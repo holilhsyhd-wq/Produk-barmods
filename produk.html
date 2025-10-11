@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portofolio Panel & Layanan</title>
+    <title>produk barmods</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -20,6 +20,10 @@
             --spotify: #1DB954;
             --netflix: #E50914;
             --vidio: #00A8FF;
+            --rcti: #00A8E8;
+            --vision: #FF6600;
+            --picsart: #FFDF2B;
+            --alight: #00F5FF;
         }
 
         * {
@@ -587,6 +591,12 @@
             border: 1px solid rgba(0, 168, 255, 0.2);
         }
 
+        /* Warna border khusus produk baru */
+        .rcti-product       { border-top: 3px solid var(--rcti); }
+        .vision-product     { border-top: 3px solid var(--vision); }
+        .picsart-product    { border-top: 3px solid var(--picsart); }
+        .alight-product     { border-top: 3px solid var(--alight); }
+
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -680,7 +690,7 @@
             <div class="header-content">
                 <div class="logo">
                     <i class="fas fa-server"></i>
-                    <h1>SELAMAT MEMESAN💯</h1>
+                    <h1>SELAMAT MEMESAN</h1>
                 </div>
                 <div class="header-right">
                     <div class="real-time-clock">
@@ -707,7 +717,12 @@
                             <a href="#yt-premium">YT Premium</a>
                             <a href="#spotify-premium">Spotify Premium</a>
                             <a href="#netflix">Netflix</a>
-                            <a href="#vidio-premium">Vidio Premium</a>
+                            <!-- MENU BARU -->
+                            <a href="#vidio-1bulan">Vidio 1 BULAN</a>
+                            <a href="#rcti-1bulan">RCTI 1 BULAN</a>
+                            <a href="#vision-1bulan">VISION 1 BULAN</a>
+                            <a href="#picsart-1bulan">PICSART 1 BULAN</a>
+                            <a href="#alight-1tahun">ALIGHT MOTION 1 THN</a>
                             <a href="#sc-suntik">SC Suntik Sosmed</a>
                             <a href="#sc-order">SC Order Sosmed</a>
                             <a href="#sc-osint">SC OSINT</a>
@@ -720,8 +735,8 @@
 
     <div class="container">
         <section class="hero">
-            <h2>SELAMAT DATANG DI WEBSITE PRODUK YANG DI SEDIAKAN BARMODS</h2>
-            <p>SAYA MENYEDIAKAN BANYAK PRODUK MULAI DARI KEBUTUHAN HOSTING DAN LL..</p>
+            <h2>💯SELAMAT DATANG💯</h2>
+            <p></p>
         </section>
 
         <section class="profile-section" id="profile">
@@ -730,8 +745,9 @@
                     <i class="fas fa-user-tie"></i>
                 </div>
                 <div class="profile-info">
-                    <h2>barmods</h2>
-                    <p>pembelian ini melalui whatsapp asli barmods.</p>
+                    <h2>BARMODS</h2>
+                    <p>Kami adalah penyedia layanan panel Pterodactyl dan jasa sosial media terpercaya dengan pengalaman lebih dari 5 tahun. Komitmen kami adalah memberikan layanan terbaik dengan harga terjangkau dan kualitas premium
+                    dan kami juga menjual beragam aplikasi premium dengan harga murah.</p>
                     <div class="stats">
                         <div class="stat">
                             <div class="stat-value">5+</div>
@@ -923,6 +939,7 @@
         <h2 class="section-title" id="premium">Layanan Premium</h2>
         
         <div class="products">
+            <!-- YouTube Premium -->
             <div class="product-card youtube-product" id="yt-premium-card">
                 <div class="product-header">
                     <h3><i class="fab fa-youtube"></i> YouTube Premium</h3>
@@ -943,6 +960,7 @@
                 </div>
             </div>
 
+            <!-- Spotify Premium -->
             <div class="product-card spotify-product" id="spotify-premium-card">
                 <div class="product-header">
                     <h3><i class="fab fa-spotify"></i> Spotify Premium</h3>
@@ -963,6 +981,7 @@
                 </div>
             </div>
 
+            <!-- Netflix Premium -->
             <div class="product-card netflix-product" id="netflix-card">
                 <div class="product-header">
                     <h3><i class="fab fa-netflix"></i> Netflix Premium</h3>
@@ -983,13 +1002,14 @@
                 </div>
             </div>
 
-            <div class="product-card vidio-product" id="vidio-premium-card">
+            <!-- Vidio 1 BULAN (HARGA BARU 25K) -->
+            <div class="product-card vidio-product" id="vidio-1bulan">
                 <div class="product-header">
-                    <h3><i class="fas fa-tv"></i> Vidio Premium</h3>
+                    <h3><i class="fas fa-tv"></i> Vidio 1 BULAN</h3>
                     <p>Akun Premium</p>
                 </div>
                 <div class="product-body">
-                    <div class="product-price">Rp 7.000</div>
+                    <div class="product-price">Rp 25.000</div>
                     <ul class="product-features">
                         <li><i class="fas fa-check"></i> Akses Konten Premium</li>
                         <li><i class="fas fa-check"></i> Bebas Iklan</li>
@@ -997,7 +1017,91 @@
                         <li><i class="fas fa-check"></i> Multiple Device</li>
                         <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
                     </ul>
-                    <button class="buy-btn" data-product="Vidio Premium" data-price="7000">
+                    <button class="buy-btn" data-product="Vidio 1 BULAN" data-price="25000">
+                        <i class="fab fa-whatsapp"></i> Beli Sekarang
+                    </button>
+                </div>
+            </div>
+
+            <!-- RCTI 1 BULAN -->
+            <div class="product-card rcti-product" id="rcti-1bulan">
+                <div class="product-header">
+                    <h3><i class="fas fa-broadcast-tower"></i> RCTI 1 BULAN</h3>
+                    <p>Streaming TV</p>
+                </div>
+                <div class="product-body">
+                    <div class="product-price">Rp 60.000</div>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> Siaran Langsung RCTI</li>
+                        <li><i class="fas fa-check"></i> Bebas Iklan</li>
+                        <li><i class="fas fa-check"></i> Kualitas HD</li>
+                        <li><i class="fas fa-check"></i> Multi Device</li>
+                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
+                    </ul>
+                    <button class="buy-btn" data-product="RCTI 1 BULAN" data-price="60000">
+                        <i class="fab fa-whatsapp"></i> Beli Sekarang
+                    </button>
+                </div>
+            </div>
+
+            <!-- VISION 1 BULAN -->
+            <div class="product-card vision-product" id="vision-1bulan">
+                <div class="product-header">
+                    <h3><i class="fas fa-eye"></i> VISION 1 BULAN</h3>
+                    <p>Streaming Premium</p>
+                </div>
+                <div class="product-body">
+                    <div class="product-price">Rp 25.000</div>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> Akses Vision+ Premium</li>
+                        <li><i class="fas fa-check"></i> Bebas Iklan</li>
+                        <li><i class="fas fa-check"></i> Kualitas HD</li>
+                        <li><i class="fas fa-check"></i> Multiple Device</li>
+                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
+                    </ul>
+                    <button class="buy-btn" data-product="VISION 1 BULAN" data-price="25000">
+                        <i class="fab fa-whatsapp"></i> Beli Sekarang
+                    </button>
+                </div>
+            </div>
+
+            <!-- PICSART 1 BULAN -->
+            <div class="product-card picsart-product" id="picsart-1bulan">
+                <div class="product-header">
+                    <h3><i class="fas fa-palette"></i> PICSART 1 BULAN</h3>
+                    <p>Edit Foto Premium</p>
+                </div>
+                <div class="product-body">
+                    <div class="product-price">Rp 15.000</div>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> Akses Premium Tools</li>
+                        <li><i class="fas fa-check"></i> Filter & Sticker Eksklusif</li>
+                        <li><i class="fas fa-check"></i> Export Tanpa Watermark</li>
+                        <li><i class="fas fa-check"></i> Multi Device</li>
+                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
+                    </ul>
+                    <button class="buy-btn" data-product="PICSART 1 BULAN" data-price="15000">
+                        <i class="fab fa-whatsapp"></i> Beli Sekarang
+                    </button>
+                </div>
+            </div>
+
+            <!-- ALIGHT MOTION 1 TAHUN -->
+            <div class="product-card alight-product" id="alight-1tahun">
+                <div class="product-header">
+                    <h3><i class="fas fa-video"></i> ALIGHT MOTION 1 TAHUN</h3>
+                    <p>Edit Video Premium</p>
+                </div>
+                <div class="product-body">
+                    <div class="product-price">Rp 20.000</div>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> Akses Pro Selama 1 Tahun</li>
+                        <li><i class="fas fa-check"></i> Effect & Preset Premium</li>
+                        <li><i class="fas fa-check"></i> Export Tanpa Watermark</li>
+                        <li><i class="fas fa-check"></i> Semua Fitur Unlock</li>
+                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
+                    </ul>
+                    <button class="buy-btn" data-product="ALIGHT MOTION 1 TAHUN" data-price="20000">
                         <i class="fab fa-whatsapp"></i> Beli Sekarang
                     </button>
                 </div>
@@ -1019,10 +1123,10 @@
                 </div>
                 <div class="contact-item">
                     <i class="fas fa-map-marker-alt"></i>
-                    <span>tangerang, Indonesia</span>
+                    <span>tangerang, banten</span>
                 </div>
             </div>
-            <p>&copy; 2025 barmods. All rights reserved.</p>
+            <p>&copy; 2025 barmods Store. All rights reserved.</p>
         </div>
     </footer>
 
@@ -1415,8 +1519,16 @@
                         targetElement = document.getElementById('spotify-premium-card');
                     } else if (targetId === '#netflix') {
                         targetElement = document.getElementById('netflix-card');
-                    } else if (targetId === '#vidio-premium') {
-                        targetElement = document.getElementById('vidio-premium-card');
+                    } else if (targetId === '#vidio-1bulan') {
+                        targetElement = document.getElementById('vidio-1bulan');
+                    } else if (targetId === '#rcti-1bulan') {
+                        targetElement = document.getElementById('rcti-1bulan');
+                    } else if (targetId === '#vision-1bulan') {
+                        targetElement = document.getElementById('vision-1bulan');
+                    } else if (targetId === '#picsart-1bulan') {
+                        targetElement = document.getElementById('picsart-1bulan');
+                    } else if (targetId === '#alight-1tahun') {
+                        targetElement = document.getElementById('alight-1tahun');
                     } else if (targetId === '#rat') {
                         targetElement = document.getElementById('rat-card');
                     } else if (targetId === '#sc-osint') {
