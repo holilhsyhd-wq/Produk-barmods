@@ -1,1558 +1,1806 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>produk barmods</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #0a192f;
-            --secondary: #64ffda;
-            --accent: #ff2e63;
-            --light: #ccd6f6;
-            --dark: #0a192f;
-            --success: #64ffda;
-            --blue-glow: #00a8ff;
-            --instagram: #E1306C;
-            --tiktok: #000000;
-            --youtube: #FF0000;
-            --spotify: #1DB954;
-            --netflix: #E50914;
-            --vidio: #00A8FF;
-            --rcti: #00A8E8;
-            --vision: #FF6600;
-            --picsart: #FFDF2B;
-            --alight: #00F5FF;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(-45deg, #0a192f, #112240, #1e3799, #0c2461);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            color: var(--light);
-            line-height: 1.6;
-            position: relative;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        .animated-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            overflow: hidden;
-        }
-
-        .particles {
-            position: absolute;
-            display: block;
-            list-style: none;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-        }
-
-        .particles li {
-            position: absolute;
-            display: block;
-            background: rgba(255, 255, 255, 0.1);
-            animation: animate 25s linear infinite;
-            bottom: -150px;
-            border-radius: 50%;
-        }
-
-        .particles li:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            left: 25%;
-            animation-delay: 0s;
-            background: rgba(0, 168, 255, 0.2);
-        }
-
-        .particles li:nth-child(2) {
-            width: 20px;
-            height: 20px;
-            left: 10%;
-            animation-delay: 2s;
-            animation-duration: 12s;
-            background: rgba(100, 255, 218, 0.3);
-        }
-
-        .particles li:nth-child(3) {
-            width: 50px;
-            height: 50px;
-            left: 70%;
-            animation-delay: 4s;
-            background: rgba(30, 55, 153, 0.2);
-        }
-
-        .particles li:nth-child(4) {
-            width: 60px;
-            height: 60px;
-            left: 40%;
-            animation-delay: 0s;
-            animation-duration: 18s;
-            background: rgba(255, 46, 99, 0.2);
-        }
-
-        .particles li:nth-child(5) {
-            width: 35px;
-            height: 35px;
-            left: 65%;
-            animation-delay: 0s;
-            background: rgba(0, 168, 255, 0.3);
-        }
-
-        .particles li:nth-child(6) {
-            width: 90px;
-            height: 90px;
-            left: 75%;
-            animation-delay: 3s;
-            background: rgba(100, 255, 218, 0.2);
-        }
-
-        .particles li:nth-child(7) {
-            width: 45px;
-            height: 45px;
-            left: 35%;
-            animation-delay: 7s;
-            background: rgba(30, 55, 153, 0.3);
-        }
-
-        .particles li:nth-child(8) {
-            width: 30px;
-            height: 30px;
-            left: 50%;
-            animation-delay: 15s;
-            animation-duration: 45s;
-            background: rgba(255, 46, 99, 0.2);
-        }
-
-        .particles li:nth-child(9) {
-            width: 70px;
-            height: 70px;
-            left: 20%;
-            animation-delay: 2s;
-            animation-duration: 35s;
-            background: rgba(0, 168, 255, 0.2);
-        }
-
-        .particles li:nth-child(10) {
-            width: 25px;
-            height: 25px;
-            left: 85%;
-            animation-delay: 0s;
-            animation-duration: 11s;
-            background: rgba(100, 255, 218, 0.3);
-        }
-
-        @keyframes animate {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-1000px) rotate(720deg);
-                opacity: 0;
-            }
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        header {
-            background: rgba(10, 25, 47, 0.85);
-            color: var(--light);
-            padding: 20px 0;
-            box-shadow: 0 4px 30px rgba(0, 168, 255, 0.3);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(100, 255, 218, 0.2);
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo i {
-            font-size: 2rem;
-            color: var(--secondary);
-            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
-        }
-
-        .logo h1 {
-            font-size: 1.5rem;
-            background: linear-gradient(90deg, var(--secondary), var(--blue-glow));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .real-time-clock {
-            background: rgba(0, 168, 255, 0.2);
-            padding: 8px 15px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: 1px solid rgba(0, 168, 255, 0.3);
-            box-shadow: 0 0 15px rgba(0, 168, 255, 0.2);
-            backdrop-filter: blur(5px);
-        }
-
-        .real-time-clock i {
-            color: var(--success);
-            text-shadow: 0 0 8px rgba(100, 255, 218, 0.5);
-        }
-
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-btn {
-            background: rgba(0, 168, 255, 0.2);
-            color: var(--light);
-            padding: 8px 15px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: 1px solid rgba(0, 168, 255, 0.3);
-            box-shadow: 0 0 15px rgba(0, 168, 255, 0.2);
-            backdrop-filter: blur(5px);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .dropdown-btn:hover {
-            background: rgba(0, 168, 255, 0.3);
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            right: 0;
-            background: rgba(10, 25, 47, 0.95);
-            min-width: 250px;
-            border-radius: 10px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(100, 255, 218, 0.2);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            overflow: hidden;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-
-        .dropdown-content.show {
-            display: block;
-        }
-
-        .dropdown-content a {
-            color: var(--light);
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            transition: all 0.3s ease;
-            border-bottom: 1px solid rgba(100, 255, 218, 0.1);
-        }
-
-        .dropdown-content a:hover {
-            background: rgba(0, 168, 255, 0.2);
-            color: var(--secondary);
-        }
-
-        .hero {
-            text-align: center;
-            padding: 80px 20px;
-            background: rgba(10, 25, 47, 0.7);
-            border-radius: 15px;
-            margin: 30px 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(100, 255, 218, 0.1);
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 168, 255, 0.1) 0%, transparent 70%);
-            animation: pulse 8s infinite linear;
-            z-index: -1;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .hero h2 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            background: linear-gradient(90deg, var(--light), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 25px;
-            color: var(--light);
-        }
-
-        .profile-section {
-            background: rgba(17, 34, 64, 0.7);
-            border-radius: 15px;
-            padding: 40px;
-            margin: 40px 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(100, 255, 218, 0.1);
-            backdrop-filter: blur(10px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .profile-header {
-            margin-bottom: 30px;
-        }
-
-        .profile-pic {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--secondary), var(--blue-glow));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            box-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
-        }
-
-        .profile-pic i {
-            font-size: 60px;
-            color: var(--dark);
-        }
-
-        .profile-info {
-            max-width: 600px;
-        }
-
-        .profile-info h2 {
-            font-size: 2rem;
-            margin-bottom: 15px;
-            color: var(--light);
-        }
-
-        .profile-info p {
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-            color: var(--light);
-        }
-
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 20px;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--secondary);
-            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: var(--light);
-        }
-
-        .products {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            margin: 40px 0;
-        }
-
-        .product-card {
-            background: rgba(17, 34, 64, 0.7);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid rgba(100, 255, 218, 0.1);
-            backdrop-filter: blur(10px);
-            position: relative;
-            z-index: 1;
-        }
-
-        .product-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--secondary), var(--blue-glow));
-            z-index: 2;
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 168, 255, 0.3);
-        }
-
-        .product-header {
-            background: linear-gradient(135deg, rgba(0, 168, 255, 0.2), rgba(100, 255, 218, 0.1));
-            color: var(--light);
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid rgba(100, 255, 218, 0.1);
-        }
-
-        .product-header h3 {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-            color: var(--light);
-        }
-
-        .product-body {
-            padding: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-price {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--secondary);
-            margin: 10px 0;
-            text-align: center;
-            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
-        }
-
-        .product-features {
-            list-style: none;
-            margin: 15px 0;
-            flex-grow: 1;
-        }
-
-        .product-features li {
-            padding: 8px 0;
-            border-bottom: 1px dashed rgba(100, 255, 218, 0.2);
-            display: flex;
-            align-items: center;
-        }
-
-        .product-features li i {
-            color: var(--success);
-            margin-right: 10px;
-            text-shadow: 0 0 8px rgba(100, 255, 218, 0.5);
-        }
-
-        .buy-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: linear-gradient(135deg, var(--success), var(--blue-glow));
-            color: var(--dark);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: auto;
-            box-shadow: 0 5px 15px rgba(0, 168, 255, 0.3);
-        }
-
-        .buy-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 168, 255, 0.5);
-        }
-
-        .section-title {
-            text-align: center;
-            margin: 40px 0 20px;
-            font-size: 2rem;
-            color: var(--light);
-            position: relative;
-        }
-
-        .section-title:after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, var(--secondary), var(--blue-glow));
-            margin: 10px auto;
-            border-radius: 2px;
-            box-shadow: 0 0 10px rgba(0, 168, 255, 0.5);
-        }
-
-        footer {
-            background: rgba(10, 25, 47, 0.85);
-            color: var(--light);
-            text-align: center;
-            padding: 30px 0;
-            margin-top: 50px;
-            border-top: 1px solid rgba(100, 255, 218, 0.2);
-            backdrop-filter: blur(10px);
-        }
-
-        .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0, 168, 255, 0.1);
-            padding: 8px 15px;
-            border-radius: 30px;
-            border: 1px solid rgba(0, 168, 255, 0.2);
-        }
-
-        /* Warna border khusus produk baru */
-        .rcti-product       { border-top: 3px solid var(--rcti); }
-        .vision-product     { border-top: 3px solid var(--vision); }
-        .picsart-product    { border-top: 3px solid var(--picsart); }
-        .alight-product     { border-top: 3px solid var(--alight); }
-
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .header-right {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .hero h2 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .products {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            }
-
-            .contact-info {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .stats {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .profile-section {
-                padding: 30px 20px;
-            }
-
-            .dropdown-content {
-                min-width: 200px;
-                right: -50px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo h1 {
-                font-size: 1.2rem;
-            }
-
-            .real-time-clock, .dropdown-btn {
-                font-size: 0.9rem;
-                padding: 6px 12px;
-            }
-
-            .hero {
-                padding: 40px 15px;
-            }
-
-            .hero h2 {
-                font-size: 1.8rem;
-            }
-
-            .products {
-                grid-template-columns: 1fr;
-            }
-
-            .dropdown-content {
-                min-width: 180px;
-                right: -30px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Daftar List Premium</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-card: #0f172a;
+      --bg-card-soft: #020617;
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.15);
+      --text: #e5e7eb;
+      --text-soft: #9ca3af;
+      --border-soft: #1f2937;
+      --radius-xl: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 50%, #000 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 900px;
+      background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(15,23,42,0.8));
+      border-radius: 24px;
+      border: 1px solid rgba(148,163,184,0.15);
+      box-shadow:
+        0 22px 70px rgba(15,23,42,0.9),
+        0 0 0 1px rgba(15,23,42,0.8);
+      padding: 20px 18px 22px;
+      backdrop-filter: blur(18px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .app {
+        padding: 26px 26px 28px;
+      }
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .title-main {
+      font-size: 20px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .title-main span.symbol {
+      font-size: 18px;
+      color: var(--accent);
+    }
+
+    .title-sub {
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    .badge-live {
+      border-radius: 999px;
+      border: 1px solid rgba(34,197,94,0.4);
+      background: radial-gradient(circle at top left, #22c55e33, transparent);
+      padding: 5px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 6px rgba(34,197,94,0.25);
+    }
+
+    .search-bar {
+      margin: 10px 0 16px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: rgba(15,23,42,0.85);
+      color: var(--text);
+      font-size: 13px;
+      outline: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .search-input input {
+      border: none;
+      outline: none;
+      background: transparent;
+      color: inherit;
+      width: 100%;
+      font-size: 13px;
+    }
+
+    .search-input span.icon {
+      font-size: 14px;
+      color: var(--text-soft);
+    }
+
+    .list-wrapper {
+      border-radius: 20px;
+      background: radial-gradient(circle at top left, #1e293b66, #020617 60%);
+      border: 1px solid rgba(30,64,175,0.6);
+      padding: 12px 10px;
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .list-border-top,
+    .list-border-bottom {
+      font-size: 11px;
+      color: #a5b4fc;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin: 2px 0;
+      opacity: 0.9;
+    }
+
+    .list-border-top::before,
+    .list-border-bottom::before,
+    .list-border-top::after,
+    .list-border-bottom::after {
+      content: "";
+      display: inline-block;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #4f46e5, transparent);
+      vertical-align: middle;
+      width: 18px;
+      margin: 0 5px;
+      opacity: 0.6;
+    }
+
+    .list-border-bottom {
+      margin-top: 6px;
+    }
+
+    .items {
+      margin: 4px 0 6px;
+      border-radius: 14px;
+      background: rgba(15,23,42,0.85);
+      border: 1px solid rgba(51,65,85,0.9);
+      padding: 4px 6px;
+      max-height: 65vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #4b5563 transparent;
+    }
+
+    .items::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .items::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .items::-webkit-scrollbar-thumb {
+      background: #4b5563;
+      border-radius: 999px;
+    }
+
+    .group {
+      border-bottom: 1px dashed rgba(55,65,81,0.8);
+      padding: 4px 0 6px;
+    }
+
+    .group:last-of-type {
+      border-bottom: none;
+    }
+
+    details.group {
+      padding: 0;
+    }
+
+    details.group[open] {
+      background: rgba(15,23,42,0.7);
+      border-radius: 10px;
+      padding: 4px 4px 6px;
+      margin-bottom: 2px;
+    }
+
+    summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 4px 4px;
+      border-radius: 8px;
+      transition: background 0.16s ease, transform 0.12s ease;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary:hover {
+      background: rgba(15,23,42,0.9);
+      transform: translateY(-0.5px);
+    }
+
+    .group-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .group-title .bullet {
+      font-size: 13px;
+      color: #e5e7eb;
+    }
+
+    .group-title .name {
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .group-tag {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-soft);
+      border-radius: 999px;
+      padding: 3px 7px;
+      border: 1px solid rgba(75,85,99,0.9);
+      background: rgba(15,23,42,0.9);
+      white-space: nowrap;
+    }
+
+    .chevron {
+      font-size: 10px;
+      margin-left: 4px;
+    }
+
+    details[open] .chevron {
+      transform: rotate(90deg);
+    }
+
+    .products {
+      margin-top: 4px;
+      padding: 0 2px 2px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .product {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.2fr) auto;
+      gap: 6px;
+      font-size: 11px;
+      align-items: baseline;
+      padding: 4px 6px;
+      border-radius: 8px;
+      background: rgba(15,23,42,0.85);
+      border: 1px solid rgba(31,41,55,0.9);
+      cursor: pointer;
+      transition: background 0.12s ease, transform 0.08s ease, border-color 0.12s ease, opacity 0.12s ease;
+    }
+
+    .product:hover {
+      background: rgba(15,23,42,1);
+      border-color: rgba(34,197,94,0.6);
+      transform: translateY(-0.5px);
+    }
+
+    .product.disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      border-style: dashed;
+    }
+
+    .product.disabled:hover {
+      transform: none;
+      border-color: rgba(75,85,99,0.8);
+      background: rgba(15,23,42,0.7);
+    }
+
+    @media (max-width: 600px) {
+      .product {
+        grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.5fr);
+        grid-template-rows: auto auto;
+      }
+      .product-price {
+        justify-self: flex-start;
+        margin-top: 2px;
+      }
+    }
+
+    .product-name {
+      font-weight: 500;
+      color: #e5e7eb;
+    }
+
+    .product-note {
+      font-size: 10px;
+      color: var(--text-soft);
+    }
+
+    .product-price {
+      font-weight: 600;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid rgba(34,197,94,0.5);
+      justify-self: flex-end;
+    }
+
+    .note-bottom {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--text-soft);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .note-bottom span.label {
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    .example-chip {
+      border-radius: 999px;
+      padding: 3px 8px;
+      border: 1px solid rgba(148,163,184,0.8);
+      font-size: 11px;
+    }
+
+    .payment-box {
+      margin-top: 8px;
+      padding: 7px 9px;
+      border-radius: 14px;
+      background: rgba(15,23,42,0.9);
+      border: 1px dashed rgba(55,65,81,0.95);
+      font-size: 11px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 10px;
+      align-items: center;
+    }
+
+    .payment-label {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 10px;
+      color: var(--text-soft);
+    }
+
+    .payment-number {
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .payment-name {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .tag-dana {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(59,130,246,0.8);
+      background: radial-gradient(circle at top left, rgba(59,130,246,0.25), transparent);
+    }
+
+    .highlight {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .order-info {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-soft);
+      border-radius: 12px;
+      padding: 7px 9px;
+      background: rgba(15,23,42,0.92);
+      border: 1px solid rgba(75,85,99,0.8);
+      line-height: 1.5;
+    }
+
+    .order-info b {
+      color: var(--accent);
+    }
+
+    /* Modal order */
+    .order-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 40;
+    }
+
+    .order-modal-card {
+      background: #020617;
+      border-radius: 18px;
+      border: 1px solid rgba(148,163,184,0.4);
+      padding: 14px 16px 14px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow:
+        0 20px 45px rgba(0,0,0,0.75),
+        0 0 0 1px rgba(15,23,42,0.9);
+      font-size: 13px;
+    }
+
+    .order-modal-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .order-modal-title span.label {
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--text-soft);
+    }
+
+    .order-modal-product {
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+
+    .order-modal-price {
+      font-size: 12px;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .order-modal-text {
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .order-modal-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 11px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      color: var(--text);
+    }
+
+    .btn-primary {
+      border-color: rgba(34,197,94,0.8);
+      background: radial-gradient(circle at top left, rgba(34,197,94,0.25), rgba(15,23,42,1));
+    }
+
+    .btn-outline {
+      border-color: rgba(148,163,184,0.8);
+      background: rgba(15,23,42,0.9);
+    }
+
+    .btn-close {
+      margin-left: auto;
+      font-size: 11px;
+      opacity: 0.75;
+    }
+
+    .btn span.icon {
+      font-size: 13px;
+    }
+
+    /* Floating WA button */
+    .wa-floating {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 30;
+      text-decoration: none;
+    }
+
+    .wa-floating-inner {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: #0d9488;
+      border: 1px solid rgba(34,211,238,0.8);
+      font-size: 11px;
+      color: #ecfeff;
+      box-shadow: 0 12px 25px rgba(15,23,42,0.9);
+    }
+
+    .wa-floating-inner span.icon {
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .wa-floating {
+        right: 10px;
+        bottom: 12px;
+      }
+    }
+
+  </style>
 </head>
 <body>
-    <div class="animated-background">
-        <ul class="particles">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-        </ul>
-    </div>
-
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-server"></i>
-                    <h1>SELAMAT MEMESAN</h1>
-                </div>
-                <div class="header-right">
-                    <div class="real-time-clock">
-                        <i class="far fa-clock"></i>
-                        <span id="clock">Loading...</span>
-                    </div>
-                    <div class="dropdown">
-                        <div class="dropdown-btn" id="dropdown-btn">
-                            <i class="fas fa-bars"></i>
-                            Menu Layanan
-                        </div>
-                        <div class="dropdown-content" id="dropdown-content">
-                            <a href="#pterodactyl">Panel Pterodactyl</a>
-                            <a href="#tracking">Tracking Camera</a>
-                            <a href="#profile">Profil</a>
-                            <a href="#instagram-likes">Like Instagram</a>
-                            <a href="#tiktok-likes">Like TikTok</a>
-                            <a href="#instagram-followers">Followers Instagram</a>
-                            <a href="#tiktok-followers">Followers TikTok</a>
-                            <a href="#instagram-viewers">Viewers Instagram</a>
-                            <a href="#tiktok-viewers">Viewers TikTok</a>
-                            <a href="#apk-join">Apk Join Murid Hck Kuota</a>
-                            <a href="#rat">RAT</a>
-                            <a href="#yt-premium">YT Premium</a>
-                            <a href="#spotify-premium">Spotify Premium</a>
-                            <a href="#netflix">Netflix</a>
-                            <!-- MENU BARU -->
-                            <a href="#vidio-1bulan">Vidio 1 BULAN</a>
-                            <a href="#rcti-1bulan">RCTI 1 BULAN</a>
-                            <a href="#vision-1bulan">VISION 1 BULAN</a>
-                            <a href="#picsart-1bulan">PICSART 1 BULAN</a>
-                            <a href="#alight-1tahun">ALIGHT MOTION 1 THN</a>
-                            <a href="#sc-suntik">SC Suntik Sosmed</a>
-                            <a href="#sc-order">SC Order Sosmed</a>
-                            <a href="#sc-osint">SC OSINT</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <main class="app">
+    <header class="header">
+      <div class="title-block">
+        <div class="title-main">
+          <span class="symbol">╭═┅═━––––––❍</span>
+          <span>DAFTAR LIST</span>
         </div>
+        <div class="title-sub">Premium Subscription • Ios • Android • Sharing & Private</div>
+      </div>
+      <div class="badge-live">
+        <span class="dot"></span>
+        <span>Chat Order Aktif</span>
+      </div>
     </header>
 
-    <div class="container">
-        <section class="hero">
-            <h2>💯SELAMAT DATANG💯</h2>
-            <p></p>
-        </section>
+    <section class="search-bar">
+      <label class="search-input">
+        <span class="icon">⌕</span>
+        <input
+          type="text"
+          id="search"
+          placeholder="Cari berdasarkan nama layanan (misal: Netflix, Spotify, YouTube)..."
+        />
+      </label>
+    </section>
 
-        <section class="profile-section" id="profile">
-            <div class="profile-header">
-                <div class="profile-pic">
-                    <i class="fas fa-user-tie"></i>
-                </div>
-                <div class="profile-info">
-                    <h2>BARMODS</h2>
-                    <p>Kami adalah penyedia layanan panel Pterodactyl dan jasa sosial media terpercaya dengan pengalaman lebih dari 5 tahun. Komitmen kami adalah memberikan layanan terbaik dengan harga terjangkau dan kualitas premium
-                    dan kami juga menjual beragam aplikasi premium dengan harga murah.</p>
-                    <div class="stats">
-                        <div class="stat">
-                            <div class="stat-value">5+</div>
-                            <div class="stat-label">Tahun Pengalaman</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">10K+</div>
-                            <div class="stat-label">Pelanggan</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-value">99%</div>
-                            <div class="stat-label">Kepuasan</div>
-                        </div>
-                    </div>
-                </div>
+    <section class="list-wrapper">
+      <div class="list-border-top">LIST PREMIUM</div>
+
+      <div class="items" id="items">
+        <!-- 1. ALIGHT MOTION -->
+        <details class="group" open data-group="alight motion">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 1.</span>
+              <span class="name">ALIGHT MOTION</span>
             </div>
-        </section>
-
-        <h2 class="section-title" id="pterodactyl">Paket Panel Pterodactyl</h2>
-        
-        <div class="products" id="pterodactyl-container">
-            <!-- Pterodactyl products will be loaded here by JavaScript -->
-        </div>
-        
-        <h2 class="section-title" id="tracking">Layanan Tracking</h2>
-        
-        <div class="products">
-            <div class="product-card tracking-product">
-                <div class="product-header">
-                    <h3>Tracking Camera</h3>
-                    <p>Monitoring 24/7</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp 20.000</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> Real-time Monitoring</li>
-                        <li><i class="fas fa-check"></i> Penyimpanan Cloud 30 Hari</li>
-                        <li><i class="fas fa-check"></i> Notifikasi Gerakan</li>
-                        <li><i class="fas fa-check"></i> Akses Multi-Device</li>
-                        <li><i class="fas fa-check"></i> Support 24/7</li>
-                    </ul>
-                    <button class="buy-btn" data-product="Tracking Camera" data-price="20000">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
+            <div class="group-tag">
+              Editing Video <span class="chevron">▶</span>
             </div>
-        </div>
-
-        <h2 class="section-title" id="instagram-likes">Like Instagram</h2>
-        
-        <div class="products" id="instagram-likes-products">
-            <!-- Instagram likes products will be loaded here by JavaScript -->
-        </div>
-
-        <h2 class="section-title" id="tiktok-likes">Like TikTok</h2>
-        
-        <div class="products" id="tiktok-likes-products">
-            <!-- TikTok likes products will be loaded here by JavaScript -->
-        </div>
-
-        <h2 class="section-title" id="instagram-followers">Followers Instagram</h2>
-        
-        <div class="products" id="instagram-followers-products">
-            <!-- Instagram followers products will be loaded here by JavaScript -->
-        </div>
-
-        <h2 class="section-title" id="tiktok-followers">Followers TikTok</h2>
-        
-        <div class="products" id="tiktok-followers-products">
-            <!-- TikTok followers products will be loaded here by JavaScript -->
-        </div>
-
-        <h2 class="section-title" id="instagram-viewers">Viewers Instagram</h2>
-        
-        <div class="products" id="instagram-viewers-products">
-            <!-- Instagram viewers products will be loaded here by JavaScript -->
-        </div>
-
-        <h2 class="section-title" id="tiktok-viewers">Viewers TikTok</h2>
-        
-        <div class="products" id="tiktok-viewers-products">
-            <!-- TikTok viewers products will be loaded here by JavaScript -->
-        </div>
-
-        <h2 class="section-title" id="apk-join">Layanan Khusus</h2>
-        
-        <div class="products">
-            <div class="product-card special-product" id="apk-join-card">
-                <div class="product-header">
-                    <h3>Apk Join Murid Hck Kuota</h3>
-                    <p>Akses Khusus</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp 20.000</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> Akses Penuh Aplikasi</li>
-                        <li><i class="fas fa-check"></i> Kuota Internet Khusus</li>
-                        <li><i class="fas fa-check"></i> Update Berkala</li>
-                        <li><i class="fas fa-check"></i> Support 24/7</li>
-                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
-                    </ul>
-                    <button class="buy-btn" data-product="Apk Join Murid Hck Kuota" data-price="20000">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Alight Motion Private - 1 Tahun (iOS & Android)" data-stock="10">
+              <div class="product-name">Alight Motion Private - 1 Tahun (iOS &amp; Android)</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 2k</div>
             </div>
-
-            <div class="product-card special-product" id="rat-card">
-                <div class="product-header">
-                    <h3>RAT</h3>
-                    <p>Remote Access Tool</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp 70.000</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> Akses Remote Lengkap</li>
-                        <li><i class="fas fa-check"></i> Monitoring Real-time</li>
-                        <li><i class="fas fa-check"></i> File Management</li>
-                        <li><i class="fas fa-check"></i> Stealth Mode</li>
-                        <li><i class="fas fa-check"></i> Support Teknis</li>
-                    </ul>
-                    <button class="buy-btn" data-product="RAT" data-price="70000">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
+            <div class="product" data-name="Bulk AM Private - 1 Bulan (10 akun)" data-stock="10">
+              <div class="product-name">Bulk AM Private - 1 Bulan (10 akun)</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 7k</div>
             </div>
+          </div>
+        </details>
 
-            <div class="product-card special-product" id="sc-suntik-card">
-                <div class="product-header">
-                    <h3>SC Suntik Sosmed</h3>
-                    <p>Script Khusus</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp 30.000</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> Script Lengkap</li>
-                        <li><i class="fas fa-check"></i> Tutorial Penggunaan</li>
-                        <li><i class="fas fa-check"></i> Update Berkala</li>
-                        <li><i class="fas fa-check"></i> Support 24/7</li>
-                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
-                    </ul>
-                    <button class="buy-btn" data-product="SC Suntik Sosmed" data-price="30000">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
+        <!-- 2. APPLE MUSIC -->
+        <details class="group" data-group="apple music">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 2.</span>
+              <span class="name">APPLE MUSIC</span>
             </div>
+            <div class="group-tag">
+              Musik <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Apple Music Invite - 1 Bulan" data-stock="10">
+              <div class="product-name">Apple Music Invite - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 5k</div>
+            </div>
+            <div class="product" data-name="Apple Music Head - 1 Bulan" data-stock="10">
+              <div class="product-name">Apple Music Head - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 8k</div>
+            </div>
+          </div>
+        </details>
 
-            <div class="product-card special-product" id="sc-order-card">
-                <div class="product-header">
-                    <h3>SC Order Sosmed</h3>
-                    <p>Script Order</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp 25.000</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> Script Order Lengkap</li>
-                        <li><i class="fas fa-check"></i> Auto Process</li>
-                        <li><i class="fas fa-check"></i> Multi Platform</li>
-                        <li><i class="fas fa-check"></i> Update Berkala</li>
-                        <li><i class="fas fa-check"></i> Support 24/7</li>
-                    </ul>
-                    <button class="buy-btn" data-product="SC Order Sosmed" data-price="25000">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
+        <!-- 3. BSTATION -->
+        <details class="group" data-group="bstation">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 3.</span>
+              <span class="name">BSTATION</span>
             </div>
+            <div class="group-tag">
+              Streaming <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Bstation Sharing - 1 Bulan" data-stock="10">
+              <div class="product-name">Bstation Sharing - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 5k</div>
+            </div>
+            <div class="product" data-name="Bstation Private - 1 Bulan" data-stock="10">
+              <div class="product-name">Bstation Private - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 32k</div>
+            </div>
+          </div>
+        </details>
 
-            <div class="product-card special-product" id="sc-osint-card">
-                <div class="product-header">
-                    <h3>SC OSINT</h3>
-                    <p>Open Source Intelligence</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp 5.000</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> Script OSINT Lengkap</li>
-                        <li><i class="fas fa-check"></i> Data Gathering</li>
-                        <li><i class="fas fa-check"></i> Tutorial Penggunaan</li>
-                        <li><i class="fas fa-check"></i> Update Berkala</li>
-                        <li><i class="fas fa-check"></i> Support 24/7</li>
-                    </ul>
-                    <button class="buy-btn" data-product="SC OSINT" data-price="5000">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
+        <!-- 4. CANVA -->
+        <details class="group" data-group="canva">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 4.</span>
+              <span class="name">CANVA</span>
             </div>
-        </div>
+            <div class="group-tag">
+              Desain <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Canva Member - 1 Bulan" data-stock="10">
+              <div class="product-name">Canva Member - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 2k</div>
+            </div>
+            <div class="product" data-name="Canva Member - 1 Tahun" data-stock="10">
+              <div class="product-name">Canva Member - 1 Tahun</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 4k</div>
+            </div>
+            <div class="product" data-name="Canva Owner - 1 Bulan" data-stock="10">
+              <div class="product-name">Canva Owner - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 5k</div>
+            </div>
+          </div>
+        </details>
 
-        <h2 class="section-title" id="premium">Layanan Premium</h2>
-        
-        <div class="products">
-            <!-- YouTube Premium -->
-            <div class="product-card youtube-product" id="yt-premium-card">
-                <div class="product-header">
-                    <h3><i class="fab fa-youtube"></i> YouTube Premium</h3>
-                    <p>Akun Premium</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp 10.000</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> Bebas Iklan</li>
-                        <li><i class="fas fa-check"></i> Background Play</li>
-                        <li><i class="fas fa-check"></i> Download Video</li>
-                        <li><i class="fas fa-check"></i> YouTube Music</li>
-                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
-                    </ul>
-                    <button class="buy-btn" data-product="YouTube Premium" data-price="10000">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
+        <!-- 5. CAPCUT -->
+        <details class="group" data-group="capcut">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 5.</span>
+              <span class="name">CAPCUT</span>
             </div>
+            <div class="group-tag">
+              Editor Video <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Capcut Private - 7 Hari" data-stock="10">
+              <div class="product-name">Capcut Private - 7 Hari</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 2k</div>
+            </div>
+            <div class="product" data-name="Capcut Sharing - 21 Hari" data-stock="10">
+              <div class="product-name">Capcut Sharing - 21 Hari</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 3k</div>
+            </div>
+            <div class="product" data-name="Capcut Sharing - 1 Bulan" data-stock="10">
+              <div class="product-name">Capcut Sharing - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 5k</div>
+            </div>
+            <div class="product" data-name="Capcut Private - 21 Hari" data-stock="10">
+              <div class="product-name">Capcut Private - 21 Hari</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 7k</div>
+            </div>
+            <div class="product" data-name="Capcut Private - 1 Bulan" data-stock="10">
+              <div class="product-name">Capcut Private - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 8k</div>
+            </div>
+          </div>
+        </details>
 
-            <!-- Spotify Premium -->
-            <div class="product-card spotify-product" id="spotify-premium-card">
-                <div class="product-header">
-                    <h3><i class="fab fa-spotify"></i> Spotify Premium</h3>
-                    <p>Akun Premium</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp 15.000</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> Musik Tanpa Iklan</li>
-                        <li><i class="fas fa-check"></i> Download Lagu</li>
-                        <li><i class="fas fa-check"></i> Kualitas High</li>
-                        <li><i class="fas fa-check"></i> Skip Unlimited</li>
-                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
-                    </ul>
-                    <button class="buy-btn" data-product="Spotify Premium" data-price="15000">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
+        <!-- 7. CHATGPT -->
+        <details class="group" data-group="chatgpt">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 7.</span>
+              <span class="name">CHATGPT</span>
             </div>
+            <div class="group-tag">
+              AI Tools <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="ChatGPT Plus Sharing - 1 Bulan (bergaransi)" data-stock="10">
+              <div class="product-name">ChatGPT Plus Sharing - 1 Bulan (bergaransi)</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 7k</div>
+            </div>
+            <div class="product" data-name="ChatGPT Private - 1 Bulan (bergaransi)" data-stock="10">
+              <div class="product-name">ChatGPT Private - 1 Bulan (bergaransi)</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 30k</div>
+            </div>
+          </div>
+        </details>
 
-            <!-- Netflix Premium -->
-            <div class="product-card netflix-product" id="netflix-card">
-                <div class="product-header">
-                    <h3><i class="fab fa-netflix"></i> Netflix Premium</h3>
-                    <p>Akun Premium</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp 10.000</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> Akses Full HD/4K</li>
-                        <li><i class="fas fa-check"></i> Bebas Iklan</li>
-                        <li><i class="fas fa-check"></i> Multiple Device</li>
-                        <li><i class="fas fa-check"></i> Download Konten</li>
-                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
-                    </ul>
-                    <button class="buy-btn" data-product="Netflix Premium" data-price="10000">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
+        <!-- 9. FIZZO NOVEL -->
+        <details class="group" data-group="fizzo novel">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 9.</span>
+              <span class="name">FIZZO NOVEL</span>
             </div>
+            <div class="group-tag">
+              Bacaan <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Fizzo Novel Sharing - 1 Bulan" data-stock="10">
+              <div class="product-name">Fizzo Novel Sharing - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 3k</div>
+            </div>
+          </div>
+        </details>
 
-            <!-- Vidio 1 BULAN (HARGA BARU 25K) -->
-            <div class="product-card vidio-product" id="vidio-1bulan">
-                <div class="product-header">
-                    <h3><i class="fas fa-tv"></i> Vidio 1 BULAN</h3>
-                    <p>Akun Premium</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp 25.000</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> Akses Konten Premium</li>
-                        <li><i class="fas fa-check"></i> Bebas Iklan</li>
-                        <li><i class="fas fa-check"></i> Kualitas HD</li>
-                        <li><i class="fas fa-check"></i> Multiple Device</li>
-                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
-                    </ul>
-                    <button class="buy-btn" data-product="Vidio 1 BULAN" data-price="25000">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
+        <!-- 12. IQIYI -->
+        <details class="group" data-group="iqiyi">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 12.</span>
+              <span class="name">IQIYI</span>
             </div>
+            <div class="group-tag">
+              Drama & Film <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Iqiyi Sharing Plan Standar - 1 Bulan" data-stock="10">
+              <div class="product-name">Iqiyi Sharing Plan Standar - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 3k</div>
+            </div>
+            <div class="product" data-name="Iqiyi Sharing Plan Premium - 1 Bulan" data-stock="10">
+              <div class="product-name">Iqiyi Sharing Plan Premium - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 5k</div>
+            </div>
+            <div class="product" data-name="Iqiyi Standar - 1 Bulan (Private)" data-stock="10">
+              <div class="product-name">Iqiyi Standar - 1 Bulan (Private)</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 30k</div>
+            </div>
+            <div class="product" data-name="Iqiyi Premium - 1 Bulan (Private)" data-stock="10">
+              <div class="product-name">Iqiyi Premium - 1 Bulan (Private)</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 40k</div>
+            </div>
+          </div>
+        </details>
 
-            <!-- RCTI 1 BULAN -->
-            <div class="product-card rcti-product" id="rcti-1bulan">
-                <div class="product-header">
-                    <h3><i class="fas fa-broadcast-tower"></i> RCTI 1 BULAN</h3>
-                    <p>Streaming TV</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp 60.000</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> Siaran Langsung RCTI</li>
-                        <li><i class="fas fa-check"></i> Bebas Iklan</li>
-                        <li><i class="fas fa-check"></i> Kualitas HD</li>
-                        <li><i class="fas fa-check"></i> Multi Device</li>
-                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
-                    </ul>
-                    <button class="buy-btn" data-product="RCTI 1 BULAN" data-price="60000">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
+        <!-- 13. LIGHTROOM -->
+        <details class="group" data-group="lightroom">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 13.</span>
+              <span class="name">LIGHTROOM</span>
             </div>
+            <div class="group-tag">
+              Foto <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Lightroom - 1 Tahun" data-stock="10">
+              <div class="product-name">Lightroom - 1 Tahun</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 7k</div>
+            </div>
+          </div>
+        </details>
 
-            <!-- VISION 1 BULAN -->
-            <div class="product-card vision-product" id="vision-1bulan">
-                <div class="product-header">
-                    <h3><i class="fas fa-eye"></i> VISION 1 BULAN</h3>
-                    <p>Streaming Premium</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp 25.000</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> Akses Vision+ Premium</li>
-                        <li><i class="fas fa-check"></i> Bebas Iklan</li>
-                        <li><i class="fas fa-check"></i> Kualitas HD</li>
-                        <li><i class="fas fa-check"></i> Multiple Device</li>
-                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
-                    </ul>
-                    <button class="buy-btn" data-product="VISION 1 BULAN" data-price="25000">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
+        <!-- 15. NETFLIX -->
+        <details class="group" data-group="netflix">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 15.</span>
+              <span class="name">NETFLIX</span>
             </div>
+            <div class="group-tag">
+              Streaming <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Netflix 1p2u" data-stock="10">
+              <div class="product-name">Netflix 1p2u</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 20k</div>
+            </div>
+            <div class="product" data-name="Netflix 1p1u" data-stock="10">
+              <div class="product-name">Netflix 1p1u</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 30k</div>
+            </div>
+          </div>
+        </details>
 
-            <!-- PICSART 1 BULAN -->
-            <div class="product-card picsart-product" id="picsart-1bulan">
-                <div class="product-header">
-                    <h3><i class="fas fa-palette"></i> PICSART 1 BULAN</h3>
-                    <p>Edit Foto Premium</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp 15.000</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> Akses Premium Tools</li>
-                        <li><i class="fas fa-check"></i> Filter & Sticker Eksklusif</li>
-                        <li><i class="fas fa-check"></i> Export Tanpa Watermark</li>
-                        <li><i class="fas fa-check"></i> Multi Device</li>
-                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
-                    </ul>
-                    <button class="buy-btn" data-product="PICSART 1 BULAN" data-price="15000">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
+        <!-- 18. PICSART -->
+        <details class="group" data-group="picsart">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 18.</span>
+              <span class="name">PICSART</span>
             </div>
+            <div class="group-tag">
+              Edit Foto <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Picsart Sharing - 1 Bulan" data-stock="10">
+              <div class="product-name">Picsart Sharing - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 3k</div>
+            </div>
+            <div class="product" data-name="Picsart Private - 1 Bulan" data-stock="10">
+              <div class="product-name">Picsart Private - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 7k</div>
+            </div>
+          </div>
+        </details>
 
-            <!-- ALIGHT MOTION 1 TAHUN -->
-            <div class="product-card alight-product" id="alight-1tahun">
-                <div class="product-header">
-                    <h3><i class="fas fa-video"></i> ALIGHT MOTION 1 TAHUN</h3>
-                    <p>Edit Video Premium</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp 20.000</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> Akses Pro Selama 1 Tahun</li>
-                        <li><i class="fas fa-check"></i> Effect & Preset Premium</li>
-                        <li><i class="fas fa-check"></i> Export Tanpa Watermark</li>
-                        <li><i class="fas fa-check"></i> Semua Fitur Unlock</li>
-                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
-                    </ul>
-                    <button class="buy-btn" data-product="ALIGHT MOTION 1 TAHUN" data-price="20000">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
+        <!-- 20. SPOTIFY -->
+        <details class="group" data-group="spotify">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 20.</span>
+              <span class="name">SPOTIFY</span>
             </div>
-        </div>
+            <div class="group-tag">
+              Musik <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Spotify Premium - 1 Bulan (bergaransi)" data-stock="10">
+              <div class="product-name">Spotify Premium - 1 Bulan (bergaransi)</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 8k</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 21. VIDIO -->
+        <details class="group" data-group="vidio">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 21.</span>
+              <span class="name">VIDIO</span>
+            </div>
+            <div class="group-tag">
+              Streaming Bola <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Vidio Platinum Sharing - 1 Bulan" data-stock="10">
+              <div class="product-name">Vidio Platinum Sharing - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 17k</div>
+            </div>
+            <div class="product" data-name="Vidio Platinum Private - 1 Bulan" data-stock="10">
+              <div class="product-name">Vidio Platinum Private - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 28k</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 22. VISION -->
+        <details class="group" data-group="vision">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 22.</span>
+              <span class="name">VISION</span>
+            </div>
+            <div class="group-tag">
+              TV Kabel <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Vision Ultimate Private - 1 Bulan" data-stock="10">
+              <div class="product-name">Vision Ultimate Private - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 40k</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 23. VIU -->
+        <details class="group" data-group="viu">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 23.</span>
+              <span class="name">VIU</span>
+            </div>
+            <div class="group-tag">
+              Drama Asia <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Viu Antilimit - 200 Tahun" data-stock="10">
+              <div class="product-name">Viu Antilimit - 200 Tahun</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 2k</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 24. WETV -->
+        <details class="group" data-group="wetv">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 24.</span>
+              <span class="name">WETV</span>
+            </div>
+            <div class="group-tag">
+              Drama & Film <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Wetv Sharing - 1 Bulan (8u)" data-stock="10">
+              <div class="product-name">Wetv Sharing - 1 Bulan (8u)</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 6k</div>
+            </div>
+            <div class="product" data-name="Wetv Sharing - 1 Bulan (5u)" data-stock="10">
+              <div class="product-name">Wetv Sharing - 1 Bulan (5u)</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 8k</div>
+            </div>
+            <div class="product" data-name="Wetv Private - 1 Bulan" data-stock="10">
+              <div class="product-name">Wetv Private - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 30k</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 25. WINK -->
+        <details class="group" data-group="wink">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 25.</span>
+              <span class="name">WINK</span>
+            </div>
+            <div class="group-tag">
+              Premium <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Wink Premium Private Android - 7 Hari" data-stock="10">
+              <div class="product-name">Wink Premium Private Android - 7 Hari</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 7k</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 26. YOUKU -->
+        <details class="group" data-group="youku">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 26.</span>
+              <span class="name">YOUKU</span>
+            </div>
+            <div class="group-tag">
+              Drama Tiongkok <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Youku Sharing - 1 Bulan" data-stock="10">
+              <div class="product-name">Youku Sharing - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 4k</div>
+            </div>
+            <div class="product" data-name="Youku Private - 1 Bulan" data-stock="10">
+              <div class="product-name">Youku Private - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 24k</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 27. YOUTUBE -->
+        <details class="group" data-group="youtube">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 27.</span>
+              <span class="name">YOUTUBE</span>
+            </div>
+            <div class="group-tag">
+              Tanpa Iklan <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="YouTube Famplan" data-stock="10">
+              <div class="product-name">YouTube Famplan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 3k</div>
+            </div>
+            <div class="product" data-name="YouTube Indplan - 1 Bulan" data-stock="10">
+              <div class="product-name">YouTube Indplan - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 8k</div>
+            </div>
+            <div class="product" data-name="YouTube Indplan - 2 Bulan" data-stock="10">
+              <div class="product-name">YouTube Indplan - 2 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 9k</div>
+            </div>
+            <div class="product" data-name="YouTube Head - 1 Bulan" data-stock="10">
+              <div class="product-name">YouTube Head - 1 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 10k</div>
+            </div>
+            <div class="product" data-name="YouTube Indplan - 3 Bulan" data-stock="10">
+              <div class="product-name">YouTube Indplan - 3 Bulan</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 11k</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 28. PANEL PTERODACTYL -->
+        <details class="group" data-group="panel pterodactyl">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 28.</span>
+              <span class="name">PANEL PTERODACTYL</span>
+            </div>
+            <div class="group-tag">
+              Panel &amp; Hosting <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Panel Pterodactyl 1GB" data-stock="10">
+              <div class="product-name">Panel Pterodactyl 1GB</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 1k</div>
+            </div>
+            <div class="product" data-name="Panel Pterodactyl 2GB" data-stock="10">
+              <div class="product-name">Panel Pterodactyl 2GB</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 2k</div>
+            </div>
+            <div class="product" data-name="Panel Pterodactyl 3GB" data-stock="10">
+              <div class="product-name">Panel Pterodactyl 3GB</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 3k</div>
+            </div>
+            <div class="product" data-name="Panel Pterodactyl 4GB" data-stock="10">
+              <div class="product-name">Panel Pterodactyl 4GB</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 4k</div>
+            </div>
+            <div class="product" data-name="Panel Pterodactyl 5GB" data-stock="10">
+              <div class="product-name">Panel Pterodactyl 5GB</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 5k</div>
+            </div>
+            <div class="product" data-name="Panel Pterodactyl 6GB" data-stock="10">
+              <div class="product-name">Panel Pterodactyl 6GB</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 6k</div>
+            </div>
+            <div class="product" data-name="Panel Pterodactyl 7GB" data-stock="10">
+              <div class="product-name">Panel Pterodactyl 7GB</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 7k</div>
+            </div>
+            <div class="product" data-name="Panel Pterodactyl 8GB" data-stock="10">
+              <div class="product-name">Panel Pterodactyl 8GB</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 8k</div>
+            </div>
+            <div class="product" data-name="Panel Pterodactyl 9GB" data-stock="10">
+              <div class="product-name">Panel Pterodactyl 9GB</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 9k</div>
+            </div>
+            <div class="product" data-name="Panel Pterodactyl Unlimited" data-stock="10">
+              <div class="product-name">Panel Pterodactyl Unlimited</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 10k</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 29. TRACKING -->
+        <details class="group" data-group="tracking">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 29.</span>
+              <span class="name">TRACKING</span>
+            </div>
+            <div class="group-tag">
+              Perangkat Kamera <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Tracking Camera" data-stock="10">
+              <div class="product-name">Tracking Camera</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 20k</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 30. INSTAGRAM LIKES -->
+        <details class="group" data-group="instagram likes">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 30.</span>
+              <span class="name">INSTAGRAM LIKES</span>
+            </div>
+            <div class="group-tag">
+              IG Engagement <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Instagram Likes 1.000" data-stock="10">
+              <div class="product-name">Instagram Likes 1.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 3k</div>
+            </div>
+            <div class="product" data-name="Instagram Likes 2.000" data-stock="10">
+              <div class="product-name">Instagram Likes 2.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 6k</div>
+            </div>
+            <div class="product" data-name="Instagram Likes 3.000" data-stock="10">
+              <div class="product-name">Instagram Likes 3.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 9k</div>
+            </div>
+            <div class="product" data-name="Instagram Likes 4.000" data-stock="10">
+              <div class="product-name">Instagram Likes 4.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 12k</div>
+            </div>
+            <div class="product" data-name="Instagram Likes 5.000" data-stock="10">
+              <div class="product-name">Instagram Likes 5.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 15k</div>
+            </div>
+            <div class="product" data-name="Instagram Likes 6.000" data-stock="10">
+              <div class="product-name">Instagram Likes 6.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 18k</div>
+            </div>
+            <div class="product" data-name="Instagram Likes 7.000" data-stock="10">
+              <div class="product-name">Instagram Likes 7.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 21k</div>
+            </div>
+            <div class="product" data-name="Instagram Likes 8.000" data-stock="10">
+              <div class="product-name">Instagram Likes 8.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 24k</div>
+            </div>
+            <div class="product" data-name="Instagram Likes 9.000" data-stock="10">
+              <div class="product-name">Instagram Likes 9.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 27k</div>
+            </div>
+            <div class="product" data-name="Instagram Likes 10.000" data-stock="10">
+              <div class="product-name">Instagram Likes 10.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 30k</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 31. TIKTOK LIKES -->
+        <details class="group" data-group="tiktok likes">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 31.</span>
+              <span class="name">TIKTOK LIKES</span>
+            </div>
+            <div class="group-tag">
+              TikTok Engagement <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="TikTok Likes 100" data-stock="10">
+              <div class="product-name">TikTok Likes 100</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 5k</div>
+            </div>
+            <div class="product" data-name="TikTok Likes 200" data-stock="10">
+              <div class="product-name">TikTok Likes 200</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 10k</div>
+            </div>
+            <div class="product" data-name="TikTok Likes 300" data-stock="10">
+              <div class="product-name">TikTok Likes 300</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 15k</div>
+            </div>
+            <div class="product" data-name="TikTok Likes 400" data-stock="10">
+              <div class="product-name">TikTok Likes 400</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 20k</div>
+            </div>
+            <div class="product" data-name="TikTok Likes 500" data-stock="10">
+              <div class="product-name">TikTok Likes 500</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 25k</div>
+            </div>
+            <div class="product" data-name="TikTok Likes 600" data-stock="10">
+              <div class="product-name">TikTok Likes 600</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 30k</div>
+            </div>
+            <div class="product" data-name="TikTok Likes 700" data-stock="10">
+              <div class="product-name">TikTok Likes 700</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 35k</div>
+            </div>
+            <div class="product" data-name="TikTok Likes 800" data-stock="10">
+              <div class="product-name">TikTok Likes 800</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 40k</div>
+            </div>
+            <div class="product" data-name="TikTok Likes 900" data-stock="10">
+              <div class="product-name">TikTok Likes 900</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 45k</div>
+            </div>
+            <div class="product" data-name="TikTok Likes 1.000" data-stock="10">
+              <div class="product-name">TikTok Likes 1.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 50k</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 32. INSTAGRAM FOLLOWERS -->
+        <details class="group" data-group="instagram followers">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 32.</span>
+              <span class="name">INSTAGRAM FOLLOWERS</span>
+            </div>
+            <div class="group-tag">
+              IG Growth <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Instagram Followers 100" data-stock="10">
+              <div class="product-name">Instagram Followers 100</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 5k</div>
+            </div>
+            <div class="product" data-name="Instagram Followers 200" data-stock="10">
+              <div class="product-name">Instagram Followers 200</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 10k</div>
+            </div>
+            <div class="product" data-name="Instagram Followers 300" data-stock="10">
+              <div class="product-name">Instagram Followers 300</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 15k</div>
+            </div>
+            <div class="product" data-name="Instagram Followers 400" data-stock="10">
+              <div class="product-name">Instagram Followers 400</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 20k</div>
+            </div>
+            <div class="product" data-name="Instagram Followers 500" data-stock="10">
+              <div class="product-name">Instagram Followers 500</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 25k</div>
+            </div>
+            <div class="product" data-name="Instagram Followers 600" data-stock="10">
+              <div class="product-name">Instagram Followers 600</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 30k</div>
+            </div>
+            <div class="product" data-name="Instagram Followers 700" data-stock="10">
+              <div class="product-name">Instagram Followers 700</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 35k</div>
+            </div>
+            <div class="product" data-name="Instagram Followers 800" data-stock="10">
+              <div class="product-name">Instagram Followers 800</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 40k</div>
+            </div>
+            <div class="product" data-name="Instagram Followers 900" data-stock="10">
+              <div class="product-name">Instagram Followers 900</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 45k</div>
+            </div>
+            <div class="product" data-name="Instagram Followers 1.000" data-stock="10">
+              <div class="product-name">Instagram Followers 1.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 50k</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 33. TIKTOK FOLLOWERS -->
+        <details class="group" data-group="tiktok followers">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 33.</span>
+              <span class="name">TIKTOK FOLLOWERS</span>
+            </div>
+            <div class="group-tag">
+              TikTok Growth <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="TikTok Followers 100" data-stock="10">
+              <div class="product-name">TikTok Followers 100</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 5k</div>
+            </div>
+            <div class="product" data-name="TikTok Followers 200" data-stock="10">
+              <div class="product-name">TikTok Followers 200</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 10k</div>
+            </div>
+            <div class="product" data-name="TikTok Followers 300" data-stock="10">
+              <div class="product-name">TikTok Followers 300</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 15k</div>
+            </div>
+            <div class="product" data-name="TikTok Followers 400" data-stock="10">
+              <div class="product-name">TikTok Followers 400</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 20k</div>
+            </div>
+            <div class="product" data-name="TikTok Followers 500" data-stock="10">
+              <div class="product-name">TikTok Followers 500</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 25k</div>
+            </div>
+            <div class="product" data-name="TikTok Followers 600" data-stock="10">
+              <div class="product-name">TikTok Followers 600</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 30k</div>
+            </div>
+            <div class="product" data-name="TikTok Followers 700" data-stock="10">
+              <div class="product-name">TikTok Followers 700</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 35k</div>
+            </div>
+            <div class="product" data-name="TikTok Followers 800" data-stock="10">
+              <div class="product-name">TikTok Followers 800</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 40k</div>
+            </div>
+            <div class="product" data-name="TikTok Followers 900" data-stock="10">
+              <div class="product-name">TikTok Followers 900</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 45k</div>
+            </div>
+            <div class="product" data-name="TikTok Followers 1.000" data-stock="10">
+              <div class="product-name">TikTok Followers 1.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 50k</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 34. INSTAGRAM VIEWERS -->
+        <details class="group" data-group="instagram viewers">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 34.</span>
+              <span class="name">INSTAGRAM VIEWERS</span>
+            </div>
+            <div class="group-tag">
+              IG Views <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="Instagram Viewers 1.000" data-stock="10">
+              <div class="product-name">Instagram Viewers 1.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 3k</div>
+            </div>
+            <div class="product" data-name="Instagram Viewers 2.000" data-stock="10">
+              <div class="product-name">Instagram Viewers 2.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 6k</div>
+            </div>
+            <div class="product" data-name="Instagram Viewers 3.000" data-stock="10">
+              <div class="product-name">Instagram Viewers 3.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 9k</div>
+            </div>
+            <div class="product" data-name="Instagram Viewers 4.000" data-stock="10">
+              <div class="product-name">Instagram Viewers 4.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 12k</div>
+            </div>
+            <div class="product" data-name="Instagram Viewers 5.000" data-stock="10">
+              <div class="product-name">Instagram Viewers 5.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 15k</div>
+            </div>
+            <div class="product" data-name="Instagram Viewers 6.000" data-stock="10">
+              <div class="product-name">Instagram Viewers 6.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 18k</div>
+            </div>
+            <div class="product" data-name="Instagram Viewers 7.000" data-stock="10">
+              <div class="product-name">Instagram Viewers 7.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 21k</div>
+            </div>
+            <div class="product" data-name="Instagram Viewers 8.000" data-stock="10">
+              <div class="product-name">Instagram Viewers 8.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 24k</div>
+            </div>
+            <div class="product" data-name="Instagram Viewers 9.000" data-stock="10">
+              <div class="product-name">Instagram Viewers 9.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 27k</div>
+            </div>
+            <div class="product" data-name="Instagram Viewers 10.000" data-stock="10">
+              <div class="product-name">Instagram Viewers 10.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 30k</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- 35. TIKTOK VIEWERS -->
+        <details class="group" data-group="tiktok viewers">
+          <summary>
+            <div class="group-title">
+              <span class="bullet">┊⫹⫺ 35.</span>
+              <span class="name">TIKTOK VIEWERS</span>
+            </div>
+            <div class="group-tag">
+              TikTok Views <span class="chevron">▶</span>
+            </div>
+          </summary>
+          <div class="products">
+            <div class="product" data-name="TikTok Viewers 1.000" data-stock="10">
+              <div class="product-name">TikTok Viewers 1.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 3k</div>
+            </div>
+            <div class="product" data-name="TikTok Viewers 2.000" data-stock="10">
+              <div class="product-name">TikTok Viewers 2.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 6k</div>
+            </div>
+            <div class="product" data-name="TikTok Viewers 3.000" data-stock="10">
+              <div class="product-name">TikTok Viewers 3.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 9k</div>
+            </div>
+            <div class="product" data-name="TikTok Viewers 4.000" data-stock="10">
+              <div class="product-name">TikTok Viewers 4.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 12k</div>
+            </div>
+            <div class="product" data-name="TikTok Viewers 5.000" data-stock="10">
+              <div class="product-name">TikTok Viewers 5.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 15k</div>
+            </div>
+            <div class="product" data-name="TikTok Viewers 6.000" data-stock="10">
+              <div class="product-name">TikTok Viewers 6.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 18k</div>
+            </div>
+            <div class="product" data-name="TikTok Viewers 7.000" data-stock="10">
+              <div class="product-name">TikTok Viewers 7.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 21k</div>
+            </div>
+            <div class="product" data-name="TikTok Viewers 8.000" data-stock="10">
+              <div class="product-name">TikTok Viewers 8.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 24k</div>
+            </div>
+            <div class="product" data-name="TikTok Viewers 9.000" data-stock="10">
+              <div class="product-name">TikTok Viewers 9.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 27k</div>
+            </div>
+            <div class="product" data-name="TikTok Viewers 10.000" data-stock="10">
+              <div class="product-name">TikTok Viewers 10.000</div>
+              <div class="product-note"></div>
+              <div class="product-price">Rp 30k</div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="list-border-bottom">╰═┅═━––––––❍</div>
+    </section>
+
+    <section class="payment-box">
+      <span class="payment-label">PAYMENT</span>
+      <span class="tag-dana">DANA</span>
+      <span class="payment-number">083877842721</span>
+      <span class="payment-name">a.n. Karsih</span>
+    </section>
+
+    <section class="order-info">
+      <b>Cara order:</b><br/>
+      1. Klik salah satu produk di atas.<br/>
+      2. Pilih ingin order via <b>Gmail</b> atau <b>WhatsApp</b>.<br/>
+      3. Isi <b>Gmail kamu</b>, dan kirim <b>SS bukti pembayaran</b> ke penjual.<br/>
+      4. Penjual akan proses dan kirim produk ke Gmail yang kamu tulis.<br/>
+      5. Stok otomatis berkurang setiap kali order dikirim (di browser ini).
+    </section>
+
+    <section class="note-bottom">
+      <span class="label">
+        &gt; Jika ada kendala, bisa langsung chat WhatsApp di pojok kanan bawah.
+      </span>
+      <span class="example-chip">
+        Email penjual: <span class="highlight">holilhsyhd@gmail.com</span>
+      </span>
+    </section>
+  </main>
+
+  <!-- Tombol WA mengambang -->
+  <a class="wa-floating" href="https://wa.me/6283877842721?text=Halo%2C%20saya%20ingin%20tanya%20tentang%20list%20premium%20di%20website%20ini." target="_blank" rel="noopener noreferrer">
+    <div class="wa-floating-inner">
+      <span class="icon">💬</span>
+      <span>Chat WhatsApp</span>
     </div>
+  </a>
 
-    <footer>
-        <div class="container">
-            <h3>Hubungi Kami</h3>
-            <div class="contact-info">
-                <div class="contact-item">
-                    <i class="fab fa-whatsapp"></i>
-                    <span>+62 838-7784-2721</span>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <span>holilhsyhd@gmail.com</span>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>tangerang, banten</span>
-                </div>
-            </div>
-            <p>&copy; 2025 barmods Store. All rights reserved.</p>
-        </div>
-    </footer>
+  <!-- Modal Order -->
+  <div id="order-modal" class="order-modal-backdrop hidden">
+    <div class="order-modal-card">
+      <div class="order-modal-title">
+        <span class="label">KONFIRMASI ORDER</span>
+        <button class="btn btn-close" type="button" onclick="closeOrderModal()">✕</button>
+      </div>
+      <div id="modal-product" class="order-modal-product"></div>
+      <div id="modal-price" class="order-modal-price"></div>
+      <div class="order-modal-text">
+        Pilih metode order:<br/>
+        • <b>Gmail</b> &mdash; cocok untuk kirim format lengkap + bukti transfer.<br/>
+        • <b>WhatsApp</b> &mdash; cocok untuk tanya-tanya dulu / cepat.
+      </div>
+      <div class="order-modal-actions">
+        <button id="btn-email" class="btn btn-primary" type="button">
+          <span class="icon">✉️</span>
+          <span>Order via Gmail</span>
+        </button>
+        <button id="btn-wa" class="btn btn-outline" type="button">
+          <span class="icon">💬</span>
+          <span>Order via WhatsApp</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
-    <script>
-        // Real-time clock
-        function updateClock() {
-            const now = new Date();
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            };
-            document.getElementById('clock').textContent = now.toLocaleDateString('id-ID', options);
+  <script>
+    // ====== KONFIGURASI KONTAK PENJUAL ======
+    const SELLER_EMAIL = "holilhsyhd@gmail.com";
+    const WHATSAPP_BASE = "https://wa.me/6283877842721";
+
+    // ====== PENCARIAN PRODUK ======
+    const searchInput = document.getElementById("search");
+    const groups = Array.from(document.querySelectorAll(".group"));
+
+    searchInput.addEventListener("input", function () {
+      const q = this.value.trim().toLowerCase();
+
+      groups.forEach(group => {
+        const groupName = group.getAttribute("data-group") || "";
+        const products = Array.from(group.querySelectorAll(".product"));
+        let hasMatch = false;
+
+        products.forEach(p => {
+          const dataName = (p.getAttribute("data-name") || "").toLowerCase();
+          const text = (groupName + " " + dataName).toLowerCase();
+
+          if (!q || text.includes(q)) {
+            p.classList.remove("hidden");
+            hasMatch = true;
+          } else {
+            p.classList.add("hidden");
+          }
+        });
+
+        if (!q) {
+          products.forEach(p => p.classList.remove("hidden"));
+          group.classList.remove("hidden");
+        } else {
+          if (hasMatch) {
+            group.classList.remove("hidden");
+            group.open = true;
+          } else {
+            group.classList.add("hidden");
+          }
         }
-        
-        setInterval(updateClock, 1000);
-        updateClock();
-        
-        // Pterodactyl products data
-        const pterodactylProducts = [
-            { gb: 1, price: 1000 },
-            { gb: 2, price: 2000 },
-            { gb: 3, price: 3000 },
-            { gb: 4, price: 4000 },
-            { gb: 5, price: 5000 },
-            { gb: 6, price: 6000 },
-            { gb: 7, price: 7000 },
-            { gb: 8, price: 8000 },
-            { gb: 9, price: 9000 },
-            { gb: 'Unlimited', price: 10000 }
-        ];
-        
-        // Render Pterodactyl products
-        const pterodactylContainer = document.getElementById('pterodactyl-container');
-        
-        pterodactylProducts.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.className = 'product-card';
-            
-            const isUnlimited = product.gb === 'Unlimited';
-            const gbText = isUnlimited ? 'Unlimited' : `${product.gb}GB`;
-            
-            productCard.innerHTML = `
-                <div class="product-header">
-                    <h3>Panel Pterodactyl ${gbText}</h3>
-                    <p>Paket Terbaik</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp ${product.price.toLocaleString('id-ID')}</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> Anti maling SC</li>
-                        <li><i class="fas fa-check"></i> Panel on 24 jam</li>
-                        <li><i class="fas fa-check"></i> Kualitas terbaik</li>
-                        <li><i class="fas fa-check"></i> RAM VPS 16 core 8</li>
-                        <li><i class="fas fa-check"></i> Anti delay</li>
-                    </ul>
-                    <button class="buy-btn" data-product="Panel Pterodactyl ${gbText}" data-price="${product.price}">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
-            `;
-            
-            pterodactylContainer.appendChild(productCard);
-        });
-        
-        // Instagram likes products data
-        const instagramLikesProducts = [
-            { likes: 1000, price: 3000 },
-            { likes: 2000, price: 6000 },
-            { likes: 3000, price: 9000 },
-            { likes: 4000, price: 12000 },
-            { likes: 5000, price: 15000 },
-            { likes: 6000, price: 18000 },
-            { likes: 7000, price: 21000 },
-            { likes: 8000, price: 24000 },
-            { likes: 9000, price: 27000 },
-            { likes: 10000, price: 30000 }
-        ];
-        
-        // Render Instagram likes products
-        const instagramLikesContainer = document.getElementById('instagram-likes-products');
-        
-        instagramLikesProducts.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.className = 'product-card instagram-product';
-            
-            productCard.innerHTML = `
-                <div class="product-header">
-                    <h3><i class="fab fa-instagram"></i> ${product.likes.toLocaleString('id-ID')} Likes</h3>
-                    <p>Instagram</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp ${product.price.toLocaleString('id-ID')}</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> ${product.likes.toLocaleString('id-ID')} Likes Berkualitas</li>
-                        <li><i class="fas fa-check"></i> Proses Cepat (1-3 Jam)</li>
-                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
-                        <li><i class="fas fa-check"></i> Aman & Terpercaya</li>
-                        <li><i class="fas fa-check"></i> Support 24/7</li>
-                    </ul>
-                    <button class="buy-btn" data-product="${product.likes.toLocaleString('id-ID')} Likes Instagram" data-price="${product.price}">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
-            `;
-            
-            instagramLikesContainer.appendChild(productCard);
-        });
-        
-        // TikTok likes products data
-        const tiktokLikesProducts = [
-            { likes: 100, price: 5000 },
-            { likes: 200, price: 10000 },
-            { likes: 300, price: 15000 },
-            { likes: 400, price: 20000 },
-            { likes: 500, price: 25000 },
-            { likes: 600, price: 30000 },
-            { likes: 700, price: 35000 },
-            { likes: 800, price: 40000 },
-            { likes: 900, price: 45000 },
-            { likes: 1000, price: 50000 }
-        ];
-        
-        // Render TikTok likes products
-        const tiktokLikesContainer = document.getElementById('tiktok-likes-products');
-        
-        tiktokLikesProducts.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.className = 'product-card tiktok-product';
-            
-            productCard.innerHTML = `
-                <div class="product-header">
-                    <h3><i class="fab fa-tiktok"></i> ${product.likes.toLocaleString('id-ID')} Likes</h3>
-                    <p>TikTok</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp ${product.price.toLocaleString('id-ID')}</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> ${product.likes.toLocaleString('id-ID')} Likes Berkualitas</li>
-                        <li><i class="fas fa-check"></i> Proses Cepat (1-3 Jam)</li>
-                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
-                        <li><i class="fas fa-check"></i> Aman & Terpercaya</li>
-                        <li><i class="fas fa-check"></i> Support 24/7</li>
-                    </ul>
-                    <button class="buy-btn" data-product="${product.likes.toLocaleString('id-ID')} Likes TikTok" data-price="${product.price}">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
-            `;
-            
-            tiktokLikesContainer.appendChild(productCard);
-        });
-        
-        // Instagram followers products data
-        const instagramFollowersProducts = [
-            { followers: 100, price: 10000 },
-            { followers: 200, price: 20000 },
-            { followers: 300, price: 30000 },
-            { followers: 400, price: 40000 },
-            { followers: 500, price: 50000 },
-            { followers: 600, price: 60000 },
-            { followers: 700, price: 70000 },
-            { followers: 800, price: 80000 },
-            { followers: 900, price: 90000 },
-            { followers: 1000, price: 100000 }
-        ];
-        
-        // Render Instagram followers products
-        const instagramFollowersContainer = document.getElementById('instagram-followers-products');
-        
-        instagramFollowersProducts.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.className = 'product-card instagram-product';
-            
-            productCard.innerHTML = `
-                <div class="product-header">
-                    <h3><i class="fab fa-instagram"></i> ${product.followers.toLocaleString('id-ID')} Followers</h3>
-                    <p>Instagram</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp ${product.price.toLocaleString('id-ID')}</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> ${product.followers.toLocaleString('id-ID')} Followers Berkualitas</li>
-                        <li><i class="fas fa-check"></i> Proses Cepat (1-3 Jam)</li>
-                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
-                        <li><i class="fas fa-check"></i> Aman & Terpercaya</li>
-                        <li><i class="fas fa-check"></i> Support 24/7</li>
-                    </ul>
-                    <button class="buy-btn" data-product="${product.followers.toLocaleString('id-ID')} Followers Instagram" data-price="${product.price}">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
-            `;
-            
-            instagramFollowersContainer.appendChild(productCard);
-        });
-        
-        // TikTok followers products data
-        const tiktokFollowersProducts = [
-            { followers: 100, price: 10000 },
-            { followers: 200, price: 20000 },
-            { followers: 300, price: 30000 },
-            { followers: 400, price: 40000 },
-            { followers: 500, price: 50000 },
-            { followers: 600, price: 60000 },
-            { followers: 700, price: 70000 },
-            { followers: 800, price: 80000 },
-            { followers: 900, price: 90000 },
-            { followers: 1000, price: 100000 }
-        ];
-        
-        // Render TikTok followers products
-        const tiktokFollowersContainer = document.getElementById('tiktok-followers-products');
-        
-        tiktokFollowersProducts.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.className = 'product-card tiktok-product';
-            
-            productCard.innerHTML = `
-                <div class="product-header">
-                    <h3><i class="fab fa-tiktok"></i> ${product.followers.toLocaleString('id-ID')} Followers</h3>
-                    <p>TikTok</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp ${product.price.toLocaleString('id-ID')}</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> ${product.followers.toLocaleString('id-ID')} Followers Berkualitas</li>
-                        <li><i class="fas fa-check"></i> Proses Cepat (1-3 Jam)</li>
-                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
-                        <li><i class="fas fa-check"></i> Aman & Terpercaya</li>
-                        <li><i class="fas fa-check"></i> Support 24/7</li>
-                    </ul>
-                    <button class="buy-btn" data-product="${product.followers.toLocaleString('id-ID')} Followers TikTok" data-price="${product.price}">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
-            `;
-            
-            tiktokFollowersContainer.appendChild(productCard);
-        });
-        
-        // Instagram viewers products data
-        const instagramViewersProducts = [
-            { viewers: 1000, price: 3000 },
-            { viewers: 2000, price: 6000 },
-            { viewers: 3000, price: 9000 },
-            { viewers: 4000, price: 12000 },
-            { viewers: 5000, price: 15000 },
-            { viewers: 6000, price: 18000 },
-            { viewers: 7000, price: 21000 },
-            { viewers: 8000, price: 24000 },
-            { viewers: 9000, price: 27000 },
-            { viewers: 10000, price: 30000 }
-        ];
-        
-        // Render Instagram viewers products
-        const instagramViewersContainer = document.getElementById('instagram-viewers-products');
-        
-        instagramViewersProducts.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.className = 'product-card instagram-product';
-            
-            productCard.innerHTML = `
-                <div class="product-header">
-                    <h3><i class="fab fa-instagram"></i> ${product.viewers.toLocaleString('id-ID')} Viewers</h3>
-                    <p>Instagram</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp ${product.price.toLocaleString('id-ID')}</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> ${product.viewers.toLocaleString('id-ID')} Viewers Berkualitas</li>
-                        <li><i class="fas fa-check"></i> Proses Cepat (1-3 Jam)</li>
-                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
-                        <li><i class="fas fa-check"></i> Aman & Terpercaya</li>
-                        <li><i class="fas fa-check"></i> Support 24/7</li>
-                    </ul>
-                    <button class="buy-btn" data-product="${product.viewers.toLocaleString('id-ID')} Viewers Instagram" data-price="${product.price}">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
-            `;
-            
-            instagramViewersContainer.appendChild(productCard);
-        });
-        
-        // TikTok viewers products data
-        const tiktokViewersProducts = [
-            { viewers: 1000, price: 3000 },
-            { viewers: 2000, price: 6000 },
-            { viewers: 3000, price: 9000 },
-            { viewers: 4000, price: 12000 },
-            { viewers: 5000, price: 15000 },
-            { viewers: 6000, price: 18000 },
-            { viewers: 7000, price: 21000 },
-            { viewers: 8000, price: 24000 },
-            { viewers: 9000, price: 27000 },
-            { viewers: 10000, price: 30000 }
-        ];
-        
-        // Render TikTok viewers products
-        const tiktokViewersContainer = document.getElementById('tiktok-viewers-products');
-        
-        tiktokViewersProducts.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.className = 'product-card tiktok-product';
-            
-            productCard.innerHTML = `
-                <div class="product-header">
-                    <h3><i class="fab fa-tiktok"></i> ${product.viewers.toLocaleString('id-ID')} Viewers</h3>
-                    <p>TikTok</p>
-                </div>
-                <div class="product-body">
-                    <div class="product-price">Rp ${product.price.toLocaleString('id-ID')}</div>
-                    <ul class="product-features">
-                        <li><i class="fas fa-check"></i> ${product.viewers.toLocaleString('id-ID')} Viewers Berkualitas</li>
-                        <li><i class="fas fa-check"></i> Proses Cepat (1-3 Jam)</li>
-                        <li><i class="fas fa-check"></i> Garansi 30 Hari</li>
-                        <li><i class="fas fa-check"></i> Aman & Terpercaya</li>
-                        <li><i class="fas fa-check"></i> Support 24/7</li>
-                    </ul>
-                    <button class="buy-btn" data-product="${product.viewers.toLocaleString('id-ID')} Viewers TikTok" data-price="${product.price}">
-                        <i class="fab fa-whatsapp"></i> Beli Sekarang
-                    </button>
-                </div>
-            `;
-            
-            tiktokViewersContainer.appendChild(productCard);
-        });
-        
-        // WhatsApp integration
-        document.addEventListener('DOMContentLoaded', function() {
-            const buyButtons = document.querySelectorAll('.buy-btn');
-            const phoneNumber = '6283877842721';
-            
-            buyButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const product = this.getAttribute('data-product');
-                    const price = this.getAttribute('data-price');
-                    
-                    const message = `Halo, saya ingin membeli ${product} seharga Rp ${parseInt(price).toLocaleString('id-ID')}. Bagaimana cara pemesanannya?`;
-                    const encodedMessage = encodeURIComponent(message);
-                    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-                    
-                    window.open(whatsappURL, '_blank');
-                });
-            });
-            
-            // Dropdown functionality
-            const dropdownBtn = document.getElementById('dropdown-btn');
-            const dropdownContent = document.getElementById('dropdown-content');
-            
-            // Toggle dropdown on button click
-            dropdownBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                dropdownContent.classList.toggle('show');
-            });
-            
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function() {
-                dropdownContent.classList.remove('show');
-            });
-            
-            // Prevent dropdown from closing when clicking inside it
-            dropdownContent.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-            
-            // Smooth scroll for dropdown links
-            const dropdownLinks = document.querySelectorAll('.dropdown-content a');
-            dropdownLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    
-                    // Close dropdown
-                    dropdownContent.classList.remove('show');
-                    
-                    // Handle different types of targets
-                    let targetElement;
-                    
-                    if (targetId === '#pterodactyl') {
-                        targetElement = document.getElementById('pterodactyl-container');
-                    } else if (targetId === '#yt-premium') {
-                        targetElement = document.getElementById('yt-premium-card');
-                    } else if (targetId === '#spotify-premium') {
-                        targetElement = document.getElementById('spotify-premium-card');
-                    } else if (targetId === '#netflix') {
-                        targetElement = document.getElementById('netflix-card');
-                    } else if (targetId === '#vidio-1bulan') {
-                        targetElement = document.getElementById('vidio-1bulan');
-                    } else if (targetId === '#rcti-1bulan') {
-                        targetElement = document.getElementById('rcti-1bulan');
-                    } else if (targetId === '#vision-1bulan') {
-                        targetElement = document.getElementById('vision-1bulan');
-                    } else if (targetId === '#picsart-1bulan') {
-                        targetElement = document.getElementById('picsart-1bulan');
-                    } else if (targetId === '#alight-1tahun') {
-                        targetElement = document.getElementById('alight-1tahun');
-                    } else if (targetId === '#rat') {
-                        targetElement = document.getElementById('rat-card');
-                    } else if (targetId === '#sc-osint') {
-                        targetElement = document.getElementById('sc-osint-card');
-                    } else if (targetId === '#sc-order') {
-                        targetElement = document.getElementById('sc-order-card');
-                    } else if (targetId === '#sc-suntik') {
-                        targetElement = document.getElementById('sc-suntik-card');
-                    } else if (targetId === '#apk-join') {
-                        targetElement = document.getElementById('apk-join-card');
-                    } else {
-                        targetElement = document.querySelector(targetId);
-                    }
-                    
-                    if (targetElement) {
-                        // Smooth scroll to target
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-        });
-    </script>
+      });
+    });
+
+    // ====== MODAL ORDER ======
+    let currentProductName = "";
+    let currentProductPrice = "";
+    let currentProductEl = null;
+
+    const modal = document.getElementById("order-modal");
+    const modalProduct = document.getElementById("modal-product");
+    const modalPrice = document.getElementById("modal-price");
+    const btnEmail = document.getElementById("btn-email");
+    const btnWa = document.getElementById("btn-wa");
+
+    function openOrderModal(productEl, productName, price) {
+      currentProductName = productName;
+      currentProductPrice = price;
+      currentProductEl = productEl;
+
+      modalProduct.textContent = productName;
+      modalPrice.textContent = price ? `Harga: ${price}` : "";
+      modal.classList.remove("hidden");
+    }
+
+    function closeOrderModal() {
+      modal.classList.add("hidden");
+    }
+
+    // Tutup modal jika klik di luar card
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        closeOrderModal();
+      }
+    });
+
+    // ====== RENDER STOK DI TAMPILAN ======
+    function renderStock(productEl) {
+      const noteEl = productEl.querySelector(".product-note");
+      const baseText = "Klik untuk pilih order via Gmail / WhatsApp";
+      let stock = parseInt(productEl.dataset.stock || "0", 10);
+      if (isNaN(stock)) stock = 0;
+
+      if (stock > 0) {
+        productEl.classList.remove("disabled");
+        if (noteEl) {
+          noteEl.textContent = `${baseText} • Stok: ${stock}`;
+        }
+      } else {
+        productEl.classList.add("disabled");
+        if (noteEl) {
+          noteEl.textContent = "Stok habis (hubungi penjual jika ingin cek ulang)";
+        }
+      }
+    }
+
+    // Inisialisasi stok semua produk
+    const allProducts = Array.from(document.querySelectorAll(".product"));
+    allProducts.forEach(renderStock);
+
+    // ====== FUNGSI ORDER VIA EMAIL & WHATSAPP ======
+    function sendEmailOrder(productName, price) {
+      const email = SELLER_EMAIL;
+      const subject = `Order ${productName}`;
+      const body = `Halo,\n\nSaya ingin membeli:\n\nProduk : ${productName}\nHarga  : ${price}\n\nGmail saya : ..................\n\nSaya sudah transfer ke DANA 083877842721 a.n. Karsih.\nTerlampir bukti pembayaran (screenshot).\n\nMohon proses dan kirim akses/akun ke Gmail tersebut.\n\nTerima kasih.`;
+
+      const mailtoUrl =
+        "mailto:" +
+        encodeURIComponent(email) +
+        "?subject=" +
+        encodeURIComponent(subject) +
+        "&body=" +
+        encodeURIComponent(body);
+
+      window.location.href = mailtoUrl;
+    }
+
+    function sendWhatsAppOrder(productName, price) {
+      const text = `Halo, saya ingin order:\n\nProduk : ${productName}\nHarga  : ${price}\n\nGmail saya : ..................\n\nSaya sudah transfer ke DANA 083877842721 a.n. Karsih.\nSaya akan kirim bukti pembayaran (screenshot).\n\nMohon diproses ya.`;
+      const url = WHATSAPP_BASE + "?text=" + encodeURIComponent(text);
+      window.open(url, "_blank");
+    }
+
+    function decreaseStockCurrentProduct() {
+      if (!currentProductEl) return;
+      let stock = parseInt(currentProductEl.dataset.stock || "0", 10);
+      if (isNaN(stock) || stock <= 0) return;
+      stock -= 1;
+      currentProductEl.dataset.stock = String(stock);
+      renderStock(currentProductEl);
+    }
+
+    btnEmail.addEventListener("click", () => {
+      sendEmailOrder(currentProductName, currentProductPrice);
+      decreaseStockCurrentProduct();
+      closeOrderModal();
+    });
+
+    btnWa.addEventListener("click", () => {
+      sendWhatsAppOrder(currentProductName, currentProductPrice);
+      decreaseStockCurrentProduct();
+      closeOrderModal();
+    });
+
+    // ====== SET KLIK DI SEMUA PRODUK UNTUK BUKA MODAL ======
+    allProducts.forEach(p => {
+      p.addEventListener("click", () => {
+        let stock = parseInt(p.dataset.stock || "0", 10);
+        if (isNaN(stock)) stock = 0;
+
+        if (stock <= 0) {
+          alert("Maaf, stok untuk produk ini sudah habis. Silakan pilih produk lain atau hubungi penjual.");
+          return;
+        }
+
+        const name =
+          p.getAttribute("data-name") ||
+          p.querySelector(".product-name")?.textContent.trim() ||
+          "Produk Premium";
+        const price = p.querySelector(".product-price")?.textContent.trim() || "";
+        openOrderModal(p, name, price);
+      });
+    });
+  </script>
 </body>
 </html>
