@@ -1,857 +1,1133 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Ptero Admin – Simple Panel</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <style>
-      :root {
-        --bg: #020617;
-        --bg-card: #020617;
-        --bg-card-soft: #0f172a;
-        --border-soft: #1e293b;
-        --accent: #22c55e;
-        --accent-soft: #166534;
-        --accent-text: #bbf7d0;
-        --text-main: #e5e7eb;
-        --text-muted: #9ca3af;
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>DigitalStore - Layanan Digital</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-soft: #020617;
+      --card: #020617;
+      --accent: #6366f1;
+      --accent-soft: rgba(99,102,241,.16);
+      --text: #e5e7eb;
+      --text-soft: #94a3b8;
+      --border: rgba(148,163,184,.35);
+    }
+    body.light {
+      --bg: #f3f4f6;
+      --bg-soft: #e5e7eb;
+      --card: #ffffff;
+      --accent: #4f46e5;
+      --accent-soft: rgba(79,70,229,.1);
+      --text: #020617;
+      --text-soft: #6b7280;
+      --border: rgba(148,163,184,.6);
+    }
+    *{box-sizing:border-box;}
+    body {
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:radial-gradient(circle at top,#1d2538 0,#020617 55%);
+      color:var(--text);
+    }
+    .topbar {
+      height:60px;
+      background:linear-gradient(90deg,#020617,#0b1120);
+      display:flex;
+      align-items:center;
+      padding:0 14px;
+      gap:10px;
+      position:fixed;
+      top:0;left:0;right:0;
+      border-bottom:1px solid rgba(148,163,184,.4);
+      z-index:20;
+    }
+    body.light .topbar {
+      background:linear-gradient(90deg,#ffffff,#e5e7eb);
+    }
+    .toggle-btn {
+      font-size:24px;
+      cursor:pointer;
+      padding:4px 6px;
+      border-radius:999px;
+      background:rgba(15,23,42,.6);
+    }
+    body.light .toggle-btn {
+      background:rgba(229,231,235,1);
+      color:#111827;
+    }
+    .brand-title {
+      display:flex;
+      flex-direction:column;
+    }
+    .brand-title span:first-child {
+      font-weight:700;
+      font-size:15px;
+    }
+    .brand-title span:last-child {
+      font-size:11px;
+      color:var(--text-soft);
+    }
+    .spacer {flex:1;}
+    .top-actions {
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .theme-btn, .admin-contact-btn {
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(15,23,42,.6);
+      color:var(--text);
+      padding:6px 10px;
+      font-size:11px;
+      display:flex;
+      align-items:center;
+      gap:4px;
+      text-decoration:none;
+      cursor:pointer;
+    }
+    body.light .theme-btn,
+    body.light .admin-contact-btn {
+      background:#f9fafb;
+    }
+    .sidebar {
+      position:fixed;
+      top:60px;bottom:0;left:0;
+      width:220px;
+      background:rgba(2,6,23,.98);
+      border-right:1px solid var(--border);
+      padding:14px;
+      transform:translateX(-100%);
+      transition:.25s;
+      z-index:15;
+      backdrop-filter:blur(18px);
+    }
+    body.light .sidebar {
+      background:rgba(255,255,255,.96);
+    }
+    .sidebar.show {
+      transform:translateX(0);
+    }
+    .nav-section-title {
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:var(--text-soft);
+      margin-bottom:4px;
+    }
+    .nav-item {
+      padding:8px 10px;
+      border-radius:10px;
+      margin-top:4px;
+      font-size:13px;
+      color:var(--text-soft);
+      display:flex;
+      align-items:center;
+      gap:6px;
+      cursor:pointer;
+    }
+    .nav-badge {
+      font-size:10px;
+      padding:2px 6px;
+      border-radius:999px;
+      background:var(--accent-soft);
+      color:var(--accent);
+      margin-left:auto;
+    }
+    .nav-item.active,
+    .nav-item:hover {
+      background:var(--accent-soft);
+      color:var(--text);
+    }
+    .main {
+      padding:72px 12px 18px;
+      max-width:960px;
+      margin:0 auto;
+    }
+    .card {
+      background:var(--card);
+      border-radius:16px;
+      padding:12px 12px 10px;
+      border:1px solid var(--border);
+      margin-bottom:10px;
+      box-shadow:0 12px 30px rgba(15,23,42,.4);
+    }
+    body.light .card {
+      box-shadow:0 14px 30px rgba(15,23,42,.12);
+    }
+    .card-header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:6px;
+    }
+    .card-header h2 {
+      margin:0;
+      font-size:15px;
+    }
+    .card-header small {
+      font-size:11px;
+      color:var(--text-soft);
+    }
+    .card p {
+      margin:0;
+      color:var(--text-soft);
+      font-size:12px;
+      line-height:1.4;
+    }
+    .pill-row {
+      margin-top:8px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      font-size:11px;
+    }
+    .pill {
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid var(--border);
+    }
+    .admin-contact-big {
+      margin-top:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .btn-primary {
+      background:var(--accent);
+      color:#fff;
+      border:none;
+      border-radius:999px;
+      padding:7px 12px;
+      font-size:12px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      cursor:pointer;
+    }
+    .btn-outline {
+      border-radius:999px;
+      border:1px solid var(--border);
+      padding:7px 12px;
+      font-size:12px;
+      text-decoration:none;
+      color:var(--text-soft);
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+    .search-row {
+      margin:6px 0 8px;
+      display:flex;
+      gap:6px;
+    }
+    .search-input {
+      flex:1;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:var(--bg-soft);
+      color:var(--text);
+      font-size:12px;
+    }
+    .search-input::placeholder {
+      color:var(--text-soft);
+    }
+    .product-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:8px;
+      margin-top:4px;
+    }
+    @media(max-width:520px) {
+      .product-grid {
+        grid-template-columns:1fr 1fr;
       }
+    }
+    .product-card {
+      background:var(--bg-soft);
+      border-radius:12px;
+      padding:8px;
+      border:1px solid rgba(148,163,184,.4);
+      font-size:12px;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      transition:.15s transform,.15s box-shadow,.15s border-color;
+    }
+    .product-card:hover {
+      transform:translateY(-1px);
+      border-color:var(--accent);
+      box-shadow:0 10px 18px rgba(15,23,42,.45);
+    }
+    .product-header {
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .product-icon {
+      width:22px;
+      height:22px;
+      border-radius:999px;
+      background:var(--accent-soft);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:13px;
+    }
+    .product-title {
+      font-weight:600;
+      font-size:12px;
+    }
+    .price-tag {
+      color:#22c55e;
+      font-weight:700;
+      font-size:12px;
+    }
+    .stock-line {
+      color:var(--text-soft);
+      font-size:11px;
+    }
+    .btn-product {
+      margin-top:2px;
+      align-self:flex-start;
+      padding:5px 9px;
+      border-radius:999px;
+      background:var(--accent);
+      color:#fff;
+      font-size:11px;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      cursor:pointer;
+    }
+    .btn-product span.icon {
+      font-size:12px;
+    }
+    /* Admin */
+    #admin {
+      display:none;
+    }
+    .login-info {
+      font-size:11px;
+      color:var(--text-soft);
+      margin-top:4px;
+    }
+    .admin-table {
+      width:100%;
+      border-collapse:collapse;
+      margin-top:8px;
+      font-size:11px;
+    }
+    .admin-table th,
+    .admin-table td {
+      padding:5px 4px;
+      border-bottom:1px solid var(--border);
+      text-align:left;
+    }
+    .admin-input {
+      width:100%;
+      padding:4px 6px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:var(--bg-soft);
+      color:var(--text);
+      font-size:11px;
+    }
+    /* Modal */
+    .modal-backdrop {
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.8);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:40;
+    }
+    .modal {
+      width:90%;
+      max-width:320px;
+      background:var(--card);
+      border-radius:16px;
+      padding:14px 14px 12px;
+      border:1px solid var(--border);
+      box-shadow:0 18px 40px rgba(0,0,0,.7);
+    }
+    .modal h3 {
+      margin:0 0 4px;
+      font-size:15px;
+    }
+    .modal p {
+      margin:0 0 8px;
+      font-size:12px;
+      color:var(--text-soft);
+    }
+    .modal-input {
+      width:100%;
+      padding:7px 9px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:var(--bg-soft);
+      color:var(--text);
+      font-size:12px;
+      margin-bottom:6px;
+    }
+    .modal-actions {
+      display:flex;
+      justify-content:flex-end;
+      gap:6px;
+      margin-top:6px;
+    }
+    .btn-cancel {
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:transparent;
+      color:var(--text-soft);
+      padding:6px 10px;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .btn-ok {
+      border-radius:999px;
+      border:none;
+      background:var(--accent);
+      color:#fff;
+      padding:6px 10px;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .modal-msg {
+      font-size:11px;
+      margin-top:4px;
+      min-height:14px;
+    }
+    .modal-msg.error {color:#f97373;}
+    .modal-msg.ok {color:#22c55e;}
+  </style>
+</head>
+<body>
 
-      * {
-        box-sizing: border-box;
-      }
+<div class="topbar">
+  <div class="toggle-btn" onclick="toggleMenu()">☰</div>
+  <div class="brand-title">
+    <span>DigitalStore</span>
+    <span>Layanan Digital & Sosial Media</span>
+  </div>
+  <div class="spacer"></div>
+  <div class="top-actions">
+    <a href="https://wa.me/6283877842721" class="admin-contact-btn">
+      📞 Admin
+    </a>
+    <button type="button" class="theme-btn" onclick="toggleTheme()" id="themeBtn">
+      🌙 Gelap
+    </button>
+  </div>
+</div>
 
-      body {
-        margin: 0;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-          sans-serif;
-        background: radial-gradient(
-          circle at top,
-          #1e293b 0,
-          #020617 45%,
-          #000 100%
-        );
-        color: var(--text-main);
-      }
+<div class="sidebar" id="sidebar">
+  <div class="nav-section-title">Menu</div>
+  <div class="nav-item active" onclick="showSection('dashboard', this)">📊 Dashboard</div>
+  <div class="nav-item" onclick="showSection('admin', this)">🛠️ Admin <span class="nav-badge" id="adminBadge">Login</span></div>
+</div>
 
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-
-      .main-wrapper {
-        min-height: 100vh;
-        display: flex;
-        align-items: stretch;
-      }
-
-      .sidebar {
-        width: 260px;
-        padding: 24px 20px;
-        border-right: 1px solid var(--border-soft);
-        background: linear-gradient(
-          to bottom,
-          #020617aa 0,
-          #020617 40%,
-          #000 100%
-        );
-        backdrop-filter: blur(18px);
-        position: sticky;
-        top: 0;
-        height: 100vh;
-      }
-
-      .logo-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 10px;
-        border-radius: 999px;
-        border: 1px solid var(--accent-soft);
-        background: linear-gradient(135deg, #22c55e22, transparent);
-        font-size: 11px;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        color: var(--accent-text);
-      }
-
-      .logo-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 999px;
-        background: var(--accent);
-        box-shadow: 0 0 14px #22c55ecc;
-      }
-
-      .nav-title {
-        margin-top: 24px;
-        font-size: 13px;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-      }
-
-      .nav-list {
-        margin-top: 10px;
-        list-style: none;
-        padding: 0;
-      }
-
-      .nav-item {
-        margin-bottom: 4px;
-      }
-
-      .nav-link {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 8px 10px;
-        border-radius: 10px;
-        font-size: 14px;
-        color: var(--text-muted);
-        cursor: pointer;
-        transition: background 0.15s, transform 0.1s, color 0.15s;
-      }
-
-      .nav-link.active {
-        background: radial-gradient(circle at top left, #22c55e22, transparent);
-        color: var(--accent-text);
-        border: 1px solid #22c55e44;
-      }
-
-      .nav-link:hover {
-        background: #020617;
-        color: var(--text-main);
-        transform: translateY(-1px);
-      }
-
-      .nav-icon {
-        width: 18px;
-        height: 18px;
-        border-radius: 6px;
-        border: 1px solid var(--border-soft);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 11px;
-      }
-
-      .main-content {
-        flex: 1;
-        padding: 24px 32px;
-      }
-
-      .content-header {
-        display: flex;
-        justify-content: space-between;
-        gap: 16px;
-        align-items: center;
-        margin-bottom: 24px;
-      }
-
-      .chip {
-        padding: 4px 10px;
-        border-radius: 999px;
-        border: 1px solid var(--border-soft);
-        font-size: 11px;
-        color: var(--text-muted);
-      }
-
-      .chip span {
-        color: var(--accent-text);
-      }
-
-      .btn {
-        border-radius: 999px;
-        padding: 6px 14px;
-        border: 1px solid transparent;
-        background: #020617;
-        color: var(--text-main);
-        font-size: 13px;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-      }
-
-      .btn-primary {
-        background: linear-gradient(135deg, #22c55e, #16a34a);
-        color: #022c22;
-        font-weight: 600;
-        box-shadow: 0 12px 30px #22c55e3d;
-      }
-
-      .btn-outline {
-        border-color: var(--border-soft);
-      }
-
-      .btn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-
-      .grid {
-        display: grid;
-        gap: 16px;
-      }
-
-      .grid-3 {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .grid-2 {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .card {
-        background: radial-gradient(circle at top left, #1e293b66, #020617 55%);
-        border-radius: 20px;
-        padding: 18px 16px;
-        border: 1px solid #1e293b;
-        box-shadow: 0 18px 50px #00000088;
-      }
-
-      .card-soft {
-        background: #020617;
-      }
-
-      .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 8px;
-        margin-bottom: 12px;
-      }
-
-      .card-title {
-        font-size: 14px;
-        color: var(--text-muted);
-      }
-
-      .card-value {
-        font-size: 20px;
-        font-weight: 600;
-      }
-
-      .card-pill {
-        font-size: 11px;
-        padding: 3px 8px;
-        border-radius: 999px;
-        background: #0f172a;
-        color: var(--text-muted);
-      }
-
-      .table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 13px;
-      }
-
-      .table thead {
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: var(--text-muted);
-      }
-
-      .table th,
-      .table td {
-        padding: 8px 10px;
-        border-bottom: 1px solid #111827;
-      }
-
-      .badge {
-        padding: 2px 8px;
-        border-radius: 999px;
-        font-size: 11px;
-      }
-
-      .badge-muted {
-        background: #1e293b;
-        color: #9ca3af;
-      }
-
-      .input-group {
-        display: flex;
-        gap: 8px;
-        margin-top: 8px;
-      }
-
-      .input {
-        flex: 1;
-        padding: 8px 10px;
-        border-radius: 999px;
-        border: 1px solid #1e293b;
-        background: #020617;
-        color: var(--text-main);
-        font-size: 13px;
-      }
-
-      .text-xs {
-        font-size: 11px;
-        color: var(--text-muted);
-      }
-
-      .error-box {
-        border-radius: 16px;
-        padding: 10px 12px;
-        border: 1px solid #b91c1c88;
-        background: linear-gradient(135deg, #450a0a, #020617 60%, #000 100%);
-        margin-bottom: 16px;
-        font-size: 13px;
-        color: #fecaca;
-      }
-
-      @media (max-width: 900px) {
-        .main-wrapper {
-          flex-direction: column;
-        }
-
-        .sidebar {
-          position: static;
-          width: 100%;
-          height: auto;
-          border-right: none;
-          border-bottom: 1px solid var(--border-soft);
-        }
-
-        .main-content {
-          padding: 16px;
-        }
-
-        .grid-3,
-        .grid-2 {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="main-wrapper">
-      <!-- SIDEBAR -->
-      <aside class="sidebar">
-        <div class="logo-badge">
-          <span class="logo-dot"></span>
-          Ptero Admin
+<div class="main">
+  <!-- DASHBOARD -->
+  <div id="dashboard">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>Cara Order</h2>
+          <small>Via DANA + Gmail + bukti transfer (SS)</small>
         </div>
-
-        <div style="margin-top: 18px; font-size: 20px; font-weight: 600">
-          Control Center
-        </div>
-        <div style="font-size: 12px; color: #9ca3af; margin-top: 4px">
-          Monitoring & quick actions untuk panel Pterodactyl kamu.
-        </div>
-
-        <div class="nav-title">Navigation</div>
-        <ul class="nav-list">
-          <li class="nav-item">
-            <div class="nav-link active">
-              <div class="nav-icon">◦</div>
-              Overview
-            </div>
-          </li>
-          <li class="nav-item">
-            <div class="nav-link">
-              <div class="nav-icon">◎</div>
-              Servers
-            </div>
-          </li>
-          <li class="nav-item">
-            <div class="nav-link">
-              <div class="nav-icon">⚙</div>
-              Settings
-            </div>
-          </li>
-        </ul>
-      </aside>
-
-      <!-- MAIN -->
-      <main class="main-content">
-        <header class="content-header">
-          <div>
-            <div class="chip">
-              Linked to <span>Pterodactyl API (Application)</span>
-            </div>
-            <h1 style="margin: 8px 0 4px; font-size: 26px">
-              Game & Bot server control at a glance
-            </h1>
-            <p style="font-size: 13px; color: #9ca3af">
-              Monitor, refresh, dan buat server baru (termasuk Panel Bot-WA)
-              langsung dari satu halaman.
-            </p>
-          </div>
-
-          <div style="display: flex; flex-direction: column; gap: 8px">
-            <div style="display: flex; gap: 8px">
-              <button class="btn btn-outline" id="btn-refresh">
-                ⟳ Refresh servers
-              </button>
-              <button class="btn btn-primary" id="btn-create-manual">
-                Create Server Manual
-              </button>
-            </div>
-            <button class="btn btn-primary" id="btn-create-botwa">
-              ⚡ 1-Click Create Panel Bot-WA
-            </button>
-          </div>
-        </header>
-
-        <div id="error-box" class="error-box" style="display: none"></div>
-
-        <!-- STATS -->
-        <section class="grid grid-3" style="margin-bottom: 18px">
-          <div class="card">
-            <div class="card-header">
-              <div>
-                <div class="card-title">Total Servers</div>
-                <div class="card-value" id="stat-total">0</div>
-              </div>
-              <div class="card-pill">All Wings</div>
-            </div>
-            <div class="text-xs">
-              Jumlah server yang terbaca dari Application API Pterodactyl.
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div>
-                <div class="card-title">Online (dummy)</div>
-                <div class="card-value" id="stat-online">0</div>
-              </div>
-              <div class="card-pill">Mode demo</div>
-            </div>
-            <div class="text-xs">
-              Kalau kamu punya field status, bisa di-mapping ke sini.
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div>
-                <div class="card-title">Bot-WA Preset</div>
-                <div class="card-value">1-click</div>
-              </div>
-              <div class="card-pill">Panel Bot-WA</div>
-            </div>
-            <div class="text-xs">
-              Tombol khusus buat bikin server Panel Bot-WA dengan konfigurasi
-              template di backend Pterodactyl kamu.
-            </div>
-          </div>
-        </section>
-
-        <!-- BODY GRID -->
-        <section class="grid grid-2">
-          <!-- LIST SERVER -->
-          <div class="card card-soft">
-            <div class="card-header">
-              <div>
-                <div class="card-title">Servers</div>
-                <div
-                  id="label-servers"
-                  style="font-size: 12px; color: #9ca3af"
-                >
-                  Loading...
-                </div>
-              </div>
-            </div>
-
-            <div style="overflow-x: auto">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>External ID</th>
-                    <th>User</th>
-                    <th>Status*</th>
-                  </tr>
-                </thead>
-                <tbody id="servers-tbody"></tbody>
-              </table>
-            </div>
-
-            <div class="text-xs" style="margin-top: 8px">
-              *Status masih placeholder. Untuk realtime status gunakan Client
-              API <code>/api/client/servers/:id/resources</code> + WebSocket.
-            </div>
-          </div>
-
-          <!-- FORM CREATE MANUAL -->
-          <div class="card card-soft">
-            <div class="card-header">
-              <div>
-                <div class="card-title">Create Server Manual</div>
-                <div style="font-size: 12px; color: #9ca3af">
-                  Skeleton minimal, konfigurasi user / egg / allocation diubah
-                  di script ini.
-                </div>
-              </div>
-              <button class="btn btn-outline" id="btn-fill-demo">
-                Fill demo
-              </button>
-            </div>
-
-            <label class="text-xs">Server name</label>
-            <div class="input-group">
-              <input
-                class="input"
-                id="input-name"
-                placeholder="contoh: Survival #1"
-              />
-            </div>
-
-            <label class="text-xs" style="margin-top: 12px">
-              External ID (opsional)
-            </label>
-            <div class="input-group">
-              <input
-                class="input"
-                id="input-external"
-                placeholder="boleh dikosongkan"
-              />
-            </div>
-
-            <div
-              class="text-xs"
-              style="margin-top: 12px; line-height: 1.5; opacity: 0.9"
-            >
-              Detail <b>user</b>, <b>egg</b>, <b>limits</b>, dan
-              <b>allocation</b> diatur di dalam script (bagian komentar CAPS).
-              <br />
-              Sesuaikan dengan konfigurasi panel dan egg Pterodactyl kamu.
-            </div>
-          </div>
-        </section>
-      </main>
+      </div>
+      <p>
+        1. Pilih produk di bawah.<br>
+        2. Tekan tombol <b>Order via Gmail</b> pada produk.<br>
+        3. Sistem akan minta kamu <b>bayar dulu via DANA</b> ke nomor <b>083877842721</b>.<br>
+        4. Setelah bayar, isi data DANA & lanjut ke Gmail.<br>
+        5. Di Gmail, <b>wajib lampirkan screenshot (SS) bukti transfer</b> sebelum kirim email.
+      </p>
+      <div class="admin-contact-big">
+        <a class="btn-primary" href="https://wa.me/6283877842721">
+          💬 Chat WhatsApp Admin
+        </a>
+        <a class="btn-outline" href="mailto:holilhsyhd@gmail.com">
+          ✉️ Kirim Email Admin
+        </a>
+      </div>
+      <div class="pill-row">
+        <div class="pill">Pembayaran: DANA 083877842721</div>
+        <div class="pill">Proses cepat setelah bukti transfer & data lengkap</div>
+      </div>
     </div>
 
-    <!-- ======================== SCRIPT LOGIC ======================== -->
-    <script>
-      /************************************************************
-       *  KONFIGURASI PTERODACTYL – GANTI BAGIAN INI
-       ************************************************************/
-      const PTERO_BASE_URL = "https://zeroix.publik.xpanelprivate.my.id"; // GANTI
-      const PTERO_API_KEY = "ptla_koDwodlNIKP6gMlOsWlFMsZUAJJTk31WGyRXRDVZ1Wc"; // GANTI – JANGAN PAKAI KEY PENTING DI PUBLIK
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>Daftar Produk</h2>
+          <small>Scroll ke bawah untuk melihat semua produk</small>
+        </div>
+      </div>
+      <div class="search-row">
+        <input id="searchInput" class="search-input" placeholder="Cari produk (misal: Netflix, Spotify, Followers)...">
+      </div>
+      <div class="product-grid" id="productGrid"></div>
+    </div>
+  </div>
 
-      // Setting default untuk server biasa (manual)
-      const DEFAULT_USER_ID = 15; // GANTI: id user yang punya server
-      const DEFAULT_EGG_ID = 15; // GANTI: id egg default
-      const DEFAULT_ALLOCATION_ID = 1; // GANTI: allocation id valid
+  <!-- ADMIN -->
+  <div id="admin">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>Admin Panel</h2>
+          <small>Akses khusus pemilik toko</small>
+        </div>
+      </div>
+      <p>Tekan tombol di bawah untuk login sebagai admin. Setelah login, kamu bisa mengubah <b>nama produk</b>, <b>harga</b>, dan <b>stok</b>. Data disimpan di browser ini.</p>
+      <div class="pill-row">
+        <div class="pill">Username: <b>barmods</b></div>
+        <div class="pill">Sandi: <b>barmods21</b></div>
+      </div>
+      <div style="margin-top:10px;">
+        <button class="btn-primary" type="button" onclick="openLoginModal()">🔐 Login Admin</button>
+      </div>
+      <div id="adminStatus" class="login-info"></div>
+    </div>
 
-      // Setting khusus panel BOT-WA
-      const BOTWA_USER_ID = 15; // GANTI kalau mau user tertentu
-      const BOTWA_EGG_ID = 15; // GANTI: id egg Bot-WA / panel bot
-      const BOTWA_ALLOCATION_ID = 1; // GANTI: allocation id buat Bot-WA
+    <div class="card" id="adminPanel" style="display:none;">
+      <div class="card-header">
+        <div>
+          <h2>Edit Produk & Stok</h2>
+          <small>Perubahan langsung ke Dashboard & tersimpan di browser</small>
+        </div>
+      </div>
+      <table class="admin-table" id="adminTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Produk</th>
+            <th>Harga</th>
+            <th>Stok</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
 
-      /************************************************************
-       *  UTIL
-       ************************************************************/
-      const serversTbody = document.getElementById("servers-tbody");
-      const labelServers = document.getElementById("label-servers");
-      const statTotal = document.getElementById("stat-total");
-      const statOnline = document.getElementById("stat-online");
-      const errorBox = document.getElementById("error-box");
+    <div class="card" id="orderHistoryCard" style="display:none;">
+      <div class="card-header">
+        <div>
+          <h2>Riwayat Order</h2>
+          <small>Data order yang dibuat dari tombol Order Sekarang</small>
+        </div>
+      </div>
+      <table class="admin-table" id="orderTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Waktu</th>
+            <th>Produk</th>
+            <th>DANA</th>
+            <th>Nama</th>
+            <th>Stok sisa</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
 
-      const inputName = document.getElementById("input-name");
-      const inputExternal = document.getElementById("input-external");
+  </div>
+</div>
 
-      const btnRefresh = document.getElementById("btn-refresh");
-      const btnCreateManual = document.getElementById("btn-create-manual");
-      const btnCreateBotWa = document.getElementById("btn-create-botwa");
-      const btnFillDemo = document.getElementById("btn-fill-demo");
+<!-- MODAL LOGIN ADMIN -->
+<div class="modal-backdrop" id="loginModal">
+  <div class="modal">
+    <h3>Login Admin</h3>
+    <p>Masukkan username & sandi admin. Tekan <b>Batal</b> jika ingin menutup tanpa login.</p>
+    <input id="user" class="modal-input" placeholder="Username">
+    <input id="pass" class="modal-input" placeholder="Sandi" type="password">
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" onclick="closeLoginModal()">Batal</button>
+      <button type="button" class="btn-ok" onclick="loginAdmin()">Masuk</button>
+    </div>
+    <div id="loginMsg" class="modal-msg"></div>
+  </div>
+</div>
 
-      function showError(message, detail) {
-        errorBox.style.display = "block";
-        errorBox.innerHTML =
-          "⚠ " +
-          message +
-          (detail ? "<br/><span class='text-xs'>" + detail + "</span>" : "");
+<!-- MODAL ORDER / DANA -->
+<div class="modal-backdrop" id="orderModal">
+  <div class="modal">
+    <h3>Pembayaran via DANA</h3>
+    <p>
+      Silakan transfer dulu ke DANA:<br>
+      <b>083877842721</b><br>
+      Setelah bayar, pilih <b>Sudah bayar</b> untuk isi data.
+    </p>
+
+    <div id="orderStepButtons">
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" onclick="orderBelumBayar()">Belum bayar</button>
+        <button type="button" class="btn-ok" onclick="orderSudahBayar()">Sudah bayar</button>
+      </div>
+    </div>
+
+    <div id="orderStepForm" style="display:none;">
+      <p>Isi data DANA kamu:</p>
+      <input id="orderDana" class="modal-input" placeholder="Nomor DANA kamu">
+      <input id="orderNama" class="modal-input" placeholder="Atas nama di DANA">
+      <p style="font-size:11px;color:var(--text-soft);margin:4px 0 0;">
+        Saat Gmail terbuka nanti, <b>wajib lampirkan screenshot (SS) bukti transfer</b> sebelum mengirim email.
+      </p>
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" onclick="closeOrderModal()">Batal</button>
+        <button type="button" class="btn-ok" onclick="orderSekarang()">Order Sekarang</button>
+      </div>
+      <div id="orderMsg" class="modal-msg"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* =================== DATA PRODUK DASAR =================== */
+  var defaultProducts = [
+    {id:1,name:"Alight Motion Private - 1 Tahun (iOS & Android)",price:"Rp 2k",stock:50,category:"editing",icon:"🎨"},
+    {id:2,name:"Bulk AM Private - 1 Bulan (10 akun)",price:"Rp 7k",stock:50,category:"editing",icon:"🎨"},
+    {id:3,name:"Apple Music Invite - 1 Bulan",price:"Rp 5k",stock:50,category:"music",icon:"🎵"},
+    {id:4,name:"Apple Music Head - 1 Bulan",price:"Rp 8k",stock:50,category:"music",icon:"🎵"},
+    {id:5,name:"Bstation Sharing - 1 Bulan",price:"Rp 5k",stock:50,category:"streaming",icon:"🎬"},
+    {id:6,name:"Bstation Private - 1 Bulan",price:"Rp 32k",stock:50,category:"streaming",icon:"🎬"},
+    {id:7,name:"Canva Member - 1 Bulan",price:"Rp 2k",stock:50,category:"editing",icon:"🎨"},
+    {id:8,name:"Canva Member - 1 Tahun",price:"Rp 4k",stock:50,category:"editing",icon:"🎨"},
+    {id:9,name:"Canva Owner - 1 Bulan",price:"Rp 5k",stock:50,category:"editing",icon:"🎨"},
+    {id:10,name:"Capcut Private - 7 Hari",price:"Rp 2k",stock:50,category:"editing",icon:"🎨"},
+    {id:11,name:"Capcut Sharing - 21 Hari",price:"Rp 3k",stock:50,category:"editing",icon:"🎨"},
+    {id:12,name:"Capcut Sharing - 1 Bulan",price:"Rp 5k",stock:50,category:"editing",icon:"🎨"},
+    {id:13,name:"Capcut Private - 21 Hari",price:"Rp 7k",stock:50,category:"editing",icon:"🎨"},
+    {id:14,name:"Capcut Private - 1 Bulan",price:"Rp 8k",stock:50,category:"editing",icon:"🎨"},
+    {id:15,name:"ChatGPT Plus Sharing - 1 Bulan (bergaransi)",price:"Rp 7k",stock:50,category:"ai",icon:"🤖"},
+    {id:16,name:"ChatGPT Private - 1 Bulan (bergaransi)",price:"Rp 30k",stock:50,category:"ai",icon:"🤖"},
+    {id:17,name:"Fizzo Novel Sharing - 1 Bulan",price:"Rp 3k",stock:50,category:"editing",icon:"🎨"},
+    {id:18,name:"Iqiyi Sharing Plan Standar - 1 Bulan",price:"Rp 3k",stock:50,category:"streaming",icon:"🎬"},
+    {id:19,name:"Iqiyi Sharing Plan Premium - 1 Bulan",price:"Rp 5k",stock:50,category:"streaming",icon:"🎬"},
+    {id:20,name:"Iqiyi Standar - 1 Bulan (Private)",price:"Rp 30k",stock:50,category:"streaming",icon:"🎬"},
+    {id:21,name:"Iqiyi Premium - 1 Bulan (Private)",price:"Rp 40k",stock:50,category:"streaming",icon:"🎬"},
+    {id:22,name:"Lightroom - 1 Tahun",price:"Rp 7k",stock:50,category:"editing",icon:"🎨"},
+    {id:23,name:"Netflix 1p2u",price:"Rp 20k",stock:50,category:"streaming",icon:"🎬"},
+    {id:24,name:"Netflix 1p1u",price:"Rp 30k",stock:50,category:"streaming",icon:"🎬"},
+    {id:25,name:"Picsart Sharing - 1 Bulan",price:"Rp 3k",stock:50,category:"editing",icon:"🎨"},
+    {id:26,name:"Picsart Private - 1 Bulan",price:"Rp 7k",stock:50,category:"editing",icon:"🎨"},
+    {id:27,name:"Spotify Premium - 1 Bulan (bergaransi)",price:"Rp 8k",stock:50,category:"music",icon:"🎵"},
+    {id:28,name:"Vidio Platinum Sharing - 1 Bulan",price:"Rp 17k",stock:50,category:"streaming",icon:"🎬"},
+    {id:29,name:"Vidio Platinum Private - 1 Bulan",price:"Rp 28k",stock:50,category:"streaming",icon:"🎬"},
+    {id:30,name:"Vision Ultimate Private - 1 Bulan",price:"Rp 40k",stock:50,category:"streaming",icon:"🎬"},
+    {id:31,name:"Viu Antilimit - 200 Tahun",price:"Rp 2k",stock:50,category:"streaming",icon:"🎬"},
+    {id:32,name:"Wetv Sharing - 1 Bulan (8u)",price:"Rp 6k",stock:50,category:"streaming",icon:"🎬"},
+    {id:33,name:"Wetv Sharing - 1 Bulan (5u)",price:"Rp 8k",stock:50,category:"streaming",icon:"🎬"},
+    {id:34,name:"Wetv Private - 1 Bulan",price:"Rp 30k",stock:50,category:"streaming",icon:"🎬"},
+    {id:35,name:"Wink Premium Private Android - 7 Hari",price:"Rp 7k",stock:50,category:"editing",icon:"🎨"},
+    {id:36,name:"Youku Sharing - 1 Bulan",price:"Rp 4k",stock:50,category:"streaming",icon:"🎬"},
+    {id:37,name:"Youku Private - 1 Bulan",price:"Rp 24k",stock:50,category:"streaming",icon:"🎬"},
+    {id:38,name:"YouTube Famplan",price:"Rp 3k",stock:50,category:"streaming",icon:"🎬"},
+    {id:39,name:"YouTube Indplan - 1 Bulan",price:"Rp 8k",stock:50,category:"streaming",icon:"🎬"},
+    {id:40,name:"YouTube Indplan - 2 Bulan",price:"Rp 9k",stock:50,category:"streaming",icon:"🎬"},
+    {id:41,name:"YouTube Head - 1 Bulan",price:"Rp 10k",stock:50,category:"streaming",icon:"🎬"},
+    {id:42,name:"YouTube Indplan - 3 Bulan",price:"Rp 11k",stock:50,category:"streaming",icon:"🎬"},
+    {id:43,name:"Panel Pterodactyl 1GB",price:"Rp 1k",stock:50,category:"panel",icon:"🖥️"},
+    {id:44,name:"Panel Pterodactyl 2GB",price:"Rp 2k",stock:50,category:"panel",icon:"🖥️"},
+    {id:45,name:"Panel Pterodactyl 3GB",price:"Rp 3k",stock:50,category:"panel",icon:"🖥️"},
+    {id:46,name:"Panel Pterodactyl 4GB",price:"Rp 4k",stock:50,category:"panel",icon:"🖥️"},
+    {id:47,name:"Panel Pterodactyl 5GB",price:"Rp 5k",stock:50,category:"panel",icon:"🖥️"},
+    {id:48,name:"Panel Pterodactyl 6GB",price:"Rp 6k",stock:50,category:"panel",icon:"🖥️"},
+    {id:49,name:"Panel Pterodactyl 7GB",price:"Rp 7k",stock:50,category:"panel",icon:"🖥️"},
+    {id:50,name:"Panel Pterodactyl 8GB",price:"Rp 8k",stock:50,category:"panel",icon:"🖥️"},
+    {id:51,name:"Panel Pterodactyl 9GB",price:"Rp 9k",stock:50,category:"panel",icon:"🖥️"},
+    {id:52,name:"Panel Pterodactyl Unlimited",price:"Rp 10k",stock:50,category:"panel",icon:"🖥️"},
+    {id:53,name:"Tracking Camera",price:"Rp 20k",stock:50,category:"tools",icon:"🛠️"},
+    {id:54,name:"Instagram Likes 1.000",price:"Rp 3k",stock:50,category:"sosmed",icon:"📱"},
+    {id:55,name:"Instagram Likes 2.000",price:"Rp 6k",stock:50,category:"sosmed",icon:"📱"},
+    {id:56,name:"Instagram Likes 3.000",price:"Rp 9k",stock:50,category:"sosmed",icon:"📱"},
+    {id:57,name:"Instagram Likes 4.000",price:"Rp 12k",stock:50,category:"sosmed",icon:"📱"},
+    {id:58,name:"Instagram Likes 5.000",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
+    {id:59,name:"Instagram Likes 6.000",price:"Rp 18k",stock:50,category:"sosmed",icon:"📱"},
+    {id:60,name:"Instagram Likes 7.000",price:"Rp 21k",stock:50,category:"sosmed",icon:"📱"},
+    {id:61,name:"Instagram Likes 8.000",price:"Rp 24k",stock:50,category:"sosmed",icon:"📱"},
+    {id:62,name:"Instagram Likes 9.000",price:"Rp 27k",stock:50,category:"sosmed",icon:"📱"},
+    {id:63,name:"Instagram Likes 10.000",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"},
+    {id:64,name:"TikTok Likes 100",price:"Rp 5k",stock:50,category:"sosmed",icon:"📱"},
+    {id:65,name:"TikTok Likes 200",price:"Rp 10k",stock:50,category:"sosmed",icon:"📱"},
+    {id:66,name:"TikTok Likes 300",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
+    {id:67,name:"TikTok Likes 400",price:"Rp 20k",stock:50,category:"sosmed",icon:"📱"},
+    {id:68,name:"TikTok Likes 500",price:"Rp 25k",stock:50,category:"sosmed",icon:"📱"},
+    {id:69,name:"TikTok Likes 600",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"},
+    {id:70,name:"TikTok Likes 700",price:"Rp 35k",stock:50,category:"sosmed",icon:"📱"},
+    {id:71,name:"TikTok Likes 800",price:"Rp 40k",stock:50,category:"sosmed",icon:"📱"},
+    {id:72,name:"TikTok Likes 900",price:"Rp 45k",stock:50,category:"sosmed",icon:"📱"},
+    {id:73,name:"TikTok Likes 1.000",price:"Rp 50k",stock:50,category:"sosmed",icon:"📱"},
+    {id:74,name:"Instagram Followers 100",price:"Rp 5k",stock:50,category:"sosmed",icon:"📱"},
+    {id:75,name:"Instagram Followers 200",price:"Rp 10k",stock:50,category:"sosmed",icon:"📱"},
+    {id:76,name:"Instagram Followers 300",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
+    {id:77,name:"Instagram Followers 400",price:"Rp 20k",stock:50,category:"sosmed",icon:"📱"},
+    {id:78,name:"Instagram Followers 500",price:"Rp 25k",stock:50,category:"sosmed",icon:"📱"},
+    {id:79,name:"Instagram Followers 600",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"},
+    {id:80,name:"Instagram Followers 700",price:"Rp 35k",stock:50,category:"sosmed",icon:"📱"},
+    {id:81,name:"Instagram Followers 800",price:"Rp 40k",stock:50,category:"sosmed",icon:"📱"},
+    {id:82,name:"Instagram Followers 900",price:"Rp 45k",stock:50,category:"sosmed",icon:"📱"},
+    {id:83,name:"Instagram Followers 1.000",price:"Rp 50k",stock:50,category:"sosmed",icon:"📱"},
+    {id:84,name:"TikTok Followers 100",price:"Rp 5k",stock:50,category:"sosmed",icon:"📱"},
+    {id:85,name:"TikTok Followers 200",price:"Rp 10k",stock:50,category:"sosmed",icon:"📱"},
+    {id:86,name:"TikTok Followers 300",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
+    {id:87,name:"TikTok Followers 400",price:"Rp 20k",stock:50,category:"sosmed",icon:"📱"},
+    {id:88,name:"TikTok Followers 500",price:"Rp 25k",stock:50,category:"sosmed",icon:"📱"},
+    {id:89,name:"TikTok Followers 600",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"},
+    {id:90,name:"TikTok Followers 700",price:"Rp 35k",stock:50,category:"sosmed",icon:"📱"},
+    {id:91,name:"TikTok Followers 800",price:"Rp 40k",stock:50,category:"sosmed",icon:"📱"},
+    {id:92,name:"TikTok Followers 900",price:"Rp 45k",stock:50,category:"sosmed",icon:"📱"},
+    {id:93,name:"TikTok Followers 1.000",price:"Rp 50k",stock:50,category:"sosmed",icon:"📱"},
+    {id:94,name:"Instagram Viewers 1.000",price:"Rp 3k",stock:50,category:"sosmed",icon:"📱"},
+    {id:95,name:"Instagram Viewers 2.000",price:"Rp 6k",stock:50,category:"sosmed",icon:"📱"},
+    {id:96,name:"Instagram Viewers 3.000",price:"Rp 9k",stock:50,category:"sosmed",icon:"📱"},
+    {id:97,name:"Instagram Viewers 4.000",price:"Rp 12k",stock:50,category:"sosmed",icon:"📱"},
+    {id:98,name:"Instagram Viewers 5.000",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
+    {id:99,name:"Instagram Viewers 6.000",price:"Rp 18k",stock:50,category:"sosmed",icon:"📱"},
+    {id:100,name:"Instagram Viewers 7.000",price:"Rp 21k",stock:50,category:"sosmed",icon:"📱"},
+    {id:101,name:"Instagram Viewers 8.000",price:"Rp 24k",stock:50,category:"sosmed",icon:"📱"},
+    {id:102,name:"Instagram Viewers 9.000",price:"Rp 27k",stock:50,category:"sosmed",icon:"📱"},
+    {id:103,name:"Instagram Viewers 10.000",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"},
+    {id:104,name:"TikTok Viewers 1.000",price:"Rp 3k",stock:50,category:"sosmed",icon:"📱"},
+    {id:105,name:"TikTok Viewers 2.000",price:"Rp 6k",stock:50,category:"sosmed",icon:"📱"},
+    {id:106,name:"TikTok Viewers 3.000",price:"Rp 9k",stock:50,category:"sosmed",icon:"📱"},
+    {id:107,name:"TikTok Viewers 4.000",price:"Rp 12k",stock:50,category:"sosmed",icon:"📱"},
+    {id:108,name:"TikTok Viewers 5.000",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
+    {id:109,name:"TikTok Viewers 6.000",price:"Rp 18k",stock:50,category:"sosmed",icon:"📱"},
+    {id:110,name:"TikTok Viewers 7.000",price:"Rp 21k",stock:50,category:"sosmed",icon:"📱"},
+    {id:111,name:"TikTok Viewers 8.000",price:"Rp 24k",stock:50,category:"sosmed",icon:"📱"},
+    {id:112,name:"TikTok Viewers 9.000",price:"Rp 27k",stock:50,category:"sosmed",icon:"📱"},
+    {id:113,name:"TikTok Viewers 10.000",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"}
+  ];
+
+  var STORAGE_PRODUCTS_KEY = 'ds-products-v1';
+  var STORAGE_ORDERS_KEY = 'ds-orders-v1';
+
+  function loadProducts() {
+    try {
+      var raw = localStorage.getItem(STORAGE_PRODUCTS_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed;
       }
+    } catch(e) {}
+    return JSON.parse(JSON.stringify(defaultProducts));
+  }
 
-      function clearError() {
-        errorBox.style.display = "none";
-        errorBox.innerHTML = "";
+  function saveProducts() {
+    try {
+      localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(products));
+    } catch(e) {}
+  }
+
+  function loadOrders() {
+    try {
+      var raw = localStorage.getItem(STORAGE_ORDERS_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed;
       }
+    } catch(e) {}
+    return [];
+  }
 
-      /************************************************************
-       *  LOAD SERVERS
-       ************************************************************/
-      async function loadServers() {
-        clearError();
-        labelServers.textContent = "Loading...";
-        serversTbody.innerHTML = "";
+  function saveOrders() {
+    try {
+      localStorage.setItem(STORAGE_ORDERS_KEY, JSON.stringify(orders));
+    } catch(e) {}
+  }
 
-        try {
-          const res = await fetch(PTERO_BASE_URL + "/api/application/servers", {
-            method: "GET",
-            headers: {
-              Authorization: "Bearer " + PTERO_API_KEY,
-              "Content-Type": "application/json",
-              Accept: "Application/vnd.pterodactyl.v1+json",
-            },
-          });
+  var products = loadProducts();
+  var orders = loadOrders();
+  var currentOrderId = null;
 
-          const text = await res.text();
-          let data;
-          try {
-            data = JSON.parse(text);
-          } catch (e) {
-            showError("Gagal parse response server.", text);
-            labelServers.textContent = "Error saat load.";
-            return;
-          }
+  /* ============== UI BASIC ============== */
+  function toggleMenu() {
+    var s = document.getElementById('sidebar');
+    if (s.className.indexOf('show') === -1) {
+      s.className += ' show';
+    } else {
+      s.className = s.className.replace(' show','');
+    }
+  }
 
-          if (!res.ok) {
-            showError("Gagal ambil data dari Pterodactyl.", text);
-            labelServers.textContent = "Error saat load.";
-            return;
-          }
+  function showSection(id, el) {
+    document.getElementById('dashboard').style.display = id === 'dashboard' ? 'block' : 'none';
+    document.getElementById('admin').style.display = id === 'admin' ? 'block' : 'none';
+    var items = document.getElementsByClassName('nav-item');
+    for (var i=0;i<items.length;i++) {
+      items[i].className = items[i].className.replace(' active','');
+    }
+    if (el) el.className += ' active';
+    var s = document.getElementById('sidebar');
+    s.className = s.className.replace(' show','');
+  }
 
-          const list = data.data || [];
-          labelServers.textContent = `Showing ${list.length} servers`;
-          statTotal.textContent = String(list.length);
+  /* ============== RENDER PRODUK ============== */
+  function createProductCard(p) {
+    var card = document.createElement('div');
+    card.className = 'product-card';
+    card.setAttribute('data-id', p.id);
+    card.setAttribute('data-name', (p.name + ' ' + p.category).toLowerCase());
 
-          // dummy online = 0 (kamu bisa custom sendiri)
-          statOnline.textContent = "0";
+    var header = document.createElement('div');
+    header.className = 'product-header';
 
-          if (list.length === 0) {
-            serversTbody.innerHTML =
-              '<tr><td colspan="5" style="padding-top: 16px; font-size: 13px;">Belum ada server yang ditampilkan.</td></tr>';
-            return;
-          }
+    var icon = document.createElement('div');
+    icon.className = 'product-icon';
+    icon.innerHTML = p.icon || '⭐';
 
-          serversTbody.innerHTML = "";
-          list.forEach((s) => {
-            const attr = s.attributes || {};
-            const tr = document.createElement("tr");
+    var title = document.createElement('div');
+    title.className = 'product-title';
+    title.appendChild(document.createTextNode(p.name));
 
-            tr.innerHTML =
-              "<td>" +
-              (attr.id ?? "") +
-              "</td>" +
-              "<td>" +
-              (attr.name ?? "") +
-              "</td>" +
-              "<td>" +
-              (attr.external_id ||
-                '<span class="badge badge-muted">none</span>') +
-              "</td>" +
-              "<td>" +
-              (attr.user ?? "") +
-              "</td>" +
-              '<td><span class="badge badge-muted">unknown</span></td>';
+    header.appendChild(icon);
+    header.appendChild(title);
 
-            serversTbody.appendChild(tr);
-          });
-        } catch (e) {
-          console.error(e);
-          showError("Error jaringan saat load server.", String(e));
-          labelServers.textContent = "Error saat load.";
+    var price = document.createElement('div');
+    price.className = 'price-tag';
+    price.appendChild(document.createTextNode(p.price));
+
+    var stock = document.createElement('div');
+    stock.className = 'stock-line';
+    stock.appendChild(document.createTextNode('Stok: ' + p.stock));
+
+    var btn = document.createElement('a');
+    btn.className = 'btn-product';
+    btn.href = '#';
+
+    if (p.stock <= 0) {
+      btn.style.opacity = '0.6';
+      btn.style.pointerEvents = 'none';
+      btn.appendChild(document.createTextNode('Stok habis'));
+    } else {
+      btn.onclick = function(e) {
+        e.preventDefault();
+        openOrderModal(p.id);
+      };
+      var spanIcon = document.createElement('span');
+      spanIcon.className = 'icon';
+      spanIcon.appendChild(document.createTextNode('✉️'));
+      var spanText = document.createElement('span');
+      spanText.appendChild(document.createTextNode('Order via Gmail'));
+      btn.appendChild(spanIcon);
+      btn.appendChild(spanText);
+    }
+
+    card.appendChild(header);
+    card.appendChild(price);
+    card.appendChild(stock);
+    card.appendChild(btn);
+
+    return card;
+  }
+
+  function renderProducts() {
+    var grid = document.getElementById('productGrid');
+    grid.innerHTML = '';
+    var searchValEl = document.getElementById('searchInput');
+    var val = searchValEl ? searchValEl.value.toLowerCase() : '';
+    for (var i=0;i<products.length;i++) {
+      var p = products[i];
+      var nameStr = (p.name + ' ' + p.category).toLowerCase();
+      if (!val || nameStr.indexOf(val) !== -1) {
+        grid.appendChild(createProductCard(p));
+      }
+    }
+  }
+
+  /* ============== FLOW ORDER DANA ============== */
+  function openOrderModal(id) {
+    currentOrderId = id;
+    document.getElementById('orderDana').value = '';
+    document.getElementById('orderNama').value = '';
+    document.getElementById('orderMsg').innerHTML = '';
+    document.getElementById('orderStepButtons').style.display = 'block';
+    document.getElementById('orderStepForm').style.display = 'none';
+    document.getElementById('orderModal').style.display = 'flex';
+  }
+
+  function closeOrderModal() {
+    document.getElementById('orderModal').style.display = 'none';
+  }
+
+  function orderBelumBayar() {
+    closeOrderModal();
+  }
+
+  function orderSudahBayar() {
+    document.getElementById('orderStepButtons').style.display = 'none';
+    document.getElementById('orderStepForm').style.display = 'block';
+  }
+
+  function orderSekarang() {
+    var dana = document.getElementById('orderDana').value.trim();
+    var nama = document.getElementById('orderNama').value.trim();
+    var msg = document.getElementById('orderMsg');
+    msg.className = 'modal-msg';
+    msg.innerHTML = '';
+
+    if (!dana || !nama) {
+      msg.className += ' error';
+      msg.innerHTML = 'Nomor DANA dan atas nama wajib diisi.';
+      return;
+    }
+
+    var p = null;
+    for (var i=0;i<products.length;i++) {
+      if (products[i].id === currentOrderId) { p = products[i]; break; }
+    }
+    if (!p) {
+      closeOrderModal();
+      return;
+    }
+
+    if (p.stock > 0) {
+      p.stock = p.stock - 1;
+    }
+    saveProducts();
+    renderProducts();
+    if (document.getElementById('adminPanel').style.display !== 'none') {
+      renderAdminTable();
+    }
+
+    var now = new Date();
+    orders.push({
+      time: now.toISOString(),
+      productId: p.id,
+      productName: p.name,
+      price: p.price,
+      danaNumber: dana,
+      danaName: nama,
+      stockAfter: p.stock
+    });
+    saveOrders();
+    if (document.getElementById('orderHistoryCard').style.display !== 'none') {
+      renderOrderTable();
+    }
+
+    var subject = 'Order ' + p.name;
+    var body =
+      'Halo Admin, saya sudah melakukan pembayaran via DANA.\n\n' +
+      'Produk      : ' + p.name + '\n' +
+      'Harga       : ' + p.price + '\n' +
+      'Stok sisa   : ' + p.stock + '\n\n' +
+      'Data DANA:\n' +
+      'Nomor DANA  : ' + dana + '\n' +
+      'Atas nama   : ' + nama + '\n\n' +
+      'Saya akan melampirkan bukti transfer (screenshot) di email ini sebelum mengirim.\n\n' +
+      'Data saya:\n' +
+      '- Nama           :\n' +
+      '- Email          :\n' +
+      '- Nomor WhatsApp :\n\n' +
+      'Terima kasih.';
+
+    var url = 'mailto:' + encodeURIComponent('holilhsyhd@gmail.com')
+      + '?subject=' + encodeURIComponent(subject)
+      + '&body=' + encodeURIComponent(body);
+
+    closeOrderModal();
+    window.location.href = url;
+  }
+
+  document.getElementById('orderModal').addEventListener('click', function(e){
+    if (e.target === this) { closeOrderModal(); }
+  });
+
+  /* ============== LOGIN ADMIN + MODAL ============== */
+  function openLoginModal() {
+    var m = document.getElementById('loginModal');
+    m.style.display = 'flex';
+    document.getElementById('loginMsg').innerHTML = '';
+    var u = document.getElementById('user');
+    document.getElementById('pass').value = '';
+    u.value = '';
+    u.focus();
+  }
+
+  function closeLoginModal() {
+    var m = document.getElementById('loginModal');
+    m.style.display = 'none';
+  }
+
+  function loginAdmin() {
+    var u = document.getElementById('user').value;
+    var p = document.getElementById('pass').value;
+    var msg = document.getElementById('loginMsg');
+    msg.className = 'modal-msg';
+    if (u === 'barmods' && p === 'barmods21') {
+      msg.className += ' ok';
+      msg.innerHTML = 'Login berhasil. Admin aktif.';
+      document.getElementById('adminStatus').innerHTML = '✅ Admin sudah login di perangkat ini.';
+      document.getElementById('adminPanel').style.display = 'block';
+      document.getElementById('orderHistoryCard').style.display = 'block';
+      var badge = document.getElementById('adminBadge');
+      if (badge) { badge.innerHTML = 'Aktif'; }
+      renderAdminTable();
+      renderOrderTable();
+      setTimeout(function(){ closeLoginModal(); }, 800);
+    } else {
+      msg.className += ' error';
+      msg.innerHTML = 'Username atau sandi salah.';
+    }
+  }
+
+  document.getElementById('loginModal').addEventListener('click', function(e){
+    if (e.target === this) { closeLoginModal(); }
+  });
+
+  /* ============== ADMIN TABLE ============== */
+  function renderAdminTable() {
+    var tbody = document.getElementById('adminTable').getElementsByTagName('tbody')[0];
+    tbody.innerHTML = '';
+    for (var i=0;i<products.length;i++) {
+      var p = products[i];
+      var tr = document.createElement('tr');
+
+      var tdId = document.createElement('td');
+      tdId.appendChild(document.createTextNode(p.id));
+
+      var tdName = document.createElement('td');
+      var inpName = document.createElement('input');
+      inpName.className = 'admin-input';
+      inpName.value = p.name;
+      inpName.setAttribute('data-id', p.id);
+      inpName.setAttribute('data-field', 'name');
+      tdName.appendChild(inpName);
+
+      var tdPrice = document.createElement('td');
+      var inpPrice = document.createElement('input');
+      inpPrice.className = 'admin-input';
+      inpPrice.value = p.price;
+      inpPrice.setAttribute('data-id', p.id);
+      inpPrice.setAttribute('data-field', 'price');
+      tdPrice.appendChild(inpPrice);
+
+      var tdStock = document.createElement('td');
+      var inpStock = document.createElement('input');
+      inpStock.className = 'admin-input';
+      inpStock.type = 'number';
+      inpStock.min = '0';
+      inpStock.value = p.stock;
+      inpStock.setAttribute('data-id', p.id);
+      inpStock.setAttribute('data-field', 'stock');
+      tdStock.appendChild(inpStock);
+
+      tr.appendChild(tdId);
+      tr.appendChild(tdName);
+      tr.appendChild(tdPrice);
+      tr.appendChild(tdStock);
+
+      tbody.appendChild(tr);
+    }
+
+    var inputs = tbody.getElementsByClassName('admin-input');
+    for (var j=0;j<inputs.length;j++) {
+      inputs[j].oninput = function() {
+        var id = Number(this.getAttribute('data-id'));
+        var field = this.getAttribute('data-field');
+        var prod = null;
+        for (var k=0;k<products.length;k++) {
+          if (products[k].id === id) { prod = products[k]; break; }
         }
-      }
-
-      /************************************************************
-       *  CREATE SERVER – MANUAL
-       ************************************************************/
-      async function createServerManual() {
-        clearError();
-
-        const name = inputName.value.trim();
-        const externalId = inputExternal.value.trim() || null;
-
-        if (!name) {
-          showError("Nama server wajib diisi.");
-          return;
+        if (!prod) return;
+        if (field === 'name') {
+          prod.name = this.value;
+        } else if (field === 'price') {
+          prod.price = this.value;
+        } else if (field === 'stock') {
+          var v = parseInt(this.value, 10);
+          if (isNaN(v) || v < 0) v = 0;
+          prod.stock = v;
         }
+        saveProducts();
+        renderProducts();
+      };
+    }
+  }
 
-        btnCreateManual.disabled = true;
+  /* ============== RIWAYAT ORDER TABLE ============== */
+  function renderOrderTable() {
+    var tbody = document.getElementById('orderTable').getElementsByTagName('tbody')[0];
+    tbody.innerHTML = '';
+    for (var i=0;i<orders.length;i++) {
+      var o = orders[i];
+      var tr = document.createElement('tr');
 
-        // body create server – SESUAIKAN DENGAN PANELMU
-        const body = {
-          name: name,
-          description: "Created from simple admin panel",
-          external_id: externalId,
+      var tdIdx = document.createElement('td');
+      tdIdx.appendChild(document.createTextNode(i + 1));
 
-          user: DEFAULT_USER_ID,
-          egg: DEFAULT_EGG_ID,
-          docker_image: "ghcr.io/parkervcp/yolks:nodejs_18", // contoh
+      var tdTime = document.createElement('td');
+      var d = new Date(o.time);
+      tdTime.appendChild(document.createTextNode(d.toLocaleString('id-ID')));
 
-          startup: "npm start",
+      var tdProd = document.createElement('td');
+      tdProd.appendChild(document.createTextNode(o.productName));
 
-          environment: {
-            // Contoh env; sesuaikan sama egg kamu
-            // "PORT": "3000",
-          },
+      var tdDana = document.createElement('td');
+      tdDana.appendChild(document.createTextNode(o.danaNumber));
 
-          limits: {
-            memory: 1024,
-            swap: 0,
-            disk: 5120,
-            io: 500,
-            cpu: 0,
-          },
+      var tdNama = document.createElement('td');
+      tdNama.appendChild(document.createTextNode(o.danaName));
 
-          feature_limits: {
-            databases: 1,
-            backups: 1,
-            allocations: 1,
-          },
+      var tdStock = document.createElement('td');
+      tdStock.appendChild(document.createTextNode(o.stockAfter));
 
-          allocation: {
-            default: DEFAULT_ALLOCATION_ID,
-          },
-        };
+      tr.appendChild(tdIdx);
+      tr.appendChild(tdTime);
+      tr.appendChild(tdProd);
+      tr.appendChild(tdDana);
+      tr.appendChild(tdNama);
+      tr.appendChild(tdStock);
 
-        try {
-          const res = await fetch(
-            PTERO_BASE_URL + "/api/application/servers",
-            {
-              method: "POST",
-              headers: {
-                Authorization: "Bearer " + PTERO_API_KEY,
-                "Content-Type": "application/json",
-                Accept: "Application/vnd.pterodactyl.v1+json",
-              },
-              body: JSON.stringify(body),
-            }
-          );
+      tbody.appendChild(tr);
+    }
+  }
 
-          const text = await res.text();
-          let data;
-          try {
-            data = JSON.parse(text);
-          } catch (e) {
-            showError("Gagal parse response create server.", text);
-            return;
-          }
+  /* ============== PENCARIAN ============== */
+  var searchInputEl = document.getElementById('searchInput');
+  searchInputEl.oninput = function() {
+    renderProducts();
+  };
 
-          if (!res.ok) {
-            console.error(data);
-            showError(
-              "Gagal membuat server manual. Cek konfigurasi user/egg/allocation.",
-              JSON.stringify(data)
-            );
-            return;
-          }
-
-          // sukses
-          inputName.value = "";
-          inputExternal.value = "";
-          await loadServers();
-        } catch (e) {
-          console.error(e);
-          showError("Error jaringan saat create server.", String(e));
-        } finally {
-          btnCreateManual.disabled = false;
-        }
+  /* ============== MODE TERANG / GELAP ============== */
+  function applyTheme(t) {
+    var btn = document.getElementById('themeBtn');
+    if (t === 'light') {
+      if (document.body.className.indexOf('light') === -1) {
+        document.body.className += (document.body.className ? ' ' : '') + 'light';
       }
+      btn.innerHTML = '☀️ Terang';
+    } else {
+      document.body.className = document.body.className.replace('light','').trim();
+      btn.innerHTML = '🌙 Gelap';
+    }
+  }
+  var savedTheme = (function(){ try { return localStorage.getItem('ds-theme-hp'); } catch(e) { return null; } })();
+  if (!savedTheme) savedTheme = 'dark';
+  applyTheme(savedTheme);
 
-      /************************************************************
-       *  CREATE SERVER BOT-WA (PRESET)
-       ************************************************************/
-      async function createServerBotWa() {
-        clearError();
-        btnCreateBotWa.disabled = true;
+  function toggleTheme() {
+    var isLight = document.body.className.indexOf('light') !== -1;
+    var now = isLight ? 'dark' : 'light';
+    applyTheme(now);
+    try { localStorage.setItem('ds-theme-hp', now); } catch(e) {}
+  }
 
-        const body = {
-          name: "Panel Bot-WA",
-          description: "Server untuk panel bot WhatsApp (preset simple)",
-          external_id: null,
+  /* INIT */
+  renderProducts();
+</script>
 
-          user: BOTWA_USER_ID,
-          egg: BOTWA_EGG_ID,
-          docker_image: "ghcr.io/parkervcp/yolks:nodejs_18", // umumnya NodeJS
-
-          startup: "npm start", // ganti sesuai dok egg Bot-WA
-
-          environment: {
-            // Contoh env – GANTI sesuai egg:
-            // "BOT_NUMBER": "628xxxxx",
-            // "API_KEY": "xxxx",
-            // "MONGODB_URI": "mongodb+srv://....",
-          },
-
-          limits: {
-            memory: 2048,
-            swap: 0,
-            disk: 10240,
-            io: 500,
-            cpu: 0,
-          },
-
-          feature_limits: {
-            databases: 1,
-            backups: 3,
-            allocations: 1,
-          },
-
-          allocation: {
-            default: BOTWA_ALLOCATION_ID,
-          },
-        };
-
-        try {
-          const res = await fetch(
-            PTERO_BASE_URL + "/api/application/servers",
-            {
-              method: "POST",
-              headers: {
-                Authorization: "Bearer " + PTERO_API_KEY,
-                "Content-Type": "application/json",
-                Accept: "Application/vnd.pterodactyl.v1+json",
-              },
-              body: JSON.stringify(body),
-            }
-          );
-
-          const text = await res.text();
-          let data;
-          try {
-            data = JSON.parse(text);
-          } catch (e) {
-            showError(
-              "Gagal parse response create server Bot-WA.",
-              text
-            );
-            return;
-          }
-
-          if (!res.ok) {
-            console.error(data);
-            showError(
-              "Gagal membuat server Panel Bot-WA. Cek ID egg/user/allocation & env.",
-              JSON.stringify(data)
-            );
-            return;
-          }
-
-          await loadServers();
-        } catch (e) {
-          console.error(e);
-          showError("Error jaringan saat create server Bot-WA.", String(e));
-        } finally {
-          btnCreateBotWa.disabled = false;
-        }
-      }
-
-      /************************************************************
-       *  EVENT LISTENERS
-       ************************************************************/
-      btnRefresh.addEventListener("click", loadServers);
-      btnCreateManual.addEventListener("click", createServerManual);
-      btnCreateBotWa.addEventListener("click", createServerBotWa);
-
-      btnFillDemo.addEventListener("click", () => {
-        inputName.value = "My new server";
-        inputExternal.value = "external-" + Date.now();
-      });
-
-      // load awal
-      loadServers();
-    </script>
-  </body>
+</body>
 </html>
