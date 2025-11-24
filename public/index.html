@@ -746,22 +746,37 @@
 
   /* ============== AMBIL DATA PRODUK DARI FIRESTORE ============== */
   async function loadProductsFromDB() {
-    const colRef = collection(db, 'products');
-    const snap   = await getDocs(colRef);
+  const colRef = collection(db, 'products');
+  const snap   = await getDocs(colRef);
 
-    if (snap.empty) {
-      // Seed pertama kali
-      for (const p of defaultProducts) {
-        await setDoc(doc(colRef, String(p.id)), p);
-      }
-      return JSON.parse(JSON.stringify(defaultProducts));
-    } else {
-      const arr = [];
-      snap.forEach(d => arr.push(d.data()));
-      arr.sort((a,b) => a.id - b.id);
-      return arr;
+  const arr = [];
+  const existingIds = new Set();
+
+  // ambil semua produk yang sudah ada di Firestore
+  snap.forEach(d => {
+    const data = d.data();
+    arr.push(data);
+    if (data.id != null) existingIds.add(data.id);
+  });
+
+  // kalau kosong total → seed semua dari defaultProducts
+  if (arr.length === 0) {
+    for (const p of defaultProducts) {
+      await setDoc(doc(colRef, String(p.id)), p);
     }
+    return JSON.parse(JSON.stringify(defaultProducts));
   }
+
+  // kalau sudah ada, tambahkan HANYA produk yang belum ada (id baru)
+  const toAdd = defaultProducts.filter(p => !existingIds.has(p.id));
+  for (const p of toAdd) {
+    await setDoc(doc(colRef, String(p.id)), p);
+    arr.push(p);
+  }
+
+  arr.sort((a, b) => a.id - b.id);
+  return arr;
+}
 
   async function updateProductField(id, field, value) {
     const colRef = collection(db, 'products');
