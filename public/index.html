@@ -442,15 +442,15 @@
       <div class="card-header">
         <div>
           <h2>Cara Order</h2>
-          <small>Via DANA + Gmail + bukti transfer (SS)</small>
+          <small>Via DANA + form di website</small>
         </div>
       </div>
       <p>
         1. Pilih produk di bawah.<br>
-        2. Tekan tombol <b>Order via Gmail</b> pada produk.<br>
-        3. Sistem akan minta kamu <b>bayar dulu via DANA</b> ke nomor <b>083877842721</b> (a.n kamu isi nanti).<br>
-        4. Setelah bayar, isi data DANA & lanjut ke Gmail.<br>
-        5. Di Gmail, <b>wajib lampirkan screenshot (SS) bukti transfer</b> sebelum kirim email.
+        2. Tekan tombol <b>Order Sekarang</b> pada produk.<br>
+        3. Isi data DANA & data tambahan yang diminta di form (username / link / user panel).<br>
+        4. Lakukan pembayaran manual ke DANA <b>083877842721</b>.<br>
+        5. Setelah bayar, kamu bisa kirim bukti transfer ke admin (WhatsApp / chat lain) jika diminta.
       </p>
       <div class="admin-contact-big">
         <a class="btn-primary" href="https://wa.me/6283877842721">
@@ -462,7 +462,7 @@
       </div>
       <div class="pill-row">
         <div class="pill">Pembayaran: DANA 083877842721</div>
-        <div class="pill">Proses cepat setelah bukti transfer & data lengkap</div>
+        <div class="pill">Proses setelah pembayaran & data lengkap</div>
       </div>
     </div>
 
@@ -491,8 +491,8 @@
       </div>
       <p>Tekan tombol di bawah untuk login sebagai admin. Setelah login, kamu bisa mengubah <b>nama produk</b>, <b>harga</b>, dan <b>stok</b>. Data disimpan di Firebase (global).</p>
       <div class="pill-row">
-        <div class="pill">halaman <b>khusus admin</b></div>
-        <div class="pill">semua produk <b>selalu update</b></div>
+        <div class="pill">Username: <b>barmods</b></div>
+        <div class="pill">Sandi: <b>barmods21</b></div>
       </div>
       <div style="margin-top:10px;">
         <button class="btn-primary" type="button" onclick="openLoginModal()">🔐 Login Admin</button>
@@ -609,7 +609,7 @@
       </div>
 
       <p style="font-size:11px;color:var(--text-soft);margin:4px 0 0;">
-        Saat Gmail terbuka nanti, <b>wajib lampirkan screenshot (SS) bukti transfer</b> sebelum mengirim email.
+        Setelah data tersimpan, silakan lakukan pembayaran ke DANA di atas.
       </p>
       <div class="modal-actions">
         <button type="button" class="btn-cancel" onclick="closeOrderModal()">Batal</button>
@@ -869,9 +869,9 @@
       };
       const spanIcon = document.createElement('span');
       spanIcon.className = 'icon';
-      spanIcon.textContent = '✉️';
+      spanIcon.textContent = '🛒';
       const spanText = document.createElement('span');
-      spanText.textContent = 'Order via Gmail';
+      spanText.textContent = 'Order Sekarang';
       btn.appendChild(spanIcon);
       btn.appendChild(spanText);
     }
@@ -989,7 +989,7 @@
         extraInfoText =
           'Data Sosial Media (Followers):\n' +
           'Username akun       : ' + userFollowers + '\n' +
-          'Catatan             : Akun tidak boleh private selama proses.\n\n';
+          'Catatan             : Akun tidak boleh private selama proses.\n';
       } else if (lowerName.includes('likes') || lowerName.includes('viewers')) {
         const linkVideo = document.getElementById('sosmedLink').value.trim();
         const userLikes = document.getElementById('sosmedUsernameLikes').value.trim();
@@ -1002,7 +1002,7 @@
           'Data Sosial Media (Likes / Viewers):\n' +
           'Link video          : ' + linkVideo + '\n' +
           'Username (opsional) : ' + (userLikes || '-') + '\n' +
-          'Catatan             : Video harus publik, akun jangan private.\n\n';
+          'Catatan             : Video harus publik, akun jangan private.\n';
       }
     } else if (p.category === 'panel') {
       const panelUser = document.getElementById('panelUser').value.trim();
@@ -1015,7 +1015,7 @@
       extraInfoText =
         'Data Login Panel:\n' +
         'Username panel : ' + panelUser + '\n' +
-        'Password panel : ' + panelPass + '\n\n';
+        'Password panel : ' + panelPass + '\n';
     }
 
     // ====== KURANGI STOK & SIMPAN ORDER ======
@@ -1035,7 +1035,8 @@
       price: p.price,
       danaNumber: dana,
       danaName: nama,
-      stockAfter: p.stock
+      stockAfter: p.stock,
+      extraInfo: extraInfoText
     };
     orders.push(orderObj);
     await addDoc(collection(db, 'orders'), orderObj);
@@ -1043,30 +1044,17 @@
       renderOrderTable();
     }
 
-    // ====== EMAIL BODY ======
-    const subject = 'Order ' + p.name;
-    const body =
-      'Halo Admin, saya sudah melakukan pembayaran via DANA.\n\n' +
-      'Produk      : ' + p.name + '\n' +
-      'Harga       : ' + p.price + '\n' +
-      'Stok sisa   : ' + p.stock + '\n\n' +
-      'Data DANA:\n' +
-      'Nomor DANA  : ' + dana + '\n' +
-      'Atas nama   : ' + nama + '\n\n' +
-      'Saya akan melampirkan bukti transfer (screenshot) di email ini sebelum mengirim.\n\n' +
-      (extraInfoText || '') +
-      'Data saya:\n' +
-      '- Nama           :\n' +
-      '- Email          :\n' +
-      '- Nomor WhatsApp :\n\n' +
-      'Terima kasih.';
+    // ====== KONFIRMASI DI WEBSITE SAJA (TANPA GMAIL / WA) ======
+    msg.className = 'modal-msg ok';
+    msg.innerHTML =
+      '✅ Order berhasil disimpan.<br>' +
+      'Silakan lakukan pembayaran ke DANA <b>083877842721</b> ' +
+      'sebesar <b>' + p.price + '</b>.<br>' +
+      'Setelah pembayaran masuk, admin akan memproses pesanan kamu.';
 
-    const url = 'mailto:' + encodeURIComponent('holilhsyhd@gmail.com')
-      + '?subject=' + encodeURIComponent(subject)
-      + '&body=' + encodeURIComponent(body);
-
-    window.closeOrderModal();
-    window.location.href = url;
+    setTimeout(() => {
+      window.closeOrderModal();
+    }, 3000);
   };
 
   document.getElementById('orderModal').addEventListener('click', function(e){
