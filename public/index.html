@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>DigitalStore - Layanan Digital</title>
+  <title>Barmods Store - Layanan Digital</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -415,7 +415,7 @@
 <div class="topbar">
   <div class="toggle-btn" onclick="toggleMenu()">☰</div>
   <div class="brand-title">
-    <span>DigitalStore</span>
+    <span>Barmods Store</span>
     <span>Layanan Digital & Sosial Media</span>
   </div>
   <div class="spacer"></div>
@@ -448,7 +448,7 @@
       <p>
         1. Pilih produk di bawah.<br>
         2. Tekan tombol <b>Order via Gmail</b> pada produk.<br>
-        3. Sistem akan minta kamu <b>bayar dulu via DANA</b> ke nomor <b>083877842721</b>.<br>
+        3. Sistem akan minta kamu <b>bayar dulu via DANA</b> ke nomor <b>083877842721</b> (a.n kamu isi nanti).<br>
         4. Setelah bayar, isi data DANA & lanjut ke Gmail.<br>
         5. Di Gmail, <b>wajib lampirkan screenshot (SS) bukti transfer</b> sebelum kirim email.
       </p>
@@ -489,10 +489,10 @@
           <small>Akses khusus pemilik toko</small>
         </div>
       </div>
-      <p>Tekan tombol di bawah untuk login sebagai admin. Setelah login, kamu bisa mengubah <b>nama produk</b>, <b>harga</b>, dan <b>stok</b>. Data disimpan di browser ini.</p>
+      <p>Tekan tombol di bawah untuk login sebagai admin. Setelah login, kamu bisa mengubah <b>nama produk</b>, <b>harga</b>, dan <b>stok</b>. Data disimpan di Firebase (global).</p>
       <div class="pill-row">
-        <div class="pill">khusus: <b>barmods</b></div>
-        <div class="pill">setelean: <b>produk</b></div>
+        <div class="pill">Username: <b>barmods</b></div>
+        <div class="pill">Sandi: <b>barmods21</b></div>
       </div>
       <div style="margin-top:10px;">
         <button class="btn-primary" type="button" onclick="openLoginModal()">🔐 Login Admin</button>
@@ -504,7 +504,7 @@
       <div class="card-header">
         <div>
           <h2>Edit Produk & Stok</h2>
-          <small>Perubahan langsung ke Dashboard & tersimpan di browser</small>
+          <small>Perubahan langsung ke Dashboard & tersimpan di Firestore</small>
         </div>
       </div>
       <table class="admin-table" id="adminTable">
@@ -593,9 +593,38 @@
   </div>
 </div>
 
-<script>
+<!-- ===============================================
+     SCRIPT: FIREBASE + LOGIC
+     =============================================== -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    getDocs,
+    doc,
+    setDoc,
+    updateDoc,
+    addDoc,
+    query,
+    orderBy
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  /* ============= CONFIG DARI KAMU ============= */
+  const firebaseConfig = {
+    apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+    authDomain: "toko-barmods.firebaseapp.com",
+    projectId: "toko-barmods",
+    storageBucket: "toko-barmods.firebasestorage.app",
+    messagingSenderId: "284047189012",
+    appId: "1:284047189012:web:6ef0c6891adab08a383301"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
   /* =================== DATA PRODUK DASAR =================== */
-  var defaultProducts = [
+  const defaultProducts = [
     {id:1,name:"Alight Motion Private - 1 Tahun (iOS & Android)",price:"Rp 2k",stock:50,category:"editing",icon:"🎨"},
     {id:2,name:"Bulk AM Private - 1 Bulan (10 akun)",price:"Rp 7k",stock:50,category:"editing",icon:"🎨"},
     {id:3,name:"Apple Music Invite - 1 Bulan",price:"Rp 5k",stock:50,category:"music",icon:"🎵"},
@@ -711,116 +740,111 @@
     {id:113,name:"TikTok Viewers 10.000",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"}
   ];
 
-  var STORAGE_PRODUCTS_KEY = 'ds-products-v1';
-  var STORAGE_ORDERS_KEY = 'ds-orders-v1';
+  let products = [];
+  let orders   = [];
+  let currentOrderId = null;
 
-  function loadProducts() {
-    try {
-      var raw = localStorage.getItem(STORAGE_PRODUCTS_KEY);
-      if (raw) {
-        var parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) return parsed;
+  /* ============== AMBIL DATA PRODUK DARI FIRESTORE ============== */
+  async function loadProductsFromDB() {
+    const colRef = collection(db, 'products');
+    const snap   = await getDocs(colRef);
+
+    if (snap.empty) {
+      // Seed pertama kali
+      for (const p of defaultProducts) {
+        await setDoc(doc(colRef, String(p.id)), p);
       }
-    } catch(e) {}
-    return JSON.parse(JSON.stringify(defaultProducts));
+      return JSON.parse(JSON.stringify(defaultProducts));
+    } else {
+      const arr = [];
+      snap.forEach(d => arr.push(d.data()));
+      arr.sort((a,b) => a.id - b.id);
+      return arr;
+    }
   }
 
-  function saveProducts() {
-    try {
-      localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(products));
-    } catch(e) {}
+  async function updateProductField(id, field, value) {
+    const colRef = collection(db, 'products');
+    await updateDoc(doc(colRef, String(id)), { [field]: value });
   }
 
-  function loadOrders() {
-    try {
-      var raw = localStorage.getItem(STORAGE_ORDERS_KEY);
-      if (raw) {
-        var parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) return parsed;
-      }
-    } catch(e) {}
-    return [];
+  async function loadOrdersFromDB() {
+    const colRef = collection(db, 'orders');
+    const q      = query(colRef, orderBy('time', 'asc'));
+    const snap   = await getDocs(q);
+    const arr    = [];
+    snap.forEach(d => arr.push(d.data()));
+    return arr;
   }
-
-  function saveOrders() {
-    try {
-      localStorage.setItem(STORAGE_ORDERS_KEY, JSON.stringify(orders));
-    } catch(e) {}
-  }
-
-  var products = loadProducts();
-  var orders = loadOrders();
-  var currentOrderId = null;
 
   /* ============== UI BASIC ============== */
-  function toggleMenu() {
-    var s = document.getElementById('sidebar');
+  window.toggleMenu = function() {
+    const s = document.getElementById('sidebar');
     if (s.className.indexOf('show') === -1) {
       s.className += ' show';
     } else {
       s.className = s.className.replace(' show','');
     }
-  }
+  };
 
-  function showSection(id, el) {
+  window.showSection = function(id, el) {
     document.getElementById('dashboard').style.display = id === 'dashboard' ? 'block' : 'none';
-    document.getElementById('admin').style.display = id === 'admin' ? 'block' : 'none';
-    var items = document.getElementsByClassName('nav-item');
-    for (var i=0;i<items.length;i++) {
+    document.getElementById('admin').style.display     = id === 'admin' ? 'block' : 'none';
+    const items = document.getElementsByClassName('nav-item');
+    for (let i=0;i<items.length;i++) {
       items[i].className = items[i].className.replace(' active','');
     }
     if (el) el.className += ' active';
-    var s = document.getElementById('sidebar');
+    const s = document.getElementById('sidebar');
     s.className = s.className.replace(' show','');
-  }
+  };
 
   /* ============== RENDER PRODUK ============== */
   function createProductCard(p) {
-    var card = document.createElement('div');
+    const card = document.createElement('div');
     card.className = 'product-card';
     card.setAttribute('data-id', p.id);
-    card.setAttribute('data-name', (p.name + ' ' + p.category).toLowerCase());
 
-    var header = document.createElement('div');
+    const header = document.createElement('div');
     header.className = 'product-header';
 
-    var icon = document.createElement('div');
+    const icon = document.createElement('div');
     icon.className = 'product-icon';
     icon.innerHTML = p.icon || '⭐';
 
-    var title = document.createElement('div');
+    const title = document.createElement('div');
     title.className = 'product-title';
-    title.appendChild(document.createTextNode(p.name));
+    title.textContent = p.name;
 
     header.appendChild(icon);
     header.appendChild(title);
 
-    var price = document.createElement('div');
+    const price = document.createElement('div');
     price.className = 'price-tag';
-    price.appendChild(document.createTextNode(p.price));
+    price.textContent = p.price;
 
-    var stock = document.createElement('div');
+    const stock = document.createElement('div');
     stock.className = 'stock-line';
-    stock.appendChild(document.createTextNode('Stok: ' + p.stock));
+    stock.textContent = 'Stok: ' + p.stock;
 
-    var btn = document.createElement('a');
+    const btn = document.createElement('a');
     btn.className = 'btn-product';
     btn.href = '#';
 
     if (p.stock <= 0) {
       btn.style.opacity = '0.6';
       btn.style.pointerEvents = 'none';
-      btn.appendChild(document.createTextNode('Stok habis'));
+      btn.textContent = 'Stok habis';
     } else {
       btn.onclick = function(e) {
         e.preventDefault();
         openOrderModal(p.id);
       };
-      var spanIcon = document.createElement('span');
+      const spanIcon = document.createElement('span');
       spanIcon.className = 'icon';
-      spanIcon.appendChild(document.createTextNode('✉️'));
-      var spanText = document.createElement('span');
-      spanText.appendChild(document.createTextNode('Order via Gmail'));
+      spanIcon.textContent = '✉️';
+      const spanText = document.createElement('span');
+      spanText.textContent = 'Order via Gmail';
       btn.appendChild(spanIcon);
       btn.appendChild(spanText);
     }
@@ -834,13 +858,13 @@
   }
 
   function renderProducts() {
-    var grid = document.getElementById('productGrid');
+    const grid = document.getElementById('productGrid');
+    if (!grid) return;
     grid.innerHTML = '';
-    var searchValEl = document.getElementById('searchInput');
-    var val = searchValEl ? searchValEl.value.toLowerCase() : '';
-    for (var i=0;i<products.length;i++) {
-      var p = products[i];
-      var nameStr = (p.name + ' ' + p.category).toLowerCase();
+    const searchValEl = document.getElementById('searchInput');
+    const val = searchValEl ? searchValEl.value.toLowerCase() : '';
+    for (const p of products) {
+      const nameStr = (p.name + ' ' + p.category).toLowerCase();
       if (!val || nameStr.indexOf(val) !== -1) {
         grid.appendChild(createProductCard(p));
       }
@@ -848,7 +872,7 @@
   }
 
   /* ============== FLOW ORDER DANA ============== */
-  function openOrderModal(id) {
+  window.openOrderModal = function(id) {
     currentOrderId = id;
     document.getElementById('orderDana').value = '';
     document.getElementById('orderNama').value = '';
@@ -856,25 +880,25 @@
     document.getElementById('orderStepButtons').style.display = 'block';
     document.getElementById('orderStepForm').style.display = 'none';
     document.getElementById('orderModal').style.display = 'flex';
-  }
+  };
 
-  function closeOrderModal() {
+  window.closeOrderModal = function() {
     document.getElementById('orderModal').style.display = 'none';
-  }
+  };
 
-  function orderBelumBayar() {
-    closeOrderModal();
-  }
+  window.orderBelumBayar = function() {
+    window.closeOrderModal();
+  };
 
-  function orderSudahBayar() {
+  window.orderSudahBayar = function() {
     document.getElementById('orderStepButtons').style.display = 'none';
     document.getElementById('orderStepForm').style.display = 'block';
-  }
+  };
 
-  function orderSekarang() {
-    var dana = document.getElementById('orderDana').value.trim();
-    var nama = document.getElementById('orderNama').value.trim();
-    var msg = document.getElementById('orderMsg');
+  window.orderSekarang = async function() {
+    const dana = document.getElementById('orderDana').value.trim();
+    const nama = document.getElementById('orderNama').value.trim();
+    const msg  = document.getElementById('orderMsg');
     msg.className = 'modal-msg';
     msg.innerHTML = '';
 
@@ -884,41 +908,46 @@
       return;
     }
 
-    var p = null;
-    for (var i=0;i<products.length;i++) {
-      if (products[i].id === currentOrderId) { p = products[i]; break; }
+    let p = null;
+    for (const prod of products) {
+      if (prod.id === currentOrderId) { p = prod; break; }
     }
     if (!p) {
-      closeOrderModal();
+      window.closeOrderModal();
       return;
     }
 
-    if (p.stock > 0) {
-      p.stock = p.stock - 1;
-    }
-    saveProducts();
+    // Kurangi stok lokal
+    if (p.stock > 0) p.stock = p.stock - 1;
+
+    // Update stok di Firestore
+    await updateProductField(p.id, 'stock', p.stock);
+
     renderProducts();
     if (document.getElementById('adminPanel').style.display !== 'none') {
       renderAdminTable();
     }
 
-    var now = new Date();
-    orders.push({
-      time: now.toISOString(),
+    // Simpan riwayat order ke Firestore
+    const nowISO = new Date().toISOString();
+    const orderObj = {
+      time: nowISO,
       productId: p.id,
       productName: p.name,
       price: p.price,
       danaNumber: dana,
       danaName: nama,
       stockAfter: p.stock
-    });
-    saveOrders();
+    };
+    orders.push(orderObj);
+    await addDoc(collection(db, 'orders'), orderObj);
     if (document.getElementById('orderHistoryCard').style.display !== 'none') {
       renderOrderTable();
     }
 
-    var subject = 'Order ' + p.name;
-    var body =
+    // Email body rapi
+    const subject = 'Order ' + p.name;
+    const body =
       'Halo Admin, saya sudah melakukan pembayaran via DANA.\n\n' +
       'Produk      : ' + p.name + '\n' +
       'Harga       : ' + p.price + '\n' +
@@ -933,89 +962,93 @@
       '- Nomor WhatsApp :\n\n' +
       'Terima kasih.';
 
-    var url = 'mailto:' + encodeURIComponent('holilhsyhd@gmail.com')
+    const url = 'mailto:' + encodeURIComponent('holilhsyhd@gmail.com')
       + '?subject=' + encodeURIComponent(subject)
       + '&body=' + encodeURIComponent(body);
 
-    closeOrderModal();
+    window.closeOrderModal();
     window.location.href = url;
-  }
+  };
 
   document.getElementById('orderModal').addEventListener('click', function(e){
-    if (e.target === this) { closeOrderModal(); }
+    if (e.target === this) { window.closeOrderModal(); }
   });
 
   /* ============== LOGIN ADMIN + MODAL ============== */
-  function openLoginModal() {
-    var m = document.getElementById('loginModal');
+  window.openLoginModal = function() {
+    const m = document.getElementById('loginModal');
     m.style.display = 'flex';
     document.getElementById('loginMsg').innerHTML = '';
-    var u = document.getElementById('user');
+    const u = document.getElementById('user');
     document.getElementById('pass').value = '';
     u.value = '';
     u.focus();
-  }
+  };
 
-  function closeLoginModal() {
-    var m = document.getElementById('loginModal');
+  window.closeLoginModal = function() {
+    const m = document.getElementById('loginModal');
     m.style.display = 'none';
-  }
+  };
 
-  function loginAdmin() {
-    var u = document.getElementById('user').value;
-    var p = document.getElementById('pass').value;
-    var msg = document.getElementById('loginMsg');
+  window.loginAdmin = async function() {
+    const u   = document.getElementById('user').value;
+    const p   = document.getElementById('pass').value;
+    const msg = document.getElementById('loginMsg');
     msg.className = 'modal-msg';
+
     if (u === 'barmods' && p === 'barmods21') {
       msg.className += ' ok';
       msg.innerHTML = 'Login berhasil. Admin aktif.';
       document.getElementById('adminStatus').innerHTML = '✅ Admin sudah login di perangkat ini.';
       document.getElementById('adminPanel').style.display = 'block';
       document.getElementById('orderHistoryCard').style.display = 'block';
-      var badge = document.getElementById('adminBadge');
-      if (badge) { badge.innerHTML = 'Aktif'; }
+      const badge = document.getElementById('adminBadge');
+      if (badge) badge.innerHTML = 'Aktif';
+
       renderAdminTable();
+      // ambil riwayat order dari Firestore
+      orders = await loadOrdersFromDB();
       renderOrderTable();
-      setTimeout(function(){ closeLoginModal(); }, 800);
+
+      setTimeout(() => { window.closeLoginModal(); }, 800);
     } else {
       msg.className += ' error';
       msg.innerHTML = 'Username atau sandi salah.';
     }
-  }
+  };
 
   document.getElementById('loginModal').addEventListener('click', function(e){
-    if (e.target === this) { closeLoginModal(); }
+    if (e.target === this) { window.closeLoginModal(); }
   });
 
   /* ============== ADMIN TABLE ============== */
   function renderAdminTable() {
-    var tbody = document.getElementById('adminTable').getElementsByTagName('tbody')[0];
+    const tbody = document.getElementById('adminTable').getElementsByTagName('tbody')[0];
     tbody.innerHTML = '';
-    for (var i=0;i<products.length;i++) {
-      var p = products[i];
-      var tr = document.createElement('tr');
+    for (const p of products) {
+      const tr = document.createElement('tr');
 
-      var tdId = document.createElement('td');
-      tdId.appendChild(document.createTextNode(p.id));
+      const tdId = document.createElement('td');
+      tdId.textContent = p.id;
 
-      var tdName = document.createElement('td');
-      var inpName = document.createElement('input');
+      const tdName = document.createElement('td');
+      const inpName = document.createElement('input');
       inpName.className = 'admin-input';
       inpName.value = p.name;
       inpName.setAttribute('data-id', p.id);
       inpName.setAttribute('data-field', 'name');
       tdName.appendChild(inpName);
 
-      var tdPrice = document.createElement('td');
-      var inpPrice = document.createElement('input');
+      const tdPrice = document.createElement('td');
+      const inpPrice = document.createElement('input');
       inpPrice.className = 'admin-input';
       inpPrice.value = p.price;
       inpPrice.setAttribute('data-id', p.id);
       inpPrice.setAttribute('data-field', 'price');
       tdPrice.appendChild(inpPrice);
 
-      var tdStock = document.createElement('td');
-      var inpStock = document.createElement('input');
+      const tdStock = document.createElement('td');
+      const inpStock = document.createElement('input');
       inpStock.className = 'admin-input';
       inpStock.type = 'number';
       inpStock.min = '0';
@@ -1032,26 +1065,26 @@
       tbody.appendChild(tr);
     }
 
-    var inputs = tbody.getElementsByClassName('admin-input');
-    for (var j=0;j<inputs.length;j++) {
-      inputs[j].oninput = function() {
-        var id = Number(this.getAttribute('data-id'));
-        var field = this.getAttribute('data-field');
-        var prod = null;
-        for (var k=0;k<products.length;k++) {
-          if (products[k].id === id) { prod = products[k]; break; }
-        }
+    const inputs = tbody.getElementsByClassName('admin-input');
+    for (let j=0;j<inputs.length;j++) {
+      inputs[j].oninput = async function() {
+        const id = Number(this.getAttribute('data-id'));
+        const field = this.getAttribute('data-field');
+        const prod = products.find(p => p.id === id);
         if (!prod) return;
+
         if (field === 'name') {
           prod.name = this.value;
+          await updateProductField(id, 'name', prod.name);
         } else if (field === 'price') {
           prod.price = this.value;
+          await updateProductField(id, 'price', prod.price);
         } else if (field === 'stock') {
-          var v = parseInt(this.value, 10);
+          let v = parseInt(this.value, 10);
           if (isNaN(v) || v < 0) v = 0;
           prod.stock = v;
+          await updateProductField(id, 'stock', prod.stock);
         }
-        saveProducts();
         renderProducts();
       };
     }
@@ -1059,30 +1092,29 @@
 
   /* ============== RIWAYAT ORDER TABLE ============== */
   function renderOrderTable() {
-    var tbody = document.getElementById('orderTable').getElementsByTagName('tbody')[0];
+    const tbody = document.getElementById('orderTable').getElementsByTagName('tbody')[0];
     tbody.innerHTML = '';
-    for (var i=0;i<orders.length;i++) {
-      var o = orders[i];
-      var tr = document.createElement('tr');
+    orders.forEach((o, i) => {
+      const tr = document.createElement('tr');
 
-      var tdIdx = document.createElement('td');
-      tdIdx.appendChild(document.createTextNode(i + 1));
+      const tdIdx = document.createElement('td');
+      tdIdx.textContent = i + 1;
 
-      var tdTime = document.createElement('td');
-      var d = new Date(o.time);
-      tdTime.appendChild(document.createTextNode(d.toLocaleString('id-ID')));
+      const tdTime = document.createElement('td');
+      const d = new Date(o.time);
+      tdTime.textContent = d.toLocaleString('id-ID');
 
-      var tdProd = document.createElement('td');
-      tdProd.appendChild(document.createTextNode(o.productName));
+      const tdProd = document.createElement('td');
+      tdProd.textContent = o.productName;
 
-      var tdDana = document.createElement('td');
-      tdDana.appendChild(document.createTextNode(o.danaNumber));
+      const tdDana = document.createElement('td');
+      tdDana.textContent = o.danaNumber;
 
-      var tdNama = document.createElement('td');
-      tdNama.appendChild(document.createTextNode(o.danaName));
+      const tdNama = document.createElement('td');
+      tdNama.textContent = o.danaName;
 
-      var tdStock = document.createElement('td');
-      tdStock.appendChild(document.createTextNode(o.stockAfter));
+      const tdStock = document.createElement('td');
+      tdStock.textContent = o.stockAfter;
 
       tr.appendChild(tdIdx);
       tr.appendChild(tdTime);
@@ -1092,18 +1124,20 @@
       tr.appendChild(tdStock);
 
       tbody.appendChild(tr);
-    }
+    });
   }
 
   /* ============== PENCARIAN ============== */
-  var searchInputEl = document.getElementById('searchInput');
-  searchInputEl.oninput = function() {
-    renderProducts();
-  };
+  const searchInputEl = document.getElementById('searchInput');
+  if (searchInputEl) {
+    searchInputEl.oninput = function() {
+      renderProducts();
+    };
+  }
 
   /* ============== MODE TERANG / GELAP ============== */
   function applyTheme(t) {
-    var btn = document.getElementById('themeBtn');
+    const btn = document.getElementById('themeBtn');
     if (t === 'light') {
       if (document.body.className.indexOf('light') === -1) {
         document.body.className += (document.body.className ? ' ' : '') + 'light';
@@ -1114,19 +1148,24 @@
       btn.innerHTML = '🌙 Gelap';
     }
   }
-  var savedTheme = (function(){ try { return localStorage.getItem('ds-theme-hp'); } catch(e) { return null; } })();
+
+  let savedTheme;
+  try { savedTheme = localStorage.getItem('ds-theme-hp'); } catch(e) {}
   if (!savedTheme) savedTheme = 'dark';
   applyTheme(savedTheme);
 
-  function toggleTheme() {
-    var isLight = document.body.className.indexOf('light') !== -1;
-    var now = isLight ? 'dark' : 'light';
+  window.toggleTheme = function() {
+    const isLight = document.body.className.indexOf('light') !== -1;
+    const now = isLight ? 'dark' : 'light';
     applyTheme(now);
     try { localStorage.setItem('ds-theme-hp', now); } catch(e) {}
-  }
+  };
 
-  /* INIT */
-  renderProducts();
+  /* ============== INIT ============== */
+  (async function initApp(){
+    products = await loadProductsFromDB();
+    renderProducts();
+  })();
 </script>
 
 </body>
