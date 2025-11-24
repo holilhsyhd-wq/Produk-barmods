@@ -491,8 +491,8 @@
       </div>
       <p>Tekan tombol di bawah untuk login sebagai admin. Setelah login, kamu bisa mengubah <b>nama produk</b>, <b>harga</b>, dan <b>stok</b>. Data disimpan di Firebase (global).</p>
       <div class="pill-row">
-        <div class="pill">halaman: <b>admin</b></div>
-        <div class="pill">khusus: <b>barmods</b></div>
+        <div class="pill">Username: <b>barmods</b></div>
+        <div class="pill">Sandi: <b>barmods21</b></div>
       </div>
       <div style="margin-top:10px;">
         <button class="btn-primary" type="button" onclick="openLoginModal()">🔐 Login Admin</button>
@@ -581,6 +581,33 @@
       <p>Isi data DANA kamu:</p>
       <input id="orderDana" class="modal-input" placeholder="Nomor DANA kamu">
       <input id="orderNama" class="modal-input" placeholder="Atas nama di DANA">
+
+      <!-- KHUSUS SOSMED: FOLLOWERS -->
+      <div id="sosmedFollowersFields" style="display:none;margin-top:6px;">
+        <p style="font-size:11px;color:var(--text-soft);margin:0 0 4px;">
+          Data akun untuk <b>followers</b> (akun tidak boleh private):
+        </p>
+        <input id="sosmedUsernameFollowers" class="modal-input" placeholder="Username akun (tanpa @)">
+      </div>
+
+      <!-- KHUSUS SOSMED: LIKES / VIEWERS -->
+      <div id="sosmedLikesFields" style="display:none;margin-top:6px;">
+        <p style="font-size:11px;color:var(--text-soft);margin:0 0 4px;">
+          Data untuk <b>likes / viewers</b>:
+        </p>
+        <input id="sosmedLink" class="modal-input" placeholder="Link video (harus publik)">
+        <input id="sosmedUsernameLikes" class="modal-input" placeholder="Username (opsional, disarankan tidak private)">
+      </div>
+
+      <!-- KHUSUS PANEL -->
+      <div id="panelFields" style="display:none;margin-top:6px;">
+        <p style="font-size:11px;color:var(--text-soft);margin:0 0 4px;">
+          Pilih <b>username</b> dan <b>password</b> untuk login panel:
+        </p>
+        <input id="panelUser" class="modal-input" placeholder="Username panel yang diinginkan">
+        <input id="panelPass" class="modal-input" placeholder="Password panel yang diinginkan">
+      </div>
+
       <p style="font-size:11px;color:var(--text-soft);margin:4px 0 0;">
         Saat Gmail terbuka nanti, <b>wajib lampirkan screenshot (SS) bukti transfer</b> sebelum mengirim email.
       </p>
@@ -746,37 +773,22 @@
 
   /* ============== AMBIL DATA PRODUK DARI FIRESTORE ============== */
   async function loadProductsFromDB() {
-  const colRef = collection(db, 'products');
-  const snap   = await getDocs(colRef);
+    const colRef = collection(db, 'products');
+    const snap   = await getDocs(colRef);
 
-  const arr = [];
-  const existingIds = new Set();
-
-  // ambil semua produk yang sudah ada di Firestore
-  snap.forEach(d => {
-    const data = d.data();
-    arr.push(data);
-    if (data.id != null) existingIds.add(data.id);
-  });
-
-  // kalau kosong total → seed semua dari defaultProducts
-  if (arr.length === 0) {
-    for (const p of defaultProducts) {
-      await setDoc(doc(colRef, String(p.id)), p);
+    if (snap.empty) {
+      // Seed pertama kali
+      for (const p of defaultProducts) {
+        await setDoc(doc(colRef, String(p.id)), p);
+      }
+      return JSON.parse(JSON.stringify(defaultProducts));
+    } else {
+      const arr = [];
+      snap.forEach(d => arr.push(d.data()));
+      arr.sort((a,b) => a.id - b.id);
+      return arr;
     }
-    return JSON.parse(JSON.stringify(defaultProducts));
   }
-
-  // kalau sudah ada, tambahkan HANYA produk yang belum ada (id baru)
-  const toAdd = defaultProducts.filter(p => !existingIds.has(p.id));
-  for (const p of toAdd) {
-    await setDoc(doc(colRef, String(p.id)), p);
-    arr.push(p);
-  }
-
-  arr.sort((a, b) => a.id - b.id);
-  return arr;
-}
 
   async function updateProductField(id, field, value) {
     const colRef = collection(db, 'products');
@@ -892,6 +904,35 @@
     document.getElementById('orderDana').value = '';
     document.getElementById('orderNama').value = '';
     document.getElementById('orderMsg').innerHTML = '';
+
+    // reset input tambahan
+    document.getElementById('sosmedUsernameFollowers').value = '';
+    document.getElementById('sosmedLink').value = '';
+    document.getElementById('sosmedUsernameLikes').value = '';
+    document.getElementById('panelUser').value = '';
+    document.getElementById('panelPass').value = '';
+
+    // sembunyikan semua field tambahan dulu
+    document.getElementById('sosmedFollowersFields').style.display = 'none';
+    document.getElementById('sosmedLikesFields').style.display = 'none';
+    document.getElementById('panelFields').style.display = 'none';
+
+    // cek produk
+    const p = products.find(prod => prod.id === id);
+    if (p) {
+      const lowerName = p.name.toLowerCase();
+
+      if (p.category === 'sosmed') {
+        if (lowerName.includes('followers')) {
+          document.getElementById('sosmedFollowersFields').style.display = 'block';
+        } else if (lowerName.includes('likes') || lowerName.includes('viewers')) {
+          document.getElementById('sosmedLikesFields').style.display = 'block';
+        }
+      } else if (p.category === 'panel') {
+        document.getElementById('panelFields').style.display = 'block';
+      }
+    }
+
     document.getElementById('orderStepButtons').style.display = 'block';
     document.getElementById('orderStepForm').style.display = 'none';
     document.getElementById('orderModal').style.display = 'flex';
@@ -932,10 +973,53 @@
       return;
     }
 
-    // Kurangi stok lokal
-    if (p.stock > 0) p.stock = p.stock - 1;
+    // ====== BACA INPUT TAMBAHAN ======
+    let extraInfoText = '';
 
-    // Update stok di Firestore
+    if (p.category === 'sosmed') {
+      const lowerName = p.name.toLowerCase();
+
+      if (lowerName.includes('followers')) {
+        const userFollowers = document.getElementById('sosmedUsernameFollowers').value.trim();
+        if (!userFollowers) {
+          msg.className += ' error';
+          msg.innerHTML = 'Username akun wajib diisi untuk order followers.';
+          return;
+        }
+        extraInfoText =
+          'Data Sosial Media (Followers):\n' +
+          'Username akun       : ' + userFollowers + '\n' +
+          'Catatan             : Akun tidak boleh private selama proses.\n\n';
+      } else if (lowerName.includes('likes') || lowerName.includes('viewers')) {
+        const linkVideo = document.getElementById('sosmedLink').value.trim();
+        const userLikes = document.getElementById('sosmedUsernameLikes').value.trim();
+        if (!linkVideo) {
+          msg.className += ' error';
+          msg.innerHTML = 'Link video wajib diisi untuk order likes/viewers.';
+          return;
+        }
+        extraInfoText =
+          'Data Sosial Media (Likes / Viewers):\n' +
+          'Link video          : ' + linkVideo + '\n' +
+          'Username (opsional) : ' + (userLikes || '-') + '\n' +
+          'Catatan             : Video harus publik, akun jangan private.\n\n';
+      }
+    } else if (p.category === 'panel') {
+      const panelUser = document.getElementById('panelUser').value.trim();
+      const panelPass = document.getElementById('panelPass').value.trim();
+      if (!panelUser || !panelPass) {
+        msg.className += ' error';
+        msg.innerHTML = 'Username dan password panel wajib diisi.';
+        return;
+      }
+      extraInfoText =
+        'Data Login Panel:\n' +
+        'Username panel : ' + panelUser + '\n' +
+        'Password panel : ' + panelPass + '\n\n';
+    }
+
+    // ====== KURANGI STOK & SIMPAN ORDER ======
+    if (p.stock > 0) p.stock = p.stock - 1;
     await updateProductField(p.id, 'stock', p.stock);
 
     renderProducts();
@@ -943,7 +1027,6 @@
       renderAdminTable();
     }
 
-    // Simpan riwayat order ke Firestore
     const nowISO = new Date().toISOString();
     const orderObj = {
       time: nowISO,
@@ -960,7 +1043,7 @@
       renderOrderTable();
     }
 
-    // Email body rapi
+    // ====== EMAIL BODY ======
     const subject = 'Order ' + p.name;
     const body =
       'Halo Admin, saya sudah melakukan pembayaran via DANA.\n\n' +
@@ -971,6 +1054,7 @@
       'Nomor DANA  : ' + dana + '\n' +
       'Atas nama   : ' + nama + '\n\n' +
       'Saya akan melampirkan bukti transfer (screenshot) di email ini sebelum mengirim.\n\n' +
+      (extraInfoText || '') +
       'Data saya:\n' +
       '- Nama           :\n' +
       '- Email          :\n' +
