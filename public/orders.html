@@ -1,328 +1,167 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pesanan Saya - Barmods Digital Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    :root {
-      color-scheme: dark;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-      sans-serif;
-      background: #020617;
-      color: #e5e7eb;
-      min-height: 100vh;
-    }
-    header {
-      padding: 16px 20px 8px;
-      border-bottom: 1px solid rgba(148, 163, 184, .25);
-      background: radial-gradient(circle at top, #111827 0, #020617 55%);
-    }
-    .top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .brand {
-      font-size: 18px;
-      font-weight: 600;
-    }
-    .brand small {
-      display: block;
-      font-size: 12px;
-      font-weight: 400;
-      color: #9ca3af;
-    }
-    nav {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .nav-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, .4);
-      padding: 6px 14px;
-      font-size: 14px;
-      background: transparent;
-      color: #e5e7eb;
-      cursor: pointer;
-    }
-    .nav-btn.primary {
-      background: #2563eb;
-      border-color: #2563eb;
-      font-weight: 500;
-    }
-    .nav-btn.logout {
-      background: #ef4444;
-      border-color: #ef4444;
-    }
-    main {
-      max-width: 960px;
-      margin: 16px auto 40px;
-      padding: 0 12px;
-    }
-    h1 {
-      margin: 0 0 4px;
-      font-size: 24px;
-    }
-    .subtext {
-      font-size: 13px;
-      color: #9ca3af;
-      margin-bottom: 16px;
-    }
-    .subtext strong { color: #e5e7eb; }
-
-    .error-text {
-      color: #f97373;
-      font-size: 14px;
-      min-height: 18px;
-      margin-bottom: 4px;
-    }
-
-    .card {
-      background: #020617;
-      border-radius: 18px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      padding: 18px 14px 10px;
-      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.7);
-      overflow-x: auto;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      min-width: 620px;
-    }
-    thead {
-      background: rgba(15, 23, 42, 0.9);
-    }
-    th, td {
-      padding: 8px 10px;
-      text-align: left;
-      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
-    }
-    th {
-      font-weight: 600;
-      color: #cbd5f5;
-      white-space: nowrap;
-    }
-    tbody tr:nth-child(even) {
-      background: rgba(15, 23, 42, 0.4);
-    }
-    .status {
-      border-radius: 999px;
-      padding: 2px 10px;
-      font-size: 11px;
-      text-transform: lowercase;
-      border: 1px solid transparent;
-      display: inline-block;
-    }
-    .status.pending {
-      background: rgba(234, 179, 8, 0.15);
-      border-color: rgba(234, 179, 8, 0.4);
-      color: #facc15;
-    }
-    .status.proses {
-      background: rgba(59, 130, 246, 0.18);
-      border-color: rgba(59, 130, 246, 0.5);
-      color: #60a5fa;
-    }
-    .status.sukses {
-      background: rgba(22, 163, 74, 0.16);
-      border-color: rgba(22, 163, 74, 0.5);
-      color: #4ade80;
-    }
-    .status.error {
-      background: rgba(239, 68, 68, 0.16);
-      border-color: rgba(239, 68, 68, 0.6);
-      color: #fca5a5;
-    }
-    .data-order, .produk-admin {
-      max-width: 260px;
-      white-space: pre-wrap;
-      word-break: break-word;
-      font-size: 12px;
-      color: #e5e7eb;
-    }
-    @media (max-width: 640px) {
-      h1 { font-size: 20px; }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<header>
-  <div class="top-row">
-    <div class="brand">
-      Pesanan Saya
-      <small>Barmods Digital Store</small>
+  <header class="header">
+    <h2>Pesanan Saya</h2>
+    <p>Barmods Digital Store</p>
+
+    <div class="nav-buttons">
+      <a href="index.html" class="btn">Produk</a>
+      <a href="profile.html" class="btn">Profil Saya</a>
+      <a href="admin.html" class="btn">Admin</a>
+      <button id="logoutBtn" class="btn btn-red">Logout</button>
     </div>
-    <nav>
-      <button id="navProduk" class="nav-btn primary">Produk</button>
-      <button id="navProfil" class="nav-btn">Profil Saya</button>
-      <button id="navAdmin" class="nav-btn">Admin</button>
-      <button id="navLogout" class="nav-btn logout">Logout</button>
-    </nav>
-  </div>
-</header>
+  </header>
 
-<main>
-  <h1>Riwayat Pesanan</h1>
-  <p class="subtext">
-    Semua order yang kamu buat akan muncul di sini.
-    Status: <strong>pending</strong> • <strong>proses</strong> •
-    <strong>sukses</strong> • <strong>error</strong>.
-    Jika admin mengirim produk, hasilnya muncul di kolom
-    <strong>Produk dari admin</strong>.
-  </p>
+  <main class="container">
+    <h3>Riwayat Pesanan</h3>
 
-  <div id="errorBox" class="error-text"></div>
+    <p class="desc">
+      Semua order yang kamu buat akan muncul di sini. Status: 
+      <b>pending • proses • sukses • error</b>.<br>
+      Jika admin mengirim produk, hasilnya muncul di kolom <b>Produk dari admin</b>.
+    </p>
 
-  <div class="card">
-    <table>
+    <p id="errorBox" class="error" style="display:none;"></p>
+
+    <table class="table">
       <thead>
-      <tr>
-        <th>#</th>
-        <th>Waktu</th>
-        <th>Produk</th>
-        <th>Status</th>
-        <th>Data Order</th>
-        <th>Produk dari admin</th>
-      </tr>
+        <tr>
+          <th>#</th>
+          <th>Waktu</th>
+          <th>Produk</th>
+          <th>Status</th>
+          <th>Data Order</th>
+          <th>Produk dari admin</th>
+        </tr>
       </thead>
       <tbody id="orders-body">
-      <tr><td colspan="6">Memuat pesanan...</td></tr>
+        <tr>
+          <td colspan="6">Memuat pesanan...</td>
+        </tr>
       </tbody>
     </table>
-  </div>
-</main>
+  </main>
 
-<script type="module">
-  import {
-    initializeApp
-  } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+  <script type="module">
 
-  import {
-    getAuth,
-    onAuthStateChanged,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
 
-  import {
-    getFirestore,
-    collection,
-    query,
-    where,
-    orderBy,
-    getDocs
-  } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-  // 🔑 SAMA persis dengan index.html & admin.html
-  const firebaseConfig = {
-    apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-    authDomain: "toko-barmods.firebaseapp.com",
-    projectId: "toko-barmods",
-    storageBucket: "toko-barmods.firebasestorage.app",
-    messagingSenderId: "284047189012",
-    appId: "1:284047189012:web:6ef0c6891adab08a383301"
-  };
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+    // ===================== FIREBASE CONFIG =====================
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+      authDomain: "toko-barmods.firebaseapp.com",
+      projectId: "toko-barmods",
+      storageBucket: "toko-barmods.firebasestorage.app",
+      messagingSenderId: "284047189012",
+      appId: "1:284047189012:web:6ef0c6891adab08a383301"
+    };
 
-  const tbody = document.getElementById("orders-body");
-  const errorBox = document.getElementById("errorBox");
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
 
-  function setError(msg) {
-    errorBox.textContent = msg || "";
-  }
-
-  // 🔐 Cek login
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      window.location.href = "login.html";
-      return;
-    }
-    loadOrders(user.uid);
-  });
-
-  async function loadOrders(uid) {
-    setError("");
-    tbody.innerHTML = `<tr><td colspan="6">Memuat pesanan...</td></tr>`;
-    try {
-      const q = query(
-        collection(db, "orders"),
-        where("userId", "==", uid),
-        (ordetord"ordesc")
-      );
-      const snap = await getDocs(q);
-
-      if (snap.empty) {
-        tbody.innerHTML = `<tr><td colspan="6">Belum ada pesanan.</td></tr>`;
-        return;
-      }
-
-      let i = 1;
-      tbody.innerHTML = "";
-      snap.forEach(docSnap => {
-        const o = docSnap.data();
-        const t = o.createdAt?.toDate
-          ? o.createdAt.toDate().toLocaleString("id-ID")
-          : "-";
-
-        const status = (o.status || "pending").toLowerCase();
-
-        // gabung semua data order jadi 1 teks
-        const d = o.orderData || {};
-        const parts = [];
-        if (d.danaNumber) parts.push(`DANA: ${d.danaNumber}${d.danaName ? " ("+d.danaName+")" : ""}`);
-        if (d.sosmedUsername) parts.push(`Username: ${d.sosmedUsername}`);
-        if (d.sosmedLink) parts.push(`Link: ${d.sosmedLink}`);
-        if (d.panelUser) parts.push(`Panel user: ${d.panelUser}`);
-        if (d.panelPass) parts.push(`Panel pass: ${d.panelPass}`);
-        if (d.note) parts.push(`Catatan: ${d.note}`);
-        const dataOrder = parts.join(" • ") || "-";
-
-        const adminProduct = o.adminProduct || "-";
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${i++}</td>
-          <td>${t}</td>
-          <td>${o.productName || "-"}</td>
-          <td><span class="status ${status}">${status}</span></td>
-          <td class="data-order">${dataOrder}</td>
-          <td class="produk-admin">${adminProduct}</td>
-        `;
-        tbody.appendChild(tr);
+    // ===================== LOGOUT =====================
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      signOut(auth).then(() => {
+        localStorage.clear();
+        window.location.href = "login.html";
       });
-    } catch (err) {
-      console.error(err);
-      setError("Gagal memuat pesanan: " + err.message);
-      tbody.innerHTML = `<tr><td colspan="6">Terjadi error saat mengambil pesanan.</td></tr>`;
-    }
-  }
+    });
 
-  // ====== NAV ======
-  document.getElementById("navProduk").addEventListener("click", () => {
-    window.location.href = "index.html";
-  });
-  document.getElementById("navProfil").addEventListener("click", () => {
-    window.location.href = "profile.html";
-  });
-  document.getElementById("navAdmin").addEventListener("click", () => {
-    window.location.href = "admin.html";
-  });
-  document.getElementById("navLogout").addEventListener("click", async () => {
-    await signOut(auth);
-    window.location.href = "login.html";
-  });
-</script>
+    // ===================== LOAD ORDERS =====================
+    function loadOrders(userId) {
+      const tbody = document.getElementById("orders-body");
+      tbody.innerHTML = `<tr><td colspan="6">Memuat pesanan...</td></tr>`;
+
+      getDocs(collection(db, "orders"))
+        .then((snap) => {
+          let orders = [];
+
+          snap.forEach((doc) => {
+            const data = doc.data();
+            if (data.userId === userId) {
+              orders.push({
+                id: doc.id,
+                ...data
+              });
+            }
+          });
+
+          // sort manual, terbaru di atas
+          orders.sort((a, b) => {
+            if (!a.createdAt || !b.createdAt) return 0;
+            return b.createdAt.seconds - a.createdAt.seconds;
+          });
+
+          if (orders.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6">Belum ada pesanan.</td></tr>`;
+            return;
+          }
+
+          tbody.innerHTML = "";
+          let i = 1;
+
+          orders.forEach((o) => {
+            const waktu = o.createdAt
+              ? new Date(o.createdAt.seconds * 1000).toLocaleString()
+              : "-";
+
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${i++}</td>
+              <td>${waktu}</td>
+              <td>${o.productName ?? "-"}</td>
+              <td>${o.status ?? "-"}</td>
+              <td>${o.dataInput ?? "-"}</td>
+              <td>${o.adminProduct ?? "-"}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+
+        })
+        .catch((err) => {
+          document.getElementById("errorBox").style.display = "block";
+          document.getElementById("errorBox").innerText =
+            "Terjadi error saat mengambil pesanan: " + err.message;
+
+          tbody.innerHTML = `<tr><td colspan="6">Gagal memuat pesanan.</td></tr>`;
+        });
+    }
+
+    // ===================== CHECK LOGIN =====================
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      } else {
+        loadOrders(user.uid);
+      }
+    });
+
+  </script>
+
 </body>
+
 </html>
