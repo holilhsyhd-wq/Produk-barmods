@@ -10,77 +10,125 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
 <style>
-body {
-  margin:0;
-  background:#0f172a;
-  color:white;
-  font-family:Arial;
-}
-
-nav {
-  background:#1e293b;
-  padding:12px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:1px solid rgba(255,255,255,.1);
-}
-
-nav .menu button {
-  margin-left:6px;
-  padding:8px 14px;
-  background:#334155;
-  border:none;
-  color:white;
-  border-radius:6px;
-}
-
-.card {
-  background:#1e293b;
-  margin:20px;
-  padding:20px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.15);
-}
-
-input, select {
-  width:100%;
-  padding:10px;
-  margin-top:8px;
-  border-radius:6px;
-  border:1px solid #334155;
-  background:#0f172a;
-  color:white;
-}
-
-table {
-  width:100%;
-  margin-top:10px;
-  border-collapse:collapse;
-}
-
-th, td {
-  padding:10px;
-  border-bottom:1px solid rgba(255,255,255,.1);
-}
-
-button.action {
-  background:#3b82f6;
-  border:none;
-  padding:6px 10px;
-  margin:2px;
-  border-radius:6px;
-  color:white;
-}
-
-button.danger {
-  background:#ef4444;
-}
+  body{
+    margin:0;
+    background:#0f172a;
+    color:#e5e7eb;
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  nav{
+    background:#111827;
+    padding:10px 14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid rgba(148,163,184,.4);
+  }
+  nav b{font-size:15px;}
+  .nav-buttons button{
+    margin-left:6px;
+    padding:7px 12px;
+    border-radius:999px;
+    border:1px solid rgba(148,163,184,.5);
+    background:#1f2937;
+    color:#e5e7eb;
+    font-size:13px;
+    cursor:pointer;
+  }
+  .nav-buttons button.active{
+    background:#2563eb;
+    border-color:#2563eb;
+  }
+  .nav-buttons button.danger{
+    background:#dc2626;
+    border-color:#b91c1c;
+  }
+  .wrapper{
+    max-width:1024px;
+    margin:16px auto 40px;
+    padding:0 10px 40px;
+  }
+  .card{
+    background:#111827;
+    border-radius:16px;
+    padding:16px 16px 14px;
+    border:1px solid rgba(148,163,184,.35);
+    margin-bottom:14px;
+  }
+  .card h2{
+    margin:0 0 4px;
+    font-size:18px;
+  }
+  .card small{
+    color:#9ca3af;
+    font-size:12px;
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+    font-size:13px;
+  }
+  th,td{
+    padding:8px 6px;
+    border-bottom:1px solid rgba(55,65,81,.7);
+    vertical-align:top;
+  }
+  th{
+    text-align:left;
+    color:#9ca3af;
+    font-size:12px;
+  }
+  input,select,textarea{
+    width:100%;
+    box-sizing:border-box;
+    padding:7px 9px;
+    border-radius:8px;
+    border:1px solid rgba(55,65,81,.9);
+    background:#020617;
+    color:#e5e7eb;
+    font-size:13px;
+  }
+  textarea{
+    min-height:60px;
+    resize:vertical;
+  }
+  .btn{
+    border-radius:999px;
+    border:none;
+    padding:6px 11px;
+    font-size:12px;
+    cursor:pointer;
+  }
+  .btn-primary{
+    background:#2563eb;
+    color:white;
+  }
+  .btn-danger{
+    background:#dc2626;
+    color:white;
+  }
+  .status-pill{
+    display:inline-block;
+    padding:2px 8px;
+    border-radius:999px;
+    font-size:11px;
+  }
+  .s-pending{background:#facc15;color:#111827;}
+  .s-proses{background:#0ea5e9;color:#0b1120;}
+  .s-sukses{background:#22c55e;color:#022c22;}
+  .s-error{background:#f97373;color:#450a0a;}
+  .msg{
+    margin-top:6px;
+    font-size:12px;
+  }
+  .msg.error{color:#f97373;}
+  .msg.ok{color:#22c55e;}
 </style>
 </head>
 <body>
 
-<!-- CEK LOGIN ADMIN -->
+<!-- CEK LOGIN ADMIN (username & password) -->
 <script>
 if(localStorage.getItem("adminLogged") !== "true"){
   window.location.href = "login-admin.html";
@@ -88,28 +136,22 @@ if(localStorage.getItem("adminLogged") !== "true"){
 </script>
 
 <nav>
-  <div><b>Panel Admin — Barmods Digital Store</b></div>
-  <div class="menu">
-    <button onclick="showPage('produk')">Produk</button>
-    <button onclick="showPage('saldo')">Saldo Pengguna</button>
-    <button onclick="showPage('topup')">Topup</button>
-    <button onclick="showPage('orders')">Pesanan</button>
+  <b>Panel Admin — Barmods Digital Store</b>
+  <div class="nav-buttons">
+    <button id="btn-produk" onclick="showPage('produk')">Produk</button>
+    <button id="btn-saldo" onclick="showPage('saldo')">Saldo Pengguna</button>
+    <button id="btn-topup" onclick="showPage('topup')">Topup</button>
+    <button id="btn-orders" onclick="showPage('orders')">Pesanan</button>
     <button class="danger" onclick="logoutAdmin()">Logout</button>
   </div>
 </nav>
 
-<script>
-function logoutAdmin(){
-  localStorage.removeItem("adminLogged");
-  window.location.href = "login-admin.html";
-}
-</script>
+<div class="wrapper">
+  <div id="content"></div>
+</div>
 
-<!-- HALAMAN ADMIN -->
-<div id="content"></div>
-
+<!-- Firebase init -->
 <script>
-// ** Firebase Config **
 const firebaseConfig = {
   apiKey: "AIzaSyD0BMCSL9cDOOlMiaSyARzc_JrUqibHIBg",
   authDomain: "toko-barmods.firebaseapp.com",
@@ -118,199 +160,278 @@ const firebaseConfig = {
   messagingSenderId: "225431835852",
   appId: "1:225431835852:web:92e06d8f39b97f4745a1a4"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 </script>
 
 <script>
+function logoutAdmin(){
+  localStorage.removeItem("adminLogged");
+  window.location.href = "login-admin.html";
+}
+
+function setActiveBtn(page){
+  ["produk","saldo","topup","orders"].forEach(p=>{
+    const el = document.getElementById("btn-"+p);
+    if(!el) return;
+    if(p===page) el.classList.add("active");
+    else el.classList.remove("active");
+  });
+}
+
 function showPage(page){
-  if(page === "produk"){ loadProduk(); }
-  if(page === "saldo"){ loadSaldo(); }
-  if(page === "topup"){ loadTopup(); }
-  if(page === "orders"){ loadOrders(); }
+  setActiveBtn(page);
+  if(page==="produk") loadProduk();
+  if(page==="saldo")  loadSaldo();
+  if(page==="topup")  loadTopup();
+  if(page==="orders") loadOrders();
 }
 </script>
 
-<!-- ===================================== -->
-<!-- PRODUK -->
-<!-- ===================================== -->
+<!-- ========== PRODUK ========== -->
 <script>
-function loadProduk(){
-  db.collection("products")
-    .orderBy("id")
-    .get()
-    .then(snap => {
-      let html = `
-      <div class='card'>
-        <h2>Daftar Produk</h2>
-        <table>
-        <tr><th>ID</th><th>Nama</th><th>Harga</th><th>Stok</th><th>Aksi</th></tr>
-      `;
-      snap.forEach(doc => {
-        let p = doc.data();
-        html += `
-          <tr>
-            <td>${p.id}</td>
-            <td><input id="name-${doc.id}" value="${p.name}"></td>
-            <td><input id="price-${doc.id}" value="${p.price}"></td>
-            <td><input id="stock-${doc.id}" value="${p.stock}"></td>
-            <td>
-              <button class="action" onclick="saveProduk('${doc.id}')">Simpan</button>
-            </td>
-          </tr>
-        `;
-      });
-      html += `</table></div>`;
-      document.getElementById("content").innerHTML = html;
-    });
-}
-
-function saveProduk(docId){
-  db.collection("products").doc(docId).update({
-    name: document.getElementById(`name-${docId}`).value,
-    price: document.getElementById(`price-${docId}`).value,
-    stock: Number(document.getElementById(`stock-${docId}`).value)
-  });
-  alert("Berhasil disimpan!");
-}
-</script>
-
-<!-- ===================================== -->
-<!-- SALDO PENGGUNA -->
-<!-- ===================================== -->
-<script>
-function loadSaldo(){
-  db.collection("users").get().then(snap=>{
-    let html = `
-    <div class='card'>
-      <h2>Saldo Pengguna</h2>
+async function loadProduk(){
+  const snap = await db.collection("products").orderBy("id").get();
+  let html = `
+    <div class="card">
+      <h2>Daftar Produk</h2>
+      <small>Edit nama, harga, dan stok. Otomatis tersimpan untuk halaman produk.</small>
       <table>
-      <tr><th>Email</th><th>Saldo</th><th>Aksi</th></tr>
-    `;
-    snap.forEach(doc=>{
-      let u = doc.data();
-      html += `
         <tr>
-          <td>${doc.id}</td>
-          <td><input id="saldo-${doc.id}" value="${u.saldo || 0}"></td>
-          <td><button class="action" onclick="saveSaldo('${doc.id}')">Simpan</button></td>
+          <th>ID</th><th>Nama</th><th>Harga</th><th>Stok</th><th>Aksi</th>
         </tr>
-      `;
-    });
-    html += `</table></div>`;
-    document.getElementById("content").innerHTML = html;
+  `;
+  snap.forEach(doc=>{
+    const p = doc.data();
+    html += `
+      <tr>
+        <td>${p.id}</td>
+        <td><input id="name-${doc.id}" value="${p.name || ""}"></td>
+        <td><input id="price-${doc.id}" value="${p.price || ""}"></td>
+        <td><input id="stock-${doc.id}" type="number" min="0" value="${p.stock ?? 0}"></td>
+        <td><button class="btn btn-primary" onclick="saveProduk('${doc.id}')">Simpan</button></td>
+      </tr>
+    `;
   });
+  html += `</table></div>`;
+  document.getElementById("content").innerHTML = html;
 }
 
-function saveSaldo(email){
-  db.collection("users").doc(email).update({
-    saldo: Number(document.getElementById(`saldo-${email}`).value)
-  });
-  alert("Saldo disimpan!");
+async function saveProduk(docId){
+  const name  = document.getElementById(`name-${docId}`).value;
+  const price = document.getElementById(`price-${docId}`).value;
+  let stock   = parseInt(document.getElementById(`stock-${docId}`).value,10);
+  if(isNaN(stock) || stock<0) stock=0;
+  await db.collection("products").doc(docId).update({name,price,stock});
+  alert("Produk disimpan.");
 }
 </script>
 
-<!-- ===================================== -->
-<!-- TOPUP -->
-<!-- ===================================== -->
+<!-- ========== SALDO PENGGUNA ========== -->
 <script>
-function loadTopup(){
-  db.collection("topups")
-    .orderBy("time","desc")
-    .get()
-    .then(snap=>{
-      let html = `
-      <div class='card'>
-        <h2>Permintaan Topup</h2>
-        <table>
-        <tr><th>Email</th><th>Nominal</th><th>DANA</th><th>Status</th><th>Aksi</th></tr>
-      `;
-      snap.forEach(doc=>{
-        let t = doc.data();
-        html += `
-          <tr>
-            <td>${t.email}</td>
-            <td>${t.nominal}</td>
-            <td>${t.dana}</td>
-            <td>${t.status}</td>
-            <td>
-              <button class="action" onclick="setTopupStatus('${doc.id}','sukses')">✔</button>
-              <button class="danger action" onclick="setTopupStatus('${doc.id}','error')">✖</button>
-            </td>
-          </tr>
-        `;
-      });
-      html += `</table></div>`;
-      document.getElementById("content").innerHTML = html;
-    });
+async function loadSaldo(){
+  const snap = await db.collection("users").get();
+  let html = `
+    <div class="card">
+      <h2>Saldo Pengguna</h2>
+      <small>Edit saldo manual jika perlu (misal bonus / koreksi).</small>
+      <table>
+        <tr>
+          <th>Email</th><th>Nama</th><th>Nomor HP</th><th>Saldo</th><th>Aksi</th>
+        </tr>
+  `;
+  snap.forEach(doc=>{
+    const u = doc.data();
+    html += `
+      <tr>
+        <td>${doc.id}</td>
+        <td>${u.username || "-"}</td>
+        <td>${u.phone || "-"}</td>
+        <td><input id="saldo-${doc.id}" type="number" value="${u.saldo || 0}"></td>
+        <td><button class="btn btn-primary" onclick="saveSaldo('${doc.id}')">Simpan</button></td>
+      </tr>
+    `;
+  });
+  html += `</table></div>`;
+  document.getElementById("content").innerHTML = html;
 }
 
-function setTopupStatus(id, status){
-  db.collection("topups").doc(id).get().then(doc=>{
-    let t = doc.data();
-    if(status === "sukses"){
-      db.collection("users").doc(t.email).update({
-        saldo: firebase.firestore.FieldValue.increment(t.nominal)
-      });
-    }
-    db.collection("topups").doc(id).update({status});
-    alert("Topup diperbarui!");
-    loadTopup();
-  });
+async function saveSaldo(email){
+  let s = parseInt(document.getElementById(`saldo-${email}`).value,10);
+  if(isNaN(s) || s<0) s=0;
+  await db.collection("users").doc(email).set({saldo:s},{merge:true});
+  alert("Saldo pengguna diperbarui.");
 }
 </script>
 
-<!-- ===================================== -->
-<!-- PESANAN -->
-<!-- ===================================== -->
+<!-- ========== TOPUP (RIWAYAT & APPROVE) ========== -->
 <script>
-function loadOrders(){
-  db.collection("orders")
-    .orderBy("time","desc")
-    .get()
-    .then(snap=>{
-      let html = `
-      <div class='card'>
-        <h2>Pesanan Pengguna</h2>
-        <table>
-        <tr><th>Email</th><th>Produk</th><th>Status</th><th>Produk Admin</th><th>Aksi</th></tr>
-      `;
-      snap.forEach(doc=>{
-        let o = doc.data();
-        html += `
-          <tr>
-            <td>${o.email}</td>
-            <td>${o.productName}</td>
-            <td>${o.status}</td>
-            <td><input id="send-${doc.id}" value="${o.adminSend || ''}"></td>
-            <td>
-              <button class="action" onclick="updateOrder('${doc.id}','proses')">Proses</button>
-              <button class="action" onclick="updateOrder('${doc.id}','sukses')">Sukses</button>
-              <button class="danger action" onclick="updateOrder('${doc.id}','error')">Error</button>
-            </td>
-          </tr>
-        `;
-      });
-      html += `</table></div>`;
-      document.getElementById("content").innerHTML = html;
-    });
+async function loadTopup(){
+  const snap = await db.collection("topups").orderBy("time","desc").get();
+  let html = `
+    <div class="card">
+      <h2>Topup Saldo</h2>
+      <small>
+        Semua permintaan topup tampil di sini. Ubah status ke <b>sukses</b> agar saldo user otomatis bertambah.
+        Jika salah, bisa ubah lagi ke status lain dan saldo akan dikoreksi.
+      </small>
+      <table>
+        <tr>
+          <th>Waktu</th>
+          <th>Email</th>
+          <th>Nominal</th>
+          <th>DANA</th>
+          <th>Status</th>
+          <th>Aksi</th>
+        </tr>
+  `;
+  snap.forEach(doc=>{
+    const t = doc.data();
+    const waktu = t.time ? new Date(t.time).toLocaleString("id-ID") : "-";
+    html += `
+      <tr>
+        <td>${waktu}</td>
+        <td>${t.email || "-"}</td>
+        <td>Rp ${t.nominal?.toLocaleString("id-ID") || 0}</td>
+        <td>${t.dana || "-"}</td>
+        <td>
+          <span class="status-pill s-${t.status || "pending"}">${t.status || "pending"}</span><br>
+          <select id="topup-status-${doc.id}" style="margin-top:4px;">
+            <option value="pending" ${t.status==="pending"?"selected":""}>pending</option>
+            <option value="proses"  ${t.status==="proses" ?"selected":""}>proses</option>
+            <option value="sukses"  ${t.status==="sukses" ?"selected":""}>sukses</option>
+            <option value="error"   ${t.status==="error"  ?"selected":""}>error</option>
+          </select>
+        </td>
+        <td>
+          <button class="btn btn-primary" onclick="updateTopupStatus('${doc.id}')">Simpan status</button>
+        </td>
+      </tr>
+    `;
+  });
+  html += `</table></div>`;
+  document.getElementById("content").innerHTML = html;
 }
 
-function updateOrder(id, status){
-  let sendData = document.getElementById(`send-${id}`).value;
+/**
+ * Logika:
+ * - kalau dari non-sukses -> sukses  => saldo + nominal
+ * - kalau dari sukses -> status lain => saldo - nominal (koreksi)
+ */
+async function updateTopupStatus(topupId){
+  const sel = document.getElementById("topup-status-"+topupId);
+  const newStatus = sel.value;
 
-  db.collection("orders").doc(id).update({
+  const ref = db.collection("topups").doc(topupId);
+  const snap = await ref.get();
+  if(!snap.exists){
+    alert("Topup tidak ditemukan.");
+    return;
+  }
+  const data = snap.data();
+  const oldStatus = data.status || "pending";
+  const email = data.email;
+  const nominal = data.nominal || 0;
+
+  if(!email){
+    alert("Topup tidak punya email. Data tidak valid.");
+    return;
+  }
+
+  // update status di dokumen topup
+  await ref.update({status:newStatus});
+
+  // hitung koreksi saldo
+  let delta = 0;
+  if(oldStatus !== "sukses" && newStatus === "sukses"){
+    delta = nominal;          // baru diset sukses
+  }else if(oldStatus === "sukses" && newStatus !== "sukses"){
+    delta = -nominal;         // dibatalkan dari sukses
+  }
+
+  if(delta !== 0){
+    await db.collection("users").doc(email).set({
+      saldo: firebase.firestore.FieldValue.increment(delta)
+    },{merge:true});
+  }
+
+  alert("Status topup diperbarui.");
+  loadTopup();
+}
+</script>
+
+<!-- ========== PESANAN (KIRIM PRODUK KE USER) ========== -->
+<script>
+async function loadOrders(){
+  const snap = await db.collection("orders").orderBy("time","desc").get();
+  let html = `
+    <div class="card">
+      <h2>Pesanan Pengguna</h2>
+      <small>
+        Semua order user tampil di sini.  
+        Ubah status ke <b>proses / sukses / error</b>.  
+        Untuk mengirim produk (akun, link, kode, dsb), isi kolom <b>Produk untuk pembeli</b>.  
+        Teks ini akan muncul di halaman <b>Pesanan Saya</b> milik user.
+      </small>
+      <table>
+        <tr>
+          <th>Waktu</th>
+          <th>Email</th>
+          <th>Produk</th>
+          <th>Info DANA</th>
+          <th>Status</th>
+          <th>Produk untuk pembeli</th>
+          <th>Aksi</th>
+        </tr>
+  `;
+  snap.forEach(doc=>{
+    const o = doc.data();
+    const waktu = o.time ? new Date(o.time).toLocaleString("id-ID") : "-";
+    const danaInfo = `${o.danaNumber || "-"} / ${o.danaName || "-"}`;
+    html += `
+      <tr>
+        <td>${waktu}</td>
+        <td>${o.email || "-"}</td>
+        <td>${o.productName || "-"}</td>
+        <td>${danaInfo}</td>
+        <td>
+          <span class="status-pill s-${o.status || "pending"}">${o.status || "pending"}</span><br>
+          <select id="order-status-${doc.id}" style="margin-top:4px;">
+            <option value="pending" ${o.status==="pending"?"selected":""}>pending</option>
+            <option value="proses"  ${o.status==="proses" ?"selected":""}>proses</option>
+            <option value="sukses"  ${o.status==="sukses" ?"selected":""}>sukses</option>
+            <option value="error"   ${o.status==="error"  ?"selected":""}>error</option>
+          </select>
+        </td>
+        <td>
+          <textarea id="order-send-${doc.id}" placeholder="Isi detail produk untuk pembeli...">${o.adminSend || ""}</textarea>
+        </td>
+        <td>
+          <button class="btn btn-primary" onclick="saveOrder('${doc.id}')">Simpan</button>
+        </td>
+      </tr>
+    `;
+  });
+  html += `</table></div>`;
+  document.getElementById("content").innerHTML = html;
+}
+
+async function saveOrder(orderId){
+  const status = document.getElementById("order-status-"+orderId).value;
+  const send   = document.getElementById("order-send-"+orderId).value;
+
+  await db.collection("orders").doc(orderId).update({
     status: status,
-    adminSend: sendData
+    adminSend: send
   });
 
-  alert("Pesanan diperbarui!");
+  alert("Pesanan diperbarui dan produk dikirim ke user.");
   loadOrders();
 }
 </script>
 
 <script>
+// halaman awal
 showPage("produk");
 </script>
 
