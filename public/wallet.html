@@ -1,170 +1,444 @@
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import {
-    getFirestore,
-    collection,
-    getDocs,
-    doc,
-    getDoc,
-    setDoc,
-    addDoc,
-    query,
-    where
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-  import {
-    getAuth,
-    onAuthStateChanged,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-    authDomain: "toko-barmods.firebaseapp.com",
-    projectId: "toko-barmods",
-    storageBucket: "toko-barmods.appspot.com",
-    messagingSenderId: "284047189012",
-    appId: "1:284047189012:web:6ef0c6891adab08a383301"
-  };
-
-  const app  = initializeApp(firebaseConfig);
-  const db   = getFirestore(app);
-  const auth = getAuth(app);
-
-  const saldoTextEl = document.getElementById('saldoText');
-  const userEmailEl = document.getElementById('userEmail');
-  const topupMsgEl  = document.getElementById('topupMsg');
-  const tbodyTopup  = document.getElementById('topupTable').querySelector('tbody');
-
-  let currentUser = null;
-  let userBalance = 0;
-
-  function formatRupiah(num){
-    num = Math.floor(num || 0);
-    return 'Rp ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');
-  }
-
-  onAuthStateChanged(auth, async (user)=>{
-    if(!user){
-      window.location.href = 'login.html';
-      return;
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Saldo & Topup - Barmods Digital Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #020617;
+      --card: #020617;
+      --accent: #3b82f6;
+      --accent-soft: rgba(59,130,246,.2);
+      --text: #e5e7eb;
+      --text-soft: #9ca3af;
+      --danger: #f97373;
+      --success: #22c55e;
+      --border: rgba(148,163,184,.35);
     }
-    currentUser = user;
-    userEmailEl.textContent = user.email || '-';
-    await loadBalance();
-    await loadTopups();
-  });
+    body {
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:#020617;
+      color:var(--text);
+    }
+    .topbar {
+      height:56px;
+      background:linear-gradient(90deg,#020617,#0b1120);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 12px;
+      border-bottom:1px solid var(--border);
+    }
+    .brand {
+      font-weight:700;
+      font-size:15px;
+    }
+    .nav-right {
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .nav-btn {
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(15,23,42,.9);
+      color:var(--text-soft);
+      padding:5px 10px;
+      font-size:11px;
+      text-decoration:none;
+    }
+    .nav-btn.primary {
+      background:var(--accent);
+      color:#fff;
+      border:none;
+    }
+    .nav-btn.danger {
+      background:#ef4444;
+      color:#fff;
+      border:none;
+    }
+    .main {
+      max-width:900px;
+      margin:0 auto;
+      padding:14px 10px 30px;
+    }
+    h1 {
+      font-size:18px;
+      margin:0 0 4px;
+    }
+    .subtitle {
+      font-size:12px;
+      color:var(--text-soft);
+      margin-bottom:12px;
+    }
+    .card {
+      background:var(--card);
+      border-radius:16px;
+      padding:12px 12px 14px;
+      border:1px solid var(--border);
+      box-shadow:0 14px 35px rgba(15,23,42,.6);
+      margin-bottom:12px;
+    }
+    .card-title {
+      font-size:15px;
+      font-weight:600;
+      margin-bottom:4px;
+    }
+    .card-sub {
+      font-size:12px;
+      color:var(--text-soft);
+      margin-bottom:10px;
+    }
+    .saldo-big {
+      font-size:28px;
+      font-weight:700;
+      margin:4px 0;
+    }
+    .saldo-email {
+      font-size:12px;
+      color:var(--text-soft);
+    }
+    .form-row {
+      margin-bottom:8px;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      font-size:12px;
+    }
+    .form-label {
+      color:var(--text-soft);
+      font-size:12px;
+    }
+    .input {
+      border-radius:999px;
+      border:1px solid var(--border);
+      padding:7px 10px;
+      background:#020617;
+      color:var(--text);
+      font-size:13px;
+      width:100%;
+    }
+    .input::placeholder {
+      color:var(--text-soft);
+    }
+    textarea.input {
+      border-radius:12px;
+      min-height:60px;
+      resize:vertical;
+    }
+    .btn-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:6px;
+    }
+    .btn {
+      border-radius:999px;
+      border:none;
+      padding:7px 14px;
+      font-size:13px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      text-decoration:none;
+    }
+    .btn.primary {
+      background:var(--accent);
+      color:#fff;
+    }
+    .btn.whatsapp {
+      background:#22c55e;
+      color:#022c22;
+    }
+    .msg {
+      margin-top:6px;
+      font-size:12px;
+      min-height:16px;
+    }
+    .msg.err { color:var(--danger); }
+    .msg.ok  { color:var(--success); }
 
-  document.getElementById('logoutBtn').onclick = async ()=>{
-    try{ await signOut(auth); }catch(e){}
-  };
+    table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:11px;
+      margin-top:6px;
+    }
+    th, td {
+      padding:6px 4px;
+      border-bottom:1px solid var(--border);
+      text-align:left;
+      white-space:nowrap;
+    }
+    th {
+      color:var(--text-soft);
+      font-weight:500;
+    }
+    @media(max-width:600px){
+      .topbar { flex-wrap:wrap; height:auto; padding:8px 10px; gap:6px;}
+      .nav-right { width:100%; justify-content:flex-start; }
+    }
+  </style>
+</head>
+<body>
 
-  async function loadBalance(){
-    const ref = doc(db,'users',currentUser.uid);
-    const snap = await getDoc(ref);
-    if(!snap.exists()){
-      await setDoc(ref,{
-        email: currentUser.email || '',
-        balance: 0,
-        createdAt: new Date().toISOString()
+  <div class="topbar">
+    <div class="brand">Barmods Digital Store</div>
+    <div class="nav-right">
+      <a href="index.html" class="nav-btn">Produk</a>
+      <a href="orders.html" class="nav-btn">Pesanan Saya</a>
+      <a href="profile.html" class="nav-btn">Profil</a>
+      <a href="admin.html" class="nav-btn">Admin</a>
+      <button id="logoutBtn" class="nav-btn danger" type="button">Logout</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <h1>Saldo & Topup</h1>
+    <div class="subtitle">Saldo dipakai untuk membeli semua produk di Barmods Digital Store.</div>
+
+    <!-- SALDO -->
+    <div class="card">
+      <div class="card-title">Saldo Saya</div>
+      <div class="card-sub">Saldo ini digunakan untuk bayar order produk.</div>
+      <div class="saldo-big" id="saldoText">Rp 0</div>
+      <div class="saldo-email">
+        Akun: <span id="userEmail">-</span>
+      </div>
+    </div>
+
+    <!-- TOPUP -->
+    <div class="card">
+      <div class="card-title">Topup Saldo</div>
+      <div class="card-sub">
+        Pembayaran manual via DANA.<br>
+        1. Isi nominal & data DANA di bawah.<br>
+        2. Transfer ke DANA admin: <b>083877842721</b>.<br>
+        3. Kirim bukti transfer ke WhatsApp admin sambil sebutkan email akun ini.<br>
+        4. Admin akan ubah status topup dari <b>pending</b> menjadi <b>sukses</b> dan saldo bertambah.
+      </div>
+
+      <div class="form-row">
+        <label class="form-label">Nominal topup (Rp, misal 10000)</label>
+        <input id="topupAmount" class="input" placeholder="10000">
+      </div>
+
+      <div class="form-row">
+        <label class="form-label">Nomor DANA kamu</label>
+        <input id="topupDana" class="input" placeholder="Contoh: 0838xxxxxxx">
+      </div>
+
+      <div class="form-row">
+        <label class="form-label">Atas nama DANA</label>
+        <input id="topupNama" class="input" placeholder="Nama di aplikasi DANA">
+      </div>
+
+      <div class="form-row">
+        <label class="form-label">Catatan tambahan (opsional)</label>
+        <textarea id="topupNote" class="input" placeholder="Misal: topup buat beli panel / sosmed"></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn primary" type="button" onclick="buatTopup()">Buat Permintaan Topup</button>
+        <a class="btn whatsapp" href="https://wa.me/6283877842721" target="_blank">Chat WhatsApp Admin</a>
+      </div>
+
+      <div id="topupMsg" class="msg"></div>
+    </div>
+
+    <!-- RIWAYAT TOPUP -->
+    <div class="card">
+      <div class="card-title">Riwayat Topup</div>
+      <div class="card-sub">Status: pending / proses / sukses / error</div>
+
+      <table id="topupTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Waktu</th>
+            <th>Nominal</th>
+            <th>DANA</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FIREBASE LOGIC -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      doc,
+      getDoc,
+      setDoc,
+      addDoc,
+      query,
+      where
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+      authDomain: "toko-barmods.firebaseapp.com",
+      projectId: "toko-barmods",
+      storageBucket: "toko-barmods.appspot.com",
+      messagingSenderId: "284047189012",
+      appId: "1:284047189012:web:6ef0c6891adab08a383301"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const db   = getFirestore(app);
+    const auth = getAuth(app);
+
+    const saldoTextEl = document.getElementById('saldoText');
+    const userEmailEl = document.getElementById('userEmail');
+    const topupMsgEl  = document.getElementById('topupMsg');
+    const tbodyTopup  = document.getElementById('topupTable').querySelector('tbody');
+
+    let currentUser = null;
+    let userBalance = 0;
+
+    function formatRupiah(num){
+      num = Math.floor(num || 0);
+      return 'Rp ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+    }
+
+    // AUTH
+    onAuthStateChanged(auth, async (user)=>{
+      if(!user){
+        window.location.href = 'login.html';
+        return;
+      }
+      currentUser = user;
+      userEmailEl.textContent = user.email || '-';
+      await loadBalance();
+      await loadTopups();
+    });
+
+    document.getElementById('logoutBtn').onclick = async ()=>{
+      try{ await signOut(auth); }catch(e){}
+    };
+
+    // BALANCE
+    async function loadBalance(){
+      const ref = doc(db,'users',currentUser.uid);
+      const snap = await getDoc(ref);
+      if(!snap.exists()){
+        await setDoc(ref,{
+          email: currentUser.email || '',
+          balance: 0,
+          createdAt: new Date().toISOString()
+        });
+        userBalance = 0;
+      } else {
+        userBalance = snap.data().balance || 0;
+      }
+      saldoTextEl.textContent = formatRupiah(userBalance);
+    }
+
+    // TOPUP LIST
+    async function loadTopups(){
+      if(!currentUser) return;
+
+      tbodyTopup.innerHTML = '';
+
+      const col = collection(db,'topups');
+      const q   = query(col, where('userUid','==',currentUser.uid));
+      const snap = await getDocs(q);
+
+      const list = [];
+      snap.forEach(d => list.push(d.data()));
+
+      list.sort((a,b) => {
+        const aa = a.createdAt || '';
+        const bb = b.createdAt || '';
+        return bb.localeCompare(aa);
       });
-      userBalance = 0;
-    } else {
-      userBalance = snap.data().balance || 0;
-    }
-    saldoTextEl.textContent = formatRupiah(userBalance);
-  }
 
-  async function loadTopups(){
-    if(!currentUser) return;
-
-    tbodyTopup.innerHTML = '';
-
-    const col = collection(db,'topups');
-    // tanpa orderBy, jadi tidak perlu index gabungan
-    const q   = query(col, where('userUid','==',currentUser.uid));
-    const snap = await getDocs(q);
-
-    const list = [];
-    snap.forEach(d => list.push(d.data()));
-
-    // sort di client berdasarkan createdAt desc
-    list.sort((a,b) => {
-      const aa = a.createdAt || '';
-      const bb = b.createdAt || '';
-      return bb.localeCompare(aa);
-    });
-
-    list.forEach((t,i)=>{
-      const tr = document.createElement('tr');
-      const dTime = new Date(t.createdAt || Date.now());
-      tr.innerHTML = `
-        <td>${i+1}</td>
-        <td>${dTime.toLocaleString('id-ID')}</td>
-        <td>${formatRupiah(t.amount || 0)}</td>
-        <td>${t.danaNumber || ''}</td>
-        <td>${t.status || 'pending'}</td>
-      `;
-      tbodyTopup.appendChild(tr);
-    });
-  }
-
-  window.buatTopup = async function(){
-    if(!currentUser) return;
-
-    const amount = parseInt(document.getElementById('topupAmount').value,10);
-    const dana   = document.getElementById('topupDana').value.trim();
-    const nama   = document.getElementById('topupNama').value.trim();
-    const note   = document.getElementById('topupNote').value.trim();
-
-    topupMsgEl.textContent = '';
-    topupMsgEl.className = 'msg';
-
-    if(isNaN(amount) || amount < 1000){
-      topupMsgEl.textContent = 'Nominal minimal 1000.';
-      topupMsgEl.className = 'msg err';
-      return;
-    }
-    if(!dana || !nama){
-      topupMsgEl.textContent = 'Nomor DANA dan Atas nama wajib diisi.';
-      topupMsgEl.className = 'msg err';
-      return;
+      list.forEach((t,i)=>{
+        const tr = document.createElement('tr');
+        const dTime = new Date(t.createdAt || Date.now());
+        tr.innerHTML = `
+          <td>${i+1}</td>
+          <td>${dTime.toLocaleString('id-ID')}</td>
+          <td>${formatRupiah(t.amount || 0)}</td>
+          <td>${t.danaNumber || ''}</td>
+          <td>${t.status || 'pending'}</td>
+        `;
+        tbodyTopup.appendChild(tr);
+      });
     }
 
-    try{
-      const obj = {
-        userUid: currentUser.uid,
-        userEmail: currentUser.email || '',
-        amount,
-        danaNumber: dana,
-        danaName: nama,
-        note: note || '',
-        status: 'pending',
-        createdAt: new Date().toISOString()
-      };
+    // TOPUP ACTION
+    window.buatTopup = async function(){
+      if(!currentUser) return;
 
-      await addDoc(collection(db,'topups'), obj);
+      const amount = parseInt(document.getElementById('topupAmount').value,10);
+      const dana   = document.getElementById('topupDana').value.trim();
+      const nama   = document.getElementById('topupNama').value.trim();
+      const note   = document.getElementById('topupNote').value.trim();
 
-      topupMsgEl.textContent =
-        'Permintaan topup dibuat. Status: pending. Kirim bukti transfer ke WhatsApp admin.';
-      topupMsgEl.className = 'msg ok';
+      topupMsgEl.textContent = '';
+      topupMsgEl.className = 'msg';
 
-      // reset form
-      document.getElementById('topupAmount').value = '';
-      document.getElementById('topupDana').value = '';
-      document.getElementById('topupNama').value = '';
-      document.getElementById('topupNote').value = '';
-
-      // kalau loadTopups error (misal index dsb), jangan bikin pesan gagal topup
-      try {
-        await loadTopups();
-      } catch(e){
-        console.error('Gagal load riwayat topup', e);
+      if(isNaN(amount) || amount < 1000){
+        topupMsgEl.textContent = 'Nominal minimal 1000.';
+        topupMsgEl.className = 'msg err';
+        return;
+      }
+      if(!dana || !nama){
+        topupMsgEl.textContent = 'Nomor DANA dan Atas nama wajib diisi.';
+        topupMsgEl.className = 'msg err';
+        return;
       }
 
-    } catch(e){
-      console.error(e);
-      topupMsgEl.textContent = 'Gagal membuat permintaan topup. Coba lagi.';
-      topupMsgEl.className = 'msg err';
-    }
-  };
-</script>
+      try{
+        const obj = {
+          userUid: currentUser.uid,
+          userEmail: currentUser.email || '',
+          amount,
+          danaNumber: dana,
+          danaName: nama,
+          note: note || '',
+          status: 'pending',
+          createdAt: new Date().toISOString()
+        };
+
+        await addDoc(collection(db,'topups'), obj);
+
+        topupMsgEl.textContent =
+          'Permintaan topup dibuat. Status: pending. Kirim bukti transfer ke WhatsApp admin.';
+        topupMsgEl.className = 'msg ok';
+
+        document.getElementById('topupAmount').value = '';
+        document.getElementById('topupDana').value = '';
+        document.getElementById('topupNama').value = '';
+        document.getElementById('topupNote').value = '';
+
+        try {
+          await loadTopups();
+        } catch(e){
+          console.error('Gagal load riwayat topup', e);
+        }
+      } catch(e){
+        console.error(e);
+        topupMsgEl.textContent = 'Gagal membuat permintaan topup. Coba lagi.';
+        topupMsgEl.className = 'msg err';
+      }
+    };
+  </script>
+</body>
+</html>
