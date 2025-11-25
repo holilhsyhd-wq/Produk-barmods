@@ -1,485 +1,718 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Barmods Digital Store</title>
-
-<style>
-  body {
-    margin: 0;
-    background: #020617;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    color: #e5e7eb;
-  }
-
-  header {
-    padding: 14px;
-    background: #020617;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #1f2937;
-  }
-
-  .brand-title {
-    font-size: 15px;
-    font-weight: 600;
-  }
-  .brand-sub {
-    font-size: 11px;
-    color: #9ca3af;
-  }
-
-  .header-left {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .header-right {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .btn-header {
-    color: #e5e7eb;
-    background: #111827;
-    padding: 6px 11px;
-    border-radius: 999px;
-    text-decoration: none;
-    font-size: 12px;
-    border: 1px solid #374151;
-  }
-
-  main {
-    padding: 12px;
-    max-width: 960px;
-    margin: 0 auto;
-  }
-
-  h3 {
-    margin: 8px 0;
-    font-size: 15px;
-  }
-
-  .card-info {
-    background: #020617;
-    border-radius: 14px;
-    padding: 10px 12px;
-    border: 1px solid #1f2937;
-    font-size: 12px;
-    margin-bottom: 12px;
-  }
-
-  .pill-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 6px;
-  }
-  .pill {
-    border-radius: 999px;
-    padding: 4px 8px;
-    border: 1px solid #1f2937;
-    font-size: 11px;
-  }
-
-  .product-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-
-  @media (max-width: 560px) {
-    .product-grid {
-      grid-template-columns: 1fr 1fr;
+  <meta charset="UTF-8">
+  <title>Admin - Barmods Digital Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:#020617;
+      color:#e5e7eb;
     }
-  }
+    .topbar{
+      height:54px;
+      background:#020617;
+      border-bottom:1px solid #1f2937;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:0 14px;
+    }
+    .topbar-left{
+      display:flex;
+      flex-direction:column;
+    }
+    .topbar-title{font-size:15px;font-weight:600;}
+    .topbar-sub{font-size:11px;color:#9ca3af;}
+    .topbar-right{display:flex;gap:8px;flex-wrap:wrap;}
+    .btn-top{
+      padding:6px 11px;
+      border-radius:999px;
+      border:1px solid #374151;
+      background:#111827;
+      color:#e5e7eb;
+      font-size:12px;
+      cursor:pointer;
+      text-decoration:none;
+    }
+    .btn-top.logout{background:#b91c1c;border-color:#7f1d1d;}
 
-  .product-card {
-    background: #020617;
-    border-radius: 12px;
-    padding: 9px 9px 10px;
-    border: 1px solid #1f2937;
-    font-size: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
+    .main{
+      max-width:1080px;
+      margin:0 auto;
+      padding:12px;
+    }
+    .card{
+      background:#020617;
+      border-radius:14px;
+      border:1px solid #1f2937;
+      padding:12px;
+      margin-bottom:12px;
+    }
+    .card-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:6px;
+      margin-bottom:6px;
+    }
+    .card-header h2{
+      margin:0;
+      font-size:15px;
+    }
+    .card-header small{
+      font-size:11px;
+      color:#9ca3af;
+    }
+    .info{
+      font-size:12px;
+      color:#9ca3af;
+    }
+    .pill-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:6px;
+      font-size:11px;
+    }
+    .pill{
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid #1f2937;
+      background:#020617;
+    }
 
-  .product-title {
-    font-weight: 600;
-    font-size: 12px;
-  }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:12px;
+      margin-top:6px;
+    }
+    th,td{
+      border-bottom:1px solid #1f2937;
+      padding:5px 4px;
+      text-align:left;
+      vertical-align:top;
+    }
+    th{
+      background:#020617;
+      color:#9ca3af;
+      font-size:11px;
+    }
 
-  .price-tag {
-    color: #22c55e;
-    font-weight: 700;
-    font-size: 13px;
-  }
+    .small-input{
+      width:100%;
+      padding:4px 6px;
+      border-radius:8px;
+      border:1px solid #1f2937;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:11px;
+      box-sizing:border-box;
+    }
+    .textarea{
+      width:100%;
+      min-height:40px;
+      padding:4px 6px;
+      border-radius:8px;
+      border:1px solid #1f2937;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:11px;
+      resize:vertical;
+      box-sizing:border-box;
+    }
+    .select{
+      width:100%;
+      padding:4px 6px;
+      border-radius:8px;
+      border:1px solid #1f2937;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:11px;
+      box-sizing:border-box;
+    }
 
-  .stock-line {
-    font-size: 11px;
-    color: #9ca3af;
-  }
+    .btn-sm{
+      padding:4px 8px;
+      border-radius:999px;
+      border:none;
+      font-size:11px;
+      cursor:pointer;
+      margin-top:3px;
+    }
+    .btn-save{background:#2563eb;color:#fff;}
+    .btn-send{background:#16a34a;color:#fff;}
 
-  .btn-product {
-    margin-top: 5px;
-    padding: 7px;
-    border-radius: 999px;
-    border: none;
-    font-size: 12px;
-    background: #4f46e5;
-    color: #fff;
-  }
+    .badge{
+      display:inline-block;
+      border-radius:999px;
+      padding:2px 6px;
+      font-size:10px;
+      margin-top:3px;
+    }
+    .status-pending{background:#facc15;color:#111827;}
+    .status-proses{background:#3b82f6;color:#ffffff;}
+    .status-eror{background:#f97373;color:#111827;}
+    .status-sukses{background:#22c55e;color:#ffffff;}
 
-  .btn-product[disabled] {
-    background: #1f2937;
-    color: #9ca3af;
-  }
+    .msg{
+      font-size:12px;
+      margin-top:6px;
+      min-height:16px;
+    }
+    .msg.ok{color:#22c55e;}
+    .msg.err{color:#f97373;}
 
-  /* MODAL */
-  .modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(15,23,42,.78);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 18px;
-    z-index: 30;
-  }
+    .link{
+      color:#38bdf8;
+      font-size:11px;
+      text-decoration:none;
+    }
+    .link:hover{text-decoration:underline;}
 
-  .modal {
-    background: #020617;
-    width: 100%;
-    max-width: 420px;
-    border-radius: 16px;
-    padding: 14px 14px 12px;
-    border: 1px solid #1f2937;
-    box-shadow: 0 18px 50px rgba(0,0,0,.75);
-  }
+    #loadingCard{}
+    #notAdminBox{display:none;}
+    #adminWrap{display:none;}
 
-  .modal h3 {
-    margin: 0 0 6px;
-    font-size: 15px;
-  }
+    .btn-admin-link{
+      display:inline-block;
+      margin-top:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid #1f2937;
+      background:#111827;
+      color:#e5e7eb;
+      font-size:11px;
+      text-decoration:none;
+    }
 
-  .modal p {
-    margin: 0 0 8px;
-    font-size: 12px;
-    color: #9ca3af;
-  }
-
-  .modal label {
-    font-size: 12px;
-    display: block;
-    margin: 6px 0 3px;
-  }
-
-  .modal-input {
-    width: 100%;
-    padding: 7px 9px;
-    border-radius: 10px;
-    border: 1px solid #1f2937;
-    background: #020617;
-    color: #e5e7eb;
-    font-size: 12px;
-  }
-
-  .modal-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 12px;
-    gap: 8px;
-  }
-
-  .btn-cancel {
-    padding: 7px 12px;
-    border-radius: 999px;
-    border: none;
-    font-size: 12px;
-    background: #374151;
-    color: #e5e7eb;
-  }
-
-  .btn-ok {
-    padding: 7px 12px;
-    border-radius: 999px;
-    border: none;
-    font-size: 12px;
-    background: #4f46e5;
-    color: #ffffff;
-  }
-
-  .modal-msg {
-    font-size: 11px;
-    margin-top: 6px;
-    text-align: center;
-    color: #f97373;
-    min-height: 14px;
-  }
-
-  .modal-msg.ok {
-    color: #22c55e;
-  }
-</style>
+    /* MODAL KIRIM PRODUK */
+    .modal-bg{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.75);
+      display:none;
+      justify-content:center;
+      align-items:center;
+      padding:14px;
+      z-index:30;
+    }
+    .modal{
+      width:100%;
+      max-width:420px;
+      background:#020617;
+      border-radius:16px;
+      border:1px solid #1f2937;
+      padding:14px;
+      box-shadow:0 18px 40px rgba(0,0,0,.75);
+    }
+    .modal h3{
+      margin:0 0 6px;
+      font-size:15px;
+    }
+    .modal textarea{
+      width:100%;
+      min-height:80px;
+      padding:8px 9px;
+      border-radius:10px;
+      border:1px solid #1f2937;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:12px;
+      resize:vertical;
+      box-sizing:border-box;
+    }
+    .modal-footer{
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+      margin-top:10px;
+    }
+    .btn-cancel{
+      border-radius:999px;
+      border:1px solid #374151;
+      background:#111827;
+      color:#e5e7eb;
+      padding:7px 11px;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .btn-ok{
+      border-radius:999px;
+      border:none;
+      background:#16a34a;
+      color:#ffffff;
+      padding:7px 11px;
+      font-size:12px;
+      cursor:pointer;
+    }
+  </style>
 </head>
-
 <body>
-<header>
-  <div class="header-left">
-    <span class="brand-title">Barmods Digital Store</span>
-    <span class="brand-sub">Layanan Digital & Sosial Media</span>
-  </div>
-  <div class="header-right">
-    <a href="orders.html" class="btn-header">Pesanan Saya</a>
-    <a href="profile.html" class="btn-header">Profil Saya</a>
-    <a href="admin.html" class="btn-header">Admin</a>
-  </div>
-</header>
 
-<main>
-  <div class="card-info">
-    <b>Cara order singkat:</b><br>
-    1. Pilih produk di bawah lalu klik <b>Order Sekarang</b>.<br>
-    2. Transfer via DANA ke <b>083877842721</b>.<br>
-    3. Isi data DANA + (username / link / panel) di form.<br>
-    4. Boleh upload bukti transfer (opsional).<br>
-    5. Order masuk status <b>pending</b>, admin ubah ke <b>proses / sukses / eror</b>.
-    <div class="pill-row">
-      <div class="pill">Pembayaran: DANA 083877842721</div>
-      <div class="pill">Order sosmed: akun jangan private</div>
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-title">Admin - Barmods Digital Store</span>
+    <span class="topbar-sub">Kelola produk, saldo, dan pesanan</span>
+  </div>
+  <div class="topbar-right">
+    <a href="index.html" class="btn-top">← Halaman Produk</a>
+    <button id="logoutBtn" class="btn-top logout" type="button">Logout</button>
+  </div>
+</div>
+
+<div class="main">
+  <!-- Loading -->
+  <div id="loadingCard" class="card">
+    <div class="card-header">
+      <h2>Memeriksa sesi admin...</h2>
+    </div>
+    <p class="info">Mohon tunggu sebentar.</p>
+  </div>
+
+  <!-- Bukan admin -->
+  <div id="notAdminBox">
+    <div class="card">
+      <div class="card-header">
+        <h2>Akses ditolak</h2>
+      </div>
+      <p class="info">
+        Hanya email <b>holilhsyhd@gmail.com</b> yang boleh mengakses panel admin ini.<br>
+        Silakan login dengan akun Google admin di halaman login.
+      </p>
+      <a href="login.html" class="btn-top">Ke halaman login</a>
     </div>
   </div>
 
-  <h3>Daftar Produk</h3>
-  <div id="productGrid" class="product-grid"></div>
-</main>
+  <!-- Admin only -->
+  <div id="adminWrap">
+    <!-- Info admin -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>Selamat datang, Admin</h2>
+          <small>Panel kontrol Barmods Digital Store</small>
+        </div>
+      </div>
+      <p class="info">
+        Login sebagai: <b><span id="adminEmail"></span></b>
+      </p>
+      <div class="pill-row">
+        <div class="pill">Admin utama: <b>holilhsyhd@gmail.com</b></div>
+        <div class="pill" id="adminStatus">Status: aktif</div>
+      </div>
+      <a href="admin-topup.html" class="btn-admin-link">Kelola Top-up Saldo</a>
+    </div>
 
-<!-- ============== MODAL ORDER ============== -->
-<div id="orderModal" class="modal-backdrop">
+    <!-- Produk -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>Daftar Produk</h2>
+          <small>Edit nama, harga, dan stok</small>
+        </div>
+      </div>
+      <p class="info">
+        Perubahan langsung disimpan ke koleksi <b>products</b> di Firestore dan
+        akan mempengaruhi halaman produk user.
+      </p>
+      <div id="productMsg" class="msg"></div>
+      <table id="productTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nama Produk</th>
+            <th>Harga</th>
+            <th>Stok</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Pesanan -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>Daftar Pesanan</h2>
+          <small>Kelola status dan kirim produk ke pembeli</small>
+        </div>
+      </div>
+      <p class="info">
+        Status:
+        <b>pending</b> = order baru masuk,
+        <b>proses</b> = sedang dikerjakan,
+        <b>sukses</b> = produk sudah dikirim ke pembeli,
+        <b>eror</b> = gagal / ada masalah.<br>
+        Tombol <b>Kirim Produk</b> akan menetapkan status langsung ke <b>sukses</b>.
+      </p>
+      <div id="orderMsg" class="msg"></div>
+      <table id="orderTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Waktu</th>
+            <th>Produk</th>
+            <th>Pembeli</th>
+            <th>DANA</th>
+            <th>Sosmed/Panel</th>
+            <th>Bukti</th>
+            <th>Status</th>
+            <th>Produk ke pembeli</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KIRIM PRODUK -->
+<div id="deliverModal" class="modal-bg">
   <div class="modal">
-    <h3>Pembayaran via DANA</h3>
-    <p>Transfer dulu ke DANA: <b>083877842721</b></p>
-
-    <label>Nomor DANA kamu</label>
-    <input id="orderDana" class="modal-input" placeholder="Contoh: 0838xxxxxxx">
-
-    <label>Atas nama DANA</label>
-    <input id="orderNama" class="modal-input" placeholder="Nama di aplikasi DANA">
-
-    <p style="font-size:11px;margin-top:8px;color:#9ca3af;">
-      Untuk order <b>sosmed</b>, isi username & link.<br>
-      Untuk <b>panel</b>, isi user & password panel.
+    <h3>Kirim Produk ke Pembeli</h3>
+    <p class="info">
+      Isi dengan akun/akses/kode yang dikirim ke pembeli.
+      Contoh:<br>
+      <code>User: ... | Pass: ... | Link: ...</code>
     </p>
-
-    <input id="orderSosmedUser" class="modal-input" placeholder="Username sosmed (opsional)">
-    <input id="orderSosmedLink" class="modal-input" placeholder="Link video/profil (opsional)">
-    <input id="orderPanelUser" class="modal-input" placeholder="User panel (opsional)">
-    <input id="orderPanelPass" class="modal-input" placeholder="Password panel (opsional)">
-
-    <label>Upload bukti transfer (opsional)</label>
-    <input id="orderProof" type="file" accept="image/*" style="font-size:11px;color:#e5e7eb;">
-
-    <div class="modal-actions">
-      <button type="button" id="orderCancelBtn" class="btn-cancel">Batal</button>
-      <button type="button" id="orderSubmitBtn" class="btn-ok">Order Sekarang</button>
+    <textarea id="deliverMsg" placeholder="User: ...
+Password: ...
+Link akses: ...
+Catatan admin: ..."></textarea>
+    <div class="modal-footer">
+      <button type="button" class="btn-cancel" onclick="closeDeliver()">Batal</button>
+      <button type="button" class="btn-ok" onclick="sendDeliver()">Kirim</button>
     </div>
-
-    <div id="orderMsg" class="modal-msg"></div>
   </div>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
-    getFirestore, collection, getDocs, addDoc,
-    doc, updateDoc
+    getFirestore, collection, getDocs, doc, updateDoc,
+    query, orderBy
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
   import {
-    getAuth, onAuthStateChanged
+    getAuth, onAuthStateChanged, signOut
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import {
-    getStorage, ref, uploadBytes, getDownloadURL
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
     authDomain: "toko-barmods.firebaseapp.com",
     projectId: "toko-barmods",
-    storageBucket: "toko-barmods.firebasestorage.app",
+    storageBucket: "toko-barmods.appspot.com",
     messagingSenderId: "284047189012",
     appId: "1:284047189012:web:6ef0c6891adab08a383301"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const db  = getFirestore(app);
+  const ADMIN_EMAIL = "holilhsyhd@gmail.com";
+
+  const app  = initializeApp(firebaseConfig);
+  const db   = getFirestore(app);
   const auth = getAuth(app);
-  const storage = getStorage(app);
 
-  let currentUser = null;
-  let products = [];
-  let currentProduct = null;
+  const loadingCard = document.getElementById("loadingCard");
+  const notAdminBox = document.getElementById("notAdminBox");
+  const adminWrap   = document.getElementById("adminWrap");
+  const adminEmailEl = document.getElementById("adminEmail");
 
-  const grid = document.getElementById("productGrid");
-  const orderModal = document.getElementById("orderModal");
-  const msgEl = document.getElementById("orderMsg");
+  const productTableBody = document.querySelector("#productTable tbody");
+  const orderTableBody   = document.querySelector("#orderTable tbody");
+  const productMsgEl     = document.getElementById("productMsg");
+  const orderMsgEl       = document.getElementById("orderMsg");
 
-  const danaEl  = document.getElementById("orderDana");
-  const namaEl  = document.getElementById("orderNama");
-  const sUserEl = document.getElementById("orderSosmedUser");
-  const sLinkEl = document.getElementById("orderSosmedLink");
-  const pUserEl = document.getElementById("orderPanelUser");
-  const pPassEl = document.getElementById("orderPanelPass");
-  const proofEl = document.getElementById("orderProof");
+  let selectedOrderId = null;
+
+  function setMsg(el, text, ok=false){
+    el.textContent = text || "";
+    el.className = "msg" + (text ? (ok ? " ok" : " err") : "");
+  }
 
   onAuthStateChanged(auth, async (user)=>{
-    if (!user) {
-      window.location.href = "login.html";
+    if(!user){
+      // belum login
+      loadingCard.style.display = "none";
+      notAdminBox.style.display = "block";
+      adminWrap.style.display = "none";
       return;
     }
-    currentUser = user;
+    if(user.email !== ADMIN_EMAIL){
+      // bukan admin
+      loadingCard.style.display = "none";
+      notAdminBox.style.display = "block";
+      adminWrap.style.display = "none";
+      return;
+    }
+    // admin ok
+    adminEmailEl.textContent = user.email || "";
+    loadingCard.style.display = "none";
+    notAdminBox.style.display = "none";
+    adminWrap.style.display = "block";
+
     await loadProducts();
+    await loadOrders();
   });
 
-  async function loadProducts(){
-    const snap = await getDocs(collection(db,"products"));
-    products = [];
-    snap.forEach(d=> products.push(d.data()));
-    products.sort((a,b)=> (a.id||0)-(b.id||0));
-
-    grid.innerHTML = "";
-    products.forEach(p=>{
-      const card = document.createElement("div");
-      card.className = "product-card";
-
-      const title = document.createElement("div");
-      title.className = "product-title";
-      title.textContent = p.name;
-
-      const price = document.createElement("div");
-      price.className = "price-tag";
-      price.textContent = p.price;
-
-      const stok = document.createElement("div");
-      stok.className = "stock-line";
-      stok.textContent = "Stok: " + (p.stock ?? 0);
-
-      const btn = document.createElement("button");
-      btn.className = "btn-product";
-      btn.textContent = (p.stock ?? 0) > 0 ? "Order Sekarang" : "Stok habis";
-      btn.disabled = (p.stock ?? 0) <= 0;
-
-      if (!btn.disabled) {
-        btn.addEventListener("click", ()=> openModal(p.id));
-      }
-
-      card.appendChild(title);
-      card.appendChild(price);
-      card.appendChild(stok);
-      card.appendChild(btn);
-      grid.appendChild(card);
-    });
-  }
-
-  function openModal(productId){
-    currentProduct = products.find(p=> p.id === productId);
-    if (!currentProduct) return;
-
-    danaEl.value = "";
-    namaEl.value = "";
-    sUserEl.value = "";
-    sLinkEl.value = "";
-    pUserEl.value = "";
-    pPassEl.value = "";
-    proofEl.value = "";
-    msgEl.textContent = "";
-    msgEl.className = "modal-msg";
-
-    orderModal.style.display = "flex";
-  }
-
-  function closeModal(){
-    orderModal.style.display = "none";
-  }
-
-  document.getElementById("orderCancelBtn").onclick = closeModal;
-  orderModal.onclick = e=>{
-    if (e.target === orderModal) closeModal();
+  document.getElementById("logoutBtn").onclick = async ()=>{
+    try{ await signOut(auth); }catch(e){}
+    window.location.href = "login.html";
   };
 
-  document.getElementById("orderSubmitBtn").onclick = async ()=>{
-    if (!currentProduct || !currentUser) return;
+  /* -------- LOAD PRODUCTS -------- */
+  async function loadProducts(){
+    productTableBody.innerHTML = "";
+    try{
+      const snap = await getDocs(collection(db,"products"));
+      const arr = [];
+      snap.forEach(d=> arr.push(d.data()));
+      arr.sort((a,b)=> (a.id||0)-(b.id||0));
 
-    const dana = danaEl.value.trim();
-    const nama = namaEl.value.trim();
-    const file = proofEl.files[0];
+      arr.forEach(p=>{
+        const tr = document.createElement("tr");
 
-    msgEl.className = "modal-msg";
-    msgEl.textContent = "";
+        const tdId = document.createElement("td");
+        tdId.textContent = p.id ?? "";
 
-    if (!dana || !nama) {
-      msgEl.textContent = "Nomor DANA & Atas nama wajib diisi.";
+        const tdName = document.createElement("td");
+        const inpName = document.createElement("input");
+        inpName.className = "small-input";
+        inpName.value = p.name || "";
+        inpName.dataset.id = p.id;
+        inpName.dataset.field = "name";
+        tdName.appendChild(inpName);
+
+        const tdPrice = document.createElement("td");
+        const inpPrice = document.createElement("input");
+        inpPrice.className = "small-input";
+        inpPrice.value = p.price || "";
+        inpPrice.dataset.id = p.id;
+        inpPrice.dataset.field = "price";
+        tdPrice.appendChild(inpPrice);
+
+        const tdStock = document.createElement("td");
+        const inpStock = document.createElement("input");
+        inpStock.className = "small-input";
+        inpStock.type = "number";
+        inpStock.min = "0";
+        inpStock.value = p.stock ?? 0;
+        inpStock.dataset.id = p.id;
+        inpStock.dataset.field = "stock";
+        tdStock.appendChild(inpStock);
+
+        tr.appendChild(tdId);
+        tr.appendChild(tdName);
+        tr.appendChild(tdPrice);
+        tr.appendChild(tdStock);
+
+        productTableBody.appendChild(tr);
+      });
+
+      productTableBody.querySelectorAll("input.small-input").forEach(inp=>{
+        inp.addEventListener("change", async function(){
+          const id    = this.dataset.id;
+          const field = this.dataset.field;
+          let val     = this.value;
+          if(field === "stock"){
+            let v = parseInt(val,10);
+            if(isNaN(v) || v<0) v = 0;
+            val = v;
+            this.value = v;
+          }
+          try{
+            await updateDoc(doc(db,"products",String(id)),{
+              [field]: val
+            });
+            setMsg(productMsgEl,"Produk tersimpan.",true);
+          }catch(e){
+            console.error(e);
+            setMsg(productMsgEl,"Gagal menyimpan produk.",false);
+          }
+        });
+      });
+
+    }catch(e){
+      console.error(e);
+      setMsg(productMsgEl,"Gagal memuat produk.",false);
+    }
+  }
+
+  /* -------- LOAD ORDERS -------- */
+  async function loadOrders(){
+    orderTableBody.innerHTML = "";
+    try{
+      const qRef = query(collection(db,"orders"), orderBy("createdAt","desc"));
+      const snap = await getDocs(qRef);
+      const arr = [];
+      snap.forEach(d=> arr.push({docId:d.id, ...d.data()}));
+
+      arr.forEach((o, idx)=>{
+        const tr = document.createElement("tr");
+
+        const tdIdx = document.createElement("td");
+        tdIdx.textContent = idx + 1;
+
+        const tdTime = document.createElement("td");
+        if(o.createdAt){
+          const d = new Date(o.createdAt);
+          tdTime.textContent = d.toLocaleString("id-ID");
+        }else{
+          tdTime.textContent = "-";
+        }
+
+        const tdProd = document.createElement("td");
+        tdProd.innerHTML =
+          "<b>"+(o.productName||"-")+"</b><br>"+
+          (o.price||"");
+
+        const tdBuyer = document.createElement("td");
+        tdBuyer.innerHTML =
+          (o.userEmail ? ("Email: "+o.userEmail+"<br>") : "") +
+          (o.userUid   ? ("UID: "+o.userUid) : "");
+
+        const tdDana = document.createElement("td");
+        tdDana.innerHTML =
+          "No: "+(o.danaNumber||"-")+"<br>"+
+          "a.n: "+(o.danaName||"-");
+
+        const tdSos = document.createElement("td");
+        const lines = [];
+        if(o.sosmedUsername || o.socUser) lines.push("User sosmed: "+(o.sosmedUsername||o.socUser));
+        if(o.sosmedLink || o.socLink)     lines.push("Link: "+(o.sosmedLink||o.socLink));
+        if(o.panelUser) lines.push("User panel: "+o.panelUser);
+        if(o.panelPass) lines.push("Pass panel: "+o.panelPass);
+        tdSos.innerHTML = lines.length ? lines.join("<br>") : "-";
+
+        const tdProof = document.createElement("td");
+        if(o.proofUrl){
+          const a = document.createElement("a");
+          a.href = o.proofUrl;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          a.className = "link";
+          a.textContent = "Lihat bukti";
+          tdProof.appendChild(a);
+        } else {
+          tdProof.textContent = "-";
+        }
+
+        const tdStatus = document.createElement("td");
+        const select   = document.createElement("select");
+        select.className = "select";
+        const stNow    = (o.status || "pending").toLowerCase();
+        ["pending","proses","sukses","eror"].forEach(st=>{
+          const opt = document.createElement("option");
+          opt.value = st;
+          opt.textContent = st;
+          if(st === stNow) opt.selected = true;
+          select.appendChild(opt);
+        });
+        const badge = document.createElement("div");
+        badge.className = "badge status-"+stNow;
+        badge.textContent = stNow;
+        tdStatus.appendChild(select);
+        tdStatus.appendChild(badge);
+
+        const tdDelivery = document.createElement("td");
+        const ta = document.createElement("textarea");
+        ta.className = "textarea";
+        ta.value = o.deliveryMsg || "";
+        ta.placeholder = "Isi produk / catatan ke pembeli...";
+        tdDelivery.appendChild(ta);
+
+        const tdAction = document.createElement("td");
+        const btnSave = document.createElement("button");
+        btnSave.className = "btn-sm btn-save";
+        btnSave.textContent = "Simpan";
+        const btnSend = document.createElement("button");
+        btnSend.className = "btn-sm btn-send";
+        btnSend.textContent = "Kirim Produk";
+        tdAction.appendChild(btnSave);
+        tdAction.appendChild(btnSend);
+
+        tr.appendChild(tdIdx);
+        tr.appendChild(tdTime);
+        tr.appendChild(tdProd);
+        tr.appendChild(tdBuyer);
+        tr.appendChild(tdDana);
+        tr.appendChild(tdSos);
+        tr.appendChild(tdProof);
+        tr.appendChild(tdStatus);
+        tr.appendChild(tdDelivery);
+        tr.appendChild(tdAction);
+
+        orderTableBody.appendChild(tr);
+
+        // event status select
+        select.addEventListener("change", ()=>{
+          const st = select.value;
+          badge.className = "badge status-"+st;
+          badge.textContent = st;
+        });
+
+        // tombol simpan
+        btnSave.addEventListener("click", async ()=>{
+          try{
+            await updateDoc(doc(db,"orders",o.docId),{
+              status: select.value,
+              deliveryMsg: ta.value.trim() || "",
+              updatedAt: new Date().toISOString()
+            });
+            setMsg(orderMsgEl,"Order tersimpan.",true);
+          }catch(e){
+            console.error(e);
+            setMsg(orderMsgEl,"Gagal menyimpan order.",false);
+          }
+        });
+
+        // tombol kirim produk -> modal
+        btnSend.addEventListener("click", ()=>{
+          selectedOrderId = o.docId;
+          document.getElementById("deliverMsg").value = ta.value || "";
+          document.getElementById("deliverModal").style.display = "flex";
+        });
+      });
+
+    }catch(e){
+      console.error(e);
+      setMsg(orderMsgEl,"Gagal memuat pesanan.",false);
+    }
+  }
+
+  // ---- KIRIM PRODUK (MODAL) ----
+  window.closeDeliver = function(){
+    document.getElementById("deliverModal").style.display = "none";
+  };
+
+  window.sendDeliver = async function(){
+    const txt = document.getElementById("deliverMsg").value.trim();
+    if(!selectedOrderId){
+      alert("Order tidak ditemukan.");
       return;
     }
-
-    try {
-      document.getElementById("orderSubmitBtn").disabled = true;
-      document.getElementById("orderSubmitBtn").textContent = "Memproses...";
-
-      let proofUrl = null;
-      if (file) {
-        const fileName = `${currentUser.uid}_${Date.now()}_${file.name}`;
-        const storageRef = ref(storage,"proofs/"+fileName);
-        await uploadBytes(storageRef,file);
-        proofUrl = await getDownloadURL(storageRef);
-      }
-
-      // kurangi stok
-      const newStock = Math.max((currentProduct.stock ?? 0) - 1,0);
-      await updateDoc(doc(db,"products",String(currentProduct.id)), {
-        stock: newStock
+    if(!txt){
+      alert("Isi produk/pesan tidak boleh kosong.");
+      return;
+    }
+    try{
+      await updateDoc(doc(db,"orders",selectedOrderId),{
+        deliveryMsg: txt,
+        status: "sukses",
+        updatedAt: new Date().toISOString()
       });
-      currentProduct.stock = newStock;
-
-      const now = new Date().toISOString();
-      await addDoc(collection(db,"orders"),{
-        userUid: currentUser.uid,
-        userEmail: currentUser.email || "",
-        productId: currentProduct.id,
-        productName: currentProduct.name,
-        price: currentProduct.price,
-        category: currentProduct.category || "",
-        danaNumber: dana,
-        danaName: nama,
-        sosmedUsername: sUserEl.value.trim() || null,
-        sosmedLink: sLinkEl.value.trim() || null,
-        panelUser: pUserEl.value.trim() || null,
-        panelPass: pPassEl.value.trim() || null,
-        proofUrl: proofUrl,
-        deliveryMsg: null,
-        status: "pending",
-        createdAt: now,
-        updatedAt: now
-      });
-
-      msgEl.className = "modal-msg ok";
-      msgEl.textContent = "Order berhasil tersimpan (status: pending).";
-
-      await loadProducts();
-      setTimeout(closeModal, 900);
-
-    } catch(err) {
-      console.error(err);
-      msgEl.textContent = "Terjadi kesalahan saat memproses order.";
-    } finally {
-      const btn = document.getElementById("orderSubmitBtn");
-      btn.disabled = false;
-      btn.textContent = "Order Sekarang";
+      alert("Produk berhasil dikirim ke pembeli (status: sukses).");
+      document.getElementById("deliverModal").style.display = "none";
+      await loadOrders();
+    }catch(e){
+      console.error(e);
+      alert("Gagal mengirim produk.");
     }
   };
 </script>
+
 </body>
 </html>
