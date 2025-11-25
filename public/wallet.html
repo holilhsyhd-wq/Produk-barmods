@@ -1,229 +1,396 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Saldo - Barmods Digital Store</title>
-<style>
-body{
-  margin:0;
-  font-family:system-ui;
-  background:#020617;
-  color:#e5e7eb;
-}
-header{
-  padding:14px;
-  background:#020617;
-  border-bottom:1px solid #1f2937;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.nav-btn{
-  padding:8px 10px;
-  border-radius:999px;
-  background:#111827;
-  border:1px solid #374151;
-  color:white;
-  text-decoration:none;
-  font-size:12px;
-  margin-left:6px;
-}
-main{max-width:960px;margin:0 auto;padding:14px;}
-.card{
-  background:#0f172a;
-  border-radius:12px;
-  border:1px solid #1f2937;
-  padding:14px;
-  margin-bottom:12px;
-}
-h2{margin:0 0 6px;font-size:16px;}
-.big-balance{font-size:24px;font-weight:700;color:#a5b4fc;}
-label{display:block;margin-top:10px;font-size:13px;}
-input{
-  width:100%;
-  padding:9px;
-  margin-top:6px;
-  border-radius:8px;
-  background:#1e293b;
-  border:none;
-  color:white;
-  font-size:13px;
-}
-.btn{
-  margin-top:14px;
-  width:100%;
-  padding:10px;
-  border:none;
-  border-radius:8px;
-  background:#3b82f6;
-  color:white;
-  font-size:14px;
-}
-.msg{font-size:12px;margin-top:6px;min-height:16px;}
-.msg.ok{color:#22c55e;}
-.msg.err{color:#f97373;}
-.info{font-size:12px;color:#9ca3af;}
-</style>
+  <meta charset="UTF-8">
+  <title>Saldo - Barmods Digital Store</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:#020617;
+      color:#e5e7eb;
+    }
+    .topbar{
+      height:56px;
+      background:#020617;
+      border-bottom:1px solid #1f2937;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:0 14px;
+    }
+    .brand{
+      display:flex;
+      flex-direction:column;
+    }
+    .brand-title{font-size:15px;font-weight:700;}
+    .brand-sub{font-size:11px;color:#94a3b8;}
+    .top-links{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .link-btn{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid #374151;
+      background:#111827;
+      color:#e5e7eb;
+      font-size:12px;
+      text-decoration:none;
+      cursor:pointer;
+    }
+    .link-btn.logout{
+      background:#b91c1c;
+      border-color:#7f1d1d;
+    }
+
+    .main{
+      max-width:1080px;
+      margin:0 auto;
+      padding:12px;
+    }
+    .card{
+      background:#020617;
+      border-radius:14px;
+      border:1px solid #1f2937;
+      padding:12px;
+      margin-bottom:12px;
+    }
+    .card-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:6px;
+    }
+    .card-header h2{
+      margin:0;
+      font-size:15px;
+    }
+    .card-header small{
+      font-size:11px;
+      color:#94a3b8;
+    }
+    .info-text{
+      font-size:12px;
+      color:#9ca3af;
+      margin-top:4px;
+    }
+    .saldo-big{
+      font-size:22px;
+      font-weight:700;
+      margin-top:4px;
+    }
+
+    label{
+      display:block;
+      font-size:12px;
+      margin-top:10px;
+    }
+    input, select, textarea{
+      width:100%;
+      margin-top:4px;
+      padding:8px 10px;
+      border-radius:9px;
+      border:1px solid #1f2937;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:13px;
+      box-sizing:border-box;
+    }
+    textarea{resize:vertical;}
+
+    .btn-primary{
+      margin-top:12px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#2563eb;
+      border:none;
+      color:#fff;
+      font-size:13px;
+      cursor:pointer;
+    }
+    .btn-secondary{
+      margin-top:12px;
+      padding:7px 11px;
+      border-radius:999px;
+      border:1px solid #374151;
+      background:#111827;
+      color:#e5e7eb;
+      font-size:12px;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-block;
+    }
+
+    .msg{
+      font-size:12px;
+      margin-top:6px;
+      min-height:16px;
+    }
+    .msg.err{color:#f97373;}
+    .msg.ok{color:#22c55e;}
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:8px;
+      font-size:11px;
+    }
+    th,td{
+      border-bottom:1px solid #1f2937;
+      padding:4px 3px;
+      text-align:left;
+    }
+    th{color:#9ca3af;font-weight:500;}
+  </style>
 </head>
 <body>
 
-<header>
-  <div>
-    <strong>Saldo Saya</strong><br>
-    <small>Barmods Digital Store</small>
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="brand">
+    <span class="brand-title">Barmods Digital Store</span>
+    <span class="brand-sub">Saldo & Topup</span>
   </div>
-  <div>
-    <a href="index.html" class="nav-btn">Produk</a>
-    <a href="orders.html" class="nav-btn">Pesanan</a>
-    <a href="profile.html" class="nav-btn">Profil</a>
+  <div class="top-links">
+    <a href="index.html" class="link-btn">Produk</a>
+    <a href="orders.html" class="link-btn">Pesanan Saya</a>
+    <a href="profile.html" class="link-btn">Profil</a>
+    <a href="admin.html" class="link-btn">Admin</a>
+    <button id="logoutBtn" class="link-btn logout" type="button">Logout</button>
   </div>
-</header>
+</div>
 
-<main>
+<div class="main">
+  <!-- SALDO SEKARANG -->
   <div class="card">
-    <h2>Saldo saat ini</h2>
-    <div id="balanceText" class="big-balance">Rp 0</div>
-    <p class="info">
-      Untuk bisa order produk, kamu harus punya saldo di sini.
-      Topup via transfer ke DANA <b>083877842721</b>, lalu isi form di bawah.
-      Admin akan menambah saldo secara manual setelah cek bukti transfer.
-    </p>
+    <div class="card-header">
+      <div>
+        <h2>Saldo Saya</h2>
+        <small>Saldo ini dipakai untuk beli semua produk</small>
+      </div>
+    </div>
+    <div class="saldo-big" id="saldoText">Rp 0</div>
+    <div class="info-text">
+      Akun: <span id="userEmail">-</span><br>
+      Jika saldo kurang, lakukan topup di bawah lalu kirim bukti via WhatsApp. Admin akan mengubah status topup ke <b>sukses</b> dan saldo otomatis bertambah.
+    </div>
   </div>
 
+  <!-- FORM TOPUP -->
   <div class="card">
-    <h2>Topup Saldo</h2>
-    <label>Nominal topup (Rp)</label>
-    <input id="amount" type="number" min="1000" step="1000" placeholder="contoh: 10000">
+    <div class="card-header">
+      <div>
+        <h2>Topup Saldo</h2>
+        <small>Pembayaran manual via DANA</small>
+      </div>
+    </div>
+    <div class="info-text">
+      1. Isi nominal & data DANA di bawah.<br>
+      2. Transfer ke DANA admin: <b>083877842721</b>.<br>
+      3. Kirim bukti transfer ke WhatsApp admin sambil sebutkan email akun ini.<br>
+      4. Admin akan ubah status topup dari <b>pending</b> menjadi <b>sukses</b>.
+    </div>
+
+    <label>Nominal topup (Rp, misal 10000)</label>
+    <input id="topupAmount" type="number" min="1000" placeholder="Contoh: 10000">
 
     <label>Nomor DANA kamu</label>
-    <input id="danaNumber" placeholder="0838xxxxxxx">
+    <input id="topupDana" placeholder="Contoh: 0838xxxxxxx">
 
     <label>Atas nama DANA</label>
-    <input id="danaName" placeholder="Nama sesuai aplikasi DANA">
+    <input id="topupNama" placeholder="Nama di aplikasi DANA">
 
-    <label>Upload bukti transfer (opsional)</label>
-    <input type="file" id="proofFile" accept="image/*">
+    <label>Catatan tambahan (opsional)</label>
+    <textarea id="topupNote" rows="2" placeholder="Misal: sudah transfer 10k, mohon cek."></textarea>
 
-    <button class="btn" type="button" onclick="submitTopup()">Kirim Permintaan Topup</button>
-    <div id="msg" class="msg"></div>
+    <button class="btn-primary" type="button" onclick="buatTopup()">Buat Permintaan Topup</button>
+    <a class="btn-secondary" href="https://wa.me/6283877842721" target="_blank">Chat WhatsApp Admin</a>
+
+    <div id="topupMsg" class="msg"></div>
   </div>
-</main>
+
+  <!-- RIWAYAT TOPUP -->
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <h2>Riwayat Topup</h2>
+        <small>Status: pending / proses / sukses / error</small>
+      </div>
+    </div>
+
+    <div id="topupTableWrap" style="overflow-x:auto;">
+      <table id="topupTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Waktu</th>
+            <th>Nominal</th>
+            <th>DANA</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getFirestore, doc, getDoc, collection, addDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {
-  getStorage, ref, uploadBytes, getDownloadURL
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    getDocs,
+    doc,
+    getDoc,
+    setDoc,
+    addDoc,
+    query,
+    where,
+    orderBy
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-  authDomain: "toko-barmods.firebaseapp.com",
-  projectId: "toko-barmods",
-  storageBucket: "toko-barmods.appspot.com",
-  messagingSenderId: "284047189012",
-  appId: "1:284047189012:web:6ef0c6891adab08a383301"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+    authDomain: "toko-barmods.firebaseapp.com",
+    projectId: "toko-barmods",
+    storageBucket: "toko-barmods.appspot.com",
+    messagingSenderId: "284047189012",
+    appId: "1:284047189012:web:6ef0c6891adab08a383301"
+  };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-const storage = getStorage(app);
+  const app  = initializeApp(firebaseConfig);
+  const db   = getFirestore(app);
+  const auth = getAuth(app);
 
-const balEl = document.getElementById("balanceText");
-const msgEl = document.getElementById("msg");
-let currentUser = null;
+  const saldoTextEl = document.getElementById('saldoText');
+  const userEmailEl = document.getElementById('userEmail');
+  const topupMsgEl  = document.getElementById('topupMsg');
+  const tbodyTopup  = document.getElementById('topupTable').querySelector('tbody');
 
-function formatRupiah(num){
-  num = Math.floor(num || 0);
-  return "Rp " + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g,".");
-}
+  let currentUser = null;
+  let userBalance = 0;
 
-function setMsg(text, ok){
-  msgEl.textContent = text || "";
-  msgEl.className = "msg" + (text ? (ok ? " ok" : " err") : "");
-}
-
-onAuthStateChanged(auth, async (user)=>{
-  if(!user){
-    window.location.href = "login.html";
-    return;
+  function formatRupiah(num){
+    num = Math.floor(num || 0);
+    return 'Rp ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');
   }
-  currentUser = user;
-  await loadBalance();
-});
 
-async function loadBalance(){
-  try{
-    const refUser = doc(db,"users",currentUser.uid);
-    const snap = await getDoc(refUser);
-    let balance = 0;
-    if(snap.exists()){
-      const d = snap.data();
-      balance = d.balance || 0;
+  onAuthStateChanged(auth, async (user)=>{
+    if(!user){
+      window.location.href = 'login.html';
+      return;
     }
-    balEl.textContent = formatRupiah(balance);
-  }catch(e){
-    balEl.textContent = "Rp 0";
-  }
-}
+    currentUser = user;
+    userEmailEl.textContent = user.email || '-';
+    await loadBalance();
+    await loadTopups();
+  });
 
-window.submitTopup = async function(){
-  if(!currentUser) return;
+  document.getElementById('logoutBtn').onclick = async ()=>{
+    try{ await signOut(auth); }catch(e){}
+  };
 
-  const amount = parseInt(document.getElementById("amount").value,10);
-  const danaNumber = document.getElementById("danaNumber").value.trim();
-  const danaName   = document.getElementById("danaName").value.trim();
-  const proofFile  = document.getElementById("proofFile").files[0];
-
-  if(!amount || amount <= 0){
-    setMsg("Nominal topup wajib diisi.", false);
-    return;
-  }
-  if(!danaNumber || !danaName){
-    setMsg("Nomor DANA & Atas nama wajib diisi.", false);
-    return;
-  }
-
-  setMsg("Mengirim permintaan topup...", true);
-
-  let proofUrl = "";
-  try{
-    if(proofFile){
-      const path = `topupProofs/${currentUser.uid}_${Date.now()}`;
-      const storageRef = ref(storage,path);
-      await uploadBytes(storageRef, proofFile);
-      proofUrl = await getDownloadURL(storageRef);
+  async function loadBalance(){
+    const ref = doc(db,'users',currentUser.uid);
+    const snap = await getDoc(ref);
+    if(!snap.exists()){
+      await setDoc(ref,{
+        email: currentUser.email || '',
+        balance: 0,
+        createdAt: new Date().toISOString()
+      });
+      userBalance = 0;
+    } else {
+      userBalance = snap.data().balance || 0;
     }
-  }catch(e){
-    proofUrl = "";
+    saldoTextEl.textContent = formatRupiah(userBalance);
   }
 
-  try{
-    await addDoc(collection(db,"topups"),{
-      userUid: currentUser.uid,
-      email: currentUser.email || "",
-      amount,
-      danaNumber,
-      danaName,
-      proofUrl,
-      status: "pending",
-      createdAt: new Date().toISOString()
+  async function loadTopups(){
+    tbodyTopup.innerHTML = '';
+    const col = collection(db,'topups');
+    const q   = query(col,
+      where('userUid','==',currentUser.uid),
+      orderBy('createdAt','desc')
+    );
+    const snap = await getDocs(q);
+    let i = 0;
+    snap.forEach(d=>{
+      const t = d.data();
+      i++;
+      const tr = document.createElement('tr');
+      const dTime = new Date(t.createdAt || Date.now());
+      tr.innerHTML = `
+        <td>${i}</td>
+        <td>${dTime.toLocaleString('id-ID')}</td>
+        <td>${formatRupiah(t.amount || 0)}</td>
+        <td>${t.danaNumber || ''}</td>
+        <td>${t.status || 'pending'}</td>
+      `;
+      tbodyTopup.appendChild(tr);
     });
-    setMsg("Permintaan topup terkirim. Tunggu admin menambah saldo.", true);
-    document.getElementById("amount").value = "";
-    document.getElementById("danaNumber").value = "";
-    document.getElementById("danaName").value = "";
-    document.getElementById("proofFile").value = "";
-  }catch(e){
-    console.error(e);
-    setMsg("Gagal mengirim permintaan topup.", false);
   }
-};
+
+  window.buatTopup = async function(){
+    if(!currentUser) return;
+
+    const amount = parseInt(document.getElementById('topupAmount').value,10);
+    const dana   = document.getElementById('topupDana').value.trim();
+    const nama   = document.getElementById('topupNama').value.trim();
+    const note   = document.getElementById('topupNote').value.trim();
+
+    topupMsgEl.textContent = '';
+    topupMsgEl.className = 'msg';
+
+    if(isNaN(amount) || amount < 1000){
+      topupMsgEl.textContent = 'Nominal minimal 1000.';
+      topupMsgEl.className = 'msg err';
+      return;
+    }
+    if(!dana || !nama){
+      topupMsgEl.textContent = 'Nomor DANA dan Atas nama wajib diisi.';
+      topupMsgEl.className = 'msg err';
+      return;
+    }
+
+    try{
+      const obj = {
+        userUid: currentUser.uid,
+        userEmail: currentUser.email || '',
+        amount,
+        danaNumber: dana,
+        danaName: nama,
+        note: note || '',
+        status: 'pending',
+        createdAt: new Date().toISOString()
+      };
+      await addDoc(collection(db,'topups'), obj);
+
+      topupMsgEl.textContent = 'Permintaan topup dibuat. Status: pending. Kirim bukti transfer ke WhatsApp admin.';
+      topupMsgEl.className = 'msg ok';
+
+      // reset form
+      document.getElementById('topupAmount').value = '';
+      document.getElementById('topupDana').value = '';
+      document.getElementById('topupNama').value = '';
+      document.getElementById('topupNote').value = '';
+
+      await loadTopups();
+    } catch(e){
+      console.error(e);
+      topupMsgEl.textContent = 'Gagal membuat permintaan topup. Coba lagi.';
+      topupMsgEl.className = 'msg err';
+    }
+  };
 </script>
 
 </body>
