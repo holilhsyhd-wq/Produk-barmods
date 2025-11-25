@@ -1,187 +1,237 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Pesanan Saya - Barmods Digital Store</title>
-
-<style>
-  body {
-    margin: 0;
-    background: #0f0f17;
-    color: #fff;
-    font-family: Arial, sans-serif;
-  }
-
-  header {
-    padding: 16px;
-    background: #141421;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .btn-header {
-    color: #fff;
-    background: #303043;
-    padding: 6px 12px;
-    border-radius: 8px;
-    text-decoration: none;
-  }
-
-  h2 {
-    text-align: center;
-    padding: 12px;
-    margin: 0;
-  }
-
-  .order-list {
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .order-card {
-    background: #181828;
-    padding: 14px;
-    border-radius: 12px;
-  }
-
-  .status {
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 13px;
-    display: inline-block;
-  }
-
-  .pending { background: #f9a825; color: #000; }
-  .process { background: #42a5f5; color: #000; }
-  .success { background: #66bb6a; color: #000; }
-  .error   { background: #ef5350; color: #000; }
-
-  .proof-img {
-    margin-top: 8px;
-    width: 90px;
-    height: 90px;
-    border-radius: 6px;
-    object-fit: cover;
-    border: 1px solid #333;
-  }
-
-  .product-box {
-    margin-top: 10px;
-    background: #222234;
-    padding: 10px;
-    border-radius: 8px;
-  }
-</style>
+  <meta charset="UTF-8">
+  <title>Pesanan Saya - Barmods Digital Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:#020617;
+      color:#e5e7eb;
+    }
+    header{
+      padding:14px;
+      background:#020617;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      border-bottom:1px solid #1f2937;
+    }
+    .brand-title{font-size:15px;font-weight:600;}
+    .brand-sub{font-size:11px;color:#9ca3af;}
+    .header-left{display:flex;flex-direction:column;}
+    .header-right{display:flex;gap:8px;flex-wrap:wrap;}
+    .btn-header{
+      border-radius:999px;
+      padding:6px 11px;
+      border:1px solid #374151;
+      background:#111827;
+      color:#e5e7eb;
+      font-size:12px;
+      text-decoration:none;
+    }
+    main{max-width:960px;margin:0 auto;padding:12px;}
+    h2{margin:6px 0 4px;font-size:16px;}
+    .info{font-size:12px;color:#9ca3af;margin-bottom:8px;}
+    table{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px;}
+    th,td{
+      border-bottom:1px solid #1f2937;
+      padding:5px 4px;
+      text-align:left;
+      vertical-align:top;
+    }
+    th{background:#020617;font-size:11px;color:#9ca3af;}
+    .badge{
+      display:inline-block;
+      border-radius:999px;
+      padding:2px 6px;
+      font-size:10px;
+      margin-top:2px;
+    }
+    .status-pending{background:#facc15;color:#111827;}
+    .status-proses{background:#3b82f6;color:#ffffff;}
+    .status-eror{background:#f97373;color:#111827;}
+    .status-sukses{background:#22c55e;color:#ffffff;}
+    .msg{font-size:12px;min-height:16px;margin-top:6px;}
+    .msg.ok{color:#22c55e;}
+    .msg.err{color:#f97373;}
+    .delivery-box{
+      white-space:pre-wrap;
+      background:#020617;
+      border-radius:8px;
+      padding:6px 7px;
+      border:1px solid #1f2937;
+      font-size:11px;
+    }
+    .proof-link{
+      font-size:11px;
+      color:#38bdf8;
+      text-decoration:none;
+    }
+    .proof-link:hover{text-decoration:underline;}
+  </style>
 </head>
-
 <body>
 
 <header>
-  <div><b>Barmods Digital Store</b></div>
-  <a href="index.html" class="btn-header">Kembali</a>
+  <div class="header-left">
+    <span class="brand-title">Pesanan Saya</span>
+    <span class="brand-sub">Barmods Digital Store</span>
+  </div>
+  <div class="header-right">
+    <a href="index.html"   class="btn-header">← Produk</a>
+    <a href="profile.html" class="btn-header">Profil Saya</a>
+    <a href="admin.html"   class="btn-header">Admin</a>
+  </div>
 </header>
 
-<h2>Pesanan Saya</h2>
+<main>
+  <h2>Riwayat Pesanan</h2>
+  <p class="info">
+    Di sini kamu bisa lihat semua order yang kamu buat, status
+    <b>pending / proses / sukses / eror</b>, dan jika admin sudah kirim produk,
+    isinya muncul di kolom <b>Produk dari admin</b>.
+  </p>
+  <div id="orderMsg" class="msg"></div>
+  <table id="orderTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Waktu</th>
+        <th>Produk</th>
+        <th>DANA</th>
+        <th>Status</th>
+        <th>Produk dari admin</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</main>
 
-<div id="orderList" class="order-list"></div>
-
-<!-- ========================= -->
-<!-- FIREBASE SCRIPT           -->
-<!-- ========================= -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
-    getFirestore, collection, query, where, onSnapshot
+    getFirestore, collection, query, where, orderBy, getDocs
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
   import {
     getAuth, onAuthStateChanged
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+  // ======= FIREBASE CONFIG (SAMA DENGAN FILE LAIN) =======
   const firebaseConfig = {
-    apiKey: "AIzaSyBpsf...
-
-(continue the config you already use)
-
+    apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+    authDomain: "toko-barmods.firebaseapp.com",
+    projectId: "toko-barmods",
+    storageBucket: "toko-barmods.firebasestorage.app",
     messagingSenderId: "284047189012",
     appId: "1:284047189012:web:6ef0c6891adab08a383301"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const db  = getFirestore(app);
+  const app  = initializeApp(firebaseConfig);
+  const db   = getFirestore(app);
   const auth = getAuth(app);
 
-  const list = document.getElementById("orderList");
+  const msgEl = document.getElementById("orderMsg");
+  const tbody = document.querySelector("#orderTable tbody");
 
-  // CEK LOGIN USER
-  onAuthStateChanged(auth, (user)=>{
+  function setMsg(text, ok=false){
+    msgEl.textContent = text || "";
+    msgEl.className = "msg" + (text ? (ok ? " ok" : " err") : "");
+  }
+
+  onAuthStateChanged(auth, async (user)=>{
     if (!user){
+      // wajib login dulu
       window.location.href = "login.html";
       return;
     }
-
-    loadOrders(user.uid);
+    await loadOrders(user.uid);
   });
 
-  // AMBIL PESANAN USER
-  function loadOrders(uid){
-    const q = query(
-      collection(db, "orders"),
-      where("userUid", "==", uid)
-    );
+  async function loadOrders(uid){
+    tbody.innerHTML = "";
+    try{
+      const qRef = query(
+        collection(db,"orders"),
+        where("userUid","==",uid),
+        orderBy("createdAt","desc")
+      );
+      const snap = await getDocs(qRef);
+      const arr = [];
+      snap.forEach(d=> arr.push(d.data()));
 
-    onSnapshot(q, (snap)=>{
-      list.innerHTML = "";
-
-      if (snap.empty){
-        list.innerHTML = "<p style='text-align:center;color:#777;'>Belum ada pesanan.</p>";
+      if (!arr.length){
+        setMsg("Belum ada pesanan.", false);
         return;
+      } else {
+        setMsg("", true);
       }
 
-      snap.forEach(docSnap=>{
-        const d = docSnap.data();
+      arr.forEach((o, idx)=>{
+        const tr = document.createElement("tr");
 
-        const card = document.createElement("div");
-        card.className = "order-card";
+        const tdIdx = document.createElement("td");
+        tdIdx.textContent = idx + 1;
 
-        let statusClass =
-          d.status === "pending" ? "pending" :
-          d.status === "proses"  ? "process" :
-          d.status === "sukses"  ? "success" :
-          "error";
+        const tdTime = document.createElement("td");
+        if (o.createdAt){
+          tdTime.textContent = new Date(o.createdAt).toLocaleString("id-ID");
+        } else {
+          tdTime.textContent = "-";
+        }
 
-        card.innerHTML = `
-          <div><b>${d.productName}</b></div>
-          <div>Harga: ${d.price}</div>
-          <div>Tanggal: ${new Date(d.createdAt).toLocaleString()}</div>
-          <div class="status ${statusClass}" style="margin-top:6px;">
-            Status: ${d.status}
-          </div>
+        const tdProd = document.createElement("td");
+        tdProd.innerHTML =
+          "<b>"+(o.productName||"-")+"</b><br>"+
+          (o.price || "");
 
-          ${
-            d.proofUrl
-            ? `<div><img class="proof-img" src="${d.proofUrl}"></div>`
-            : ""
-          }
+        const tdDana = document.createElement("td");
+        tdDana.innerHTML =
+          "No: "+(o.danaNumber || "-")+"<br>"+
+          "a.n: "+(o.danaName || "-");
 
-          ${
-            d.adminProduct
-            ? `
-              <div class="product-box">
-                <b>Produk dari admin:</b><br>
-                ${d.adminProduct}
-              </div>
-            `
-            : ""
-          }
-        `;
+        const tdStatus = document.createElement("td");
+        const st = (o.status || "pending").toLowerCase();
+        const badge = document.createElement("span");
+        badge.className = "badge status-"+st;
+        badge.textContent = st;
+        tdStatus.appendChild(badge);
+        if (o.proofUrl){
+          const div = document.createElement("div");
+          const a = document.createElement("a");
+          a.href = o.proofUrl;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          a.className = "proof-link";
+          a.textContent = "Lihat bukti";
+          div.appendChild(a);
+          tdStatus.appendChild(document.createElement("br"));
+          tdStatus.appendChild(div);
+        }
 
-        list.appendChild(card);
+        const tdDelivery = document.createElement("td");
+        const box = document.createElement("div");
+        box.className = "delivery-box";
+        box.textContent = o.deliveryMsg
+          ? o.deliveryMsg
+          : "Belum ada produk dari admin.\nStatus akan menjadi 'sukses' jika admin sudah kirim.";
+        tdDelivery.appendChild(box);
+
+        tr.appendChild(tdIdx);
+        tr.appendChild(tdTime);
+        tr.appendChild(tdProd);
+        tr.appendChild(tdDana);
+        tr.appendChild(tdStatus);
+        tr.appendChild(tdDelivery);
+        tbody.appendChild(tr);
       });
-    });
+
+    } catch(err){
+      console.error(err);
+      setMsg("Gagal memuat pesanan.");
+    }
   }
 </script>
 
