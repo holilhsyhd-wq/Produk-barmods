@@ -1,717 +1,317 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin - Barmods Digital Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:#020617;
-      color:#e5e7eb;
-    }
-    .topbar{
-      height:54px;
-      background:#020617;
-      border-bottom:1px solid #1f2937;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:0 14px;
-    }
-    .topbar-left{
-      display:flex;
-      flex-direction:column;
-    }
-    .topbar-title{font-size:15px;font-weight:600;}
-    .topbar-sub{font-size:11px;color:#9ca3af;}
-    .topbar-right{display:flex;gap:8px;flex-wrap:wrap;}
-    .btn-top{
-      padding:6px 11px;
-      border-radius:999px;
-      border:1px solid #374151;
-      background:#111827;
-      color:#e5e7eb;
-      font-size:12px;
-      cursor:pointer;
-      text-decoration:none;
-    }
-    .btn-top.logout{background:#b91c1c;border-color:#7f1d1d;}
+<meta charset="UTF-8">
+<title>Admin - Barmods Digital Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    .main{
-      max-width:1080px;
-      margin:0 auto;
-      padding:12px;
-    }
-    .card{
-      background:#020617;
-      border-radius:14px;
-      border:1px solid #1f2937;
-      padding:12px;
-      margin-bottom:12px;
-    }
-    .card-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:6px;
-      margin-bottom:6px;
-    }
-    .card-header h2{
-      margin:0;
-      font-size:15px;
-    }
-    .card-header small{
-      font-size:11px;
-      color:#9ca3af;
-    }
-    .info{
-      font-size:12px;
-      color:#9ca3af;
-    }
-    .pill-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:6px;
-      margin-top:6px;
-      font-size:11px;
-    }
-    .pill{
-      padding:4px 8px;
-      border-radius:999px;
-      border:1px solid #1f2937;
-      background:#020617;
-    }
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
-    table{
-      width:100%;
-      border-collapse:collapse;
-      font-size:12px;
-      margin-top:6px;
-    }
-    th,td{
-      border-bottom:1px solid #1f2937;
-      padding:5px 4px;
-      text-align:left;
-      vertical-align:top;
-    }
-    th{
-      background:#020617;
-      color:#9ca3af;
-      font-size:11px;
-    }
+<style>
+body {
+  margin:0;
+  background:#0f172a;
+  color:white;
+  font-family:Arial;
+}
 
-    .small-input{
-      width:100%;
-      padding:4px 6px;
-      border-radius:8px;
-      border:1px solid #1f2937;
-      background:#020617;
-      color:#e5e7eb;
-      font-size:11px;
-      box-sizing:border-box;
-    }
-    .textarea{
-      width:100%;
-      min-height:40px;
-      padding:4px 6px;
-      border-radius:8px;
-      border:1px solid #1f2937;
-      background:#020617;
-      color:#e5e7eb;
-      font-size:11px;
-      resize:vertical;
-      box-sizing:border-box;
-    }
-    .select{
-      width:100%;
-      padding:4px 6px;
-      border-radius:8px;
-      border:1px solid #1f2937;
-      background:#020617;
-      color:#e5e7eb;
-      font-size:11px;
-      box-sizing:border-box;
-    }
+nav {
+  background:#1e293b;
+  padding:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
 
-    .btn-sm{
-      padding:4px 8px;
-      border-radius:999px;
-      border:none;
-      font-size:11px;
-      cursor:pointer;
-      margin-top:3px;
-    }
-    .btn-save{background:#2563eb;color:#fff;}
-    .btn-send{background:#16a34a;color:#fff;}
+nav .menu button {
+  margin-left:6px;
+  padding:8px 14px;
+  background:#334155;
+  border:none;
+  color:white;
+  border-radius:6px;
+}
 
-    .badge{
-      display:inline-block;
-      border-radius:999px;
-      padding:2px 6px;
-      font-size:10px;
-      margin-top:3px;
-    }
-    .status-pending{background:#facc15;color:#111827;}
-    .status-proses{background:#3b82f6;color:#ffffff;}
-    .status-eror{background:#f97373;color:#111827;}
-    .status-sukses{background:#22c55e;color:#ffffff;}
+.card {
+  background:#1e293b;
+  margin:20px;
+  padding:20px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.15);
+}
 
-    .msg{
-      font-size:12px;
-      margin-top:6px;
-      min-height:16px;
-    }
-    .msg.ok{color:#22c55e;}
-    .msg.err{color:#f97373;}
+input, select {
+  width:100%;
+  padding:10px;
+  margin-top:8px;
+  border-radius:6px;
+  border:1px solid #334155;
+  background:#0f172a;
+  color:white;
+}
 
-    .link{
-      color:#38bdf8;
-      font-size:11px;
-      text-decoration:none;
-    }
-    .link:hover{text-decoration:underline;}
+table {
+  width:100%;
+  margin-top:10px;
+  border-collapse:collapse;
+}
 
-    #loadingCard{}
-    #notAdminBox{display:none;}
-    #adminWrap{display:none;}
+th, td {
+  padding:10px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
 
-    .btn-admin-link{
-      display:inline-block;
-      margin-top:6px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid #1f2937;
-      background:#111827;
-      color:#e5e7eb;
-      font-size:11px;
-      text-decoration:none;
-    }
+button.action {
+  background:#3b82f6;
+  border:none;
+  padding:6px 10px;
+  margin:2px;
+  border-radius:6px;
+  color:white;
+}
 
-    /* MODAL KIRIM PRODUK */
-    .modal-bg{
-      position:fixed;
-      inset:0;
-      background:rgba(15,23,42,.75);
-      display:none;
-      justify-content:center;
-      align-items:center;
-      padding:14px;
-      z-index:30;
-    }
-    .modal{
-      width:100%;
-      max-width:420px;
-      background:#020617;
-      border-radius:16px;
-      border:1px solid #1f2937;
-      padding:14px;
-      box-shadow:0 18px 40px rgba(0,0,0,.75);
-    }
-    .modal h3{
-      margin:0 0 6px;
-      font-size:15px;
-    }
-    .modal textarea{
-      width:100%;
-      min-height:80px;
-      padding:8px 9px;
-      border-radius:10px;
-      border:1px solid #1f2937;
-      background:#020617;
-      color:#e5e7eb;
-      font-size:12px;
-      resize:vertical;
-      box-sizing:border-box;
-    }
-    .modal-footer{
-      display:flex;
-      justify-content:flex-end;
-      gap:8px;
-      margin-top:10px;
-    }
-    .btn-cancel{
-      border-radius:999px;
-      border:1px solid #374151;
-      background:#111827;
-      color:#e5e7eb;
-      padding:7px 11px;
-      font-size:12px;
-      cursor:pointer;
-    }
-    .btn-ok{
-      border-radius:999px;
-      border:none;
-      background:#16a34a;
-      color:#ffffff;
-      padding:7px 11px;
-      font-size:12px;
-      cursor:pointer;
-    }
-  </style>
+button.danger {
+  background:#ef4444;
+}
+</style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="topbar-left">
-    <span class="topbar-title">Admin - Barmods Digital Store</span>
-    <span class="topbar-sub">Kelola produk, saldo, dan pesanan</span>
-  </div>
-  <div class="topbar-right">
-    <a href="index.html" class="btn-top">← Halaman Produk</a>
-    <button id="logoutBtn" class="btn-top logout" type="button">Logout</button>
-  </div>
-</div>
+<!-- CEK LOGIN ADMIN -->
+<script>
+if(localStorage.getItem("adminLogged") !== "true"){
+  window.location.href = "login-admin.html";
+}
+</script>
 
-<div class="main">
-  <!-- Loading -->
-  <div id="loadingCard" class="card">
-    <div class="card-header">
-      <h2>Memeriksa sesi admin...</h2>
-    </div>
-    <p class="info">Mohon tunggu sebentar.</p>
+<nav>
+  <div><b>Panel Admin — Barmods Digital Store</b></div>
+  <div class="menu">
+    <button onclick="showPage('produk')">Produk</button>
+    <button onclick="showPage('saldo')">Saldo Pengguna</button>
+    <button onclick="showPage('topup')">Topup</button>
+    <button onclick="showPage('orders')">Pesanan</button>
+    <button class="danger" onclick="logoutAdmin()">Logout</button>
   </div>
+</nav>
 
-  <!-- Bukan admin -->
-  <div id="notAdminBox">
-    <div class="card">
-      <div class="card-header">
-        <h2>Akses ditolak</h2>
-      </div>
-      <p class="info">
-        Hanya email <b>holilhsyhd@gmail.com</b> yang boleh mengakses panel admin ini.<br>
-        Silakan login dengan akun Google admin di halaman login.
-      </p>
-      <a href="login.html" class="btn-top">Ke halaman login</a>
-    </div>
-  </div>
+<script>
+function logoutAdmin(){
+  localStorage.removeItem("adminLogged");
+  window.location.href = "login-admin.html";
+}
+</script>
 
-  <!-- Admin only -->
-  <div id="adminWrap">
-    <!-- Info admin -->
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <h2>Selamat datang, Admin</h2>
-          <small>Panel kontrol Barmods Digital Store</small>
-        </div>
-      </div>
-      <p class="info">
-        Login sebagai: <b><span id="adminEmail"></span></b>
-      </p>
-      <div class="pill-row">
-        <div class="pill">Admin utama: <b>holilhsyhd@gmail.com</b></div>
-        <div class="pill" id="adminStatus">Status: aktif</div>
-      </div>
-      <a href="admin-topup.html" class="btn-admin-link">Kelola Top-up Saldo</a>
-    </div>
+<!-- HALAMAN ADMIN -->
+<div id="content"></div>
 
-    <!-- Produk -->
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <h2>Daftar Produk</h2>
-          <small>Edit nama, harga, dan stok</small>
-        </div>
-      </div>
-      <p class="info">
-        Perubahan langsung disimpan ke koleksi <b>products</b> di Firestore dan
-        akan mempengaruhi halaman produk user.
-      </p>
-      <div id="productMsg" class="msg"></div>
-      <table id="productTable">
-        <thead>
+<script>
+// ** Firebase Config **
+const firebaseConfig = {
+  apiKey: "AIzaSyD0BMCSL9cDOOlMiaSyARzc_JrUqibHIBg",
+  authDomain: "toko-barmods.firebaseapp.com",
+  projectId: "toko-barmods",
+  storageBucket: "toko-barmods.appspot.com",
+  messagingSenderId: "225431835852",
+  appId: "1:225431835852:web:92e06d8f39b97f4745a1a4"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+</script>
+
+<script>
+function showPage(page){
+  if(page === "produk"){ loadProduk(); }
+  if(page === "saldo"){ loadSaldo(); }
+  if(page === "topup"){ loadTopup(); }
+  if(page === "orders"){ loadOrders(); }
+}
+</script>
+
+<!-- ===================================== -->
+<!-- PRODUK -->
+<!-- ===================================== -->
+<script>
+function loadProduk(){
+  db.collection("products")
+    .orderBy("id")
+    .get()
+    .then(snap => {
+      let html = `
+      <div class='card'>
+        <h2>Daftar Produk</h2>
+        <table>
+        <tr><th>ID</th><th>Nama</th><th>Harga</th><th>Stok</th><th>Aksi</th></tr>
+      `;
+      snap.forEach(doc => {
+        let p = doc.data();
+        html += `
           <tr>
-            <th>ID</th>
-            <th>Nama Produk</th>
-            <th>Harga</th>
-            <th>Stok</th>
+            <td>${p.id}</td>
+            <td><input id="name-${doc.id}" value="${p.name}"></td>
+            <td><input id="price-${doc.id}" value="${p.price}"></td>
+            <td><input id="stock-${doc.id}" value="${p.stock}"></td>
+            <td>
+              <button class="action" onclick="saveProduk('${doc.id}')">Simpan</button>
+            </td>
           </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+        `;
+      });
+      html += `</table></div>`;
+      document.getElementById("content").innerHTML = html;
+    });
+}
 
-    <!-- Pesanan -->
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <h2>Daftar Pesanan</h2>
-          <small>Kelola status dan kirim produk ke pembeli</small>
-        </div>
-      </div>
-      <p class="info">
-        Status:
-        <b>pending</b> = order baru masuk,
-        <b>proses</b> = sedang dikerjakan,
-        <b>sukses</b> = produk sudah dikirim ke pembeli,
-        <b>eror</b> = gagal / ada masalah.<br>
-        Tombol <b>Kirim Produk</b> akan menetapkan status langsung ke <b>sukses</b>.
-      </p>
-      <div id="orderMsg" class="msg"></div>
-      <table id="orderTable">
-        <thead>
+function saveProduk(docId){
+  db.collection("products").doc(docId).update({
+    name: document.getElementById(`name-${docId}`).value,
+    price: document.getElementById(`price-${docId}`).value,
+    stock: Number(document.getElementById(`stock-${docId}`).value)
+  });
+  alert("Berhasil disimpan!");
+}
+</script>
+
+<!-- ===================================== -->
+<!-- SALDO PENGGUNA -->
+<!-- ===================================== -->
+<script>
+function loadSaldo(){
+  db.collection("users").get().then(snap=>{
+    let html = `
+    <div class='card'>
+      <h2>Saldo Pengguna</h2>
+      <table>
+      <tr><th>Email</th><th>Saldo</th><th>Aksi</th></tr>
+    `;
+    snap.forEach(doc=>{
+      let u = doc.data();
+      html += `
+        <tr>
+          <td>${doc.id}</td>
+          <td><input id="saldo-${doc.id}" value="${u.saldo || 0}"></td>
+          <td><button class="action" onclick="saveSaldo('${doc.id}')">Simpan</button></td>
+        </tr>
+      `;
+    });
+    html += `</table></div>`;
+    document.getElementById("content").innerHTML = html;
+  });
+}
+
+function saveSaldo(email){
+  db.collection("users").doc(email).update({
+    saldo: Number(document.getElementById(`saldo-${email}`).value)
+  });
+  alert("Saldo disimpan!");
+}
+</script>
+
+<!-- ===================================== -->
+<!-- TOPUP -->
+<!-- ===================================== -->
+<script>
+function loadTopup(){
+  db.collection("topups")
+    .orderBy("time","desc")
+    .get()
+    .then(snap=>{
+      let html = `
+      <div class='card'>
+        <h2>Permintaan Topup</h2>
+        <table>
+        <tr><th>Email</th><th>Nominal</th><th>DANA</th><th>Status</th><th>Aksi</th></tr>
+      `;
+      snap.forEach(doc=>{
+        let t = doc.data();
+        html += `
           <tr>
-            <th>#</th>
-            <th>Waktu</th>
-            <th>Produk</th>
-            <th>Pembeli</th>
-            <th>DANA</th>
-            <th>Sosmed/Panel</th>
-            <th>Bukti</th>
-            <th>Status</th>
-            <th>Produk ke pembeli</th>
-            <th>Aksi</th>
+            <td>${t.email}</td>
+            <td>${t.nominal}</td>
+            <td>${t.dana}</td>
+            <td>${t.status}</td>
+            <td>
+              <button class="action" onclick="setTopupStatus('${doc.id}','sukses')">✔</button>
+              <button class="danger action" onclick="setTopupStatus('${doc.id}','error')">✖</button>
+            </td>
           </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
-</div>
+        `;
+      });
+      html += `</table></div>`;
+      document.getElementById("content").innerHTML = html;
+    });
+}
 
-<!-- MODAL KIRIM PRODUK -->
-<div id="deliverModal" class="modal-bg">
-  <div class="modal">
-    <h3>Kirim Produk ke Pembeli</h3>
-    <p class="info">
-      Isi dengan akun/akses/kode yang dikirim ke pembeli.
-      Contoh:<br>
-      <code>User: ... | Pass: ... | Link: ...</code>
-    </p>
-    <textarea id="deliverMsg" placeholder="User: ...
-Password: ...
-Link akses: ...
-Catatan admin: ..."></textarea>
-    <div class="modal-footer">
-      <button type="button" class="btn-cancel" onclick="closeDeliver()">Batal</button>
-      <button type="button" class="btn-ok" onclick="sendDeliver()">Kirim</button>
-    </div>
-  </div>
-</div>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import {
-    getFirestore, collection, getDocs, doc, updateDoc,
-    query, orderBy
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-  import {
-    getAuth, onAuthStateChanged, signOut
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-    authDomain: "toko-barmods.firebaseapp.com",
-    projectId: "toko-barmods",
-    storageBucket: "toko-barmods.appspot.com",
-    messagingSenderId: "284047189012",
-    appId: "1:284047189012:web:6ef0c6891adab08a383301"
-  };
-
-  const ADMIN_EMAIL = "holilhsyhd@gmail.com";
-
-  const app  = initializeApp(firebaseConfig);
-  const db   = getFirestore(app);
-  const auth = getAuth(app);
-
-  const loadingCard = document.getElementById("loadingCard");
-  const notAdminBox = document.getElementById("notAdminBox");
-  const adminWrap   = document.getElementById("adminWrap");
-  const adminEmailEl = document.getElementById("adminEmail");
-
-  const productTableBody = document.querySelector("#productTable tbody");
-  const orderTableBody   = document.querySelector("#orderTable tbody");
-  const productMsgEl     = document.getElementById("productMsg");
-  const orderMsgEl       = document.getElementById("orderMsg");
-
-  let selectedOrderId = null;
-
-  function setMsg(el, text, ok=false){
-    el.textContent = text || "";
-    el.className = "msg" + (text ? (ok ? " ok" : " err") : "");
-  }
-
-  onAuthStateChanged(auth, async (user)=>{
-    if(!user){
-      // belum login
-      loadingCard.style.display = "none";
-      notAdminBox.style.display = "block";
-      adminWrap.style.display = "none";
-      return;
+function setTopupStatus(id, status){
+  db.collection("topups").doc(id).get().then(doc=>{
+    let t = doc.data();
+    if(status === "sukses"){
+      db.collection("users").doc(t.email).update({
+        saldo: firebase.firestore.FieldValue.increment(t.nominal)
+      });
     }
-    if(user.email !== ADMIN_EMAIL){
-      // bukan admin
-      loadingCard.style.display = "none";
-      notAdminBox.style.display = "block";
-      adminWrap.style.display = "none";
-      return;
-    }
-    // admin ok
-    adminEmailEl.textContent = user.email || "";
-    loadingCard.style.display = "none";
-    notAdminBox.style.display = "none";
-    adminWrap.style.display = "block";
+    db.collection("topups").doc(id).update({status});
+    alert("Topup diperbarui!");
+    loadTopup();
+  });
+}
+</script>
 
-    await loadProducts();
-    await loadOrders();
+<!-- ===================================== -->
+<!-- PESANAN -->
+<!-- ===================================== -->
+<script>
+function loadOrders(){
+  db.collection("orders")
+    .orderBy("time","desc")
+    .get()
+    .then(snap=>{
+      let html = `
+      <div class='card'>
+        <h2>Pesanan Pengguna</h2>
+        <table>
+        <tr><th>Email</th><th>Produk</th><th>Status</th><th>Produk Admin</th><th>Aksi</th></tr>
+      `;
+      snap.forEach(doc=>{
+        let o = doc.data();
+        html += `
+          <tr>
+            <td>${o.email}</td>
+            <td>${o.productName}</td>
+            <td>${o.status}</td>
+            <td><input id="send-${doc.id}" value="${o.adminSend || ''}"></td>
+            <td>
+              <button class="action" onclick="updateOrder('${doc.id}','proses')">Proses</button>
+              <button class="action" onclick="updateOrder('${doc.id}','sukses')">Sukses</button>
+              <button class="danger action" onclick="updateOrder('${doc.id}','error')">Error</button>
+            </td>
+          </tr>
+        `;
+      });
+      html += `</table></div>`;
+      document.getElementById("content").innerHTML = html;
+    });
+}
+
+function updateOrder(id, status){
+  let sendData = document.getElementById(`send-${id}`).value;
+
+  db.collection("orders").doc(id).update({
+    status: status,
+    adminSend: sendData
   });
 
-  document.getElementById("logoutBtn").onclick = async ()=>{
-    try{ await signOut(auth); }catch(e){}
-    window.location.href = "login.html";
-  };
+  alert("Pesanan diperbarui!");
+  loadOrders();
+}
+</script>
 
-  /* -------- LOAD PRODUCTS -------- */
-  async function loadProducts(){
-    productTableBody.innerHTML = "";
-    try{
-      const snap = await getDocs(collection(db,"products"));
-      const arr = [];
-      snap.forEach(d=> arr.push(d.data()));
-      arr.sort((a,b)=> (a.id||0)-(b.id||0));
-
-      arr.forEach(p=>{
-        const tr = document.createElement("tr");
-
-        const tdId = document.createElement("td");
-        tdId.textContent = p.id ?? "";
-
-        const tdName = document.createElement("td");
-        const inpName = document.createElement("input");
-        inpName.className = "small-input";
-        inpName.value = p.name || "";
-        inpName.dataset.id = p.id;
-        inpName.dataset.field = "name";
-        tdName.appendChild(inpName);
-
-        const tdPrice = document.createElement("td");
-        const inpPrice = document.createElement("input");
-        inpPrice.className = "small-input";
-        inpPrice.value = p.price || "";
-        inpPrice.dataset.id = p.id;
-        inpPrice.dataset.field = "price";
-        tdPrice.appendChild(inpPrice);
-
-        const tdStock = document.createElement("td");
-        const inpStock = document.createElement("input");
-        inpStock.className = "small-input";
-        inpStock.type = "number";
-        inpStock.min = "0";
-        inpStock.value = p.stock ?? 0;
-        inpStock.dataset.id = p.id;
-        inpStock.dataset.field = "stock";
-        tdStock.appendChild(inpStock);
-
-        tr.appendChild(tdId);
-        tr.appendChild(tdName);
-        tr.appendChild(tdPrice);
-        tr.appendChild(tdStock);
-
-        productTableBody.appendChild(tr);
-      });
-
-      productTableBody.querySelectorAll("input.small-input").forEach(inp=>{
-        inp.addEventListener("change", async function(){
-          const id    = this.dataset.id;
-          const field = this.dataset.field;
-          let val     = this.value;
-          if(field === "stock"){
-            let v = parseInt(val,10);
-            if(isNaN(v) || v<0) v = 0;
-            val = v;
-            this.value = v;
-          }
-          try{
-            await updateDoc(doc(db,"products",String(id)),{
-              [field]: val
-            });
-            setMsg(productMsgEl,"Produk tersimpan.",true);
-          }catch(e){
-            console.error(e);
-            setMsg(productMsgEl,"Gagal menyimpan produk.",false);
-          }
-        });
-      });
-
-    }catch(e){
-      console.error(e);
-      setMsg(productMsgEl,"Gagal memuat produk.",false);
-    }
-  }
-
-  /* -------- LOAD ORDERS -------- */
-  async function loadOrders(){
-    orderTableBody.innerHTML = "";
-    try{
-      const qRef = query(collection(db,"orders"), orderBy("createdAt","desc"));
-      const snap = await getDocs(qRef);
-      const arr = [];
-      snap.forEach(d=> arr.push({docId:d.id, ...d.data()}));
-
-      arr.forEach((o, idx)=>{
-        const tr = document.createElement("tr");
-
-        const tdIdx = document.createElement("td");
-        tdIdx.textContent = idx + 1;
-
-        const tdTime = document.createElement("td");
-        if(o.createdAt){
-          const d = new Date(o.createdAt);
-          tdTime.textContent = d.toLocaleString("id-ID");
-        }else{
-          tdTime.textContent = "-";
-        }
-
-        const tdProd = document.createElement("td");
-        tdProd.innerHTML =
-          "<b>"+(o.productName||"-")+"</b><br>"+
-          (o.price||"");
-
-        const tdBuyer = document.createElement("td");
-        tdBuyer.innerHTML =
-          (o.userEmail ? ("Email: "+o.userEmail+"<br>") : "") +
-          (o.userUid   ? ("UID: "+o.userUid) : "");
-
-        const tdDana = document.createElement("td");
-        tdDana.innerHTML =
-          "No: "+(o.danaNumber||"-")+"<br>"+
-          "a.n: "+(o.danaName||"-");
-
-        const tdSos = document.createElement("td");
-        const lines = [];
-        if(o.sosmedUsername || o.socUser) lines.push("User sosmed: "+(o.sosmedUsername||o.socUser));
-        if(o.sosmedLink || o.socLink)     lines.push("Link: "+(o.sosmedLink||o.socLink));
-        if(o.panelUser) lines.push("User panel: "+o.panelUser);
-        if(o.panelPass) lines.push("Pass panel: "+o.panelPass);
-        tdSos.innerHTML = lines.length ? lines.join("<br>") : "-";
-
-        const tdProof = document.createElement("td");
-        if(o.proofUrl){
-          const a = document.createElement("a");
-          a.href = o.proofUrl;
-          a.target = "_blank";
-          a.rel = "noopener noreferrer";
-          a.className = "link";
-          a.textContent = "Lihat bukti";
-          tdProof.appendChild(a);
-        } else {
-          tdProof.textContent = "-";
-        }
-
-        const tdStatus = document.createElement("td");
-        const select   = document.createElement("select");
-        select.className = "select";
-        const stNow    = (o.status || "pending").toLowerCase();
-        ["pending","proses","sukses","eror"].forEach(st=>{
-          const opt = document.createElement("option");
-          opt.value = st;
-          opt.textContent = st;
-          if(st === stNow) opt.selected = true;
-          select.appendChild(opt);
-        });
-        const badge = document.createElement("div");
-        badge.className = "badge status-"+stNow;
-        badge.textContent = stNow;
-        tdStatus.appendChild(select);
-        tdStatus.appendChild(badge);
-
-        const tdDelivery = document.createElement("td");
-        const ta = document.createElement("textarea");
-        ta.className = "textarea";
-        ta.value = o.deliveryMsg || "";
-        ta.placeholder = "Isi produk / catatan ke pembeli...";
-        tdDelivery.appendChild(ta);
-
-        const tdAction = document.createElement("td");
-        const btnSave = document.createElement("button");
-        btnSave.className = "btn-sm btn-save";
-        btnSave.textContent = "Simpan";
-        const btnSend = document.createElement("button");
-        btnSend.className = "btn-sm btn-send";
-        btnSend.textContent = "Kirim Produk";
-        tdAction.appendChild(btnSave);
-        tdAction.appendChild(btnSend);
-
-        tr.appendChild(tdIdx);
-        tr.appendChild(tdTime);
-        tr.appendChild(tdProd);
-        tr.appendChild(tdBuyer);
-        tr.appendChild(tdDana);
-        tr.appendChild(tdSos);
-        tr.appendChild(tdProof);
-        tr.appendChild(tdStatus);
-        tr.appendChild(tdDelivery);
-        tr.appendChild(tdAction);
-
-        orderTableBody.appendChild(tr);
-
-        // event status select
-        select.addEventListener("change", ()=>{
-          const st = select.value;
-          badge.className = "badge status-"+st;
-          badge.textContent = st;
-        });
-
-        // tombol simpan
-        btnSave.addEventListener("click", async ()=>{
-          try{
-            await updateDoc(doc(db,"orders",o.docId),{
-              status: select.value,
-              deliveryMsg: ta.value.trim() || "",
-              updatedAt: new Date().toISOString()
-            });
-            setMsg(orderMsgEl,"Order tersimpan.",true);
-          }catch(e){
-            console.error(e);
-            setMsg(orderMsgEl,"Gagal menyimpan order.",false);
-          }
-        });
-
-        // tombol kirim produk -> modal
-        btnSend.addEventListener("click", ()=>{
-          selectedOrderId = o.docId;
-          document.getElementById("deliverMsg").value = ta.value || "";
-          document.getElementById("deliverModal").style.display = "flex";
-        });
-      });
-
-    }catch(e){
-      console.error(e);
-      setMsg(orderMsgEl,"Gagal memuat pesanan.",false);
-    }
-  }
-
-  // ---- KIRIM PRODUK (MODAL) ----
-  window.closeDeliver = function(){
-    document.getElementById("deliverModal").style.display = "none";
-  };
-
-  window.sendDeliver = async function(){
-    const txt = document.getElementById("deliverMsg").value.trim();
-    if(!selectedOrderId){
-      alert("Order tidak ditemukan.");
-      return;
-    }
-    if(!txt){
-      alert("Isi produk/pesan tidak boleh kosong.");
-      return;
-    }
-    try{
-      await updateDoc(doc(db,"orders",selectedOrderId),{
-        deliveryMsg: txt,
-        status: "sukses",
-        updatedAt: new Date().toISOString()
-      });
-      alert("Produk berhasil dikirim ke pembeli (status: sukses).");
-      document.getElementById("deliverModal").style.display = "none";
-      await loadOrders();
-    }catch(e){
-      console.error(e);
-      alert("Gagal mengirim produk.");
-    }
-  };
+<script>
+showPage("produk");
 </script>
 
 </body>
