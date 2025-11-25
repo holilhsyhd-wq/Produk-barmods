@@ -1,222 +1,124 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Barmods Digital Store - Admin</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <style>
-    body{
-      margin:0;
-      padding:0;
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI";
-      background:#f3f4f6;
-    }
-    .topbar{
-      height:54px;
-      background:#111827;
-      color:white;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 14px;
-    }
-    .topbar-title{
-      font-size:14px;
-      font-weight:600;
-    }
-    .topbar-sub{
-      font-size:11px;
-      color:#9ca3af;
-    }
-    .topbar-left{
-      display:flex;
-      flex-direction:column;
-    }
-    .topbar-right{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    .btn-top{
-      border:none;
-      border-radius:999px;
-      padding:6px 10px;
-      font-size:11px;
-      background:#374151;
-      color:white;
-      cursor:pointer;
-    }
-    .btn-top.logout{
-      background:#ef4444;
-    }
+<meta charset="UTF-8">
+<title>Admin - Barmods Digital Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:#f3f4f6;
+  }
+  .topbar{
+    height:54px;
+    background:#111827;
+    color:#f9fafb;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 14px;
+  }
+  .topbar-left{
+    display:flex;
+    flex-direction:column;
+  }
+  .topbar-title{font-size:14px;font-weight:600;}
+  .topbar-sub{font-size:11px;color:#9ca3af;}
+  .topbar-right{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .btn-top{
+    border:none;
+    border-radius:999px;
+    padding:6px 10px;
+    font-size:11px;
+    background:#374151;
+    color:#f9fafb;
+    cursor:pointer;
+  }
+  .btn-top.logout{background:#ef4444;}
+  .main{
+    max-width:1080px;
+    margin:0 auto;
+    padding:12px 10px 18px;
+  }
+  .card{
+    background:#ffffff;
+    border-radius:14px;
+    padding:14px;
+    margin-bottom:12px;
+    box-shadow:0 8px 20px rgba(15,23,42,.08);
+    border:1px solid #e5e7eb;
+  }
+  .card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:4px;
+    margin-bottom:6px;
+  }
+  .card-header h2{margin:0;font-size:15px;}
+  .card-header small{font-size:11px;color:#6b7280;}
+  .info{font-size:12px;color:#4b5563;}
+  .pill-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;font-size:11px;}
+  .pill{padding:4px 7px;border-radius:999px;background:#f3f4f6;border:1px solid #e5e7eb;}
 
-    .main{
-      max-width:1080px;
-      margin:0 auto;
-      padding:14px 10px 18px;
-    }
-    .card{
-      background:white;
-      border-radius:14px;
-      padding:14px;
-      margin-bottom:12px;
-      box-shadow:0 0 20px rgba(0,0,0,.08);
-      border:1px solid #e5e7eb;
-    }
-    .card-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-bottom:6px;
-    }
-    .card-header h2{
-      margin:0;
-      font-size:15px;
-    }
-    .card-header small{
-      font-size:11px;
-      color:#6b7280;
-    }
-    .pill-row{
-      margin-top:6px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:6px;
-      font-size:11px;
-    }
-    .pill{
-      padding:3px 7px;
-      border-radius:999px;
-      background:#f3f4f6;
-      border:1px solid #e5e7eb;
-    }
-    .info{
-      font-size:12px;
-      color:#4b5563;
-      margin:4px 0 0;
-    }
-    .info b{
-      color:#111827;
-    }
-
-    .msg{
-      margin-top:6px;
-      font-size:12px;
-      min-height:16px;
-    }
-    .msg.ok{color:#16a34a;}
-    .msg.err{color:#ef4444;}
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-      font-size:12px;
-      margin-top:6px;
-    }
-    th, td{
-      border-bottom:1px solid #e5e7eb;
-      padding:5px 4px;
-      text-align:left;
-      vertical-align:top;
-    }
-    th{
-      background:#f9fafb;
-      font-weight:600;
-      font-size:11px;
-    }
-    .small-input{
-      width:100%;
-      box-sizing:border-box;
-      padding:4px 6px;
-      border-radius:6px;
-      border:1px solid #d1d5db;
-      font-size:11px;
-      background:#f9fafb;
-    }
-    .textarea{
-      width:100%;
-      min-height:40px;
-      resize:vertical;
-      padding:4px 6px;
-      border-radius:6px;
-      border:1px solid #d1d5db;
-      font-size:11px;
-      background:#f9fafb;
-    }
-    .select{
-      width:100%;
-      padding:4px 6px;
-      border-radius:6px;
-      border:1px solid #d1d5db;
-      font-size:11px;
-      background:#f9fafb;
-    }
-    .btn-sm{
-      border:none;
-      border-radius:999px;
-      padding:4px 8px;
-      font-size:11px;
-      cursor:pointer;
-      margin-top:3px;
-    }
-    .btn-save{
-      background:#2563eb;
-      color:white;
-    }
-    .badge{
-      display:inline-block;
-      border-radius:999px;
-      padding:2px 6px;
-      font-size:10px;
-    }
-    .status-pending{background:#facc15;color:#111827;}
-    .status-proses{background:#3b82f6;color:white;}
-    .status-eror{background:#f97373;color:#111827;}
-    .status-sukses{background:#22c55e;color:white;}
-    .link{
-      color:#2563eb;
-      text-decoration:none;
-      font-size:11px;
-    }
-    .link:hover{text-decoration:underline;}
-
-    #adminOnly{
-      display:none;
-    }
-    #notAdminMsg{
-      display:none;
-      text-align:center;
-      margin-top:40px;
-      font-size:13px;
-      color:#ef4444;
-    }
-
-    @media (max-width:640px){
-      th, td{
-        font-size:11px;
-      }
-    }
-  </style>
+  table{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px;}
+  th,td{border-bottom:1px solid #e5e7eb;padding:5px 4px;text-align:left;vertical-align:top;}
+  th{background:#f9fafb;font-size:11px;}
+  .small-input{
+    width:100%;box-sizing:border-box;padding:4px 6px;border-radius:6px;
+    border:1px solid #d1d5db;font-size:11px;background:#f9fafb;
+  }
+  .textarea{
+    width:100%;min-height:40px;resize:vertical;padding:4px 6px;border-radius:6px;
+    border:1px solid #d1d5db;font-size:11px;background:#f9fafb;
+  }
+  .select{
+    width:100%;padding:4px 6px;border-radius:6px;border:1px solid #d1d5db;
+    font-size:11px;background:#f9fafb;
+  }
+  .btn-sm{
+    border:none;border-radius:999px;padding:4px 8px;font-size:11px;cursor:pointer;margin-top:3px;
+  }
+  .btn-save{background:#2563eb;color:#fff;}
+  .btn-send{background:#16a34a;color:#fff;}
+  .badge{
+    display:inline-block;border-radius:999px;padding:2px 6px;font-size:10px;margin-top:3px;
+  }
+  .status-pending{background:#facc15;color:#111827;}
+  .status-proses{background:#3b82f6;color:#fff;}
+  .status-eror{background:#f97373;color:#111827;}
+  .status-sukses{background:#22c55e;color:#fff;}
+  .msg{font-size:12px;margin-top:6px;min-height:16px;}
+  .msg.ok{color:#16a34a;}
+  .msg.err{color:#ef4444;}
+  .link{color:#2563eb;text-decoration:none;font-size:11px;}
+  .link:hover{text-decoration:underline;}
+  #notAdminMsg{text-align:center;margin-top:40px;display:none;}
+  #adminOnly{display:none;}
+</style>
 </head>
 <body>
 
 <div class="topbar">
   <div class="topbar-left">
-    <div class="topbar-title">Admin - Barmods Digital Store</div>
-    <div class="topbar-sub">Panel khusus pemilik toko</div>
+    <span class="topbar-title">Admin - Barmods Digital Store</span>
+    <span class="topbar-sub">Panel khusus pemilik toko</span>
   </div>
   <div class="topbar-right">
-    <button class="btn-top" type="button" onclick="location.href='index.html'">← Ke Halaman Produk</button>
-    <button class="btn-top logout" id="logoutBtnTop">Logout</button>
+    <button class="btn-top" onclick="location.href='index.html'">← Halaman Produk</button>
+    <button id="logoutBtnTop" class="btn-top logout">Logout</button>
   </div>
 </div>
 
 <div class="main">
-  <div id="loadingMsg" class="card">
+  <!-- Loading / login prompt -->
+  <div id="loadingCard" class="card">
     <div class="card-header">
       <h2>Memeriksa sesi admin...</h2>
     </div>
@@ -226,18 +128,18 @@
   <div id="notAdminMsg">
     <div class="card">
       <div class="card-header">
-        <h2>Akses Ditolak</h2>
+        <h2>Akses ditolak</h2>
       </div>
       <p class="info">
-        Akun ini bukan admin.<br>
-        Hanya email <b>holilhsyhd@gmail.com</b> yang memiliki akses panel admin.
+        Hanya email <b>holilhsyhd@gmail.com</b> yang bisa mengakses panel admin.<br>
+        Silakan login dengan akun Google admin.
       </p>
-      <button class="btn-sm btn-save" type="button" onclick="location.href='login.html'">Kembali ke Login</button>
+      <button id="loginAdminBtn" class="btn-sm btn-save" type="button">Login dengan Google</button>
     </div>
   </div>
 
   <div id="adminOnly">
-    <!-- INFO ADMIN -->
+    <!-- Info Admin -->
     <div class="card">
       <div class="card-header">
         <div>
@@ -246,25 +148,24 @@
         </div>
       </div>
       <p class="info">
-        Login sebagai: <b><span id="adminEmail"></span></b><br>
-        Gunakan panel di bawah untuk mengubah data <b>products</b> dan <b>orders</b> di Firestore.
+        Login sebagai: <b><span id="adminEmail"></span></b>
       </p>
       <div class="pill-row">
-        <div class="pill">Admin hanya: <b>holilhsyhd@gmail.com</b></div>
-        <div class="pill">Status: <b id="adminStatus">Memuat...</b></div>
+        <div class="pill">Admin: <b>holilhsyhd@gmail.com</b></div>
+        <div class="pill">Status: <b id="adminStatus">Aktif</b></div>
       </div>
     </div>
 
-    <!-- PRODUK -->
+    <!-- Produk -->
     <div class="card">
       <div class="card-header">
         <div>
           <h2>Daftar Produk</h2>
-          <small>Edit nama, harga, dan stok</small>
+          <small>Edit nama, harga, stok</small>
         </div>
       </div>
       <p class="info">
-        Perubahan disimpan langsung ke Firestore dan otomatis mempengaruhi halaman produk user.
+        Perubahan langsung disimpan ke Firestore dan mempengaruhi halaman produk user.
       </p>
       <div id="productMsg" class="msg"></div>
       <table id="productTable">
@@ -280,20 +181,21 @@
       </table>
     </div>
 
-    <!-- ORDER -->
+    <!-- Orders -->
     <div class="card">
       <div class="card-header">
         <div>
           <h2>Daftar Order</h2>
-          <small>Ubah status & kirim produk ke pembeli</small>
+          <small>Kelola status dan kirim produk ke pembeli</small>
         </div>
       </div>
       <p class="info">
         Status order:
         <b>pending</b> = baru masuk,
         <b>proses</b> = sedang dikerjakan,
-        <b>sukses</b> = selesai,
-        <b>eror</b> = ada kendala (isi keterangan di produk ke pembeli).
+        <b>eror</b> = gagal / ada kendala,
+        <b>sukses</b> = produk sudah dikirim ke pembeli.<br>
+        Tombol <b>Kirim Produk</b> akan otomatis mengubah status ke <b>sukses</b>.
       </p>
       <div id="orderMsg" class="msg"></div>
       <table id="orderTable">
@@ -304,7 +206,7 @@
             <th>Produk</th>
             <th>Pembeli</th>
             <th>DANA</th>
-            <th>Sosmed / Panel</th>
+            <th>Sosmed/Panel</th>
             <th>Bukti</th>
             <th>Status</th>
             <th>Produk ke Pembeli</th>
@@ -314,27 +216,18 @@
         <tbody></tbody>
       </table>
     </div>
-
   </div>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
-    getFirestore,
-    collection,
-    getDocs,
-    doc,
-    updateDoc,
-    query,
-    orderBy
+    getFirestore, collection, getDocs, doc, updateDoc,
+    query, orderBy
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
   import {
-    getAuth,
-    onAuthStateChanged,
-    signOut,
-    GoogleAuthProvider,
-    signInWithPopup
+    getAuth, onAuthStateChanged, signOut,
+    GoogleAuthProvider, signInWithPopup
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
   const firebaseConfig = {
@@ -353,56 +246,45 @@
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  const loadingCard = document.getElementById("loadingMsg");
+  const loadingCard = document.getElementById("loadingCard");
+  const notAdminBox = document.getElementById("notAdminMsg");
   const adminOnly   = document.getElementById("adminOnly");
-  const notAdminMsg = document.getElementById("notAdminMsg");
-  const adminEmailEl= document.getElementById("adminEmail");
-  const adminStatusEl=document.getElementById("adminStatus");
+  const loginAdminBtn = document.getElementById("loginAdminBtn");
 
+  const adminEmailEl = document.getElementById("adminEmail");
   const productTableBody = document.querySelector("#productTable tbody");
   const orderTableBody   = document.querySelector("#orderTable tbody");
-  const productMsgEl     = document.getElementById("productMsg");
-  const orderMsgEl       = document.getElementById("orderMsg");
+  const productMsgEl = document.getElementById("productMsg");
+  const orderMsgEl   = document.getElementById("orderMsg");
 
-  function setMsg(el, text, ok=false){
-    el.textContent = text;
-    el.className = "msg " + (ok ? "ok" : "err");
+  function setMsg(el,text,ok=false){
+    el.textContent = text || "";
+    el.className = "msg" + (text ? (ok?" ok":" err") : "");
   }
 
-  async function ensureAdminLogin(user) {
-    if (!user) {
-      // kalau belum login, minta login via Google
-      loadingCard.innerHTML = `
-        <div class="card-header">
-          <h2>Login Admin</h2>
-        </div>
-        <p class="info">Silakan login dengan akun Google admin untuk masuk ke panel.</p>
-        <button id="loginAdminBtn" class="btn-sm btn-save" type="button">Login dengan Google</button>
-      `;
-      const loginBtn = document.getElementById("loginAdminBtn");
-      loginBtn.onclick = async () => {
-        try{
-          await signInWithPopup(auth, provider);
-        }catch(e){
-          console.error(e);
-          loadingCard.innerHTML += `<div class="msg err">Gagal login Google admin.</div>`;
-        }
+  async function ensureAdmin(user){
+    if (!user){
+      // belum login -> tampilkan tombol login
+      loadingCard.style.display = "none";
+      notAdminBox.style.display = "block";
+      adminOnly.style.display = "none";
+      loginAdminBtn.onclick = async ()=>{
+        try { await signInWithPopup(auth, provider); }
+        catch(e){ setMsg(orderMsgEl,"Gagal login Google admin."); }
       };
       return false;
     }
-
     const email = user.email || "";
-    if (!ADMIN_EMAILS.includes(email)) {
+    if (!ADMIN_EMAILS.includes(email)){
       loadingCard.style.display = "none";
-      notAdminMsg.style.display = "block";
+      notAdminBox.style.display = "block";
       adminOnly.style.display = "none";
       return false;
     }
 
     adminEmailEl.textContent = email;
-    adminStatusEl.textContent = "Admin aktif";
     loadingCard.style.display = "none";
-    notAdminMsg.style.display = "none";
+    notAdminBox.style.display = "none";
     adminOnly.style.display = "block";
     return true;
   }
@@ -412,46 +294,45 @@
     try{
       const snap = await getDocs(collection(db,"products"));
       const arr = [];
-      snap.forEach(d => arr.push(d.data()));
-      arr.sort((a,b)=> (a.id||0) - (b.id||0));
+      snap.forEach(d=>arr.push(d.data()));
+      arr.sort((a,b)=>(a.id||0)-(b.id||0));
 
-      arr.forEach(p => {
+      arr.forEach(p=>{
         const tr = document.createElement("tr");
 
         const tdId = document.createElement("td");
         tdId.textContent = p.id;
 
         const tdName = document.createElement("td");
-        const nameInput = document.createElement("input");
-        nameInput.className = "small-input";
-        nameInput.value = p.name || "";
-        nameInput.dataset.id = p.id;
-        nameInput.dataset.field = "name";
-        tdName.appendChild(nameInput);
+        const inpName = document.createElement("input");
+        inpName.className = "small-input";
+        inpName.value = p.name || "";
+        inpName.dataset.id = p.id;
+        inpName.dataset.field = "name";
+        tdName.appendChild(inpName);
 
         const tdPrice = document.createElement("td");
-        const priceInput = document.createElement("input");
-        priceInput.className = "small-input";
-        priceInput.value = p.price || "";
-        priceInput.dataset.id = p.id;
-        priceInput.dataset.field = "price";
-        tdPrice.appendChild(priceInput);
+        const inpPrice = document.createElement("input");
+        inpPrice.className = "small-input";
+        inpPrice.value = p.price || "";
+        inpPrice.dataset.id = p.id;
+        inpPrice.dataset.field = "price";
+        tdPrice.appendChild(inpPrice);
 
         const tdStock = document.createElement("td");
-        const stockInput = document.createElement("input");
-        stockInput.className = "small-input";
-        stockInput.type = "number";
-        stockInput.min = "0";
-        stockInput.value = p.stock ?? 0;
-        stockInput.dataset.id = p.id;
-        stockInput.dataset.field = "stock";
-        tdStock.appendChild(stockInput);
+        const inpStock = document.createElement("input");
+        inpStock.className = "small-input";
+        inpStock.type = "number";
+        inpStock.min = "0";
+        inpStock.value = p.stock ?? 0;
+        inpStock.dataset.id = p.id;
+        inpStock.dataset.field = "stock";
+        tdStock.appendChild(inpStock);
 
         tr.appendChild(tdId);
         tr.appendChild(tdName);
         tr.appendChild(tdPrice);
         tr.appendChild(tdStock);
-
         productTableBody.appendChild(tr);
       });
 
@@ -460,18 +341,18 @@
           const id = this.dataset.id;
           const field = this.dataset.field;
           let val = this.value;
-          if (field === "stock") {
+          if (field === "stock"){
             let v = parseInt(val,10);
-            if (isNaN(v) || v<0) v = 0;
+            if (isNaN(v)||v<0) v=0;
             val = v;
             this.value = v;
           }
           try{
-            await updateDoc(doc(db,"products",String(id)), {
+            await updateDoc(doc(db,"products",String(id)),{
               [field]: val,
               updatedAt: new Date().toISOString()
             });
-            setMsg(productMsgEl,"Perubahan produk tersimpan.",true);
+            setMsg(productMsgEl,"Produk tersimpan.",true);
           }catch(e){
             console.error(e);
             setMsg(productMsgEl,"Gagal menyimpan produk.");
@@ -481,45 +362,37 @@
 
     }catch(e){
       console.error(e);
-      setMsg(productMsgEl,"Gagal memuat daftar produk.");
+      setMsg(productMsgEl,"Gagal memuat produk.");
     }
   }
 
   async function loadOrders(){
     orderTableBody.innerHTML = "";
     try{
-      const colRef = collection(db,"orders");
-      const qRef   = query(colRef, orderBy("createdAt","desc"));
-      const snap   = await getDocs(qRef);
-
+      const qRef = query(collection(db,"orders"), orderBy("createdAt","desc"));
+      const snap = await getDocs(qRef);
       const arr = [];
-      snap.forEach(d => arr.push({docId:d.id, ...d.data()}));
+      snap.forEach(d=>arr.push({docId:d.id, ...d.data()}));
 
-      arr.forEach((o, idx)=>{
+      arr.forEach((o,idx)=>{
         const tr = document.createElement("tr");
 
         const tdIdx = document.createElement("td");
         tdIdx.textContent = idx+1;
 
         const tdTime = document.createElement("td");
-        if (o.createdAt) {
+        if (o.createdAt){
           const d = new Date(o.createdAt);
           tdTime.textContent = d.toLocaleString("id-ID");
-        } else {
-          tdTime.textContent = "-";
-        }
+        } else tdTime.textContent = "-";
 
         const tdProd = document.createElement("td");
         tdProd.textContent = o.productName || "-";
 
         const tdBuyer = document.createElement("td");
-        const email = o.userEmail || "-";
-        const uname = o.username || "";
-        const phone = (o.danaName ? "" : "") + (o.userPhone || "");
         tdBuyer.innerHTML =
-          (uname ? "<b>"+uname+"</b><br>":"") +
-          "Email: "+(email || "-")+"<br>" +
-          "WA: "+((o.userPhone)||"-");
+          (o.userEmail?("Email: "+o.userEmail+"<br>"):"")+
+          (o.userUid?("UID: "+o.userUid+"<br>"):"");
 
         const tdDana = document.createElement("td");
         tdDana.innerHTML =
@@ -527,15 +400,15 @@
           "a.n: "+(o.danaName||"-");
 
         const tdSos = document.createElement("td");
-        let sosLines = [];
-        if (o.sosmedUsername) sosLines.push("User: "+o.sosmedUsername);
-        if (o.sosmedLink) sosLines.push("Link: "+o.sosmedLink);
-        if (o.panelUser) sosLines.push("Panel User: "+o.panelUser);
-        if (o.panelPass) sosLines.push("Panel Pass: "+o.panelPass);
-        tdSos.innerHTML = sosLines.length ? sosLines.join("<br>") : "-";
+        const lines = [];
+        if (o.sosmedUsername) lines.push("User sosmed: "+o.sosmedUsername);
+        if (o.sosmedLink) lines.push("Link: "+o.sosmedLink);
+        if (o.panelUser) lines.push("User panel: "+o.panelUser);
+        if (o.panelPass) lines.push("Pass panel: "+o.panelPass);
+        tdSos.innerHTML = lines.length?lines.join("<br>"):"-";
 
         const tdProof = document.createElement("td");
-        if (o.proofUrl) {
+        if (o.proofUrl){
           const a = document.createElement("a");
           a.href = o.proofUrl;
           a.target = "_blank";
@@ -543,43 +416,41 @@
           a.className = "link";
           a.textContent = "Lihat";
           tdProof.appendChild(a);
-        } else {
-          tdProof.textContent = "-";
-        }
+        } else tdProof.textContent = "-";
 
         const tdStatus = document.createElement("td");
         const select = document.createElement("select");
         select.className = "select";
-        select.dataset.docId = o.docId;
-        const options = ["pending","proses","sukses","eror"];
-        const statusNow = (o.status || "pending").toLowerCase();
-        options.forEach(st=>{
+        const stNow = (o.status || "pending").toLowerCase();
+        ["pending","proses","sukses","eror"].forEach(st=>{
           const opt = document.createElement("option");
           opt.value = st;
           opt.textContent = st;
-          if (st === statusNow) opt.selected = true;
+          if (st===stNow) opt.selected = true;
           select.appendChild(opt);
         });
         const badge = document.createElement("div");
-        badge.className = "badge status-"+statusNow;
-        badge.textContent = statusNow;
+        badge.className = "badge status-"+stNow;
+        badge.textContent = stNow;
         tdStatus.appendChild(select);
         tdStatus.appendChild(badge);
 
         const tdDelivery = document.createElement("td");
-        const textarea = document.createElement("textarea");
-        textarea.className = "textarea";
-        textarea.dataset.docId = o.docId;
-        textarea.placeholder = "Kirim produk / catatan ke pembeli di sini...";
-        textarea.value = o.deliveryMsg || "";
-        tdDelivery.appendChild(textarea);
+        const ta = document.createElement("textarea");
+        ta.className = "textarea";
+        ta.value = o.deliveryMsg || "";
+        ta.placeholder = "Isi produk (akun, kode, catatan, dll)...";
+        tdDelivery.appendChild(ta);
 
         const tdAction = document.createElement("td");
         const btnSave = document.createElement("button");
         btnSave.className = "btn-sm btn-save";
         btnSave.textContent = "Simpan";
-        btnSave.dataset.docId = o.docId;
+        const btnSend = document.createElement("button");
+        btnSend.className = "btn-sm btn-send";
+        btnSend.textContent = "Kirim Produk";
         tdAction.appendChild(btnSave);
+        tdAction.appendChild(btnSend);
 
         tr.appendChild(tdIdx);
         tr.appendChild(tdTime);
@@ -591,50 +462,66 @@
         tr.appendChild(tdStatus);
         tr.appendChild(tdDelivery);
         tr.appendChild(tdAction);
-
         orderTableBody.appendChild(tr);
 
-        select.addEventListener("change", function(){
-          const st = this.value;
+        select.addEventListener("change", ()=>{
+          const st = select.value;
           badge.className = "badge status-"+st;
           badge.textContent = st;
         });
 
-        btnSave.addEventListener("click", async function(){
-          const id = this.dataset.docId;
-          const newStatus = select.value;
-          const newMsg = textarea.value.trim();
+        btnSave.addEventListener("click", async ()=>{
           try{
-            await updateDoc(doc(db,"orders",id), {
-              status: newStatus,
-              deliveryMsg: newMsg,
+            await updateDoc(doc(db,"orders",o.docId),{
+              status: select.value,
+              deliveryMsg: ta.value.trim() || null,
               updatedAt: new Date().toISOString()
             });
-            setMsg(orderMsgEl,"Order "+id+" tersimpan.",true);
+            setMsg(orderMsgEl,"Order tersimpan.",true);
           }catch(e){
             console.error(e);
-            setMsg(orderMsgEl,"Gagal menyimpan order "+id+".");
+            setMsg(orderMsgEl,"Gagal menyimpan order.");
+          }
+        });
+
+        btnSend.addEventListener("click", async ()=>{
+          const text = ta.value.trim();
+          if (!text){
+            alert("Isi dulu kolom 'Produk ke pembeli' sebelum kirim.");
+            return;
+          }
+          try{
+            await updateDoc(doc(db,"orders",o.docId),{
+              status: "sukses",
+              deliveryMsg: text,
+              updatedAt: new Date().toISOString()
+            });
+            select.value = "sukses";
+            badge.className = "badge status-sukses";
+            badge.textContent = "sukses";
+            setMsg(orderMsgEl,"Produk dikirim ke pembeli (status sukses).",true);
+          }catch(e){
+            console.error(e);
+            setMsg(orderMsgEl,"Gagal mengirim produk.");
           }
         });
       });
 
     }catch(e){
       console.error(e);
-      setMsg(orderMsgEl,"Gagal memuat daftar order.");
+      setMsg(orderMsgEl,"Gagal memuat order.");
     }
   }
 
   onAuthStateChanged(auth, async (user)=>{
-    const ok = await ensureAdminLogin(user);
+    const ok = await ensureAdmin(user);
     if (!ok) return;
     await loadProducts();
     await loadOrders();
   });
 
-  document.getElementById("logoutBtnTop").onclick = async () => {
-    try{
-      await signOut(auth);
-    }catch(e){}
+  document.getElementById("logoutBtnTop").onclick = async ()=>{
+    try{ await signOut(auth); }catch(e){}
     window.location.href = "login.html";
   };
 </script>
