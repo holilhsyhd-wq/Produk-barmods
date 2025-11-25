@@ -259,7 +259,7 @@
       const q = query(
         collection(db, "orders"),
         where("userId", "==", uid),
-        orderBy("createdAt", "desc")
+        (ordetord"ordesc")
       );
       const snap = await getDocs(q);
 
