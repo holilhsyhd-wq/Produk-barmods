@@ -1,243 +1,3 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>Saldo - Barmods Digital Store</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:#020617;
-      color:#e5e7eb;
-    }
-    .topbar{
-      height:56px;
-      background:#020617;
-      border-bottom:1px solid #1f2937;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:0 14px;
-    }
-    .brand{
-      display:flex;
-      flex-direction:column;
-    }
-    .brand-title{font-size:15px;font-weight:700;}
-    .brand-sub{font-size:11px;color:#94a3b8;}
-    .top-links{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-    .link-btn{
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid #374151;
-      background:#111827;
-      color:#e5e7eb;
-      font-size:12px;
-      text-decoration:none;
-      cursor:pointer;
-    }
-    .link-btn.logout{
-      background:#b91c1c;
-      border-color:#7f1d1d;
-    }
-
-    .main{
-      max-width:1080px;
-      margin:0 auto;
-      padding:12px;
-    }
-    .card{
-      background:#020617;
-      border-radius:14px;
-      border:1px solid #1f2937;
-      padding:12px;
-      margin-bottom:12px;
-    }
-    .card-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:6px;
-    }
-    .card-header h2{
-      margin:0;
-      font-size:15px;
-    }
-    .card-header small{
-      font-size:11px;
-      color:#94a3b8;
-    }
-    .info-text{
-      font-size:12px;
-      color:#9ca3af;
-      margin-top:4px;
-    }
-    .saldo-big{
-      font-size:22px;
-      font-weight:700;
-      margin-top:4px;
-    }
-
-    label{
-      display:block;
-      font-size:12px;
-      margin-top:10px;
-    }
-    input, select, textarea{
-      width:100%;
-      margin-top:4px;
-      padding:8px 10px;
-      border-radius:9px;
-      border:1px solid #1f2937;
-      background:#020617;
-      color:#e5e7eb;
-      font-size:13px;
-      box-sizing:border-box;
-    }
-    textarea{resize:vertical;}
-
-    .btn-primary{
-      margin-top:12px;
-      padding:8px 12px;
-      border-radius:999px;
-      background:#2563eb;
-      border:none;
-      color:#fff;
-      font-size:13px;
-      cursor:pointer;
-    }
-    .btn-secondary{
-      margin-top:12px;
-      padding:7px 11px;
-      border-radius:999px;
-      border:1px solid #374151;
-      background:#111827;
-      color:#e5e7eb;
-      font-size:12px;
-      cursor:pointer;
-      text-decoration:none;
-      display:inline-block;
-    }
-
-    .msg{
-      font-size:12px;
-      margin-top:6px;
-      min-height:16px;
-    }
-    .msg.err{color:#f97373;}
-    .msg.ok{color:#22c55e;}
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-      margin-top:8px;
-      font-size:11px;
-    }
-    th,td{
-      border-bottom:1px solid #1f2937;
-      padding:4px 3px;
-      text-align:left;
-    }
-    th{color:#9ca3af;font-weight:500;}
-  </style>
-</head>
-<body>
-
-<!-- TOPBAR -->
-<div class="topbar">
-  <div class="brand">
-    <span class="brand-title">Barmods Digital Store</span>
-    <span class="brand-sub">Saldo & Topup</span>
-  </div>
-  <div class="top-links">
-    <a href="index.html" class="link-btn">Produk</a>
-    <a href="orders.html" class="link-btn">Pesanan Saya</a>
-    <a href="profile.html" class="link-btn">Profil</a>
-    <a href="admin.html" class="link-btn">Admin</a>
-    <button id="logoutBtn" class="link-btn logout" type="button">Logout</button>
-  </div>
-</div>
-
-<div class="main">
-  <!-- SALDO SEKARANG -->
-  <div class="card">
-    <div class="card-header">
-      <div>
-        <h2>Saldo Saya</h2>
-        <small>Saldo ini dipakai untuk beli semua produk</small>
-      </div>
-    </div>
-    <div class="saldo-big" id="saldoText">Rp 0</div>
-    <div class="info-text">
-      Akun: <span id="userEmail">-</span><br>
-      Jika saldo kurang, lakukan topup di bawah lalu kirim bukti via WhatsApp. Admin akan mengubah status topup ke <b>sukses</b> dan saldo otomatis bertambah.
-    </div>
-  </div>
-
-  <!-- FORM TOPUP -->
-  <div class="card">
-    <div class="card-header">
-      <div>
-        <h2>Topup Saldo</h2>
-        <small>Pembayaran manual via DANA</small>
-      </div>
-    </div>
-    <div class="info-text">
-      1. Isi nominal & data DANA di bawah.<br>
-      2. Transfer ke DANA admin: <b>083877842721</b>.<br>
-      3. Kirim bukti transfer ke WhatsApp admin sambil sebutkan email akun ini.<br>
-      4. Admin akan ubah status topup dari <b>pending</b> menjadi <b>sukses</b>.
-    </div>
-
-    <label>Nominal topup (Rp, misal 10000)</label>
-    <input id="topupAmount" type="number" min="1000" placeholder="Contoh: 10000">
-
-    <label>Nomor DANA kamu</label>
-    <input id="topupDana" placeholder="Contoh: 0838xxxxxxx">
-
-    <label>Atas nama DANA</label>
-    <input id="topupNama" placeholder="Nama di aplikasi DANA">
-
-    <label>Catatan tambahan (opsional)</label>
-    <textarea id="topupNote" rows="2" placeholder="Misal: sudah transfer 10k, mohon cek."></textarea>
-
-    <button class="btn-primary" type="button" onclick="buatTopup()">Buat Permintaan Topup</button>
-    <a class="btn-secondary" href="https://wa.me/6283877842721" target="_blank">Chat WhatsApp Admin</a>
-
-    <div id="topupMsg" class="msg"></div>
-  </div>
-
-  <!-- RIWAYAT TOPUP -->
-  <div class="card">
-    <div class="card-header">
-      <div>
-        <h2>Riwayat Topup</h2>
-        <small>Status: pending / proses / sukses / error</small>
-      </div>
-    </div>
-
-    <div id="topupTableWrap" style="overflow-x:auto;">
-      <table id="topupTable">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Waktu</th>
-            <th>Nominal</th>
-            <th>DANA</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
@@ -249,8 +9,7 @@
     setDoc,
     addDoc,
     query,
-    where,
-    orderBy
+    where
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
   import {
     getAuth,
@@ -316,21 +75,30 @@
   }
 
   async function loadTopups(){
+    if(!currentUser) return;
+
     tbodyTopup.innerHTML = '';
+
     const col = collection(db,'topups');
-    const q   = query(col,
-      where('userUid','==',currentUser.uid),
-      orderBy('createdAt','desc')
-    );
+    // tanpa orderBy, jadi tidak perlu index gabungan
+    const q   = query(col, where('userUid','==',currentUser.uid));
     const snap = await getDocs(q);
-    let i = 0;
-    snap.forEach(d=>{
-      const t = d.data();
-      i++;
+
+    const list = [];
+    snap.forEach(d => list.push(d.data()));
+
+    // sort di client berdasarkan createdAt desc
+    list.sort((a,b) => {
+      const aa = a.createdAt || '';
+      const bb = b.createdAt || '';
+      return bb.localeCompare(aa);
+    });
+
+    list.forEach((t,i)=>{
       const tr = document.createElement('tr');
       const dTime = new Date(t.createdAt || Date.now());
       tr.innerHTML = `
-        <td>${i}</td>
+        <td>${i+1}</td>
         <td>${dTime.toLocaleString('id-ID')}</td>
         <td>${formatRupiah(t.amount || 0)}</td>
         <td>${t.danaNumber || ''}</td>
@@ -373,9 +141,11 @@
         status: 'pending',
         createdAt: new Date().toISOString()
       };
+
       await addDoc(collection(db,'topups'), obj);
 
-      topupMsgEl.textContent = 'Permintaan topup dibuat. Status: pending. Kirim bukti transfer ke WhatsApp admin.';
+      topupMsgEl.textContent =
+        'Permintaan topup dibuat. Status: pending. Kirim bukti transfer ke WhatsApp admin.';
       topupMsgEl.className = 'msg ok';
 
       // reset form
@@ -384,7 +154,13 @@
       document.getElementById('topupNama').value = '';
       document.getElementById('topupNote').value = '';
 
-      await loadTopups();
+      // kalau loadTopups error (misal index dsb), jangan bikin pesan gagal topup
+      try {
+        await loadTopups();
+      } catch(e){
+        console.error('Gagal load riwayat topup', e);
+      }
+
     } catch(e){
       console.error(e);
       topupMsgEl.textContent = 'Gagal membuat permintaan topup. Coba lagi.';
@@ -392,6 +168,3 @@
     }
   };
 </script>
-
-</body>
-</html>
