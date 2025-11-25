@@ -8,155 +8,271 @@
 <style>
   body {
     margin: 0;
-    background: #0f0f17;
-    font-family: Arial, sans-serif;
-    color: #fff;
+    background: #020617;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #e5e7eb;
   }
 
   header {
-    padding: 16px;
-    background: #141421;
+    padding: 14px;
+    background: #020617;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 17px;
+    border-bottom: 1px solid #1f2937;
+  }
+
+  .brand-title {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .brand-sub {
+    font-size: 11px;
+    color: #9ca3af;
+  }
+
+  .header-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header-right {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
   }
 
   .btn-header {
-    color: #fff;
-    background: #303043;
-    padding: 6px 12px;
-    border-radius: 8px;
+    color: #e5e7eb;
+    background: #111827;
+    padding: 6px 11px;
+    border-radius: 999px;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 12px;
+    border: 1px solid #374151;
+  }
+
+  main {
+    padding: 12px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  h3 {
+    margin: 8px 0;
+    font-size: 15px;
+  }
+
+  .card-info {
+    background: #020617;
+    border-radius: 14px;
+    padding: 10px 12px;
+    border: 1px solid #1f2937;
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .pill {
+    border-radius: 999px;
+    padding: 4px 8px;
+    border: 1px solid #1f2937;
+    font-size: 11px;
   }
 
   .product-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    padding: 12px;
-    gap: 12px;
+    gap: 10px;
+  }
+
+  @media (max-width: 560px) {
+    .product-grid {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 
   .product-card {
-    background: #181828;
-    padding: 12px;
-    border-radius: 10px;
+    background: #020617;
+    border-radius: 12px;
+    padding: 9px 9px 10px;
+    border: 1px solid #1f2937;
+    font-size: 12px;
     display: flex;
     flex-direction: column;
     gap: 4px;
   }
 
+  .product-title {
+    font-weight: 600;
+    font-size: 12px;
+  }
+
   .price-tag {
-    color: #4d9dff;
-    font-size: 15px;
-    font-weight: bold;
+    color: #22c55e;
+    font-weight: 700;
+    font-size: 13px;
+  }
+
+  .stock-line {
+    font-size: 11px;
+    color: #9ca3af;
   }
 
   .btn-product {
-    margin-top: 8px;
-    padding: 8px;
-    background: #5568ff;
-    color: #fff;
+    margin-top: 5px;
+    padding: 7px;
+    border-radius: 999px;
     border: none;
-    border-radius: 8px;
-    font-size: 14px;
+    font-size: 12px;
+    background: #4f46e5;
+    color: #fff;
+  }
+
+  .btn-product[disabled] {
+    background: #1f2937;
+    color: #9ca3af;
   }
 
   /* MODAL */
   .modal-backdrop {
     position: fixed;
     inset: 0;
+    background: rgba(15,23,42,.78);
     display: none;
-    background: rgba(0,0,0,0.65);
-    justify-content: center;
     align-items: center;
-    padding: 20px;
+    justify-content: center;
+    padding: 18px;
+    z-index: 30;
   }
 
   .modal {
-    background: #181828;
-    padding: 16px;
+    background: #020617;
     width: 100%;
-    max-width: 380px;
-    border-radius: 12px;
+    max-width: 420px;
+    border-radius: 16px;
+    padding: 14px 14px 12px;
+    border: 1px solid #1f2937;
+    box-shadow: 0 18px 50px rgba(0,0,0,.75);
+  }
+
+  .modal h3 {
+    margin: 0 0 6px;
+    font-size: 15px;
+  }
+
+  .modal p {
+    margin: 0 0 8px;
+    font-size: 12px;
+    color: #9ca3af;
+  }
+
+  .modal label {
+    font-size: 12px;
+    display: block;
+    margin: 6px 0 3px;
   }
 
   .modal-input {
     width: 100%;
-    padding: 8px;
-    background: #202033;
-    border: 1px solid #333;
-    border-radius: 8px;
-    color: #fff;
+    padding: 7px 9px;
+    border-radius: 10px;
+    border: 1px solid #1f2937;
+    background: #020617;
+    color: #e5e7eb;
+    font-size: 12px;
   }
 
   .modal-actions {
     display: flex;
     justify-content: space-between;
-    margin-top: 14px;
+    margin-top: 12px;
+    gap: 8px;
   }
 
   .btn-cancel {
-    padding: 8px 15px;
-    background: #444;
-    border-radius: 8px;
+    padding: 7px 12px;
+    border-radius: 999px;
     border: none;
-    color: white;
+    font-size: 12px;
+    background: #374151;
+    color: #e5e7eb;
   }
 
   .btn-ok {
-    padding: 8px 15px;
-    background: #5568ff;
-    border-radius: 8px;
+    padding: 7px 12px;
+    border-radius: 999px;
     border: none;
-    color: white;
+    font-size: 12px;
+    background: #4f46e5;
+    color: #ffffff;
   }
 
   .modal-msg {
-    font-size: 13px;
-    margin-top: 10px;
-    color: #ff4d4d;
+    font-size: 11px;
+    margin-top: 6px;
     text-align: center;
+    color: #f97373;
+    min-height: 14px;
   }
 
   .modal-msg.ok {
-    color: #57ff8f;
+    color: #22c55e;
   }
 </style>
 </head>
 
 <body>
-
 <header>
-  <div><b>Barmods Digital Store</b></div>
-  <div>
+  <div class="header-left">
+    <span class="brand-title">Barmods Digital Store</span>
+    <span class="brand-sub">Layanan Digital & Sosial Media</span>
+  </div>
+  <div class="header-right">
+    <a href="orders.html" class="btn-header">Pesanan Saya</a>
     <a href="profile.html" class="btn-header">Profil Saya</a>
     <a href="admin.html" class="btn-header">Admin</a>
   </div>
 </header>
 
-<h3 style="padding: 12px;">Daftar Produk</h3>
+<main>
+  <div class="card-info">
+    <b>Cara order singkat:</b><br>
+    1. Pilih produk di bawah lalu klik <b>Order Sekarang</b>.<br>
+    2. Transfer via DANA ke <b>083877842721</b>.<br>
+    3. Isi data DANA + (username / link / panel) di form.<br>
+    4. Boleh upload bukti transfer (opsional).<br>
+    5. Order masuk status <b>pending</b>, admin ubah ke <b>proses / sukses / eror</b>.
+    <div class="pill-row">
+      <div class="pill">Pembayaran: DANA 083877842721</div>
+      <div class="pill">Order sosmed: akun jangan private</div>
+    </div>
+  </div>
 
-<div id="productGrid" class="product-grid"></div>
+  <h3>Daftar Produk</h3>
+  <div id="productGrid" class="product-grid"></div>
+</main>
 
-<!-- ========================== -->
-<!--   MODAL ORDER / DANA       -->
-<!-- ========================== -->
+<!-- ============== MODAL ORDER ============== -->
 <div id="orderModal" class="modal-backdrop">
   <div class="modal">
     <h3>Pembayaran via DANA</h3>
-    <p>Transfer ke DANA:<br><b>083877842721</b></p>
+    <p>Transfer dulu ke DANA: <b>083877842721</b></p>
 
     <label>Nomor DANA kamu</label>
-    <input id="orderDana" class="modal-input" placeholder="Contoh: 081234xxxxxx">
+    <input id="orderDana" class="modal-input" placeholder="Contoh: 0838xxxxxxx">
 
-    <label style="margin-top:6px;">Atas nama DANA</label>
+    <label>Atas nama DANA</label>
     <input id="orderNama" class="modal-input" placeholder="Nama di aplikasi DANA">
 
-    <p style="font-size:11px;margin-top:10px;">
-      Untuk order sosmed, isi username/link.<br>
-      Untuk panel, isi user & password panel.
+    <p style="font-size:11px;margin-top:8px;color:#9ca3af;">
+      Untuk order <b>sosmed</b>, isi username & link.<br>
+      Untuk <b>panel</b>, isi user & password panel.
     </p>
 
     <input id="orderSosmedUser" class="modal-input" placeholder="Username sosmed (opsional)">
@@ -164,21 +280,18 @@
     <input id="orderPanelUser" class="modal-input" placeholder="User panel (opsional)">
     <input id="orderPanelPass" class="modal-input" placeholder="Password panel (opsional)">
 
-    <label style="margin-top:8px;">Upload bukti transfer</label>
-    <input id="orderProof" type="file" accept="image/*" style="margin-top:4px;color:#fff;">
+    <label>Upload bukti transfer (opsional)</label>
+    <input id="orderProof" type="file" accept="image/*" style="font-size:11px;color:#e5e7eb;">
 
     <div class="modal-actions">
-      <button id="orderCancelBtn" class="btn-cancel">Batal</button>
-      <button id="orderSubmitBtn" class="btn-ok">Order Sekarang</button>
+      <button type="button" id="orderCancelBtn" class="btn-cancel">Batal</button>
+      <button type="button" id="orderSubmitBtn" class="btn-ok">Order Sekarang</button>
     </div>
 
     <div id="orderMsg" class="modal-msg"></div>
   </div>
 </div>
 
-<!-- ================================= -->
-<!--  FIREBASE + ORDER SCRIPT FIX      -->
-<!-- ================================= -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
@@ -212,7 +325,7 @@
 
   const grid = document.getElementById("productGrid");
   const orderModal = document.getElementById("orderModal");
-  const msg = document.getElementById("orderMsg");
+  const msgEl = document.getElementById("orderMsg");
 
   const danaEl  = document.getElementById("orderDana");
   const namaEl  = document.getElementById("orderNama");
@@ -228,7 +341,7 @@
       return;
     }
     currentUser = user;
-    loadProducts();
+    await loadProducts();
   });
 
   async function loadProducts(){
@@ -242,18 +355,30 @@
       const card = document.createElement("div");
       card.className = "product-card";
 
-      card.innerHTML = `
-        <div><b>${p.name}</b></div>
-        <div class="price-tag">${p.price}</div>
-        <div>Stok: ${p.stock}</div>
-      `;
+      const title = document.createElement("div");
+      title.className = "product-title";
+      title.textContent = p.name;
+
+      const price = document.createElement("div");
+      price.className = "price-tag";
+      price.textContent = p.price;
+
+      const stok = document.createElement("div");
+      stok.className = "stock-line";
+      stok.textContent = "Stok: " + (p.stock ?? 0);
 
       const btn = document.createElement("button");
       btn.className = "btn-product";
-      btn.textContent = p.stock > 0 ? "Order Sekarang" : "Stok habis";
-      btn.disabled = p.stock <= 0;
+      btn.textContent = (p.stock ?? 0) > 0 ? "Order Sekarang" : "Stok habis";
+      btn.disabled = (p.stock ?? 0) <= 0;
 
-      btn.addEventListener("click", ()=> openModal(p.id));
+      if (!btn.disabled) {
+        btn.addEventListener("click", ()=> openModal(p.id));
+      }
+
+      card.appendChild(title);
+      card.appendChild(price);
+      card.appendChild(stok);
       card.appendChild(btn);
       grid.appendChild(card);
     });
@@ -270,49 +395,59 @@
     pUserEl.value = "";
     pPassEl.value = "";
     proofEl.value = "";
-    msg.textContent = "";
+    msgEl.textContent = "";
+    msgEl.className = "modal-msg";
 
     orderModal.style.display = "flex";
   }
 
-  document.getElementById("orderCancelBtn").onclick = ()=>{
+  function closeModal(){
     orderModal.style.display = "none";
-  };
+  }
+
+  document.getElementById("orderCancelBtn").onclick = closeModal;
   orderModal.onclick = e=>{
-    if (e.target === orderModal) orderModal.style.display = "none";
+    if (e.target === orderModal) closeModal();
   };
 
   document.getElementById("orderSubmitBtn").onclick = async ()=>{
-    if (!currentProduct) return;
-
-    msg.textContent = "";
+    if (!currentProduct || !currentUser) return;
 
     const dana = danaEl.value.trim();
     const nama = namaEl.value.trim();
     const file = proofEl.files[0];
 
-    if (!dana || !nama){
-      msg.textContent = "Nomor DANA & Atas nama wajib diisi.";
-      return;
-    }
-    if (!file){
-      msg.textContent = "Bukti transfer wajib diupload.";
+    msgEl.className = "modal-msg";
+    msgEl.textContent = "";
+
+    if (!dana || !nama) {
+      msgEl.textContent = "Nomor DANA & Atas nama wajib diisi.";
       return;
     }
 
     try {
-      const fileName = `${currentUser.uid}_${Date.now()}_${file.name}`;
-      const storageRef = ref(storage, "proofs/"+fileName);
-      await uploadBytes(storageRef,file);
-      const proofUrl = await getDownloadURL(storageRef);
+      document.getElementById("orderSubmitBtn").disabled = true;
+      document.getElementById("orderSubmitBtn").textContent = "Memproses...";
 
+      let proofUrl = null;
+      if (file) {
+        const fileName = `${currentUser.uid}_${Date.now()}_${file.name}`;
+        const storageRef = ref(storage,"proofs/"+fileName);
+        await uploadBytes(storageRef,file);
+        proofUrl = await getDownloadURL(storageRef);
+      }
+
+      // kurangi stok
+      const newStock = Math.max((currentProduct.stock ?? 0) - 1,0);
       await updateDoc(doc(db,"products",String(currentProduct.id)), {
-        stock: currentProduct.stock - 1
+        stock: newStock
       });
+      currentProduct.stock = newStock;
 
-      await addDoc(collection(db,"orders"), {
+      const now = new Date().toISOString();
+      await addDoc(collection(db,"orders"),{
         userUid: currentUser.uid,
-        userEmail: currentUser.email,
+        userEmail: currentUser.email || "",
         productId: currentProduct.id,
         productName: currentProduct.name,
         price: currentProduct.price,
@@ -324,24 +459,27 @@
         panelUser: pUserEl.value.trim() || null,
         panelPass: pPassEl.value.trim() || null,
         proofUrl: proofUrl,
+        deliveryMsg: null,
         status: "pending",
-        createdAt: new Date().toISOString()
+        createdAt: now,
+        updatedAt: now
       });
 
-      msg.className = "modal-msg ok";
-      msg.textContent = "Order berhasil! Status: pending.";
+      msgEl.className = "modal-msg ok";
+      msgEl.textContent = "Order berhasil tersimpan (status: pending).";
 
-      setTimeout(()=>{
-        orderModal.style.display = "none";
-        loadProducts();
-      }, 800);
+      await loadProducts();
+      setTimeout(closeModal, 900);
 
     } catch(err) {
-      console.log(err);
-      msg.textContent = "Terjadi kesalahan saat memproses order.";
+      console.error(err);
+      msgEl.textContent = "Terjadi kesalahan saat memproses order.";
+    } finally {
+      const btn = document.getElementById("orderSubmitBtn");
+      btn.disabled = false;
+      btn.textContent = "Order Sekarang";
     }
   };
 </script>
-
 </body>
 </html>
