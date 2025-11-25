@@ -2,448 +2,447 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pesanan Saya - Barmods Digital Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Google Font (opsional, biar lebih cakep) -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+  <!-- ==== SIMPLE STYLE (DARK) ==== -->
   <style>
+    :root {
+      --bg: #050814;
+      --card: #101522;
+      --card-soft: #151b2b;
+      --accent: #2563eb;
+      --accent-soft: #1d4ed8;
+      --danger: #ef4444;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --border: #1f2933;
+      --radius: 14px;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
     }
 
     body {
-      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f3f4f6;
-      color: #111827;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 55%);
+      color: var(--text);
       min-height: 100vh;
     }
 
-    .page {
-      max-width: 1000px;
+    .wrapper {
+      max-width: 960px;
       margin: 0 auto;
-      padding: 16px 16px 40px;
+      padding: 20px 16px 48px;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav-brand {
+      font-weight: 700;
+      font-size: 18px;
+      margin-right: auto;
+    }
+
+    .nav-btn,
+    .nav-btn:visited {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      background: #0f172a;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease, transform 0.1s ease,
+        border-color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover {
+      background: #1e293b;
+      transform: translateY(-1px);
+    }
+
+    .nav-btn.logout {
+      background: var(--danger);
+      border-color: #b91c1c;
+    }
+
+    .nav-btn.logout:hover {
+      background: #b91c1c;
     }
 
     /* HEADER */
-    header {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 18px;
-      margin-top: 8px;
-    }
-
-    .title-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
     h1 {
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: 0.02em;
+      font-size: 26px;
+      margin-bottom: 4px;
     }
 
-    .store-name {
-      font-size: 14px;
-      color: #6b7280;
-      font-weight: 500;
-    }
-
-    .top-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      justify-content: flex-start;
-    }
-
-    .link-btn {
-      text-decoration: none;
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid #d1d5db;
-      font-size: 13px;
-      font-weight: 500;
-      color: #111827;
-      background: white;
-      transition: all 0.15s ease;
-    }
-
-    .link-btn:hover {
-      background: #f9fafb;
-    }
-
-    .logout-btn {
-      padding: 6px 14px;
-      border-radius: 999px;
-      border: none;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      background: #ef4444;
-      color: white;
-      box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
-      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
-    }
-
-    .logout-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 10px rgba(239, 68, 68, 0.6);
-      opacity: 0.95;
-    }
-
-    /* CARD UMUM */
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 16px 16px 18px;
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.07);
+    .subtitle {
+      color: var(--muted);
       margin-bottom: 16px;
     }
 
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 10px;
+    /* CARD */
+    .card {
+      background: linear-gradient(145deg, #020617, #020617ee);
+      border-radius: 24px;
+      padding: 20px 18px;
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(18px);
+      margin-bottom: 18px;
     }
 
-    .card-header h2 {
+    .card-title {
       font-size: 18px;
       font-weight: 600;
+      margin-bottom: 8px;
     }
 
-    .card-header small {
-      font-size: 12px;
-      color: #6b7280;
-    }
-
-    .info-text {
-      font-size: 13px;
-      color: #4b5563;
+    .card-text {
+      font-size: 14px;
+      color: var(--muted);
       line-height: 1.5;
     }
 
-    .legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px 12px;
+    .highlight-dot {
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+
+    .error-text {
       margin-top: 10px;
-      font-size: 12px;
-      color: #374151;
+      font-size: 14px;
+      color: var(--danger);
+      white-space: pre-wrap;
     }
 
-    .legend-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    /* TABLE */
+    .table-card {
+      background: #020617ee;
+      border-radius: 24px;
+      padding: 0;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+      overflow: hidden;
     }
 
-    .legend-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-    }
-
-    .legend-dot.pending  { background: #fbbf24; }
-    .legend-dot.proses   { background: #3b82f6; }
-    .legend-dot.sukses   { background: #22c55e; }
-    .legend-dot.error    { background: #ef4444; }
-
-    /* TABEL PESANAN */
     .table-wrapper {
       width: 100%;
       overflow-x: auto;
-      border-radius: 12px;
-      border: 1px solid #e5e7eb;
-      background: #f9fafb;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
+      font-size: 14px;
       min-width: 640px;
     }
 
     thead {
-      background: #111827;
-      color: #f9fafb;
+      background: #020617;
     }
 
-    th, td {
+    th,
+    td {
       padding: 10px 10px;
-      font-size: 13px;
+      border-bottom: 1px solid rgba(30, 64, 100, 0.5);
       text-align: left;
-      border-bottom: 1px solid #e5e7eb;
-      vertical-align: top;
     }
 
     th {
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-      font-size: 11px;
+      font-weight: 500;
+      color: #cbd5f5;
+      font-size: 13px;
     }
 
     tbody tr:nth-child(even) {
-      background: #f3f4f6;
+      background: rgba(15, 23, 42, 0.75);
     }
 
-    tbody tr:hover {
-      background: #e5e7eb;
-    }
-
-    .col-no {
-      width: 32px;
-      text-align: center;
-    }
-
-    .col-status {
-      min-width: 90px;
-    }
-
-    .status-pill {
+    .status-badge {
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: lowercase;
       display: inline-flex;
       align-items: center;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: capitalize;
+      justify-content: center;
     }
 
     .status-pending {
-      background: rgba(251, 191, 36, 0.12);
-      color: #92400e;
-      border: 1px solid rgba(251, 191, 36, 0.6);
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
     }
 
     .status-proses {
-      background: rgba(59, 130, 246, 0.12);
-      color: #1d4ed8;
-      border: 1px solid rgba(59, 130, 246, 0.6);
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
     }
 
     .status-sukses {
-      background: rgba(34, 197, 94, 0.12);
-      color: #166534;
-      border: 1px solid rgba(34, 197, 94, 0.7);
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
     }
 
     .status-error {
-      background: rgba(239, 68, 68, 0.12);
-      color: #b91c1c;
-      border: 1px solid rgba(239, 68, 68, 0.7);
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
     }
 
-    .cell-small-text {
-      font-size: 12px;
-      color: #4b5563;
-      line-height: 1.4;
-    }
-
-    .produk-name {
-      font-weight: 500;
-      margin-bottom: 4px;
-    }
-
-    .empty-state {
+    .muted {
+      color: var(--muted);
       font-size: 13px;
-      color: #6b7280;
-      padding: 12px 4px 4px;
+    }
+
+    .admin-product {
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+
+    .empty {
+      padding: 14px 0;
+      font-size: 14px;
+      color: var(--muted);
       text-align: center;
     }
 
-    footer {
-      margin-top: 12px;
-      font-size: 11px;
-      color: #9ca3af;
-      text-align: center;
-    }
-
-    /* MOBILE */
-    @media (max-width: 720px) {
-      .page {
-        padding: 12px 10px 26px;
+    @media (max-width: 640px) {
+      .wrapper {
+        padding-inline: 12px;
       }
-
       h1 {
-        font-size: 20px;
+        font-size: 22px;
       }
-
-      .card {
-        padding: 14px 12px 16px;
+      .nav-brand {
+        flex-basis: 100%;
+        margin-bottom: 8px;
       }
-
-      .table-wrapper {
-        border-radius: 12px;
-      }
-
-      table {
-        min-width: 580px;
+      .navbar {
+        gap: 6px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <header>
-      <div class="title-row">
-        <div>
-          <h1>Pesanan Saya</h1>
-          <div class="store-name">Barmods Digital Store</div>
-        </div>
-      </div>
+  <div class="wrapper">
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <div class="nav-brand">Barmods Digital Store</div>
+      <a href="index.html" class="nav-btn">Produk</a>
+      <a href="profile.html" class="nav-btn">Profil Saya</a>
+      <a href="orders.html" class="nav-btn">Pesanan Saya</a>
+      <a href="wallet.html" class="nav-btn">Saldo</a>
+      <a href="admin.html" class="nav-btn">Admin</a>
+      <button id="logoutBtn" class="nav-btn logout">Logout</button>
+    </nav>
 
-      <div class="top-actions">
-        <a href="products.html" class="link-btn">Produk</a>
-        <a href="profile.html" class="link-btn">Profil Saya</a>
-        <a href="admin.html" class="link-btn">Admin</a>
-        <button id="logoutBtn" class="logout-btn">Logout</button>
-      </div>
-    </header>
+    <!-- HEADER -->
+    <h1>Pesanan Saya</h1>
+    <p class="subtitle">
+      Semua pesanan yang kamu buat akan muncul di sini. Akun:
+      <span id="userEmail" class="highlight-dot">-</span>
+    </p>
 
-    <!-- INFO & STATUS -->
+    <!-- INFO CARD -->
     <section class="card">
-      <div class="card-header">
-        <h2>Riwayat Pesanan</h2>
-        <small>Semua order yang kamu buat akan muncul di sini.</small>
-      </div>
-      <p class="info-text">
+      <div class="card-title">Riwayat Pesanan</div>
+      <p class="card-text">
+        Semua order yang kamu buat akan muncul di sini. Status:
+        <span class="highlight-dot">pending</span> •
+        <span class="highlight-dot">proses</span> •
+        <span class="highlight-dot">sukses</span> •
+        <span class="highlight-dot">error</span>.
         Jika admin mengirim produk, hasilnya akan muncul di kolom
-        <strong>Produk dari admin</strong>. Simpan baik-baik produk yang sudah dikirim, ya.
+        <span class="highlight-dot">Produk dari admin</span>.
       </p>
-
-      <div class="legend">
-        <span class="legend-item">
-          <span class="legend-dot pending"></span> pending
-        </span>
-        <span class="legend-item">
-          <span class="legend-dot proses"></span> proses
-        </span>
-        <span class="legend-item">
-          <span class="legend-dot sukses"></span> sukses
-        </span>
-        <span class="legend-item">
-          <span class="legend-dot error"></span> error
-        </span>
-      </div>
+      <div id="errorBox" class="error-text" style="display:none;"></div>
     </section>
 
     <!-- TABEL PESANAN -->
-    <section class="card">
+    <section class="table-card">
       <div class="table-wrapper">
-        <table id="ordersTable">
+        <table>
           <thead>
             <tr>
-              <th class="col-no">#</th>
+              <th>#</th>
               <th>Waktu</th>
               <th>Produk</th>
-              <th class="col-status">Status</th>
+              <th>Status</th>
               <th>Data Order</th>
               <th>Produk dari admin</th>
             </tr>
           </thead>
           <tbody id="ordersBody">
-            <!-- BARIS PESANAN DIISI OTOMATIS OLEH JAVASCRIPT -->
+            <tr>
+              <td colspan="6" class="empty">Memuat pesanan...</td>
+            </tr>
           </tbody>
         </table>
       </div>
-      <p id="emptyState" class="empty-state" style="display:none;">
-        Kamu belum punya pesanan. Ayo coba order produk dulu 😄
-      </p>
     </section>
-
-    <footer>
-      © <span id="year"></span> Barmods Digital Store
-    </footer>
   </div>
 
-  <!-- === SCRIPT FIREBASE & LOGIC PESANAN KAMU TARUH DI SINI === -->
+  <!-- ================= FIREBASE SCRIPT ================= -->
   <script type="module">
-    // TODO: PASTE SCRIPT LAMA KAMU DI SINI
-    // Misalnya: import firebase, ambil userId, ambil koleksi "orders", lalu isi tbody#ordersBody
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
 
-    // Contoh fungsi bantu untuk render baris (silakan pakai/ubah/abaikan):
-    function tambahBarisOrder(tbody, index, data) {
-      const tr = document.createElement('tr');
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
 
-      const tdNo = document.createElement('td');
-      tdNo.className = 'col-no';
-      tdNo.textContent = index;
-      tr.appendChild(tdNo);
+    import {
+      getFirestore,
+      collection,
+      query,
+      where,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-      const tdWaktu = document.createElement('td');
-      tdWaktu.innerHTML = `<div class="cell-small-text">${data.waktu || '-'}</div>`;
-      tr.appendChild(tdWaktu);
+    // ==== KONFIGURASI FIREBASE (punyamu) ====
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+      authDomain: "toko-barmods.firebaseapp.com",
+      projectId: "toko-barmods",
+      storageBucket: "toko-barmods.firebasestorage.app",
+      messagingSenderId: "284047189012",
+      appId: "1:284047189012:web:6ef0c6891adab08a383301"
+    };
 
-      const tdProduk = document.createElement('td');
-      tdProduk.innerHTML = `
-        <div class="produk-name">${data.namaProduk || '-'}</div>
-        <div class="cell-small-text">${data.keteranganProduk || ''}</div>
-      `;
-      tr.appendChild(tdProduk);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-      const tdStatus = document.createElement('td');
-      tdStatus.className = 'col-status';
-      const status = (data.status || 'pending').toLowerCase();
-      let statusClass = 'status-pending';
-      if (status === 'proses') statusClass = 'status-proses';
-      else if (status === 'sukses') statusClass = 'status-sukses';
-      else if (status === 'error') statusClass = 'status-error';
+    const tbody = document.getElementById("ordersBody");
+    const errorBox = document.getElementById("errorBox");
+    const emailSpan = document.getElementById("userEmail");
 
-      tdStatus.innerHTML = `<span class="status-pill ${statusClass}">${status}</span>`;
-      tr.appendChild(tdStatus);
-
-      const tdDataOrder = document.createElement('td');
-      tdDataOrder.innerHTML = `<div class="cell-small-text">${data.dataOrder || '-'}</div>`;
-      tr.appendChild(tdDataOrder);
-
-      const tdProdukAdmin = document.createElement('td');
-      tdProdukAdmin.innerHTML = `<div class="cell-small-text">${data.produkAdmin || '-'}</div>`;
-      tr.appendChild(tdProdukAdmin);
-
-      tbody.appendChild(tr);
-    }
-
-    // Contoh dummy (bisa dihapus, hanya contoh tampilan):
-    const contohData = [
-      {
-        waktu: "26/11/2025, 05.22.50",
-        namaProduk: "Alight Motion Private - 1 Tahun (iOS & Android)",
-        keteranganProduk: "",
-        status: "pending",
-        dataOrder: "-",
-        produkAdmin: "-"
+    // ===== LOGOUT =====
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        window.location.href = "login.html";
+      } catch (e) {
+        alert("Gagal logout: " + e.message);
       }
-    ];
-
-    const tbody = document.getElementById('ordersBody');
-    const emptyState = document.getElementById('emptyState');
-
-    if (contohData.length === 0) {
-      emptyState.style.display = 'block';
-    } else {
-      contohData.forEach((d, i) => tambahBarisOrder(tbody, i + 1, d));
-      emptyState.style.display = 'none';
-    }
-
-    // Tahun di footer
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Logout (ganti dengan fungsi logout Firebase punyamu)
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      // TODO: panggil fungsi signOut() Firebase di sini
-      alert('Logout ditekan. Sambungkan dengan fungsi logout Firebase kamu.');
     });
+
+    // ===== CEK LOGIN DAN LOAD PESANAN =====
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        // belum login → pindah ke login
+        window.location.href = "login.html";
+        return;
+      }
+
+      emailSpan.textContent = user.email || "-";
+      loadOrders(user);
+    });
+
+    async function loadOrders(user) {
+      tbody.innerHTML = `<tr><td colspan="6" class="empty">Memuat pesanan...</td></tr>`;
+      errorBox.style.display = "none";
+      errorBox.textContent = "";
+
+      try {
+        // Ambil hanya pesanan milik user ini, TANPA orderBy → tidak perlu index
+        const q = query(
+          collection(db, "orders"),
+          where("userId", "==", user.uid)
+        );
+
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+          tbody.innerHTML = `<tr><td colspan="6" class="empty">Belum ada pesanan.</td></tr>`;
+          return;
+        }
+
+        // Sort manual by createdAt desc (kalau ada)
+        const docs = [];
+        snap.forEach((doc) => docs.push({ id: doc.id, ...doc.data() }));
+        docs.sort((a, b) => {
+          const ta = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
+          const tb = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
+          return tb - ta; // terbaru di atas
+        });
+
+        tbody.innerHTML = "";
+        let i = 1;
+        for (const o of docs) {
+          const waktu = o.createdAt?.toDate
+            ? o.createdAt.toDate().toLocaleString("id-ID")
+            : "-";
+
+          const status = (o.status || "pending").toLowerCase();
+          let statusClass = "status-pending";
+          if (status === "proses") statusClass = "status-proses";
+          else if (status === "sukses") statusClass = "status-sukses";
+          else if (status === "error") statusClass = "status-error";
+
+          // build data order singkat (tanpa nomor DANA kalau bukan topup)
+          let dataOrder = "";
+          if (o.category === "sosmed") {
+            if (o.sosmedUsername) dataOrder += `User: ${o.sosmedUsername}\n`;
+            if (o.sosmedLink) dataOrder += `Link: ${o.sosmedLink}\n`;
+          } else if (o.category === "panel") {
+            if (o.panelUser) dataOrder += `User panel: ${o.panelUser}\n`;
+            if (o.panelPass) dataOrder += `Pass panel: ${o.panelPass}\n`;
+          } else if (o.category === "apk") {
+            dataOrder += o.note ? o.note : "Order aplikasi premium";
+          } else {
+            // fallback
+            if (o.danaNumber) dataOrder += `DANA: ${o.danaNumber}\n`;
+            if (o.danaName) dataOrder += `Atas nama: ${o.danaName}\n`;
+          }
+
+          if (!dataOrder) dataOrder = "-";
+
+          const adminProduct = o.adminProduct?.trim()
+            ? o.adminProduct
+            : "Belum ada. Tunggu admin mengirim produk.";
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${i++}</td>
+            <td class="muted">${waktu}</td>
+            <td>${o.productName || "-"}</td>
+            <td><span class="status-badge ${statusClass}">${status}</span></td>
+            <td><pre class="muted" style="white-space:pre-wrap; margin:0;">${dataOrder}</pre></td>
+            <td><div class="admin-product">${adminProduct}</div></td>
+          `;
+          tbody.appendChild(tr);
+        }
+      } catch (err) {
+        console.error(err);
+        errorBox.style.display = "block";
+        errorBox.textContent =
+          "Terjadi error saat mengambil pesanan: " + err.message;
+        tbody.innerHTML = `<tr><td colspan="6" class="empty">Gagal memuat pesanan.</td></tr>`;
+      }
+    }
   </script>
 </body>
 </html>
