@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Admin - Barmods Digital Store</title>
+  <title>Barmods Digital Store</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body{
@@ -12,7 +12,7 @@
       color:#e5e7eb;
     }
     .topbar{
-      height:54px;
+      height:56px;
       background:#020617;
       border-bottom:1px solid #1f2937;
       display:flex;
@@ -20,24 +20,31 @@
       align-items:center;
       padding:0 14px;
     }
-    .topbar-left{
+    .brand{
       display:flex;
       flex-direction:column;
     }
-    .topbar-title{font-size:15px;font-weight:600;}
-    .topbar-sub{font-size:11px;color:#9ca3af;}
-    .topbar-right{display:flex;gap:8px;flex-wrap:wrap;}
-    .btn-top{
-      padding:6px 11px;
+    .brand-title{font-size:15px;font-weight:700;}
+    .brand-sub{font-size:11px;color:#94a3b8;}
+    .top-links{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .link-btn{
+      padding:6px 10px;
       border-radius:999px;
       border:1px solid #374151;
       background:#111827;
       color:#e5e7eb;
       font-size:12px;
-      cursor:pointer;
       text-decoration:none;
+      cursor:pointer;
     }
-    .btn-top.logout{background:#b91c1c;border-color:#7f1d1d;}
+    .link-btn.logout{
+      background:#b91c1c;
+      border-color:#7f1d1d;
+    }
 
     .main{
       max-width:1080px;
@@ -54,9 +61,8 @@
     .card-header{
       display:flex;
       justify-content:space-between;
-      align-items:center;
+      align-items:flex-start;
       gap:6px;
-      margin-bottom:6px;
     }
     .card-header h2{
       margin:0;
@@ -64,132 +70,75 @@
     }
     .card-header small{
       font-size:11px;
-      color:#9ca3af;
+      color:#94a3b8;
     }
-    .info{
+    .info-text{
       font-size:12px;
       color:#9ca3af;
+      margin-top:4px;
     }
-    .pill-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:6px;
-      margin-top:6px;
-      font-size:11px;
+    .saldo-text{
+      font-size:14px;
+      margin-top:4px;
     }
-    .pill{
-      padding:4px 8px;
+
+    .search-input{
+      width:100%;
+      margin-top:8px;
+      padding:8px 11px;
       border-radius:999px;
       border:1px solid #1f2937;
       background:#020617;
+      color:#e5e7eb;
+      font-size:13px;
+      box-sizing:border-box;
     }
 
-    table{
-      width:100%;
-      border-collapse:collapse;
+    .product-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
+      gap:10px;
+      margin-top:12px;
+    }
+    .product-card{
+      background:#0f172a;
+      border-radius:12px;
+      border:1px solid #1f2937;
+      padding:9px;
       font-size:12px;
-      margin-top:6px;
     }
-    th,td{
-      border-bottom:1px solid #1f2937;
-      padding:5px 4px;
-      text-align:left;
-      vertical-align:top;
+    .pc-title{
+      font-size:13px;
+      font-weight:600;
     }
-    th{
-      background:#020617;
+    .pc-price{
+      color:#22c55e;
+      font-weight:700;
+      font-size:13px;
+      margin-top:4px;
+    }
+    .pc-stock{
+      font-size:11px;
       color:#9ca3af;
-      font-size:11px;
+      margin-top:2px;
     }
-
-    .small-input{
-      width:100%;
-      padding:4px 6px;
-      border-radius:8px;
-      border:1px solid #1f2937;
-      background:#020617;
-      color:#e5e7eb;
-      font-size:11px;
-      box-sizing:border-box;
-    }
-    .textarea{
-      width:100%;
-      min-height:40px;
-      padding:4px 6px;
-      border-radius:8px;
-      border:1px solid #1f2937;
-      background:#020617;
-      color:#e5e7eb;
-      font-size:11px;
-      resize:vertical;
-      box-sizing:border-box;
-    }
-    .select{
-      width:100%;
-      padding:4px 6px;
-      border-radius:8px;
-      border:1px solid #1f2937;
-      background:#020617;
-      color:#e5e7eb;
-      font-size:11px;
-      box-sizing:border-box;
-    }
-
-    .btn-sm{
-      padding:4px 8px;
+    .btn-order{
+      margin-top:8px;
+      padding:6px 9px;
       border-radius:999px;
       border:none;
-      font-size:11px;
-      cursor:pointer;
-      margin-top:3px;
-    }
-    .btn-save{background:#2563eb;color:#fff;}
-    .btn-send{background:#16a34a;color:#fff;}
-
-    .badge{
-      display:inline-block;
-      border-radius:999px;
-      padding:2px 6px;
-      font-size:10px;
-      margin-top:3px;
-    }
-    .status-pending{background:#facc15;color:#111827;}
-    .status-proses{background:#3b82f6;color:#ffffff;}
-    .status-eror{background:#f97373;color:#111827;}
-    .status-sukses{background:#22c55e;color:#ffffff;}
-
-    .msg{
+      background:#2563eb;
+      color:#fff;
       font-size:12px;
-      margin-top:6px;
-      min-height:16px;
+      cursor:pointer;
     }
-    .msg.ok{color:#22c55e;}
-    .msg.err{color:#f97373;}
-
-    .link{
-      color:#38bdf8;
-      font-size:11px;
-      text-decoration:none;
-    }
-    .link:hover{text-decoration:underline;}
-
-    #loadingCard{}
-    #notAdminBox{display:none;}
-    #adminWrap{display:none;}
-
-    .btn-admin-link{
-      display:inline-block;
-      margin-top:6px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid #1f2937;
-      background:#111827;
-      color:#e5e7eb;
-      font-size:11px;
-      text-decoration:none;
+    .btn-order:disabled{
+      background:#1f2937;
+      color:#6b7280;
+      cursor:not-allowed;
     }
 
-    /* MODAL KIRIM PRODUK */
+    /* MODAL */
     .modal-bg{
       position:fixed;
       inset:0;
@@ -198,195 +147,139 @@
       justify-content:center;
       align-items:center;
       padding:14px;
-      z-index:30;
+      z-index:40;
     }
     .modal{
-      width:100%;
-      max-width:420px;
       background:#020617;
       border-radius:16px;
       border:1px solid #1f2937;
       padding:14px;
+      max-width:420px;
+      width:100%;
       box-shadow:0 18px 40px rgba(0,0,0,.75);
     }
     .modal h3{
       margin:0 0 6px;
       font-size:15px;
     }
-    .modal textarea{
+    .modal p{
+      font-size:12px;
+      color:#9ca3af;
+      margin:0 0 8px;
+    }
+    .modal label{
+      display:block;
+      font-size:12px;
+      margin-top:8px;
+    }
+    .modal input, .modal textarea{
       width:100%;
-      min-height:80px;
-      padding:8px 9px;
-      border-radius:10px;
+      padding:7px 9px;
+      border-radius:9px;
       border:1px solid #1f2937;
       background:#020617;
       color:#e5e7eb;
       font-size:12px;
-      resize:vertical;
+      margin-top:4px;
       box-sizing:border-box;
+    }
+    .modal textarea{
+      resize:vertical;
     }
     .modal-footer{
       display:flex;
       justify-content:flex-end;
       gap:8px;
-      margin-top:10px;
+      margin-top:12px;
     }
     .btn-cancel{
       border-radius:999px;
       border:1px solid #374151;
       background:#111827;
       color:#e5e7eb;
-      padding:7px 11px;
       font-size:12px;
+      padding:7px 11px;
       cursor:pointer;
     }
     .btn-ok{
       border-radius:999px;
       border:none;
-      background:#16a34a;
-      color:#ffffff;
-      padding:7px 11px;
+      background:#2563eb;
+      color:#fff;
       font-size:12px;
+      padding:7px 11px;
       cursor:pointer;
     }
+    .msg{
+      font-size:12px;
+      margin-top:6px;
+      min-height:16px;
+    }
+    .msg.err{color:#f97373;}
+    .msg.ok{color:#22c55e;}
   </style>
 </head>
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
-  <div class="topbar-left">
-    <span class="topbar-title">Admin - Barmods Digital Store</span>
-    <span class="topbar-sub">Kelola produk, saldo, dan pesanan</span>
+  <div class="brand">
+    <span class="brand-title">Barmods Digital Store</span>
+    <span class="brand-sub">Saldo • Produk Digital • Sosmed</span>
   </div>
-  <div class="topbar-right">
-    <a href="index.html" class="btn-top">← Halaman Produk</a>
-    <button id="logoutBtn" class="btn-top logout" type="button">Logout</button>
+  <div class="top-links">
+    <a href="wallet.html" class="link-btn">Saldo</a>
+    <a href="orders.html" class="link-btn">Pesanan Saya</a>
+    <a href="profile.html" class="link-btn">Profil</a>
+    <a href="admin.html" class="link-btn">Admin</a>
+    <button id="logoutBtn" class="link-btn logout" type="button">Logout</button>
   </div>
 </div>
 
 <div class="main">
-  <!-- Loading -->
-  <div id="loadingCard" class="card">
+  <!-- SALDO -->
+  <div class="card">
     <div class="card-header">
-      <h2>Memeriksa sesi admin...</h2>
-    </div>
-    <p class="info">Mohon tunggu sebentar.</p>
-  </div>
-
-  <!-- Bukan admin -->
-  <div id="notAdminBox">
-    <div class="card">
-      <div class="card-header">
-        <h2>Akses ditolak</h2>
+      <div>
+        <h2>Saldo Saya</h2>
+        <small>Gunakan saldo untuk order produk</small>
       </div>
-      <p class="info">
-        Hanya email <b>holilhsyhd@gmail.com</b> yang boleh mengakses panel admin ini.<br>
-        Silakan login dengan akun Google admin di halaman login.
-      </p>
-      <a href="login.html" class="btn-top">Ke halaman login</a>
+    </div>
+    <div class="saldo-text">
+      Saldo: <b id="saldoText">Rp 0</b>
+    </div>
+    <div class="info-text">
+      Akun: <span id="userEmail">-</span><br>
+      Topup lewat menu <b>Saldo</b>, admin akan menambahkan saldo setelah cek pembayaran.
     </div>
   </div>
 
-  <!-- Admin only -->
-  <div id="adminWrap">
-    <!-- Info admin -->
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <h2>Selamat datang, Admin</h2>
-          <small>Panel kontrol Barmods Digital Store</small>
-        </div>
+  <!-- PRODUK -->
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <h2>Daftar Produk</h2>
+        <small>Saldo akan otomatis terpotong saat order</small>
       </div>
-      <p class="info">
-        Login sebagai: <b><span id="adminEmail"></span></b>
-      </p>
-      <div class="pill-row">
-        <div class="pill">Admin utama: <b>holilhsyhd@gmail.com</b></div>
-        <div class="pill" id="adminStatus">Status: aktif</div>
-      </div>
-      <a href="admin-topup.html" class="btn-admin-link">Kelola Top-up Saldo</a>
     </div>
-
-    <!-- Produk -->
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <h2>Daftar Produk</h2>
-          <small>Edit nama, harga, dan stok</small>
-        </div>
-      </div>
-      <p class="info">
-        Perubahan langsung disimpan ke koleksi <b>products</b> di Firestore dan
-        akan mempengaruhi halaman produk user.
-      </p>
-      <div id="productMsg" class="msg"></div>
-      <table id="productTable">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nama Produk</th>
-            <th>Harga</th>
-            <th>Stok</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <!-- Pesanan -->
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <h2>Daftar Pesanan</h2>
-          <small>Kelola status dan kirim produk ke pembeli</small>
-        </div>
-      </div>
-      <p class="info">
-        Status:
-        <b>pending</b> = order baru masuk,
-        <b>proses</b> = sedang dikerjakan,
-        <b>sukses</b> = produk sudah dikirim ke pembeli,
-        <b>eror</b> = gagal / ada masalah.<br>
-        Tombol <b>Kirim Produk</b> akan menetapkan status langsung ke <b>sukses</b>.
-      </p>
-      <div id="orderMsg" class="msg"></div>
-      <table id="orderTable">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Waktu</th>
-            <th>Produk</th>
-            <th>Pembeli</th>
-            <th>DANA</th>
-            <th>Sosmed/Panel</th>
-            <th>Bukti</th>
-            <th>Status</th>
-            <th>Produk ke pembeli</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+    <input id="searchInput" class="search-input" placeholder="Cari produk (misal: Netflix, TikTok, Panel, Followers)...">
+    <div id="productGrid" class="product-grid"></div>
   </div>
 </div>
 
-<!-- MODAL KIRIM PRODUK -->
-<div id="deliverModal" class="modal-bg">
+<!-- MODAL ORDER -->
+<div id="orderModal" class="modal-bg">
   <div class="modal">
-    <h3>Kirim Produk ke Pembeli</h3>
-    <p class="info">
-      Isi dengan akun/akses/kode yang dikirim ke pembeli.
-      Contoh:<br>
-      <code>User: ... | Pass: ... | Link: ...</code>
-    </p>
-    <textarea id="deliverMsg" placeholder="User: ...
-Password: ...
-Link akses: ...
-Catatan admin: ..."></textarea>
+    <h3 id="modalTitle">Order Produk</h3>
+    <p id="modalInfo"></p>
+
+    <div id="modalFields"></div>
+
+    <div id="orderMsg" class="msg"></div>
+
     <div class="modal-footer">
-      <button type="button" class="btn-cancel" onclick="closeDeliver()">Batal</button>
-      <button type="button" class="btn-ok" onclick="sendDeliver()">Kirim</button>
+      <button class="btn-cancel" type="button" onclick="closeOrderModal()">Batal</button>
+      <button class="btn-ok" type="button" onclick="submitOrder()">Order Sekarang</button>
     </div>
   </div>
 </div>
@@ -394,11 +287,19 @@ Catatan admin: ..."></textarea>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
-    getFirestore, collection, getDocs, doc, updateDoc,
-    query, orderBy
+    getFirestore,
+    collection,
+    getDocs,
+    doc,
+    getDoc,
+    setDoc,
+    updateDoc,
+    addDoc
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
   import {
-    getAuth, onAuthStateChanged, signOut
+    getAuth,
+    onAuthStateChanged,
+    signOut
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
   const firebaseConfig = {
@@ -410,306 +311,260 @@ Catatan admin: ..."></textarea>
     appId: "1:284047189012:web:6ef0c6891adab08a383301"
   };
 
-  const ADMIN_EMAIL = "holilhsyhd@gmail.com";
-
   const app  = initializeApp(firebaseConfig);
   const db   = getFirestore(app);
   const auth = getAuth(app);
 
-  const loadingCard = document.getElementById("loadingCard");
-  const notAdminBox = document.getElementById("notAdminBox");
-  const adminWrap   = document.getElementById("adminWrap");
-  const adminEmailEl = document.getElementById("adminEmail");
+  const saldoTextEl = document.getElementById('saldoText');
+  const userEmailEl = document.getElementById('userEmail');
+  const productGrid = document.getElementById('productGrid');
+  const searchInput = document.getElementById('searchInput');
+  const orderModal  = document.getElementById('orderModal');
+  const modalTitle  = document.getElementById('modalTitle');
+  const modalInfo   = document.getElementById('modalInfo');
+  const modalFields = document.getElementById('modalFields');
+  const orderMsgEl  = document.getElementById('orderMsg');
 
-  const productTableBody = document.querySelector("#productTable tbody");
-  const orderTableBody   = document.querySelector("#orderTable tbody");
-  const productMsgEl     = document.getElementById("productMsg");
-  const orderMsgEl       = document.getElementById("orderMsg");
+  let currentUser = null;
+  let userBalance = 0;
+  let products    = [];
+  let selectedProduct = null;
 
-  let selectedOrderId = null;
-
-  function setMsg(el, text, ok=false){
-    el.textContent = text || "";
-    el.className = "msg" + (text ? (ok ? " ok" : " err") : "");
+  // Format rupiah
+  function formatRupiah(num){
+    num = Math.floor(num || 0);
+    return 'Rp ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');
   }
 
+  // Konversi "Rp 2k" / "2k" / "2000" → number
+  function parsePriceToNumber(str){
+    if(!str) return 0;
+    let s = String(str).toLowerCase();
+    s = s.replace('rp','').trim();
+    s = s.replace(/\s/g,'');
+    if(s.endsWith('k')){
+      const n = parseFloat(s.slice(0,-1));
+      return isNaN(n)?0:n*1000;
+    }
+    s = s.replace(/\./g,'').replace(/,/g,'');
+    const n = parseInt(s,10);
+    return isNaN(n)?0:n;
+  }
+
+  // Cek login
   onAuthStateChanged(auth, async (user)=>{
     if(!user){
-      // belum login
-      loadingCard.style.display = "none";
-      notAdminBox.style.display = "block";
-      adminWrap.style.display = "none";
+      window.location.href = 'login.html';
       return;
     }
-    if(user.email !== ADMIN_EMAIL){
-      // bukan admin
-      loadingCard.style.display = "none";
-      notAdminBox.style.display = "block";
-      adminWrap.style.display = "none";
-      return;
-    }
-    // admin ok
-    adminEmailEl.textContent = user.email || "";
-    loadingCard.style.display = "none";
-    notAdminBox.style.display = "none";
-    adminWrap.style.display = "block";
-
+    currentUser = user;
+    userEmailEl.textContent = user.email || '-';
+    await loadUserBalance();
     await loadProducts();
-    await loadOrders();
   });
 
-  document.getElementById("logoutBtn").onclick = async ()=>{
+  document.getElementById('logoutBtn').onclick = async ()=>{
     try{ await signOut(auth); }catch(e){}
-    window.location.href = "login.html";
   };
 
-  /* -------- LOAD PRODUCTS -------- */
+  // Load saldo user
+  async function loadUserBalance(){
+    if(!currentUser) return;
+    const ref = doc(db,'users',currentUser.uid);
+    const snap = await getDoc(ref);
+    if(!snap.exists()){
+      await setDoc(ref,{
+        email: currentUser.email || '',
+        balance: 0,
+        createdAt: new Date().toISOString()
+      });
+      userBalance = 0;
+    } else {
+      const d = snap.data();
+      userBalance = d.balance || 0;
+    }
+    saldoTextEl.textContent = formatRupiah(userBalance);
+  }
+
+  // Load produk
   async function loadProducts(){
-    productTableBody.innerHTML = "";
-    try{
-      const snap = await getDocs(collection(db,"products"));
-      const arr = [];
-      snap.forEach(d=> arr.push(d.data()));
-      arr.sort((a,b)=> (a.id||0)-(b.id||0));
-
-      arr.forEach(p=>{
-        const tr = document.createElement("tr");
-
-        const tdId = document.createElement("td");
-        tdId.textContent = p.id ?? "";
-
-        const tdName = document.createElement("td");
-        const inpName = document.createElement("input");
-        inpName.className = "small-input";
-        inpName.value = p.name || "";
-        inpName.dataset.id = p.id;
-        inpName.dataset.field = "name";
-        tdName.appendChild(inpName);
-
-        const tdPrice = document.createElement("td");
-        const inpPrice = document.createElement("input");
-        inpPrice.className = "small-input";
-        inpPrice.value = p.price || "";
-        inpPrice.dataset.id = p.id;
-        inpPrice.dataset.field = "price";
-        tdPrice.appendChild(inpPrice);
-
-        const tdStock = document.createElement("td");
-        const inpStock = document.createElement("input");
-        inpStock.className = "small-input";
-        inpStock.type = "number";
-        inpStock.min = "0";
-        inpStock.value = p.stock ?? 0;
-        inpStock.dataset.id = p.id;
-        inpStock.dataset.field = "stock";
-        tdStock.appendChild(inpStock);
-
-        tr.appendChild(tdId);
-        tr.appendChild(tdName);
-        tr.appendChild(tdPrice);
-        tr.appendChild(tdStock);
-
-        productTableBody.appendChild(tr);
-      });
-
-      productTableBody.querySelectorAll("input.small-input").forEach(inp=>{
-        inp.addEventListener("change", async function(){
-          const id    = this.dataset.id;
-          const field = this.dataset.field;
-          let val     = this.value;
-          if(field === "stock"){
-            let v = parseInt(val,10);
-            if(isNaN(v) || v<0) v = 0;
-            val = v;
-            this.value = v;
-          }
-          try{
-            await updateDoc(doc(db,"products",String(id)),{
-              [field]: val
-            });
-            setMsg(productMsgEl,"Produk tersimpan.",true);
-          }catch(e){
-            console.error(e);
-            setMsg(productMsgEl,"Gagal menyimpan produk.",false);
-          }
-        });
-      });
-
-    }catch(e){
-      console.error(e);
-      setMsg(productMsgEl,"Gagal memuat produk.",false);
-    }
+    const snap = await getDocs(collection(db,'products'));
+    const arr = [];
+    snap.forEach(d=> arr.push(d.data()));
+    arr.sort((a,b)=>(a.id||0)-(b.id||0));
+    products = arr;
+    renderProducts();
   }
 
-  /* -------- LOAD ORDERS -------- */
-  async function loadOrders(){
-    orderTableBody.innerHTML = "";
-    try{
-      const qRef = query(collection(db,"orders"), orderBy("createdAt","desc"));
-      const snap = await getDocs(qRef);
-      const arr = [];
-      snap.forEach(d=> arr.push({docId:d.id, ...d.data()}));
+  function renderProducts(){
+    const val = searchInput.value.toLowerCase();
+    productGrid.innerHTML = '';
+    products.forEach(p=>{
+      const combined = (p.name + ' ' + (p.category||'')).toLowerCase();
+      if(val && !combined.includes(val)) return;
 
-      arr.forEach((o, idx)=>{
-        const tr = document.createElement("tr");
+      const card = document.createElement('div');
+      card.className = 'product-card';
 
-        const tdIdx = document.createElement("td");
-        tdIdx.textContent = idx + 1;
+      const priceValue = parsePriceToNumber(p.price);
 
-        const tdTime = document.createElement("td");
-        if(o.createdAt){
-          const d = new Date(o.createdAt);
-          tdTime.textContent = d.toLocaleString("id-ID");
-        }else{
-          tdTime.textContent = "-";
-        }
+      card.innerHTML = `
+        <div class="pc-title">${p.name}</div>
+        <div class="pc-price">${p.price}</div>
+        <div class="pc-stock">Stok: ${p.stock ?? 0}</div>
+      `;
 
-        const tdProd = document.createElement("td");
-        tdProd.innerHTML =
-          "<b>"+(o.productName||"-")+"</b><br>"+
-          (o.price||"");
+      const btn = document.createElement('button');
+      btn.className = 'btn-order';
+      btn.textContent = 'Order';
+      if((p.stock ?? 0) <= 0){
+        btn.disabled = true;
+        btn.textContent = 'Stok habis';
+      }
+      btn.onclick = ()=> openOrderModal(p);
 
-        const tdBuyer = document.createElement("td");
-        tdBuyer.innerHTML =
-          (o.userEmail ? ("Email: "+o.userEmail+"<br>") : "") +
-          (o.userUid   ? ("UID: "+o.userUid) : "");
-
-        const tdDana = document.createElement("td");
-        tdDana.innerHTML =
-          "No: "+(o.danaNumber||"-")+"<br>"+
-          "a.n: "+(o.danaName||"-");
-
-        const tdSos = document.createElement("td");
-        const lines = [];
-        if(o.sosmedUsername || o.socUser) lines.push("User sosmed: "+(o.sosmedUsername||o.socUser));
-        if(o.sosmedLink || o.socLink)     lines.push("Link: "+(o.sosmedLink||o.socLink));
-        if(o.panelUser) lines.push("User panel: "+o.panelUser);
-        if(o.panelPass) lines.push("Pass panel: "+o.panelPass);
-        tdSos.innerHTML = lines.length ? lines.join("<br>") : "-";
-
-        const tdProof = document.createElement("td");
-        if(o.proofUrl){
-          const a = document.createElement("a");
-          a.href = o.proofUrl;
-          a.target = "_blank";
-          a.rel = "noopener noreferrer";
-          a.className = "link";
-          a.textContent = "Lihat bukti";
-          tdProof.appendChild(a);
-        } else {
-          tdProof.textContent = "-";
-        }
-
-        const tdStatus = document.createElement("td");
-        const select   = document.createElement("select");
-        select.className = "select";
-        const stNow    = (o.status || "pending").toLowerCase();
-        ["pending","proses","sukses","eror"].forEach(st=>{
-          const opt = document.createElement("option");
-          opt.value = st;
-          opt.textContent = st;
-          if(st === stNow) opt.selected = true;
-          select.appendChild(opt);
-        });
-        const badge = document.createElement("div");
-        badge.className = "badge status-"+stNow;
-        badge.textContent = stNow;
-        tdStatus.appendChild(select);
-        tdStatus.appendChild(badge);
-
-        const tdDelivery = document.createElement("td");
-        const ta = document.createElement("textarea");
-        ta.className = "textarea";
-        ta.value = o.deliveryMsg || "";
-        ta.placeholder = "Isi produk / catatan ke pembeli...";
-        tdDelivery.appendChild(ta);
-
-        const tdAction = document.createElement("td");
-        const btnSave = document.createElement("button");
-        btnSave.className = "btn-sm btn-save";
-        btnSave.textContent = "Simpan";
-        const btnSend = document.createElement("button");
-        btnSend.className = "btn-sm btn-send";
-        btnSend.textContent = "Kirim Produk";
-        tdAction.appendChild(btnSave);
-        tdAction.appendChild(btnSend);
-
-        tr.appendChild(tdIdx);
-        tr.appendChild(tdTime);
-        tr.appendChild(tdProd);
-        tr.appendChild(tdBuyer);
-        tr.appendChild(tdDana);
-        tr.appendChild(tdSos);
-        tr.appendChild(tdProof);
-        tr.appendChild(tdStatus);
-        tr.appendChild(tdDelivery);
-        tr.appendChild(tdAction);
-
-        orderTableBody.appendChild(tr);
-
-        // event status select
-        select.addEventListener("change", ()=>{
-          const st = select.value;
-          badge.className = "badge status-"+st;
-          badge.textContent = st;
-        });
-
-        // tombol simpan
-        btnSave.addEventListener("click", async ()=>{
-          try{
-            await updateDoc(doc(db,"orders",o.docId),{
-              status: select.value,
-              deliveryMsg: ta.value.trim() || "",
-              updatedAt: new Date().toISOString()
-            });
-            setMsg(orderMsgEl,"Order tersimpan.",true);
-          }catch(e){
-            console.error(e);
-            setMsg(orderMsgEl,"Gagal menyimpan order.",false);
-          }
-        });
-
-        // tombol kirim produk -> modal
-        btnSend.addEventListener("click", ()=>{
-          selectedOrderId = o.docId;
-          document.getElementById("deliverMsg").value = ta.value || "";
-          document.getElementById("deliverModal").style.display = "flex";
-        });
-      });
-
-    }catch(e){
-      console.error(e);
-      setMsg(orderMsgEl,"Gagal memuat pesanan.",false);
-    }
+      card.appendChild(btn);
+      productGrid.appendChild(card);
+    });
   }
 
-  // ---- KIRIM PRODUK (MODAL) ----
-  window.closeDeliver = function(){
-    document.getElementById("deliverModal").style.display = "none";
+  searchInput.oninput = renderProducts;
+
+  // Buka modal
+  function openOrderModal(p){
+    selectedProduct = p;
+    modalTitle.textContent = 'Order: ' + (p.name || '');
+    modalInfo.textContent  =
+      'Harga: ' + (p.price || '-') +
+      ' • Saldo kamu: ' + formatRupiah(userBalance) +
+      ' • Kategori: ' + (p.category || '-');
+
+    modalFields.innerHTML = '';
+    orderMsgEl.textContent = '';
+    orderMsgEl.className = 'msg';
+
+    // Field umum DANA (untuk data pembayaran / identitas)
+    const danaHtml = `
+      <label>Nomor DANA kamu</label>
+      <input id="orderDanaNumber" placeholder="Contoh: 0838xxxxxxx">
+      <label>Atas nama DANA</label>
+      <input id="orderDanaName" placeholder="Nama sesuai akun DANA">
+    `;
+    modalFields.insertAdjacentHTML('beforeend', danaHtml);
+
+    // Kalau kategori sosmed → username & link
+    if(p.category === 'sosmed'){
+      const sosHtml = `
+        <label>Username akun (tidak boleh private)</label>
+        <input id="orderSosUser" placeholder="contoh: @username">
+        <label>Link postingan / profil (jika likes / views)</label>
+        <input id="orderSosLink" placeholder="https://...">
+      `;
+      modalFields.insertAdjacentHTML('beforeend', sosHtml);
+    }
+
+    // Kalau kategori panel → user & pass wajib
+    if(p.category === 'panel'){
+      const panelHtml = `
+        <label>User panel</label>
+        <input id="orderPanelUser" placeholder="User panel">
+        <label>Password panel</label>
+        <input id="orderPanelPass" placeholder="Password panel">
+      `;
+      modalFields.insertAdjacentHTML('beforeend', panelHtml);
+    }
+
+    orderModal.style.display = 'flex';
+  }
+
+  window.closeOrderModal = function(){
+    orderModal.style.display = 'none';
   };
 
-  window.sendDeliver = async function(){
-    const txt = document.getElementById("deliverMsg").value.trim();
-    if(!selectedOrderId){
-      alert("Order tidak ditemukan.");
+  // Submit order
+  window.submitOrder = async function(){
+    if(!currentUser || !selectedProduct) return;
+
+    const msg = orderMsgEl;
+    msg.textContent = '';
+    msg.className = 'msg';
+
+    const danaNumber = (document.getElementById('orderDanaNumber')?.value || '').trim();
+    const danaName   = (document.getElementById('orderDanaName')?.value   || '').trim();
+    const sosUser    = (document.getElementById('orderSosUser')?.value    || '').trim();
+    const sosLink    = (document.getElementById('orderSosLink')?.value    || '').trim();
+    const panelUser  = (document.getElementById('orderPanelUser')?.value  || '').trim();
+    const panelPass  = (document.getElementById('orderPanelPass')?.value  || '').trim();
+
+    if(!danaNumber || !danaName){
+      msg.textContent = 'Nomor DANA dan Atas nama wajib diisi.';
+      msg.className = 'msg err';
       return;
     }
-    if(!txt){
-      alert("Isi produk/pesan tidak boleh kosong.");
+
+    if(selectedProduct.category === 'sosmed' && !sosUser){
+      msg.textContent = 'Username sosmed wajib diisi untuk pesanan sosmed.';
+      msg.className = 'msg err';
       return;
     }
+
+    if(selectedProduct.category === 'panel' && (!panelUser || !panelPass)){
+      msg.textContent = 'User & Password panel wajib diisi untuk pesanan panel.';
+      msg.className = 'msg err';
+      return;
+    }
+
+    const priceValue = parsePriceToNumber(selectedProduct.price);
+    if(userBalance < priceValue){
+      msg.textContent = 'Saldo tidak cukup. Silakan topup saldo di menu Saldo.';
+      msg.className = 'msg err';
+      return;
+    }
+
     try{
-      await updateDoc(doc(db,"orders",selectedOrderId),{
-        deliveryMsg: txt,
-        status: "sukses",
-        updatedAt: new Date().toISOString()
-      });
-      alert("Produk berhasil dikirim ke pembeli (status: sukses).");
-      document.getElementById("deliverModal").style.display = "none";
-      await loadOrders();
-    }catch(e){
+      // Kurangi saldo user
+      const newBalance = userBalance - priceValue;
+      const userRef = doc(db,'users',currentUser.uid);
+      await updateDoc(userRef,{balance:newBalance});
+      userBalance = newBalance;
+      saldoTextEl.textContent = formatRupiah(userBalance);
+
+      // Simpan order
+      const orderObj = {
+        userUid: currentUser.uid,
+        userEmail: currentUser.email || '',
+        productId: selectedProduct.id,
+        productName: selectedProduct.name,
+        price: selectedProduct.price,
+        priceValue,
+        category: selectedProduct.category || '',
+        danaNumber,
+        danaName,
+        sosmedUsername: sosUser || '',
+        sosmedLink: sosLink || '',
+        panelUser: panelUser || '',
+        panelPass: panelPass || '',
+        proofUrl: '',            // bisa dipakai nanti kalau pakai upload bukti
+        status: 'pending',
+        deliveryMsg: '',
+        createdAt: new Date().toISOString(),
+        balanceAfter: newBalance
+      };
+
+      await addDoc(collection(db,'orders'), orderObj);
+
+      msg.textContent = 'Order berhasil dibuat. Status: pending.';
+      msg.className = 'msg ok';
+
+      setTimeout(()=>{
+        orderModal.style.display = 'none';
+        window.location.href = 'orders.html';
+      }, 800);
+
+    } catch(e){
       console.error(e);
-      alert("Gagal mengirim produk.");
+      msg.textContent = 'Gagal membuat order. Coba lagi.';
+      msg.className = 'msg err';
     }
   };
 </script>
