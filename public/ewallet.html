@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saldo - Barmods Digital Store</title>
+<style>
+body{
+  margin:0;
+  font-family:system-ui;
+  background:#020617;
+  color:#e5e7eb;
+}
+header{
+  padding:14px;
+  background:#020617;
+  border-bottom:1px solid #1f2937;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.nav-btn{
+  padding:8px 10px;
+  border-radius:999px;
+  background:#111827;
+  border:1px solid #374151;
+  color:white;
+  text-decoration:none;
+  font-size:12px;
+  margin-left:6px;
+}
+main{max-width:960px;margin:0 auto;padding:14px;}
+.card{
+  background:#0f172a;
+  border-radius:12px;
+  border:1px solid #1f2937;
+  padding:14px;
+  margin-bottom:12px;
+}
+h2{margin:0 0 6px;font-size:16px;}
+.big-balance{font-size:24px;font-weight:700;color:#a5b4fc;}
+label{display:block;margin-top:10px;font-size:13px;}
+input{
+  width:100%;
+  padding:9px;
+  margin-top:6px;
+  border-radius:8px;
+  background:#1e293b;
+  border:none;
+  color:white;
+  font-size:13px;
+}
+.btn{
+  margin-top:14px;
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:#3b82f6;
+  color:white;
+  font-size:14px;
+}
+.msg{font-size:12px;margin-top:6px;min-height:16px;}
+.msg.ok{color:#22c55e;}
+.msg.err{color:#f97373;}
+.info{font-size:12px;color:#9ca3af;}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <strong>Saldo Saya</strong><br>
+    <small>Barmods Digital Store</small>
+  </div>
+  <div>
+    <a href="index.html" class="nav-btn">Produk</a>
+    <a href="orders.html" class="nav-btn">Pesanan</a>
+    <a href="profile.html" class="nav-btn">Profil</a>
+  </div>
+</header>
+
+<main>
+  <div class="card">
+    <h2>Saldo saat ini</h2>
+    <div id="balanceText" class="big-balance">Rp 0</div>
+    <p class="info">
+      Untuk bisa order produk, kamu harus punya saldo di sini.
+      Topup via transfer ke DANA <b>083877842721</b>, lalu isi form di bawah.
+      Admin akan menambah saldo secara manual setelah cek bukti transfer.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Topup Saldo</h2>
+    <label>Nominal topup (Rp)</label>
+    <input id="amount" type="number" min="1000" step="1000" placeholder="contoh: 10000">
+
+    <label>Nomor DANA kamu</label>
+    <input id="danaNumber" placeholder="0838xxxxxxx">
+
+    <label>Atas nama DANA</label>
+    <input id="danaName" placeholder="Nama sesuai aplikasi DANA">
+
+    <label>Upload bukti transfer (opsional)</label>
+    <input type="file" id="proofFile" accept="image/*">
+
+    <button class="btn" type="button" onclick="submitTopup()">Kirim Permintaan Topup</button>
+    <div id="msg" class="msg"></div>
+  </div>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, collection, addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getStorage, ref, uploadBytes, getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+  authDomain: "toko-barmods.firebaseapp.com",
+  projectId: "toko-barmods",
+  storageBucket: "toko-barmods.appspot.com",
+  messagingSenderId: "284047189012",
+  appId: "1:284047189012:web:6ef0c6891adab08a383301"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const storage = getStorage(app);
+
+const balEl = document.getElementById("balanceText");
+const msgEl = document.getElementById("msg");
+let currentUser = null;
+
+function formatRupiah(num){
+  num = Math.floor(num || 0);
+  return "Rp " + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g,".");
+}
+
+function setMsg(text, ok){
+  msgEl.textContent = text || "";
+  msgEl.className = "msg" + (text ? (ok ? " ok" : " err") : "");
+}
+
+onAuthStateChanged(auth, async (user)=>{
+  if(!user){
+    window.location.href = "login.html";
+    return;
+  }
+  currentUser = user;
+  await loadBalance();
+});
+
+async function loadBalance(){
+  try{
+    const refUser = doc(db,"users",currentUser.uid);
+    const snap = await getDoc(refUser);
+    let balance = 0;
+    if(snap.exists()){
+      const d = snap.data();
+      balance = d.balance || 0;
+    }
+    balEl.textContent = formatRupiah(balance);
+  }catch(e){
+    balEl.textContent = "Rp 0";
+  }
+}
+
+window.submitTopup = async function(){
+  if(!currentUser) return;
+
+  const amount = parseInt(document.getElementById("amount").value,10);
+  const danaNumber = document.getElementById("danaNumber").value.trim();
+  const danaName   = document.getElementById("danaName").value.trim();
+  const proofFile  = document.getElementById("proofFile").files[0];
+
+  if(!amount || amount <= 0){
+    setMsg("Nominal topup wajib diisi.", false);
+    return;
+  }
+  if(!danaNumber || !danaName){
+    setMsg("Nomor DANA & Atas nama wajib diisi.", false);
+    return;
+  }
+
+  setMsg("Mengirim permintaan topup...", true);
+
+  let proofUrl = "";
+  try{
+    if(proofFile){
+      const path = `topupProofs/${currentUser.uid}_${Date.now()}`;
+      const storageRef = ref(storage,path);
+      await uploadBytes(storageRef, proofFile);
+      proofUrl = await getDownloadURL(storageRef);
+    }
+  }catch(e){
+    proofUrl = "";
+  }
+
+  try{
+    await addDoc(collection(db,"topups"),{
+      userUid: currentUser.uid,
+      email: currentUser.email || "",
+      amount,
+      danaNumber,
+      danaName,
+      proofUrl,
+      status: "pending",
+      createdAt: new Date().toISOString()
+    });
+    setMsg("Permintaan topup terkirim. Tunggu admin menambah saldo.", true);
+    document.getElementById("amount").value = "";
+    document.getElementById("danaNumber").value = "";
+    document.getElementById("danaName").value = "";
+    document.getElementById("proofFile").value = "";
+  }catch(e){
+    console.error(e);
+    setMsg("Gagal mengirim permintaan topup.", false);
+  }
+};
+</script>
+
+</body>
+</html>
