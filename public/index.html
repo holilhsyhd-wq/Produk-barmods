@@ -351,26 +351,12 @@
   <div class="spacer"></div>
   <div class="top-actions">
     <a href="https://wa.me/6283877842721" class="btn-top">📞 Admin</a>
-    <a href="admin.html" class="btn-top" id="adminLink" style="display:none;">🛠️ Panel Admin</a>
     <button type="button" class="btn-top" onclick="toggleTheme()" id="themeBtn">🌙 Gelap</button>
-    <button type="button" class="btn-top" id="authBtn" onclick="handleAuthClick()">🔑 Login Google</button>
+    <button type="button" class="btn-top" id="logoutBtn">🚪 Logout</button>
   </div>
 </div>
 
 <div class="main">
-  <!-- INFO LOGIN -->
-  <div class="card" id="loginInfoCard">
-    <div class="card-header">
-      <div>
-        <h2>Login Diperlukan</h2>
-        <small>Masuk dengan akun Google untuk melihat produk & riwayat pesanan</small>
-      </div>
-    </div>
-    <p>
-      Tekan tombol <b>Login Google</b> di kanan atas. Setelah login, daftar produk dan riwayat pesanan kamu akan muncul di sini.
-    </p>
-  </div>
-
   <!-- DASHBOARD / PRODUK -->
   <div id="dashboard" style="display:none;">
     <div class="card">
@@ -381,7 +367,7 @@
         </div>
       </div>
       <p>
-        1. Pastikan sudah <b>login Google</b>.<br>
+        1. Pastikan sudah <b>login</b> (email & password Barmods).<br>
         2. Pilih produk di bawah.<br>
         3. Tekan tombol <b>Order Sekarang</b> pada produk.<br>
         4. Isi data DANA & data tambahan (username / link / user panel) di form.<br>
@@ -416,7 +402,7 @@
       <div class="card-header">
         <div>
           <h2>Riwayat Pesanan Saya</h2>
-          <small>Hanya order dari akun Google kamu yang tampil di sini</small>
+          <small>Hanya order dari akun kamu yang tampil di sini</small>
         </div>
       </div>
       <table class="admin-table" id="myOrderTable">
@@ -504,9 +490,6 @@
   </div>
 </div>
 
-<!-- ===============================================
-     SCRIPT: FIREBASE + LOGIC (USER)
-     =============================================== -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
@@ -530,8 +513,6 @@
   import {
     getAuth,
     onAuthStateChanged,
-    GoogleAuthProvider,
-    signInWithPopup,
     signOut
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
@@ -548,21 +529,126 @@
   const db  = getFirestore(app);
   const storage = getStorage(app);
   const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
 
-  const ADMIN_EMAILS = ["holilhsyhd@gmail.com"]; // admin bisa lihat link ke admin.html
-
-  const defaultProducts = [/* === SAMA persis seperti sebelumnya (1–113) === */];
-
-  // isi defaultProducts tepat sama seperti versi sebelumnya
-  // (aku potong di sini biar jawaban nggak terlalu panjang)
-  // ➜ Di file aslimu, paste array defaultProducts 1–113 yang kita pakai tadi.
+  // ========= DATA PRODUK DASAR =========
+  const defaultProducts = [
+    {id:1,name:"Alight Motion Private - 1 Tahun (iOS & Android)",price:"Rp 2k",stock:50,category:"editing",icon:"🎨"},
+    {id:2,name:"Bulk AM Private - 1 Bulan (10 akun)",price:"Rp 7k",stock:50,category:"editing",icon:"🎨"},
+    {id:3,name:"Apple Music Invite - 1 Bulan",price:"Rp 5k",stock:50,category:"music",icon:"🎵"},
+    {id:4,name:"Apple Music Head - 1 Bulan",price:"Rp 8k",stock:50,category:"music",icon:"🎵"},
+    {id:5,name:"Bstation Sharing - 1 Bulan",price:"Rp 5k",stock:50,category:"streaming",icon:"🎬"},
+    {id:6,name:"Bstation Private - 1 Bulan",price:"Rp 32k",stock:50,category:"streaming",icon:"🎬"},
+    {id:7,name:"Canva Member - 1 Bulan",price:"Rp 2k",stock:50,category:"editing",icon:"🎨"},
+    {id:8,name:"Canva Member - 1 Tahun",price:"Rp 4k",stock:50,category:"editing",icon:"🎨"},
+    {id:9,name:"Canva Owner - 1 Bulan",price:"Rp 5k",stock:50,category:"editing",icon:"🎨"},
+    {id:10,name:"Capcut Private - 7 Hari",price:"Rp 2k",stock:50,category:"editing",icon:"🎨"},
+    {id:11,name:"Capcut Sharing - 21 Hari",price:"Rp 3k",stock:50,category:"editing",icon:"🎨"},
+    {id:12,name:"Capcut Sharing - 1 Bulan",price:"Rp 5k",stock:50,category:"editing",icon:"🎨"},
+    {id:13,name:"Capcut Private - 21 Hari",price:"Rp 7k",stock:50,category:"editing",icon:"🎨"},
+    {id:14,name:"Capcut Private - 1 Bulan",price:"Rp 8k",stock:50,category:"editing",icon:"🎨"},
+    {id:15,name:"ChatGPT Plus Sharing - 1 Bulan (bergaransi)",price:"Rp 7k",stock:50,category:"ai",icon:"🤖"},
+    {id:16,name:"ChatGPT Private - 1 Bulan (bergaransi)",price:"Rp 30k",stock:50,category:"ai",icon:"🤖"},
+    {id:17,name:"Fizzo Novel Sharing - 1 Bulan",price:"Rp 3k",stock:50,category:"editing",icon:"🎨"},
+    {id:18,name:"Iqiyi Sharing Plan Standar - 1 Bulan",price:"Rp 3k",stock:50,category:"streaming",icon:"🎬"},
+    {id:19,name:"Iqiyi Sharing Plan Premium - 1 Bulan",price:"Rp 5k",stock:50,category:"streaming",icon:"🎬"},
+    {id:20,name:"Iqiyi Standar - 1 Bulan (Private)",price:"Rp 30k",stock:50,category:"streaming",icon:"🎬"},
+    {id:21,name:"Iqiyi Premium - 1 Bulan (Private)",price:"Rp 40k",stock:50,category:"streaming",icon:"🎬"},
+    {id:22,name:"Lightroom - 1 Tahun",price:"Rp 7k",stock:50,category:"editing",icon:"🎨"},
+    {id:23,name:"Netflix 1p2u",price:"Rp 20k",stock:50,category:"streaming",icon:"🎬"},
+    {id:24,name:"Netflix 1p1u",price:"Rp 30k",stock:50,category:"streaming",icon:"🎬"},
+    {id:25,name:"Picsart Sharing - 1 Bulan",price:"Rp 3k",stock:50,category:"editing",icon:"🎨"},
+    {id:26,name:"Picsart Private - 1 Bulan",price:"Rp 7k",stock:50,category:"editing",icon:"🎨"},
+    {id:27,name:"Spotify Premium - 1 Bulan (bergaransi)",price:"Rp 8k",stock:50,category:"music",icon:"🎵"},
+    {id:28,name:"Vidio Platinum Sharing - 1 Bulan",price:"Rp 17k",stock:50,category:"streaming",icon:"🎬"},
+    {id:29,name:"Vidio Platinum Private - 1 Bulan",price:"Rp 28k",stock:50,category:"streaming",icon:"🎬"},
+    {id:30,name:"Vision Ultimate Private - 1 Bulan",price:"Rp 40k",stock:50,category:"streaming",icon:"🎬"},
+    {id:31,name:"Viu Antilimit - 200 Tahun",price:"Rp 2k",stock:50,category:"streaming",icon:"🎬"},
+    {id:32,name:"Wetv Sharing - 1 Bulan (8u)",price:"Rp 6k",stock:50,category:"streaming",icon:"🎬"},
+    {id:33,name:"Wetv Sharing - 1 Bulan (5u)",price:"Rp 8k",stock:50,category:"streaming",icon:"🎬"},
+    {id:34,name:"Wetv Private - 1 Bulan",price:"Rp 30k",stock:50,category:"streaming",icon:"🎬"},
+    {id:35,name:"Wink Premium Private Android - 7 Hari",price:"Rp 7k",stock:50,category:"editing",icon:"🎨"},
+    {id:36,name:"Youku Sharing - 1 Bulan",price:"Rp 4k",stock:50,category:"streaming",icon:"🎬"},
+    {id:37,name:"Youku Private - 1 Bulan",price:"Rp 24k",stock:50,category:"streaming",icon:"🎬"},
+    {id:38,name:"YouTube Famplan",price:"Rp 3k",stock:50,category:"streaming",icon:"🎬"},
+    {id:39,name:"YouTube Indplan - 1 Bulan",price:"Rp 8k",stock:50,category:"streaming",icon:"🎬"},
+    {id:40,name:"YouTube Indplan - 2 Bulan",price:"Rp 9k",stock:50,category:"streaming",icon:"🎬"},
+    {id:41,name:"YouTube Head - 1 Bulan",price:"Rp 10k",stock:50,category:"streaming",icon:"🎬"},
+    {id:42,name:"YouTube Indplan - 3 Bulan",price:"Rp 11k",stock:50,category:"streaming",icon:"🎬"},
+    {id:43,name:"Panel Pterodactyl 1GB",price:"Rp 1k",stock:50,category:"panel",icon:"🖥️"},
+    {id:44,name:"Panel Pterodactyl 2GB",price:"Rp 2k",stock:50,category:"panel",icon:"🖥️"},
+    {id:45,name:"Panel Pterodactyl 3GB",price:"Rp 3k",stock:50,category:"panel",icon:"🖥️"},
+    {id:46,name:"Panel Pterodactyl 4GB",price:"Rp 4k",stock:50,category:"panel",icon:"🖥️"},
+    {id:47,name:"Panel Pterodactyl 5GB",price:"Rp 5k",stock:50,category:"panel",icon:"🖥️"},
+    {id:48,name:"Panel Pterodactyl 6GB",price:"Rp 6k",stock:50,category:"panel",icon:"🖥️"},
+    {id:49,name:"Panel Pterodactyl 7GB",price:"Rp 7k",stock:50,category:"panel",icon:"🖥️"},
+    {id:50,name:"Panel Pterodactyl 8GB",price:"Rp 8k",stock:50,category:"panel",icon:"🖥️"},
+    {id:51,name:"Panel Pterodactyl 9GB",price:"Rp 9k",stock:50,category:"panel",icon:"🖥️"},
+    {id:52,name:"Panel Pterodactyl Unlimited",price:"Rp 10k",stock:50,category:"panel",icon:"🖥️"},
+    {id:53,name:"Tracking Camera",price:"Rp 20k",stock:50,category:"tools",icon:"🛠️"},
+    {id:54,name:"Instagram Likes 1.000",price:"Rp 3k",stock:50,category:"sosmed",icon:"📱"},
+    {id:55,name:"Instagram Likes 2.000",price:"Rp 6k",stock:50,category:"sosmed",icon:"📱"},
+    {id:56,name:"Instagram Likes 3.000",price:"Rp 9k",stock:50,category:"sosmed",icon:"📱"},
+    {id:57,name:"Instagram Likes 4.000",price:"Rp 12k",stock:50,category:"sosmed",icon:"📱"},
+    {id:58,name:"Instagram Likes 5.000",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
+    {id:59,name:"Instagram Likes 6.000",price:"Rp 18k",stock:50,category:"sosmed",icon:"📱"},
+    {id:60,name:"Instagram Likes 7.000",price:"Rp 21k",stock:50,category:"sosmed",icon:"📱"},
+    {id:61,name:"Instagram Likes 8.000",price:"Rp 24k",stock:50,category:"sosmed",icon:"📱"},
+    {id:62,name:"Instagram Likes 9.000",price:"Rp 27k",stock:50,category:"sosmed",icon:"📱"},
+    {id:63,name:"Instagram Likes 10.000",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"},
+    {id:64,name:"TikTok Likes 100",price:"Rp 5k",stock:50,category:"sosmed",icon:"📱"},
+    {id:65,name:"TikTok Likes 200",price:"Rp 10k",stock:50,category:"sosmed",icon:"📱"},
+    {id:66,name:"TikTok Likes 300",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
+    {id:67,name:"TikTok Likes 400",price:"Rp 20k",stock:50,category:"sosmed",icon:"📱"},
+    {id:68,name:"TikTok Likes 500",price:"Rp 25k",stock:50,category:"sosmed",icon:"📱"},
+    {id:69,name:"TikTok Likes 600",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"},
+    {id:70,name:"TikTok Likes 700",price:"Rp 35k",stock:50,category:"sosmed",icon:"📱"},
+    {id:71,name:"TikTok Likes 800",price:"Rp 40k",stock:50,category:"sosmed",icon:"📱"},
+    {id:72,name:"TikTok Likes 900",price:"Rp 45k",stock:50,category:"sosmed",icon:"📱"},
+    {id:73,name:"TikTok Likes 1.000",price:"Rp 50k",stock:50,category:"sosmed",icon:"📱"},
+    {id:74,name:"Instagram Followers 100",price:"Rp 5k",stock:50,category:"sosmed",icon:"📱"},
+    {id:75,name:"Instagram Followers 200",price:"Rp 10k",stock:50,category:"sosmed",icon:"📱"},
+    {id:76,name:"Instagram Followers 300",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
+    {id:77,name:"Instagram Followers 400",price:"Rp 20k",stock:50,category:"sosmed",icon:"📱"},
+    {id:78,name:"Instagram Followers 500",price:"Rp 25k",stock:50,category:"sosmed",icon:"📱"},
+    {id:79,name:"Instagram Followers 600",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"},
+    {id:80,name:"Instagram Followers 700",price:"Rp 35k",stock:50,category:"sosmed",icon:"📱"},
+    {id:81,name:"Instagram Followers 800",price:"Rp 40k",stock:50,category:"sosmed",icon:"📱"},
+    {id:82,name:"Instagram Followers 900",price:"Rp 45k",stock:50,category:"sosmed",icon:"📱"},
+    {id:83,name:"Instagram Followers 1.000",price:"Rp 50k",stock:50,category:"sosmed",icon:"📱"},
+    {id:84,name:"TikTok Followers 100",price:"Rp 5k",stock:50,category:"sosmed",icon:"📱"},
+    {id:85,name:"TikTok Followers 200",price:"Rp 10k",stock:50,category:"sosmed",icon:"📱"},
+    {id:86,name:"TikTok Followers 300",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
+    {id:87,name:"TikTok Followers 400",price:"Rp 20k",stock:50,category:"sosmed",icon:"📱"},
+    {id:88,name:"TikTok Followers 500",price:"Rp 25k",stock:50,category:"sosmed",icon:"📱"},
+    {id:89,name:"TikTok Followers 600",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"},
+    {id:90,name:"TikTok Followers 700",price:"Rp 35k",stock:50,category:"sosmed",icon:"📱"},
+    {id:91,name:"TikTok Followers 800",price:"Rp 40k",stock:50,category:"sosmed",icon:"📱"},
+    {id:92,name:"TikTok Followers 900",price:"Rp 45k",stock:50,category:"sosmed",icon:"📱"},
+    {id:93,name:"TikTok Followers 1.000",price:"Rp 50k",stock:50,category:"sosmed",icon:"📱"},
+    {id:94,name:"Instagram Viewers 1.000",price:"Rp 3k",stock:50,category:"sosmed",icon:"📱"},
+    {id:95,name:"Instagram Viewers 2.000",price:"Rp 6k",stock:50,category:"sosmed",icon:"📱"},
+    {id:96,name:"Instagram Viewers 3.000",price:"Rp 9k",stock:50,category:"sosmed",icon:"📱"},
+    {id:97,name:"Instagram Viewers 4.000",price:"Rp 12k",stock:50,category:"sosmed",icon:"📱"},
+    {id:98,name:"Instagram Viewers 5.000",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
+    {id:99,name:"Instagram Viewers 6.000",price:"Rp 18k",stock:50,category:"sosmed",icon:"📱"},
+    {id:100,name:"Instagram Viewers 7.000",price:"Rp 21k",stock:50,category:"sosmed",icon:"📱"},
+    {id:101,name:"Instagram Viewers 8.000",price:"Rp 24k",stock:50,category:"sosmed",icon:"📱"},
+    {id:102,name:"Instagram Viewers 9.000",price:"Rp 27k",stock:50,category:"sosmed",icon:"📱"},
+    {id:103,name:"Instagram Viewers 10.000",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"},
+    {id:104,name:"TikTok Viewers 1.000",price:"Rp 3k",stock:50,category:"sosmed",icon:"📱"},
+    {id:105,name:"TikTok Viewers 2.000",price:"Rp 6k",stock:50,category:"sosmed",icon:"📱"},
+    {id:106,name:"TikTok Viewers 3.000",price:"Rp 9k",stock:50,category:"sosmed",icon:"📱"},
+    {id:107,name:"TikTok Viewers 4.000",price:"Rp 12k",stock:50,category:"sosmed",icon:"📱"},
+    {id:108,name:"TikTok Viewers 5.000",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
+    {id:109,name:"TikTok Viewers 6.000",price:"Rp 18k",stock:50,category:"sosmed",icon:"📱"},
+    {id:110,name:"TikTok Viewers 7.000",price:"Rp 21k",stock:50,category:"sosmed",icon:"📱"},
+    {id:111,name:"TikTok Viewers 8.000",price:"Rp 24k",stock:50,category:"sosmed",icon:"📱"},
+    {id:112,name:"TikTok Viewers 9.000",price:"Rp 27k",stock:50,category:"sosmed",icon:"📱"},
+    {id:113,name:"TikTok Viewers 10.000",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"}
+  ];
 
   let products = [];
-  let productsLoaded = false;
   let myOrders = [];
-  let currentUser = null;
-  let isAdmin = false;
   let currentOrderId = null;
 
   async function loadProductsFromDB() {
@@ -671,7 +757,7 @@
     const tbody = table.getElementsByTagName('tbody')[0];
     tbody.innerHTML = '';
 
-    if (!currentUser) {
+    if (!myOrders.length) {
       card.style.display = 'none';
       return;
     }
@@ -723,63 +809,28 @@
     });
   }
 
-  function updateAuthUI() {
-    const authBtn = document.getElementById('authBtn');
-    const adminLink = document.getElementById('adminLink');
-    const loginCard = document.getElementById('loginInfoCard');
-    const dashboard = document.getElementById('dashboard');
-
-    if (!currentUser) {
-      if (authBtn) authBtn.textContent = '🔑 Login Google';
-      if (adminLink) adminLink.style.display = 'none';
-      if (loginCard) loginCard.style.display = 'block';
-      if (dashboard) dashboard.style.display = 'none';
-    } else {
-      if (authBtn) authBtn.textContent = '🚪 Logout (' + (currentUser.displayName || currentUser.email) + ')';
-      if (loginCard) loginCard.style.display = 'none';
-      if (dashboard) dashboard.style.display = 'block';
-      if (adminLink) adminLink.style.display = isAdmin ? 'inline-flex' : 'none';
-    }
-  }
-
-  window.handleAuthClick = async function() {
-    if (auth.currentUser) {
-      await signOut(auth);
-    } else {
-      try {
-        await signInWithPopup(auth, provider);
-      } catch(e) {
-        console.error(e);
-        alert('Login Google gagal. Coba lagi.');
-      }
-    }
-  };
-
+  // ========= AUTH =========
   onAuthStateChanged(auth, async (user) => {
-    currentUser = user;
-    isAdmin = !!(user && ADMIN_EMAILS.includes(user.email));
-    updateAuthUI();
-
-    if (user) {
-      if (!productsLoaded) {
-        products = await loadProductsFromDB();
-        productsLoaded = true;
-      }
-      renderProducts();
-      myOrders = await loadOrdersForUser(user.uid);
-      renderMyOrders();
-    } else {
-      myOrders = [];
-      renderMyOrders();
-    }
-  });
-
-  // ========== ORDER FLOW ==========
-  window.openOrderModal = function(id) {
-    if (!currentUser) {
-      alert('Silakan login dengan Google dulu sebelum order.');
+    if (!user) {
+      window.location.href = 'login.html';
       return;
     }
+    document.getElementById('dashboard').style.display = 'block';
+
+    products = await loadProductsFromDB();
+    renderProducts();
+
+    myOrders = await loadOrdersForUser(user.uid);
+    renderMyOrders();
+  });
+
+  document.getElementById('logoutBtn').onclick = async () => {
+    await signOut(auth);
+    window.location.href = 'login.html';
+  };
+
+  // ========= ORDER FLOW =========
+  window.openOrderModal = function(id) {
     currentOrderId = id;
     document.getElementById('orderDana').value = '';
     document.getElementById('orderNama').value = '';
@@ -914,12 +965,18 @@
       return;
     }
 
+    const user = auth.currentUser;
+    if (!user) {
+      msg.className += ' error';
+      msg.innerHTML = 'Sesi login habis. Silakan login ulang.';
+      return;
+    }
+
     if (p.stock > 0) p.stock = p.stock - 1;
     await updateProductField(p.id, 'stock', p.stock);
     renderProducts();
 
     const nowISO = new Date().toISOString();
-    const user = auth.currentUser;
     const orderObj = {
       time: nowISO,
       productId: p.id,
@@ -930,9 +987,8 @@
       stockAfter: p.stock,
       extraInfo: extraInfoText,
       buktiUrl: buktiUrl,
-      userUid: user ? user.uid : null,
-      userEmail: user ? user.email : null,
-      userDisplayName: user ? user.displayName : null,
+      userUid: user.uid,
+      userEmail: user.email || null,
       status: 'pending',
       delivery: ''
     };
@@ -949,7 +1005,7 @@
 
     setTimeout(() => {
       window.closeOrderModal();
-    }, 3000);
+    }, 2500);
   };
 
   document.getElementById('orderModal').addEventListener('click', function(e){
@@ -985,8 +1041,6 @@
     applyTheme(now);
     try { localStorage.setItem('ds-theme-hp', now); } catch(e) {}
   };
-
-  // init: tidak load produk dulu supaya kalau rules butuh auth, tidak error
 </script>
 
 </body>
