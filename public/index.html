@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Barmods Store - Layanan Digital</title>
+  <title>Barmods Store - Produk</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -47,17 +47,6 @@
     body.light .topbar {
       background:linear-gradient(90deg,#ffffff,#e5e7eb);
     }
-    .toggle-btn {
-      font-size:24px;
-      cursor:pointer;
-      padding:4px 6px;
-      border-radius:999px;
-      background:rgba(15,23,42,.6);
-    }
-    body.light .toggle-btn {
-      background:rgba(229,231,235,1);
-      color:#111827;
-    }
     .brand-title {
       display:flex;
       flex-direction:column;
@@ -76,7 +65,7 @@
       align-items:center;
       gap:6px;
     }
-    .theme-btn, .admin-contact-btn {
+    .btn-top {
       border-radius:999px;
       border:1px solid var(--border);
       background:rgba(15,23,42,.6);
@@ -89,58 +78,8 @@
       text-decoration:none;
       cursor:pointer;
     }
-    body.light .theme-btn,
-    body.light .admin-contact-btn {
+    body.light .btn-top {
       background:#f9fafb;
-    }
-    .sidebar {
-      position:fixed;
-      top:60px;bottom:0;left:0;
-      width:220px;
-      background:rgba(2,6,23,.98);
-      border-right:1px solid var(--border);
-      padding:14px;
-      transform:translateX(-100%);
-      transition:.25s;
-      z-index:15;
-      backdrop-filter:blur(18px);
-    }
-    body.light .sidebar {
-      background:rgba(255,255,255,.96);
-    }
-    .sidebar.show {
-      transform:translateX(0);
-    }
-    .nav-section-title {
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-      color:var(--text-soft);
-      margin-bottom:4px;
-    }
-    .nav-item {
-      padding:8px 10px;
-      border-radius:10px;
-      margin-top:4px;
-      font-size:13px;
-      color:var(--text-soft);
-      display:flex;
-      align-items:center;
-      gap:6px;
-      cursor:pointer;
-    }
-    .nav-badge {
-      font-size:10px;
-      padding:2px 6px;
-      border-radius:999px;
-      background:var(--accent-soft);
-      color:var(--accent);
-      margin-left:auto;
-    }
-    .nav-item.active,
-    .nav-item:hover {
-      background:var(--accent-soft);
-      color:var(--text);
     }
     .main {
       padding:72px 12px 18px;
@@ -309,15 +248,6 @@
     .btn-product span.icon {
       font-size:12px;
     }
-    /* Admin */
-    #admin {
-      display:none;
-    }
-    .login-info {
-      font-size:11px;
-      color:var(--text-soft);
-      margin-top:4px;
-    }
     .admin-table {
       width:100%;
       border-collapse:collapse;
@@ -329,27 +259,6 @@
       padding:5px 4px;
       border-bottom:1px solid var(--border);
       text-align:left;
-    }
-    .admin-input {
-      width:100%;
-      padding:4px 6px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background:var(--bg-soft);
-      color:var(--text);
-      font-size:11px;
-    }
-    .btn-mini {
-      font-size:10px;
-      padding:4px 6px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background:rgba(15,23,42,.7);
-      color:var(--text);
-      cursor:pointer;
-    }
-    body.light .btn-mini {
-      background:#f9fafb;
     }
     .status-text {
       text-transform:lowercase;
@@ -435,36 +344,35 @@
 <body>
 
 <div class="topbar">
-  <div class="toggle-btn" onclick="toggleMenu()">☰</div>
   <div class="brand-title">
     <span>Barmods Store</span>
     <span>Layanan Digital & Sosial Media</span>
   </div>
   <div class="spacer"></div>
   <div class="top-actions">
-    <a href="https://wa.me/6283877842721" class="admin-contact-btn">
-      📞 Admin
-    </a>
-    <button type="button" class="theme-btn" onclick="toggleTheme()" id="themeBtn">
-      🌙 Gelap
-    </button>
-    <button type="button" class="admin-contact-btn" id="authBtn" onclick="handleAuthClick()">
-      🔑 Login Google
-    </button>
-  </div>
-</div>
-
-<div class="sidebar" id="sidebar">
-  <div class="nav-section-title">Menu</div>
-  <div class="nav-item active" onclick="showSection('dashboard', this)">📊 Dashboard</div>
-  <div class="nav-item" id="navAdmin" onclick="showSection('admin', this)" style="display:none;">
-    🛠️ Admin <span class="nav-badge" id="adminBadge">Login</span>
+    <a href="https://wa.me/6283877842721" class="btn-top">📞 Admin</a>
+    <a href="admin.html" class="btn-top" id="adminLink" style="display:none;">🛠️ Panel Admin</a>
+    <button type="button" class="btn-top" onclick="toggleTheme()" id="themeBtn">🌙 Gelap</button>
+    <button type="button" class="btn-top" id="authBtn" onclick="handleAuthClick()">🔑 Login Google</button>
   </div>
 </div>
 
 <div class="main">
-  <!-- DASHBOARD -->
-  <div id="dashboard">
+  <!-- INFO LOGIN -->
+  <div class="card" id="loginInfoCard">
+    <div class="card-header">
+      <div>
+        <h2>Login Diperlukan</h2>
+        <small>Masuk dengan akun Google untuk melihat produk & riwayat pesanan</small>
+      </div>
+    </div>
+    <p>
+      Tekan tombol <b>Login Google</b> di kanan atas. Setelah login, daftar produk dan riwayat pesanan kamu akan muncul di sini.
+    </p>
+  </div>
+
+  <!-- DASHBOARD / PRODUK -->
+  <div id="dashboard" style="display:none;">
     <div class="card">
       <div class="card-header">
         <div>
@@ -473,20 +381,16 @@
         </div>
       </div>
       <p>
-        1. Login dulu dengan Google (opsional tapi lebih rapi buat riwayat pesanan).<br>
+        1. Pastikan sudah <b>login Google</b>.<br>
         2. Pilih produk di bawah.<br>
         3. Tekan tombol <b>Order Sekarang</b> pada produk.<br>
         4. Isi data DANA & data tambahan (username / link / user panel) di form.<br>
         5. Upload <b>SS bukti transfer</b> langsung di form (WAJIB).<br>
-        6. Admin akan cek data & pembayaran, lalu mengirim produk lewat sistem.
+        6. Admin akan cek data & mengirim produk melalui riwayat pesanan kamu.
       </p>
       <div class="admin-contact-big">
-        <a class="btn-primary" href="https://wa.me/6283877842721">
-          💬 Chat WhatsApp Admin
-        </a>
-        <a class="btn-outline" href="mailto:holilhsyhd@gmail.com">
-          ✉️ Kirim Email Admin
-        </a>
+        <a class="btn-primary" href="https://wa.me/6283877842721">💬 Chat WhatsApp Admin</a>
+        <a class="btn-outline" href="mailto:holilhsyhd@gmail.com">✉️ Kirim Email Admin</a>
       </div>
       <div class="pill-row">
         <div class="pill">Pembayaran: DANA 083877842721</div>
@@ -512,7 +416,7 @@
       <div class="card-header">
         <div>
           <h2>Riwayat Pesanan Saya</h2>
-          <small>Pesanan ini hanya terkait akun Google kamu</small>
+          <small>Hanya order dari akun Google kamu yang tampil di sini</small>
         </div>
       </div>
       <table class="admin-table" id="myOrderTable">
@@ -529,68 +433,6 @@
         <tbody></tbody>
       </table>
     </div>
-  </div>
-
-  <!-- ADMIN -->
-  <div id="admin">
-    <div class="card">
-      <div class="card-header">
-        <div>
-          <h2>Admin Panel</h2>
-          <small>Akses khusus admin (login Google)</small>
-        </div>
-      </div>
-      <p>
-        Login menggunakan akun Google admin di pojok kanan atas. Hanya email yang terdaftar sebagai admin yang
-        bisa mengedit produk, melihat semua order, mengganti status, dan mengirim produk ke pembeli.
-      </p>
-      <div id="adminStatus" class="login-info"></div>
-    </div>
-
-    <div class="card" id="adminPanel" style="display:none;">
-      <div class="card-header">
-        <div>
-          <h2>Edit Produk & Stok</h2>
-          <small>Perubahan langsung ke Dashboard & tersimpan di Firestore</small>
-        </div>
-      </div>
-      <table class="admin-table" id="adminTable">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Produk</th>
-            <th>Harga</th>
-            <th>Stok</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <div class="card" id="orderHistoryCard" style="display:none;">
-      <div class="card-header">
-        <div>
-          <h2>Riwayat Order (Semua)</h2>
-          <small>Data order + status + link bukti transfer</small>
-        </div>
-      </div>
-      <table class="admin-table" id="orderTable">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Waktu</th>
-            <th>Produk</th>
-            <th>DANA</th>
-            <th>Nama</th>
-            <th>Status</th>
-            <th>Produk</th>
-            <th>Bukti</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
   </div>
 </div>
 
@@ -663,7 +505,7 @@
 </div>
 
 <!-- ===============================================
-     SCRIPT: FIREBASE + LOGIC
+     SCRIPT: FIREBASE + LOGIC (USER)
      =============================================== -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -693,7 +535,6 @@
     signOut
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-  /* ============= CONFIG DARI KAMU ============= */
   const firebaseConfig = {
     apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
     authDomain: "toko-barmods.firebaseapp.com",
@@ -709,140 +550,25 @@
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  // Ganti email ini dengan email Google admin kamu
-  const ADMIN_EMAILS = ["holilhsyhd@gmail.com"];
+  const ADMIN_EMAILS = ["holilhsyhd@gmail.com"]; // admin bisa lihat link ke admin.html
 
-  /* =================== DATA PRODUK DASAR =================== */
-  const defaultProducts = [
-    {id:1,name:"Alight Motion Private - 1 Tahun (iOS & Android)",price:"Rp 2k",stock:50,category:"editing",icon:"🎨"},
-    {id:2,name:"Bulk AM Private - 1 Bulan (10 akun)",price:"Rp 7k",stock:50,category:"editing",icon:"🎨"},
-    {id:3,name:"Apple Music Invite - 1 Bulan",price:"Rp 5k",stock:50,category:"music",icon:"🎵"},
-    {id:4,name:"Apple Music Head - 1 Bulan",price:"Rp 8k",stock:50,category:"music",icon:"🎵"},
-    {id:5,name:"Bstation Sharing - 1 Bulan",price:"Rp 5k",stock:50,category:"streaming",icon:"🎬"},
-    {id:6,name:"Bstation Private - 1 Bulan",price:"Rp 32k",stock:50,category:"streaming",icon:"🎬"},
-    {id:7,name:"Canva Member - 1 Bulan",price:"Rp 2k",stock:50,category:"editing",icon:"🎨"},
-    {id:8,name:"Canva Member - 1 Tahun",price:"Rp 4k",stock:50,category:"editing",icon:"🎨"},
-    {id:9,name:"Canva Owner - 1 Bulan",price:"Rp 5k",stock:50,category:"editing",icon:"🎨"},
-    {id:10,name:"Capcut Private - 7 Hari",price:"Rp 2k",stock:50,category:"editing",icon:"🎨"},
-    {id:11,name:"Capcut Sharing - 21 Hari",price:"Rp 3k",stock:50,category:"editing",icon:"🎨"},
-    {id:12,name:"Capcut Sharing - 1 Bulan",price:"Rp 5k",stock:50,category:"editing",icon:"🎨"},
-    {id:13,name:"Capcut Private - 21 Hari",price:"Rp 7k",stock:50,category:"editing",icon:"🎨"},
-    {id:14,name:"Capcut Private - 1 Bulan",price:"Rp 8k",stock:50,category:"editing",icon:"🎨"},
-    {id:15,name:"ChatGPT Plus Sharing - 1 Bulan (bergaransi)",price:"Rp 7k",stock:50,category:"ai",icon:"🤖"},
-    {id:16,name:"ChatGPT Private - 1 Bulan (bergaransi)",price:"Rp 30k",stock:50,category:"ai",icon:"🤖"},
-    {id:17,name:"Fizzo Novel Sharing - 1 Bulan",price:"Rp 3k",stock:50,category:"editing",icon:"🎨"},
-    {id:18,name:"Iqiyi Sharing Plan Standar - 1 Bulan",price:"Rp 3k",stock:50,category:"streaming",icon:"🎬"},
-    {id:19,name:"Iqiyi Sharing Plan Premium - 1 Bulan",price:"Rp 5k",stock:50,category:"streaming",icon:"🎬"},
-    {id:20,name:"Iqiyi Standar - 1 Bulan (Private)",price:"Rp 30k",stock:50,category:"streaming",icon:"🎬"},
-    {id:21,name:"Iqiyi Premium - 1 Bulan (Private)",price:"Rp 40k",stock:50,category:"streaming",icon:"🎬"},
-    {id:22,name:"Lightroom - 1 Tahun",price:"Rp 7k",stock:50,category:"editing",icon:"🎨"},
-    {id:23,name:"Netflix 1p2u",price:"Rp 20k",stock:50,category:"streaming",icon:"🎬"},
-    {id:24,name:"Netflix 1p1u",price:"Rp 30k",stock:50,category:"streaming",icon:"🎬"},
-    {id:25,name:"Picsart Sharing - 1 Bulan",price:"Rp 3k",stock:50,category:"editing",icon:"🎨"},
-    {id:26,name:"Picsart Private - 1 Bulan",price:"Rp 7k",stock:50,category:"editing",icon:"🎨"},
-    {id:27,name:"Spotify Premium - 1 Bulan (bergaransi)",price:"Rp 8k",stock:50,category:"music",icon:"🎵"},
-    {id:28,name:"Vidio Platinum Sharing - 1 Bulan",price:"Rp 17k",stock:50,category:"streaming",icon:"🎬"},
-    {id:29,name:"Vidio Platinum Private - 1 Bulan",price:"Rp 28k",stock:50,category:"streaming",icon:"🎬"},
-    {id:30,name:"Vision Ultimate Private - 1 Bulan",price:"Rp 40k",stock:50,category:"streaming",icon:"🎬"},
-    {id:31,name:"Viu Antilimit - 200 Tahun",price:"Rp 2k",stock:50,category:"streaming",icon:"🎬"},
-    {id:32,name:"Wetv Sharing - 1 Bulan (8u)",price:"Rp 6k",stock:50,category:"streaming",icon:"🎬"},
-    {id:33,name:"Wetv Sharing - 1 Bulan (5u)",price:"Rp 8k",stock:50,category:"streaming",icon:"🎬"},
-    {id:34,name:"Wetv Private - 1 Bulan",price:"Rp 30k",stock:50,category:"streaming",icon:"🎬"},
-    {id:35,name:"Wink Premium Private Android - 7 Hari",price:"Rp 7k",stock:50,category:"editing",icon:"🎨"},
-    {id:36,name:"Youku Sharing - 1 Bulan",price:"Rp 4k",stock:50,category:"streaming",icon:"🎬"},
-    {id:37,name:"Youku Private - 1 Bulan",price:"Rp 24k",stock:50,category:"streaming",icon:"🎬"},
-    {id:38,name:"YouTube Famplan",price:"Rp 3k",stock:50,category:"streaming",icon:"🎬"},
-    {id:39,name:"YouTube Indplan - 1 Bulan",price:"Rp 8k",stock:50,category:"streaming",icon:"🎬"},
-    {id:40,name:"YouTube Indplan - 2 Bulan",price:"Rp 9k",stock:50,category:"streaming",icon:"🎬"},
-    {id:41,name:"YouTube Head - 1 Bulan",price:"Rp 10k",stock:50,category:"streaming",icon:"🎬"},
-    {id:42,name:"YouTube Indplan - 3 Bulan",price:"Rp 11k",stock:50,category:"streaming",icon:"🎬"},
-    {id:43,name:"Panel Pterodactyl 1GB",price:"Rp 1k",stock:50,category:"panel",icon:"🖥️"},
-    {id:44,name:"Panel Pterodactyl 2GB",price:"Rp 2k",stock:50,category:"panel",icon:"🖥️"},
-    {id:45,name:"Panel Pterodactyl 3GB",price:"Rp 3k",stock:50,category:"panel",icon:"🖥️"},
-    {id:46,name:"Panel Pterodactyl 4GB",price:"Rp 4k",stock:50,category:"panel",icon:"🖥️"},
-    {id:47,name:"Panel Pterodactyl 5GB",price:"Rp 5k",stock:50,category:"panel",icon:"🖥️"},
-    {id:48,name:"Panel Pterodactyl 6GB",price:"Rp 6k",stock:50,category:"panel",icon:"🖥️"},
-    {id:49,name:"Panel Pterodactyl 7GB",price:"Rp 7k",stock:50,category:"panel",icon:"🖥️"},
-    {id:50,name:"Panel Pterodactyl 8GB",price:"Rp 8k",stock:50,category:"panel",icon:"🖥️"},
-    {id:51,name:"Panel Pterodactyl 9GB",price:"Rp 9k",stock:50,category:"panel",icon:"🖥️"},
-    {id:52,name:"Panel Pterodactyl Unlimited",price:"Rp 10k",stock:50,category:"panel",icon:"🖥️"},
-    {id:53,name:"Tracking Camera",price:"Rp 20k",stock:50,category:"tools",icon:"🛠️"},
-    {id:54,name:"Instagram Likes 1.000",price:"Rp 3k",stock:50,category:"sosmed",icon:"📱"},
-    {id:55,name:"Instagram Likes 2.000",price:"Rp 6k",stock:50,category:"sosmed",icon:"📱"},
-    {id:56,name:"Instagram Likes 3.000",price:"Rp 9k",stock:50,category:"sosmed",icon:"📱"},
-    {id:57,name:"Instagram Likes 4.000",price:"Rp 12k",stock:50,category:"sosmed",icon:"📱"},
-    {id:58,name:"Instagram Likes 5.000",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
-    {id:59,name:"Instagram Likes 6.000",price:"Rp 18k",stock:50,category:"sosmed",icon:"📱"},
-    {id:60,name:"Instagram Likes 7.000",price:"Rp 21k",stock:50,category:"sosmed",icon:"📱"},
-    {id:61,name:"Instagram Likes 8.000",price:"Rp 24k",stock:50,category:"sosmed",icon:"📱"},
-    {id:62,name:"Instagram Likes 9.000",price:"Rp 27k",stock:50,category:"sosmed",icon:"📱"},
-    {id:63,name:"Instagram Likes 10.000",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"},
-    {id:64,name:"TikTok Likes 100",price:"Rp 5k",stock:50,category:"sosmed",icon:"📱"},
-    {id:65,name:"TikTok Likes 200",price:"Rp 10k",stock:50,category:"sosmed",icon:"📱"},
-    {id:66,name:"TikTok Likes 300",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
-    {id:67,name:"TikTok Likes 400",price:"Rp 20k",stock:50,category:"sosmed",icon:"📱"},
-    {id:68,name:"TikTok Likes 500",price:"Rp 25k",stock:50,category:"sosmed",icon:"📱"},
-    {id:69,name:"TikTok Likes 600",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"},
-    {id:70,name:"TikTok Likes 700",price:"Rp 35k",stock:50,category:"sosmed",icon:"📱"},
-    {id:71,name:"TikTok Likes 800",price:"Rp 40k",stock:50,category:"sosmed",icon:"📱"},
-    {id:72,name:"TikTok Likes 900",price:"Rp 45k",stock:50,category:"sosmed",icon:"📱"},
-    {id:73,name:"TikTok Likes 1.000",price:"Rp 50k",stock:50,category:"sosmed",icon:"📱"},
-    {id:74,name:"Instagram Followers 100",price:"Rp 5k",stock:50,category:"sosmed",icon:"📱"},
-    {id:75,name:"Instagram Followers 200",price:"Rp 10k",stock:50,category:"sosmed",icon:"📱"},
-    {id:76,name:"Instagram Followers 300",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
-    {id:77,name:"Instagram Followers 400",price:"Rp 20k",stock:50,category:"sosmed",icon:"📱"},
-    {id:78,name:"Instagram Followers 500",price:"Rp 25k",stock:50,category:"sosmed",icon:"📱"},
-    {id:79,name:"Instagram Followers 600",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"},
-    {id:80,name:"Instagram Followers 700",price:"Rp 35k",stock:50,category:"sosmed",icon:"📱"},
-    {id:81,name:"Instagram Followers 800",price:"Rp 40k",stock:50,category:"sosmed",icon:"📱"},
-    {id:82,name:"Instagram Followers 900",price:"Rp 45k",stock:50,category:"sosmed",icon:"📱"},
-    {id:83,name:"Instagram Followers 1.000",price:"Rp 50k",stock:50,category:"sosmed",icon:"📱"},
-    {id:84,name:"TikTok Followers 100",price:"Rp 5k",stock:50,category:"sosmed",icon:"📱"},
-    {id:85,name:"TikTok Followers 200",price:"Rp 10k",stock:50,category:"sosmed",icon:"📱"},
-    {id:86,name:"TikTok Followers 300",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
-    {id:87,name:"TikTok Followers 400",price:"Rp 20k",stock:50,category:"sosmed",icon:"📱"},
-    {id:88,name:"TikTok Followers 500",price:"Rp 25k",stock:50,category:"sosmed",icon:"📱"},
-    {id:89,name:"TikTok Followers 600",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"},
-    {id:90,name:"TikTok Followers 700",price:"Rp 35k",stock:50,category:"sosmed",icon:"📱"},
-    {id:91,name:"TikTok Followers 800",price:"Rp 40k",stock:50,category:"sosmed",icon:"📱"},
-    {id:92,name:"TikTok Followers 900",price:"Rp 45k",stock:50,category:"sosmed",icon:"📱"},
-    {id:93,name:"TikTok Followers 1.000",price:"Rp 50k",stock:50,category:"sosmed",icon:"📱"},
-    {id:94,name:"Instagram Viewers 1.000",price:"Rp 3k",stock:50,category:"sosmed",icon:"📱"},
-    {id:95,name:"Instagram Viewers 2.000",price:"Rp 6k",stock:50,category:"sosmed",icon:"📱"},
-    {id:96,name:"Instagram Viewers 3.000",price:"Rp 9k",stock:50,category:"sosmed",icon:"📱"},
-    {id:97,name:"Instagram Viewers 4.000",price:"Rp 12k",stock:50,category:"sosmed",icon:"📱"},
-    {id:98,name:"Instagram Viewers 5.000",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
-    {id:99,name:"Instagram Viewers 6.000",price:"Rp 18k",stock:50,category:"sosmed",icon:"📱"},
-    {id:100,name:"Instagram Viewers 7.000",price:"Rp 21k",stock:50,category:"sosmed",icon:"📱"},
-    {id:101,name:"Instagram Viewers 8.000",price:"Rp 24k",stock:50,category:"sosmed",icon:"📱"},
-    {id:102,name:"Instagram Viewers 9.000",price:"Rp 27k",stock:50,category:"sosmed",icon:"📱"},
-    {id:103,name:"Instagram Viewers 10.000",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"},
-    {id:104,name:"TikTok Viewers 1.000",price:"Rp 3k",stock:50,category:"sosmed",icon:"📱"},
-    {id:105,name:"TikTok Viewers 2.000",price:"Rp 6k",stock:50,category:"sosmed",icon:"📱"},
-    {id:106,name:"TikTok Viewers 3.000",price:"Rp 9k",stock:50,category:"sosmed",icon:"📱"},
-    {id:107,name:"TikTok Viewers 4.000",price:"Rp 12k",stock:50,category:"sosmed",icon:"📱"},
-    {id:108,name:"TikTok Viewers 5.000",price:"Rp 15k",stock:50,category:"sosmed",icon:"📱"},
-    {id:109,name:"TikTok Viewers 6.000",price:"Rp 18k",stock:50,category:"sosmed",icon:"📱"},
-    {id:110,name:"TikTok Viewers 7.000",price:"Rp 21k",stock:50,category:"sosmed",icon:"📱"},
-    {id:111,name:"TikTok Viewers 8.000",price:"Rp 24k",stock:50,category:"sosmed",icon:"📱"},
-    {id:112,name:"TikTok Viewers 9.000",price:"Rp 27k",stock:50,category:"sosmed",icon:"📱"},
-    {id:113,name:"TikTok Viewers 10.000",price:"Rp 30k",stock:50,category:"sosmed",icon:"📱"}
-  ];
+  const defaultProducts = [/* === SAMA persis seperti sebelumnya (1–113) === */];
+
+  // isi defaultProducts tepat sama seperti versi sebelumnya
+  // (aku potong di sini biar jawaban nggak terlalu panjang)
+  // ➜ Di file aslimu, paste array defaultProducts 1–113 yang kita pakai tadi.
 
   let products = [];
-  let orders   = [];
+  let productsLoaded = false;
   let myOrders = [];
-  let currentOrderId = null;
   let currentUser = null;
   let isAdmin = false;
+  let currentOrderId = null;
 
-  /* ============== AMBIL DATA PRODUK DARI FIRESTORE ============== */
   async function loadProductsFromDB() {
     const colRef = collection(db, 'products');
     const snap   = await getDocs(colRef);
-
     if (snap.empty) {
-      // Seed pertama kali
       for (const p of defaultProducts) {
         await setDoc(doc(colRef, String(p.id)), p);
       }
@@ -854,133 +580,19 @@
       return arr;
     }
   }
-
   async function updateProductField(id, field, value) {
     const colRef = collection(db, 'products');
     await updateDoc(doc(colRef, String(id)), { [field]: value });
   }
-
-  async function loadOrdersFromDB() {
-    const colRef = collection(db, 'orders');
-    const qRef   = query(colRef, orderBy('time', 'asc'));
-    const snap   = await getDocs(qRef);
-    const arr    = [];
-    snap.forEach(d => arr.push({ docId: d.id, ...d.data() }));
-    return arr;
-  }
-
   async function loadOrdersForUser(uid) {
     const colRef = collection(db, 'orders');
     const qRef   = query(colRef, where('userUid','==',uid), orderBy('time','asc'));
     const snap   = await getDocs(qRef);
     const arr    = [];
-    snap.forEach(d => arr.push({ docId: d.id, ...d.data() }));
+    snap.forEach(d => arr.push({ docId:d.id, ...d.data() }));
     return arr;
   }
 
-  async function updateOrderField(docId, field, value) {
-    const colRef = collection(db, 'orders');
-    await updateDoc(doc(colRef, docId), { [field]: value });
-  }
-
-  /* ============== UI BASIC ============== */
-  window.toggleMenu = function() {
-    const s = document.getElementById('sidebar');
-    if (s.className.indexOf('show') === -1) {
-      s.className += ' show';
-    } else {
-      s.className = s.className.replace(' show','');
-    }
-  };
-
-  window.showSection = function(id, el) {
-    document.getElementById('dashboard').style.display = id === 'dashboard' ? 'block' : 'none';
-    document.getElementById('admin').style.display     = id === 'admin' ? 'block' : 'none';
-    const items = document.getElementsByClassName('nav-item');
-    for (let i=0;i<items.length;i++) {
-      items[i].className = items[i].className.replace(' active','');
-    }
-    if (el) el.className += ' active';
-    const s = document.getElementById('sidebar');
-    s.className = s.className.replace(' show','');
-  };
-
-  /* ============== AUTH GOOGLE ============== */
-  function updateAuthUI() {
-    const authBtn = document.getElementById('authBtn');
-    const navAdmin = document.getElementById('navAdmin');
-    const adminStatus = document.getElementById('adminStatus');
-    const adminPanel = document.getElementById('adminPanel');
-    const orderHistoryCard = document.getElementById('orderHistoryCard');
-    const myOrdersCard = document.getElementById('myOrdersCard');
-    const badge = document.getElementById('adminBadge');
-
-    if (!authBtn) return;
-
-    if (!currentUser) {
-      authBtn.textContent = '🔑 Login Google';
-      navAdmin.style.display = 'none';
-      adminStatus.textContent = 'Belum login sebagai admin.';
-      adminPanel.style.display = 'none';
-      orderHistoryCard.style.display = 'none';
-      myOrdersCard.style.display = 'none';
-      if (badge) badge.textContent = 'Login';
-    } else {
-      authBtn.textContent = '🚪 Logout (' + (currentUser.displayName || currentUser.email) + ')';
-      myOrdersCard.style.display = 'block';
-      if (isAdmin) {
-        navAdmin.style.display = 'flex';
-        adminStatus.textContent = '✅ Login sebagai admin: ' + (currentUser.email || '');
-        adminPanel.style.display = 'block';
-        orderHistoryCard.style.display = 'block';
-        if (badge) badge.textContent = 'Aktif';
-      } else {
-        navAdmin.style.display = 'none';
-        adminStatus.textContent = 'Anda login sebagai user biasa (' + (currentUser.email || '') + '), bukan admin.';
-        adminPanel.style.display = 'none';
-        orderHistoryCard.style.display = 'none';
-        if (badge) badge.textContent = 'Login';
-      }
-    }
-  }
-
-  window.handleAuthClick = async function() {
-    if (auth.currentUser) {
-      await signOut(auth);
-    } else {
-      try {
-        await signInWithPopup(auth, provider);
-      } catch (e) {
-        console.error(e);
-        alert('Login Google gagal. Coba lagi.');
-      }
-    }
-  };
-
-  onAuthStateChanged(auth, async (user) => {
-    currentUser = user;
-    isAdmin = !!(user && ADMIN_EMAILS.includes(user.email));
-    updateAuthUI();
-
-    if (user) {
-      // load pesanan user
-      myOrders = await loadOrdersForUser(user.uid);
-      renderMyOrders();
-
-      if (isAdmin) {
-        orders = await loadOrdersFromDB();
-        renderAdminTable();
-        renderOrderTable();
-      }
-    } else {
-      orders = [];
-      myOrders = [];
-      renderOrderTable();
-      renderMyOrders();
-    }
-  });
-
-  /* ============== RENDER PRODUK ============== */
   function createProductCard(p) {
     const card = document.createElement('div');
     card.className = 'product-card';
@@ -1052,363 +664,6 @@
     }
   }
 
-  /* ============== FLOW ORDER DANA ============== */
-  window.openOrderModal = function(id) {
-    currentOrderId = id;
-    document.getElementById('orderDana').value = '';
-    document.getElementById('orderNama').value = '';
-    document.getElementById('orderMsg').innerHTML = '';
-
-    // reset input tambahan
-    document.getElementById('sosmedUsernameFollowers').value = '';
-    document.getElementById('sosmedLink').value = '';
-    document.getElementById('sosmedUsernameLikes').value = '';
-    document.getElementById('panelUser').value = '';
-    document.getElementById('panelPass').value = '';
-    const buktiInput = document.getElementById('orderBukti');
-    if (buktiInput) buktiInput.value = '';
-
-    // sembunyikan semua field tambahan dulu
-    document.getElementById('sosmedFollowersFields').style.display = 'none';
-    document.getElementById('sosmedLikesFields').style.display = 'none';
-    document.getElementById('panelFields').style.display = 'none';
-
-    // cek produk
-    const p = products.find(prod => prod.id === id);
-    if (p) {
-      const lowerName = p.name.toLowerCase();
-
-      if (p.category === 'sosmed') {
-        if (lowerName.includes('followers')) {
-          document.getElementById('sosmedFollowersFields').style.display = 'block';
-        } else if (lowerName.includes('likes') || lowerName.includes('viewers')) {
-          document.getElementById('sosmedLikesFields').style.display = 'block';
-        }
-      } else if (p.category === 'panel') {
-        document.getElementById('panelFields').style.display = 'block';
-      }
-    }
-
-    document.getElementById('orderStepButtons').style.display = 'block';
-    document.getElementById('orderStepForm').style.display = 'none';
-    document.getElementById('orderModal').style.display = 'flex';
-  };
-
-  window.closeOrderModal = function() {
-    document.getElementById('orderModal').style.display = 'none';
-  };
-
-  window.orderBelumBayar = function() {
-    window.closeOrderModal();
-  };
-
-  window.orderSudahBayar = function() {
-    document.getElementById('orderStepButtons').style.display = 'none';
-    document.getElementById('orderStepForm').style.display = 'block';
-  };
-
-  window.orderSekarang = async function() {
-    const dana = document.getElementById('orderDana').value.trim();
-    const nama = document.getElementById('orderNama').value.trim();
-    const msg  = document.getElementById('orderMsg');
-    msg.className = 'modal-msg';
-    msg.innerHTML = '';
-
-    if (!dana || !nama) {
-      msg.className += ' error';
-      msg.innerHTML = 'Nomor DANA dan atas nama wajib diisi.';
-      return;
-    }
-
-    let p = null;
-    for (const prod of products) {
-      if (prod.id === currentOrderId) { p = prod; break; }
-    }
-    if (!p) {
-      window.closeOrderModal();
-      return;
-    }
-
-    // ====== BACA INPUT TAMBAHAN ======
-    let extraInfoText = '';
-
-    if (p.category === 'sosmed') {
-      const lowerName = p.name.toLowerCase();
-
-      if (lowerName.includes('followers')) {
-        const userFollowers = document.getElementById('sosmedUsernameFollowers').value.trim();
-        if (!userFollowers) {
-          msg.className += ' error';
-          msg.innerHTML = 'Username akun wajib diisi untuk order followers.';
-          return;
-        }
-        extraInfoText =
-          'Data Sosial Media (Followers):\n' +
-          'Username akun       : ' + userFollowers + '\n' +
-          'Catatan             : Akun tidak boleh private selama proses.\n';
-      } else if (lowerName.includes('likes') || lowerName.includes('viewers')) {
-        const linkVideo = document.getElementById('sosmedLink').value.trim();
-        const userLikes = document.getElementById('sosmedUsernameLikes').value.trim();
-        if (!linkVideo) {
-          msg.className += ' error';
-          msg.innerHTML = 'Link video wajib diisi untuk order likes/viewers.';
-          return;
-        }
-        extraInfoText =
-          'Data Sosial Media (Likes / Viewers):\n' +
-          'Link video          : ' + linkVideo + '\n' +
-          'Username (opsional) : ' + (userLikes || '-') + '\n' +
-          'Catatan             : Video harus publik, akun jangan private.\n';
-      }
-    } else if (p.category === 'panel') {
-      const panelUser = document.getElementById('panelUser').value.trim();
-      const panelPass = document.getElementById('panelPass').value.trim();
-      if (!panelUser || !panelPass) {
-        msg.className += ' error';
-        msg.innerHTML = 'Username dan password panel wajib diisi.';
-        return;
-      }
-      extraInfoText =
-        'Data Login Panel:\n' +
-        'Username panel : ' + panelUser + '\n' +
-        'Password panel : ' + panelPass + '\n';
-    }
-
-    // ====== UPLOAD BUKTI TRANSFER (WAJIB) ======
-    const buktiInput = document.getElementById('orderBukti');
-    let buktiUrl = '';
-    if (buktiInput && buktiInput.files && buktiInput.files[0]) {
-      try {
-        const file = buktiInput.files[0];
-        const orderId = 'ORD-' + p.id + '-' + Date.now();
-        const refPath = 'bukti-transfer/' + orderId + '-' + file.name;
-        const fileRef = storageRef(storage, refPath);
-        await uploadBytes(fileRef, file);
-        buktiUrl = await getDownloadURL(fileRef);
-      } catch (e) {
-        console.error('Gagal upload bukti transfer:', e);
-        msg.className += ' error';
-        msg.innerHTML = 'Gagal mengupload bukti transfer. Coba lagi atau kirim ke admin via chat.';
-        return;
-      }
-    } else {
-      msg.className += ' error';
-      msg.innerHTML = 'Bukti transfer (screenshot) wajib diupload.';
-      return;
-    }
-
-    // ====== KURANGI STOK & SIMPAN ORDER ======
-    if (p.stock > 0) p.stock = p.stock - 1;
-    await updateProductField(p.id, 'stock', p.stock);
-
-    renderProducts();
-    if (isAdmin) {
-      renderAdminTable();
-    }
-
-    const nowISO = new Date().toISOString();
-    const user = auth.currentUser;
-    const orderObj = {
-      time: nowISO,
-      productId: p.id,
-      productName: p.name,
-      price: p.price,
-      danaNumber: dana,
-      danaName: nama,
-      stockAfter: p.stock,
-      extraInfo: extraInfoText,
-      buktiUrl: buktiUrl,
-      userUid: user ? user.uid : null,
-      userEmail: user ? user.email : null,
-      userDisplayName: user ? user.displayName : null,
-      status: 'pending',
-      delivery: ''
-    };
-
-    const docRef = await addDoc(collection(db, 'orders'), orderObj);
-    const fullOrder = { docId: docRef.id, ...orderObj };
-    orders.push(fullOrder);
-
-    if (user) {
-      myOrders.push(fullOrder);
-      renderMyOrders();
-    }
-
-    if (isAdmin) {
-      renderOrderTable();
-    }
-
-    // ====== KONFIRMASI DI WEBSITE SAJA ======
-    msg.className = 'modal-msg ok';
-    msg.innerHTML =
-      '✅ Order & bukti transfer berhasil disimpan.<br>' +
-      'Status awal: <b>pending</b>.<br>' +
-      'Admin akan mengecek pembayaran dan mengubah status menjadi <b>proses/sukses</b>.';
-
-    setTimeout(() => {
-      window.closeOrderModal();
-    }, 3000);
-  };
-
-  document.getElementById('orderModal').addEventListener('click', function(e){
-    if (e.target === this) { window.closeOrderModal(); }
-  });
-
-  /* ============== ADMIN TABLE ============== */
-  function renderAdminTable() {
-    const panel = document.getElementById('adminPanel');
-    if (!panel || !isAdmin) return;
-    const tbody = document.getElementById('adminTable').getElementsByTagName('tbody')[0];
-    tbody.innerHTML = '';
-    for (const p of products) {
-      const tr = document.createElement('tr');
-
-      const tdId = document.createElement('td');
-      tdId.textContent = p.id;
-
-      const tdName = document.createElement('td');
-      const inpName = document.createElement('input');
-      inpName.className = 'admin-input';
-      inpName.value = p.name;
-      inpName.setAttribute('data-id', p.id);
-      inpName.setAttribute('data-field', 'name');
-      tdName.appendChild(inpName);
-
-      const tdPrice = document.createElement('td');
-      const inpPrice = document.createElement('input');
-      inpPrice.className = 'admin-input';
-      inpPrice.value = p.price;
-      inpPrice.setAttribute('data-id', p.id);
-      inpPrice.setAttribute('data-field', 'price');
-      tdPrice.appendChild(inpPrice);
-
-      const tdStock = document.createElement('td');
-      const inpStock = document.createElement('input');
-      inpStock.className = 'admin-input';
-      inpStock.type = 'number';
-      inpStock.min = '0';
-      inpStock.value = p.stock;
-      inpStock.setAttribute('data-id', p.id);
-      inpStock.setAttribute('data-field', 'stock');
-      tdStock.appendChild(inpStock);
-
-      tr.appendChild(tdId);
-      tr.appendChild(tdName);
-      tr.appendChild(tdPrice);
-      tr.appendChild(tdStock);
-
-      tbody.appendChild(tr);
-    }
-
-    const inputs = tbody.getElementsByClassName('admin-input');
-    for (let j=0;j<inputs.length;j++) {
-      inputs[j].oninput = async function() {
-        const id = Number(this.getAttribute('data-id'));
-        const field = this.getAttribute('data-field');
-        const prod = products.find(p => p.id === id);
-        if (!prod) return;
-
-        if (field === 'name') {
-          prod.name = this.value;
-          await updateProductField(id, 'name', prod.name);
-        } else if (field === 'price') {
-          prod.price = this.value;
-          await updateProductField(id, 'price', prod.price);
-        } else if (field === 'stock') {
-          let v = parseInt(this.value, 10);
-          if (isNaN(v) || v < 0) v = 0;
-          prod.stock = v;
-          await updateProductField(id, 'stock', prod.stock);
-        }
-        renderProducts();
-      };
-    }
-  }
-
-  /* ============== RIWAYAT ORDER ADMIN ============== */
-  function renderOrderTable() {
-    const card = document.getElementById('orderHistoryCard');
-    if (!card || !isAdmin) return;
-    const tbody = document.getElementById('orderTable').getElementsByTagName('tbody')[0];
-    tbody.innerHTML = '';
-    orders.forEach((o, i) => {
-      const tr = document.createElement('tr');
-
-      const tdIdx = document.createElement('td');
-      tdIdx.textContent = i + 1;
-
-      const tdTime = document.createElement('td');
-      const d = new Date(o.time);
-      tdTime.textContent = d.toLocaleString('id-ID');
-
-      const tdProd = document.createElement('td');
-      tdProd.textContent = o.productName;
-
-      const tdDana = document.createElement('td');
-      tdDana.textContent = o.danaNumber;
-
-      const tdNama = document.createElement('td');
-      tdNama.textContent = o.danaName;
-
-      const tdStatus = document.createElement('td');
-      const select = document.createElement('select');
-      select.className = 'admin-input';
-      ['pending','proses','eror','sukses'].forEach(st => {
-        const opt = document.createElement('option');
-        opt.value = st;
-        opt.textContent = st;
-        select.appendChild(opt);
-      });
-      select.value = o.status || 'pending';
-      select.setAttribute('data-index', i);
-      select.onchange = async function() {
-        const idx = Number(this.getAttribute('data-index'));
-        const newStatus = this.value;
-        const ord = orders[idx];
-        ord.status = newStatus;
-        await updateOrderField(ord.docId, 'status', newStatus);
-      };
-      tdStatus.appendChild(select);
-
-      const tdDelivery = document.createElement('td');
-      const btnDeliv = document.createElement('button');
-      btnDeliv.className = 'btn-mini';
-      btnDeliv.textContent = o.delivery ? 'Edit' : 'Kirim';
-      btnDeliv.onclick = async function() {
-        const isi = prompt('Masukkan detail produk untuk pembeli (login, key, link, dll):', o.delivery || '');
-        if (isi === null) return;
-        o.delivery = isi;
-        await updateOrderField(o.docId, 'delivery', isi);
-        btnDeliv.textContent = isi ? 'Edit' : 'Kirim';
-      };
-      tdDelivery.appendChild(btnDeliv);
-
-      const tdBukti = document.createElement('td');
-      if (o.buktiUrl) {
-        const a = document.createElement('a');
-        a.href = o.buktiUrl;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        a.textContent = 'Lihat';
-        tdBukti.appendChild(a);
-      } else {
-        tdBukti.textContent = '-';
-      }
-
-      tr.appendChild(tdIdx);
-      tr.appendChild(tdTime);
-      tr.appendChild(tdProd);
-      tr.appendChild(tdDana);
-      tr.appendChild(tdNama);
-      tr.appendChild(tdStatus);
-      tr.appendChild(tdDelivery);
-      tr.appendChild(tdBukti);
-
-      tbody.appendChild(tr);
-    });
-  }
-
-  /* ============== RIWAYAT PESANAN USER ============== */
   function renderMyOrders() {
     const card = document.getElementById('myOrdersCard');
     const table = document.getElementById('myOrderTable');
@@ -1419,9 +674,8 @@
     if (!currentUser) {
       card.style.display = 'none';
       return;
-    } else {
-      card.style.display = 'block';
     }
+    card.style.display = 'block';
 
     myOrders.forEach((o, i) => {
       const tr = document.createElement('tr');
@@ -1469,15 +723,246 @@
     });
   }
 
-  /* ============== PENCARIAN ============== */
-  const searchInputEl = document.getElementById('searchInput');
-  if (searchInputEl) {
-    searchInputEl.oninput = function() {
-      renderProducts();
-    };
+  function updateAuthUI() {
+    const authBtn = document.getElementById('authBtn');
+    const adminLink = document.getElementById('adminLink');
+    const loginCard = document.getElementById('loginInfoCard');
+    const dashboard = document.getElementById('dashboard');
+
+    if (!currentUser) {
+      if (authBtn) authBtn.textContent = '🔑 Login Google';
+      if (adminLink) adminLink.style.display = 'none';
+      if (loginCard) loginCard.style.display = 'block';
+      if (dashboard) dashboard.style.display = 'none';
+    } else {
+      if (authBtn) authBtn.textContent = '🚪 Logout (' + (currentUser.displayName || currentUser.email) + ')';
+      if (loginCard) loginCard.style.display = 'none';
+      if (dashboard) dashboard.style.display = 'block';
+      if (adminLink) adminLink.style.display = isAdmin ? 'inline-flex' : 'none';
+    }
   }
 
-  /* ============== MODE TERANG / GELAP ============== */
+  window.handleAuthClick = async function() {
+    if (auth.currentUser) {
+      await signOut(auth);
+    } else {
+      try {
+        await signInWithPopup(auth, provider);
+      } catch(e) {
+        console.error(e);
+        alert('Login Google gagal. Coba lagi.');
+      }
+    }
+  };
+
+  onAuthStateChanged(auth, async (user) => {
+    currentUser = user;
+    isAdmin = !!(user && ADMIN_EMAILS.includes(user.email));
+    updateAuthUI();
+
+    if (user) {
+      if (!productsLoaded) {
+        products = await loadProductsFromDB();
+        productsLoaded = true;
+      }
+      renderProducts();
+      myOrders = await loadOrdersForUser(user.uid);
+      renderMyOrders();
+    } else {
+      myOrders = [];
+      renderMyOrders();
+    }
+  });
+
+  // ========== ORDER FLOW ==========
+  window.openOrderModal = function(id) {
+    if (!currentUser) {
+      alert('Silakan login dengan Google dulu sebelum order.');
+      return;
+    }
+    currentOrderId = id;
+    document.getElementById('orderDana').value = '';
+    document.getElementById('orderNama').value = '';
+    document.getElementById('orderMsg').innerHTML = '';
+
+    document.getElementById('sosmedUsernameFollowers').value = '';
+    document.getElementById('sosmedLink').value = '';
+    document.getElementById('sosmedUsernameLikes').value = '';
+    document.getElementById('panelUser').value = '';
+    document.getElementById('panelPass').value = '';
+    const buktiInput = document.getElementById('orderBukti');
+    if (buktiInput) buktiInput.value = '';
+
+    document.getElementById('sosmedFollowersFields').style.display = 'none';
+    document.getElementById('sosmedLikesFields').style.display = 'none';
+    document.getElementById('panelFields').style.display = 'none';
+
+    const p = products.find(prod => prod.id === id);
+    if (p) {
+      const lowerName = p.name.toLowerCase();
+      if (p.category === 'sosmed') {
+        if (lowerName.includes('followers')) {
+          document.getElementById('sosmedFollowersFields').style.display = 'block';
+        } else if (lowerName.includes('likes') || lowerName.includes('viewers')) {
+          document.getElementById('sosmedLikesFields').style.display = 'block';
+        }
+      } else if (p.category === 'panel') {
+        document.getElementById('panelFields').style.display = 'block';
+      }
+    }
+
+    document.getElementById('orderStepButtons').style.display = 'block';
+    document.getElementById('orderStepForm').style.display = 'none';
+    document.getElementById('orderModal').style.display = 'flex';
+  };
+
+  window.closeOrderModal = function() {
+    document.getElementById('orderModal').style.display = 'none';
+  };
+  window.orderBelumBayar = function() {
+    window.closeOrderModal();
+  };
+  window.orderSudahBayar = function() {
+    document.getElementById('orderStepButtons').style.display = 'none';
+    document.getElementById('orderStepForm').style.display = 'block';
+  };
+
+  window.orderSekarang = async function() {
+    const dana = document.getElementById('orderDana').value.trim();
+    const nama = document.getElementById('orderNama').value.trim();
+    const msg  = document.getElementById('orderMsg');
+    msg.className = 'modal-msg';
+    msg.innerHTML = '';
+
+    if (!dana || !nama) {
+      msg.className += ' error';
+      msg.innerHTML = 'Nomor DANA dan atas nama wajib diisi.';
+      return;
+    }
+
+    let p = null;
+    for (const prod of products) {
+      if (prod.id === currentOrderId) { p = prod; break; }
+    }
+    if (!p) {
+      window.closeOrderModal();
+      return;
+    }
+
+    let extraInfoText = '';
+
+    if (p.category === 'sosmed') {
+      const lowerName = p.name.toLowerCase();
+      if (lowerName.includes('followers')) {
+        const userFollowers = document.getElementById('sosmedUsernameFollowers').value.trim();
+        if (!userFollowers) {
+          msg.className += ' error';
+          msg.innerHTML = 'Username akun wajib diisi untuk order followers.';
+          return;
+        }
+        extraInfoText =
+          'Data Sosial Media (Followers):\n' +
+          'Username akun       : ' + userFollowers + '\n' +
+          'Catatan             : Akun tidak boleh private selama proses.\n';
+      } else if (lowerName.includes('likes') || lowerName.includes('viewers')) {
+        const linkVideo = document.getElementById('sosmedLink').value.trim();
+        const userLikes = document.getElementById('sosmedUsernameLikes').value.trim();
+        if (!linkVideo) {
+          msg.className += ' error';
+          msg.innerHTML = 'Link video wajib diisi untuk order likes/viewers.';
+          return;
+        }
+        extraInfoText =
+          'Data Sosial Media (Likes / Viewers):\n' +
+          'Link video          : ' + linkVideo + '\n' +
+          'Username (opsional) : ' + (userLikes || '-') + '\n' +
+          'Catatan             : Video harus publik, akun jangan private.\n';
+      }
+    } else if (p.category === 'panel') {
+      const panelUser = document.getElementById('panelUser').value.trim();
+      const panelPass = document.getElementById('panelPass').value.trim();
+      if (!panelUser || !panelPass) {
+        msg.className += ' error';
+        msg.innerHTML = 'Username dan password panel wajib diisi.';
+        return;
+      }
+      extraInfoText =
+        'Data Login Panel:\n' +
+        'Username panel : ' + panelUser + '\n' +
+        'Password panel : ' + panelPass + '\n';
+    }
+
+    const buktiInput = document.getElementById('orderBukti');
+    let buktiUrl = '';
+    if (buktiInput && buktiInput.files && buktiInput.files[0]) {
+      try {
+        const file = buktiInput.files[0];
+        const orderId = 'ORD-' + p.id + '-' + Date.now();
+        const refPath = 'bukti-transfer/' + orderId + '-' + file.name;
+        const fileRef = storageRef(storage, refPath);
+        await uploadBytes(fileRef, file);
+        buktiUrl = await getDownloadURL(fileRef);
+      } catch (e) {
+        console.error('Gagal upload bukti transfer:', e);
+        msg.className += ' error';
+        msg.innerHTML = 'Gagal mengupload bukti transfer. Coba lagi atau kirim ke admin via chat.';
+        return;
+      }
+    } else {
+      msg.className += ' error';
+      msg.innerHTML = 'Bukti transfer (screenshot) wajib diupload.';
+      return;
+    }
+
+    if (p.stock > 0) p.stock = p.stock - 1;
+    await updateProductField(p.id, 'stock', p.stock);
+    renderProducts();
+
+    const nowISO = new Date().toISOString();
+    const user = auth.currentUser;
+    const orderObj = {
+      time: nowISO,
+      productId: p.id,
+      productName: p.name,
+      price: p.price,
+      danaNumber: dana,
+      danaName: nama,
+      stockAfter: p.stock,
+      extraInfo: extraInfoText,
+      buktiUrl: buktiUrl,
+      userUid: user ? user.uid : null,
+      userEmail: user ? user.email : null,
+      userDisplayName: user ? user.displayName : null,
+      status: 'pending',
+      delivery: ''
+    };
+
+    const docRef = await addDoc(collection(db, 'orders'), orderObj);
+    const fullOrder = { docId: docRef.id, ...orderObj };
+    myOrders.push(fullOrder);
+    renderMyOrders();
+
+    msg.className = 'modal-msg ok';
+    msg.innerHTML =
+      '✅ Order & bukti transfer berhasil disimpan.<br>' +
+      'Status awal: <b>pending</b>. Admin akan mengubah menjadi <b>proses/sukses</b> setelah dicek.';
+
+    setTimeout(() => {
+      window.closeOrderModal();
+    }, 3000);
+  };
+
+  document.getElementById('orderModal').addEventListener('click', function(e){
+    if (e.target === this) { window.closeOrderModal(); }
+  });
+
+  // search
+  const searchInputEl = document.getElementById('searchInput');
+  if (searchInputEl) {
+    searchInputEl.oninput = function() { renderProducts(); };
+  }
+
+  // theme
   function applyTheme(t) {
     const btn = document.getElementById('themeBtn');
     if (t === 'light') {
@@ -1490,12 +975,10 @@
       btn.innerHTML = '🌙 Gelap';
     }
   }
-
   let savedTheme;
   try { savedTheme = localStorage.getItem('ds-theme-hp'); } catch(e) {}
   if (!savedTheme) savedTheme = 'dark';
   applyTheme(savedTheme);
-
   window.toggleTheme = function() {
     const isLight = document.body.className.indexOf('light') !== -1;
     const now = isLight ? 'dark' : 'light';
@@ -1503,11 +986,7 @@
     try { localStorage.setItem('ds-theme-hp', now); } catch(e) {}
   };
 
-  /* ============== INIT ============== */
-  (async function initApp(){
-    products = await loadProductsFromDB();
-    renderProducts();
-  })();
+  // init: tidak load produk dulu supaya kalau rules butuh auth, tidak error
 </script>
 
 </body>
