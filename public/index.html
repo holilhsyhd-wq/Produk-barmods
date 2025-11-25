@@ -448,9 +448,9 @@
       <p>
         1. Pilih produk di bawah.<br>
         2. Tekan tombol <b>Order Sekarang</b> pada produk.<br>
-        3. Isi data DANA & data tambahan yang diminta di form (username / link / user panel).<br>
-        4. Lakukan pembayaran manual ke DANA <b>083877842721</b>.<br>
-        5. Setelah bayar, kamu bisa kirim bukti transfer ke admin (WhatsApp / chat lain) jika diminta.
+        3. Isi data DANA & data tambahan (username / link / user panel) di form.<br>
+        4. Upload <b>SS bukti transfer</b> langsung di form.<br>
+        5. Admin akan cek data & pembayaran, lalu proses pesanan kamu.
       </p>
       <div class="admin-contact-big">
         <a class="btn-primary" href="https://wa.me/6283877842721">
@@ -462,7 +462,7 @@
       </div>
       <div class="pill-row">
         <div class="pill">Pembayaran: DANA 083877842721</div>
-        <div class="pill">Proses setelah pembayaran & data lengkap</div>
+        <div class="pill">Upload SS bukti transfer di form order</div>
       </div>
     </div>
 
@@ -524,7 +524,7 @@
       <div class="card-header">
         <div>
           <h2>Riwayat Order</h2>
-          <small>Data order yang dibuat dari tombol Order Sekarang</small>
+          <small>Data order + link bukti transfer</small>
         </div>
       </div>
       <table class="admin-table" id="orderTable">
@@ -536,6 +536,7 @@
             <th>DANA</th>
             <th>Nama</th>
             <th>Stok sisa</th>
+            <th>Bukti</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -567,7 +568,7 @@
     <p>
       Silakan transfer dulu ke DANA:<br>
       <b>083877842721</b><br>
-      Setelah bayar, pilih <b>Sudah bayar</b> untuk isi data.
+      Setelah bayar, pilih <b>Sudah bayar</b> untuk isi data & upload bukti.
     </p>
 
     <div id="orderStepButtons">
@@ -608,8 +609,16 @@
         <input id="panelPass" class="modal-input" placeholder="Password panel yang diinginkan">
       </div>
 
+      <!-- UPLOAD BUKTI TRANSFER -->
+      <div style="margin-top:6px;">
+        <p style="font-size:11px;color:var(--text-soft);margin:0 0 4px;">
+          Upload <b>Screenshot bukti transfer</b> (jpg/png):
+        </p>
+        <input id="orderBukti" class="modal-input" type="file" accept="image/*">
+      </div>
+
       <p style="font-size:11px;color:var(--text-soft);margin:4px 0 0;">
-        Setelah data tersimpan, silakan lakukan pembayaran ke DANA di atas.
+        Setelah data & bukti tersimpan, admin akan cek pembayaran kamu.
       </p>
       <div class="modal-actions">
         <button type="button" class="btn-cancel" onclick="closeOrderModal()">Batal</button>
@@ -636,6 +645,12 @@
     query,
     orderBy
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import {
+    getStorage,
+    ref as storageRef,
+    uploadBytes,
+    getDownloadURL
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
   /* ============= CONFIG DARI KAMU ============= */
   const firebaseConfig = {
@@ -649,6 +664,7 @@
 
   const app = initializeApp(firebaseConfig);
   const db  = getFirestore(app);
+  const storage = getStorage(app);
 
   /* =================== DATA PRODUK DASAR =================== */
   const defaultProducts = [
@@ -911,6 +927,8 @@
     document.getElementById('sosmedUsernameLikes').value = '';
     document.getElementById('panelUser').value = '';
     document.getElementById('panelPass').value = '';
+    const buktiInput = document.getElementById('orderBukti');
+    if (buktiInput) buktiInput.value = '';
 
     // sembunyikan semua field tambahan dulu
     document.getElementById('sosmedFollowersFields').style.display = 'none';
@@ -1018,6 +1036,29 @@
         'Password panel : ' + panelPass + '\n';
     }
 
+    // ====== UPLOAD BUKTI TRANSFER (JIKA ADA) ======
+    const buktiInput = document.getElementById('orderBukti');
+    let buktiUrl = '';
+    if (buktiInput && buktiInput.files && buktiInput.files[0]) {
+      try {
+        const file = buktiInput.files[0];
+        const orderId = 'ORD-' + p.id + '-' + Date.now();
+        const refPath = 'bukti_transfer/' + orderId + '-' + file.name;
+        const fileRef = storageRef(storage, refPath);
+        await uploadBytes(fileRef, file);
+        buktiUrl = await getDownloadURL(fileRef);
+      } catch (e) {
+        console.error('Gagal upload bukti transfer:', e);
+        msg.className += ' error';
+        msg.innerHTML = 'Gagal mengupload bukti transfer. Coba lagi atau kirim ke admin via chat.';
+        return;
+      }
+    } else {
+      msg.className += ' error';
+      msg.innerHTML = 'Bukti transfer (screenshot) wajib diupload.';
+      return;
+    }
+
     // ====== KURANGI STOK & SIMPAN ORDER ======
     if (p.stock > 0) p.stock = p.stock - 1;
     await updateProductField(p.id, 'stock', p.stock);
@@ -1036,7 +1077,8 @@
       danaNumber: dana,
       danaName: nama,
       stockAfter: p.stock,
-      extraInfo: extraInfoText
+      extraInfo: extraInfoText,
+      buktiUrl: buktiUrl
     };
     orders.push(orderObj);
     await addDoc(collection(db, 'orders'), orderObj);
@@ -1044,13 +1086,11 @@
       renderOrderTable();
     }
 
-    // ====== KONFIRMASI DI WEBSITE SAJA (TANPA GMAIL / WA) ======
+    // ====== KONFIRMASI DI WEBSITE SAJA ======
     msg.className = 'modal-msg ok';
     msg.innerHTML =
-      '✅ Order berhasil disimpan.<br>' +
-      'Silakan lakukan pembayaran ke DANA <b>083877842721</b> ' +
-      'sebesar <b>' + p.price + '</b>.<br>' +
-      'Setelah pembayaran masuk, admin akan memproses pesanan kamu.';
+      '✅ Order & bukti transfer berhasil disimpan.<br>' +
+      'Admin akan mengecek pembayaran kamu dan memproses pesanan.';
 
     setTimeout(() => {
       window.closeOrderModal();
@@ -1203,12 +1243,25 @@
       const tdStock = document.createElement('td');
       tdStock.textContent = o.stockAfter;
 
+      const tdBukti = document.createElement('td');
+      if (o.buktiUrl) {
+        const a = document.createElement('a');
+        a.href = o.buktiUrl;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = 'Lihat';
+        tdBukti.appendChild(a);
+      } else {
+        tdBukti.textContent = '-';
+      }
+
       tr.appendChild(tdIdx);
       tr.appendChild(tdTime);
       tr.appendChild(tdProd);
       tr.appendChild(tdDana);
       tr.appendChild(tdNama);
       tr.appendChild(tdStock);
+      tr.appendChild(tdBukti);
 
       tbody.appendChild(tr);
     });
