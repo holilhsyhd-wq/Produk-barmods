@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Barmods Digital Store - Profil Saya</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <style>
+    body{
+      margin:0;
+      padding:0;
+      background:#f3f4f6;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI";
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+    }
+    .card{
+      width:100%;
+      max-width:460px;
+      background:white;
+      padding:24px;
+      border-radius:18px;
+      box-shadow:0 0 25px rgba(0,0,0,.15);
+    }
+    h2{
+      margin:0 0 4px;
+      text-align:center;
+    }
+    small{
+      display:block;
+      text-align:center;
+      font-size:12px;
+      color:#6b7280;
+      margin-bottom:16px;
+    }
+    label{
+      display:block;
+      font-size:13px;
+      margin-top:10px;
+    }
+    .input{
+      width:100%;
+      border:1px solid #d1d5db;
+      background:#f9fafb;
+      border-radius:8px;
+      padding:9px 11px;
+      font-size:14px;
+      margin-top:4px;
+    }
+    .input[disabled]{
+      background:#e5e7eb;
+      color:#6b7280;
+    }
+    .btn-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:14px;
+    }
+    .btn{
+      flex:1;
+      min-width:120px;
+      border:none;
+      border-radius:999px;
+      padding:9px 10px;
+      font-size:13px;
+      font-weight:500;
+      cursor:pointer;
+      color:white;
+    }
+    .btn-main{ background:#2563eb; }
+    .btn-gray{ background:#6b7280; }
+    .btn-red{  background:#ef4444; }
+    .meta{
+      margin-top:10px;
+      font-size:11px;
+      color:#6b7280;
+    }
+    .msg{
+      margin-top:10px;
+      text-align:center;
+      font-size:12px;
+      min-height:16px;
+    }
+    .ok{ color:#10b981; }
+    .err{ color:#ef4444; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Profil Saya</h2>
+  <small>Barmods Digital Store</small>
+
+  <label>Email (tidak bisa diubah)</label>
+  <input id="email" class="input" disabled>
+
+  <label>Username</label>
+  <input id="username" class="input" placeholder="username kamu">
+
+  <label>Nomor HP / WhatsApp</label>
+  <input id="phone" class="input" placeholder="08xxxxxxxxxx">
+
+  <div class="meta">
+    <div id="createdAtRow">Terdaftar: -</div>
+    <div id="providerRow">Login via: -</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-main" id="btnSave">Simpan Profil</button>
+    <button class="btn btn-gray" type="button" onclick="location.href='index.html'">
+      Kembali ke Produk
+    </button>
+    <button class="btn btn-red" id="btnLogout">Logout</button>
+  </div>
+
+  <div id="msg" class="msg"></div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    updateDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+    authDomain: "toko-barmods.firebaseapp.com",
+    projectId: "toko-barmods",
+    storageBucket: "toko-barmods.firebasestorage.app",
+    messagingSenderId: "284047189012",
+    appId: "1:284047189012:web:6ef0c6891adab08a383301"
+  };
+
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  const msgEl = document.getElementById("msg");
+  function showMsg(t, ok=false){
+    msgEl.textContent = t;
+    msgEl.className = "msg " + (ok ? "ok" : "err");
+  }
+
+  const emailEl = document.getElementById("email");
+  const userEl  = document.getElementById("username");
+  const phoneEl = document.getElementById("phone");
+  const createdAtRow = document.getElementById("createdAtRow");
+  const providerRow  = document.getElementById("providerRow");
+
+  let currentUid = null;
+
+  onAuthStateChanged(auth, async (user) => {
+    if(!user){
+      // kalau belum login, balik ke login
+      window.location.href = "login.html";
+      return;
+    }
+    currentUid = user.uid;
+    emailEl.value = user.email || "";
+
+    try{
+      const ref = doc(db, "users", currentUid);
+      const snap = await getDoc(ref);
+      if(snap.exists()){
+        const data = snap.data();
+        if(data.username) userEl.value = data.username;
+        if(data.phone)    phoneEl.value = data.phone;
+        if(data.createdAt){
+          const d = new Date(data.createdAt);
+          createdAtRow.textContent = "Terdaftar: " + d.toLocaleString("id-ID");
+        }else{
+          createdAtRow.textContent = "Terdaftar: -";
+        }
+        providerRow.textContent = "Login via: " + (data.provider || (user.providerData[0]?.providerId || "unknown"));
+      }else{
+        createdAtRow.textContent = "Terdaftar: (data user belum tersimpan)";
+        providerRow.textContent  = "Login via: " + (user.providerData[0]?.providerId || "unknown");
+      }
+    }catch(e){
+      console.error(e);
+      showMsg("Gagal memuat profil.", false);
+    }
+  });
+
+  document.getElementById("btnSave").onclick = async () => {
+    if(!currentUid){
+      showMsg("Sesi login habis. Silakan login ulang.");
+      return;
+    }
+    const username = userEl.value.trim();
+    const phone    = phoneEl.value.trim();
+
+    if(!username || !phone){
+      showMsg("Username dan nomor HP wajib diisi.");
+      return;
+    }
+
+    try{
+      const ref = doc(db, "users", currentUid);
+      await updateDoc(ref, {
+        username,
+        phone,
+        updatedAt: new Date().toISOString()
+      });
+      showMsg("Profil berhasil disimpan.", true);
+    }catch(e){
+      console.error(e);
+      showMsg("Gagal menyimpan profil.");
+    }
+  };
+
+  document.getElementById("btnLogout").onclick = async () => {
+    try{
+      await signOut(auth);
+      window.location.href = "login.html";
+    }catch(e){
+      showMsg("Gagal logout.");
+    }
+  };
+</script>
+
+</body>
+</html>
