@@ -1,239 +1,227 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Pesanan Saya - Barmods Digital Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:#020617;
-      color:#e5e7eb;
+    body {
+      font-family: system-ui, sans-serif;
+      background: #050815;
+      color: #f9fafb;
+      margin: 0;
     }
-    header{
-      padding:14px;
-      background:#020617;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      border-bottom:1px solid #1f2937;
+    a { color: inherit; text-decoration: none; }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(5,8,21,0.9);
+      backdrop-filter: blur(10px);
+      padding: 12px;
+      border-bottom: 1px solid rgba(148,163,184,0.3);
+      z-index: 50;
     }
-    .brand-title{font-size:15px;font-weight:600;}
-    .brand-sub{font-size:11px;color:#9ca3af;}
-    .header-left{display:flex;flex-direction:column;}
-    .header-right{display:flex;gap:8px;flex-wrap:wrap;}
-    .btn-header{
-      border-radius:999px;
-      padding:6px 11px;
-      border:1px solid #374151;
-      background:#111827;
-      color:#e5e7eb;
-      font-size:12px;
-      text-decoration:none;
+    nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.4);
+      background: transparent;
+      color: #f9fafb;
+      cursor: pointer;
     }
-    main{max-width:960px;margin:0 auto;padding:12px;}
-    h2{margin:6px 0 4px;font-size:16px;}
-    .info{font-size:12px;color:#9ca3af;margin-bottom:8px;}
-    table{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px;}
-    th,td{
-      border-bottom:1px solid #1f2937;
-      padding:5px 4px;
-      text-align:left;
-      vertical-align:top;
+    .btn.primary { background: #2563eb; border-color: #2563eb; }
+    .btn.danger { background: #ef4444; border-color: #ef4444; }
+
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 16px;
     }
-    th{background:#020617;font-size:11px;color:#9ca3af;}
-    .badge{
-      display:inline-block;
-      border-radius:999px;
-      padding:2px 6px;
-      font-size:10px;
-      margin-top:2px;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 13px;
+      background: #0f172a;
+      border-radius: 12px;
+      overflow: hidden;
     }
-    .status-pending{background:#facc15;color:#111827;}
-    .status-proses{background:#3b82f6;color:#ffffff;}
-    .status-eror{background:#f97373;color:#111827;}
-    .status-sukses{background:#22c55e;color:#ffffff;}
-    .msg{font-size:12px;min-height:16px;margin-top:6px;}
-    .msg.ok{color:#22c55e;}
-    .msg.err{color:#f97373;}
-    .delivery-box{
-      white-space:pre-wrap;
-      background:#020617;
-      border-radius:8px;
-      padding:6px 7px;
-      border:1px solid #1f2937;
-      font-size:11px;
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid rgba(148,163,184,0.2);
     }
-    .proof-link{
-      font-size:11px;
-      color:#38bdf8;
-      text-decoration:none;
+    th { background: #1e293b; text-align: left; }
+    tr:last-child td { border-bottom: none; }
+
+    .status {
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 12px;
     }
-    .proof-link:hover{text-decoration:underline;}
+    .pending { background: #fbbf24; color: #000; }
+    .proses { background: #3b82f6; }
+    .sukses { background: #22c55e; }
+    .error { background: #ef4444; }
+
+    .error-text { color: #ef4444; margin-top: 12px; font-size: 14px; }
   </style>
 </head>
+
 <body>
+  <header>
+    <h2 style="margin:0 0 6px 0;">Pesanan Saya<br><span style="font-size:13px;color:#9ca3af;">Barmods Digital Store</span></h2>
+    <nav>
+      <a href="index.html"><button class="btn primary">Produk</button></a>
+      <a href="profile.html"><button class="btn">Profil Saya</button></a>
+      <a href="admin.html"><button class="btn">Admin</button></a>
+      <button class="btn danger" id="logoutBtn">Logout</button>
+    </nav>
+  </header>
 
-<header>
-  <div class="header-left">
-    <span class="brand-title">Pesanan Saya</span>
-    <span class="brand-sub">Barmods Digital Store</span>
-  </div>
-  <div class="header-right">
-    <a href="index.html"   class="btn-header">← Produk</a>
-    <a href="profile.html" class="btn-header">Profil Saya</a>
-    <a href="admin.html"   class="btn-header">Admin</a>
-  </div>
-</header>
+  <main>
+    <h2>Riwayat Pesanan</h2>
+    <p style="font-size:13px;color:#9ca3af;">
+      Semua order yang kamu buat akan muncul di sini.  
+      Status: <b>pending • proses • sukses • error</b>.  
+      Jika admin mengirim produk, hasilnya muncul di kolom <b>Produk dari admin</b>.
+    </p>
 
-<main>
-  <h2>Riwayat Pesanan</h2>
-  <p class="info">
-    Di sini kamu bisa lihat semua order yang kamu buat, status
-    <b>pending / proses / sukses / eror</b>, dan jika admin sudah kirim produk,
-    isinya muncul di kolom <b>Produk dari admin</b>.
-  </p>
-  <div id="orderMsg" class="msg"></div>
-  <table id="orderTable">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Waktu</th>
-        <th>Produk</th>
-        <th>DANA</th>
-        <th>Status</th>
-        <th>Produk dari admin</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</main>
+    <div id="errorMsg" class="error-text"></div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import {
-    getFirestore, collection, query, where, orderBy, getDocs
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-  import {
-    getAuth, onAuthStateChanged
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Waktu</th>
+          <th>Produk</th>
+          <th>Status</th>
+          <th>Data Order</th>
+          <th>Produk dari admin</th>
+        </tr>
+      </thead>
+      <tbody id="orderBody">
+        <tr><td colspan="6" style="text-align:center;color:#9ca3af;">Memuat pesanan...</td></tr>
+      </tbody>
+    </table>
+  </main>
 
-  // ======= FIREBASE CONFIG (SAMA DENGAN FILE LAIN) =======
-  const firebaseConfig = {
-    apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-    authDomain: "toko-barmods.firebaseapp.com",
-    projectId: "toko-barmods",
-    storageBucket: "toko-barmods.firebasestorage.app",
-    messagingSenderId: "284047189012",
-    appId: "1:284047189012:web:6ef0c6891adab08a383301"
-  };
+  <script type="module">
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      doc,
+      query,
+      orderBy,
+      where,
+      getDocs,
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-  const app  = initializeApp(firebaseConfig);
-  const db   = getFirestore(app);
-  const auth = getAuth(app);
+    // FIREBASE CONFIG
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+      authDomain: "toko-barmods.firebaseapp.com",
+      projectId: "toko-barmods",
+      storageBucket: "toko-barmods.firebasestorage.app",
+      messagingSenderId: "284047189012",
+      appId: "1:284047189012:web:6ef0c6891adab08a383301"
+    };
 
-  const msgEl = document.getElementById("orderMsg");
-  const tbody = document.querySelector("#orderTable tbody");
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-  function setMsg(text, ok=false){
-    msgEl.textContent = text || "";
-    msgEl.className = "msg" + (text ? (ok ? " ok" : " err") : "");
-  }
+    const orderBody = document.getElementById("orderBody");
+    const errorMsg = document.getElementById("errorMsg");
 
-  onAuthStateChanged(auth, async (user)=>{
-    if (!user){
-      // wajib login dulu
-      window.location.href = "login.html";
-      return;
+    function formatTime(t) {
+      try {
+        return t?.toDate().toLocaleString("id-ID");
+      } catch {
+        return "-";
+      }
     }
-    await loadOrders(user.uid);
-  });
 
-  async function loadOrders(uid){
-    tbody.innerHTML = "";
-    try{
-      const qRef = query(
-        collection(db,"orders"),
-        where("userUid","==",uid),
-        orderBy("createdAt","desc")
-      );
-      const snap = await getDocs(qRef);
-      const arr = [];
-      snap.forEach(d=> arr.push(d.data()));
+    function badge(status) {
+      return `<span class="status ${status}">${status}</span>`;
+    }
 
-      if (!arr.length){
-        setMsg("Belum ada pesanan.", false);
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
         return;
-      } else {
-        setMsg("", true);
       }
 
-      arr.forEach((o, idx)=>{
-        const tr = document.createElement("tr");
+      loadOrders(user.uid);
+    });
 
-        const tdIdx = document.createElement("td");
-        tdIdx.textContent = idx + 1;
+    async function loadOrders(uid) {
+      try {
+        const q = query(
+          collection(db, "orders"),
+          where("userId", "==", uid),
+          orderBy("createdAt", "desc")
+        );
 
-        const tdTime = document.createElement("td");
-        if (o.createdAt){
-          tdTime.textContent = new Date(o.createdAt).toLocaleString("id-ID");
-        } else {
-          tdTime.textContent = "-";
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+          orderBody.innerHTML =
+            `<tr><td colspan="6" style="text-align:center;color:#9ca3af;">Belum ada pesanan.</td></tr>`;
+          return;
         }
 
-        const tdProd = document.createElement("td");
-        tdProd.innerHTML =
-          "<b>"+(o.productName||"-")+"</b><br>"+
-          (o.price || "");
+        orderBody.innerHTML = "";
+        let i = 1;
 
-        const tdDana = document.createElement("td");
-        tdDana.innerHTML =
-          "No: "+(o.danaNumber || "-")+"<br>"+
-          "a.n: "+(o.danaName || "-");
+        snap.forEach((d) => {
+          const o = d.data();
+          const tr = document.createElement("tr");
 
-        const tdStatus = document.createElement("td");
-        const st = (o.status || "pending").toLowerCase();
-        const badge = document.createElement("span");
-        badge.className = "badge status-"+st;
-        badge.textContent = st;
-        tdStatus.appendChild(badge);
-        if (o.proofUrl){
-          const div = document.createElement("div");
-          const a = document.createElement("a");
-          a.href = o.proofUrl;
-          a.target = "_blank";
-          a.rel = "noopener noreferrer";
-          a.className = "proof-link";
-          a.textContent = "Lihat bukti";
-          div.appendChild(a);
-          tdStatus.appendChild(document.createElement("br"));
-          tdStatus.appendChild(div);
-        }
+          // Data tambahan (sosmed/panel)
+          let extra = "";
+          if (o.sosmedUsername) extra += "Username: " + o.sosmedUsername + "<br>";
+          if (o.sosmedLink) extra += "Link: " + o.sosmedLink + "<br>";
 
-        const tdDelivery = document.createElement("td");
-        const box = document.createElement("div");
-        box.className = "delivery-box";
-        box.textContent = o.deliveryMsg
-          ? o.deliveryMsg
-          : "Belum ada produk dari admin.\nStatus akan menjadi 'sukses' jika admin sudah kirim.";
-        tdDelivery.appendChild(box);
+          if (o.panelUser) extra += "User Panel: " + o.panelUser + "<br>";
+          if (o.panelPass) extra += "Pass Panel: " + o.panelPass + "<br>";
 
-        tr.appendChild(tdIdx);
-        tr.appendChild(tdTime);
-        tr.appendChild(tdProd);
-        tr.appendChild(tdDana);
-        tr.appendChild(tdStatus);
-        tr.appendChild(tdDelivery);
-        tbody.appendChild(tr);
-      });
+          if (!extra) extra = "<i>Tidak ada</i>";
 
-    } catch(err){
-      console.error(err);
-      setMsg("Gagal memuat pesanan.");
+          tr.innerHTML = `
+            <td>${i++}</td>
+            <td>${formatTime(o.createdAt)}</td>
+            <td>${o.productName || "-"}</td>
+            <td>${badge(o.status)}</td>
+            <td>${extra}</td>
+            <td>${o.adminProduct || "<i>Belum dikirim</i>"}</td>
+          `;
+
+          orderBody.appendChild(tr);
+        });
+
+      } catch (err) {
+        console.error(err);
+        errorMsg.textContent = "Gagal memuat pesanan.";
+        orderBody.innerHTML = "";
+      }
     }
-  }
-</script>
 
+    // Logout
+    document.getElementById("logoutBtn").onclick = async () => {
+      await signOut(auth);
+      window.location.href = "login.html";
+    };
+  </script>
 </body>
 </html>
