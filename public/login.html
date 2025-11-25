@@ -1,200 +1,221 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Barmods Digital Store - Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="UTF-8" />
+  <title>Masuk - Barmods Digital Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
       margin: 0;
-      padding: 0;
-      background: #f3f4f6;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI";
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: #050815;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       min-height: 100vh;
+      padding: 32px 12px;
+      color: #111827;
     }
     .card {
+      margin-top: 40px;
       width: 100%;
-      max-width: 420px;
-      background: white;
-      padding: 22px;
-      border-radius: 16px;
-      box-shadow: 0 0 25px rgba(0,0,0,.12);
+      max-width: 480px;
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.4);
+      padding: 28px 20px 24px;
     }
-    h2 {
+    h1 {
       text-align: center;
-      margin: 0 0 4px;
+      margin: 0;
+      font-size: 26px;
     }
-    small {
-      display: block;
+    .sub {
       text-align: center;
-      margin-bottom: 18px;
       color: #6b7280;
-      font-size: 12px;
+      font-size: 14px;
+      margin-bottom: 20px;
     }
     label {
-      font-size: 13px;
-      margin-top: 8px;
       display: block;
+      font-size: 13px;
+      margin-bottom: 4px;
+      color: #374151;
     }
-    .input {
+    input {
       width: 100%;
-      padding: 8px 10px;
-      border-radius: 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
       border: 1px solid #d1d5db;
-      background: #f9fafb;
-      margin-top: 4px;
       font-size: 14px;
+      margin-bottom: 14px;
+      box-sizing: border-box;
+    }
+    input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.4);
     }
     .btn {
       width: 100%;
-      padding: 10px;
       border-radius: 999px;
+      padding: 11px 16px;
       border: none;
-      margin-top: 12px;
-      font-size: 14px;
+      font-size: 15px;
+      margin-bottom: 10px;
       cursor: pointer;
-      color: white;
-      font-weight: 500;
+      color: #f9fafb;
     }
-    .btn-green { background: #10b981; }
-    .btn-blue  { background: #2563eb; }
-    .btn-gray  { background: #6b7280; }
-    .btn-red   { background: #ef4444; }
-    .msg {
+    .btn.email { background: #16a34a; }
+    .btn.google { background: #2563eb; }
+    .btn.reset { background: #ef4444; }
+    .btn.register { background: #4b5563; }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    .err {
+      color: #b91c1c;
+      font-size: 13px;
+      min-height: 18px;
+      margin-bottom: 6px;
       text-align: center;
-      margin-top: 10px;
-      font-size: 12px;
-      min-height: 16px;
     }
-    .msg.err { color: #ef4444; }
-    .msg.ok  { color: #10b981; }
   </style>
 </head>
 <body>
+  <div class="card">
+    <h1>Masuk</h1>
+    <div class="sub">Barmods Digital Store</div>
 
-<div class="card">
-  <h2>Masuk</h2>
-  <small>Barmods Digital Store</small>
+    <div class="err" id="errorBox"></div>
 
-  <!-- Login Email -->
-  <label>Email</label>
-  <input id="email" class="input" type="email" placeholder="email kamu">
+    <label for="email">Email</label>
+    <input id="email" type="email" placeholder="email kamu" />
 
-  <label>Password</label>
-  <input id="pw" class="input" type="password" placeholder="password kamu">
+    <label for="password">Password</label>
+    <input id="password" type="password" placeholder="password kamu" />
 
-  <button class="btn btn-green" id="loginEmail">Login dengan Email</button>
+    <button class="btn email" id="loginEmailBtn">Login dengan Email</button>
+    <button class="btn google" id="loginGoogleBtn">Login dengan Google 🔐</button>
+    <button class="btn reset" id="resetBtn">Lupa Password</button>
+    <button class="btn register" id="registerBtn">Daftar Akun Baru</button>
+  </div>
 
-  <!-- Login Google -->
-  <button class="btn btn-blue" id="loginGoogle">
-    Login dengan Google 🔐
-  </button>
+  <script type="module">
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      signInWithPopup,
+      GoogleAuthProvider,
+      sendPasswordResetEmail,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
 
-  <button class="btn btn-red" onclick="location.href='reset-password.html'">
-    Lupa Password
-  </button>
+    // 🔑 PASTI SAMA dengan index.html / admin.html / orders.html
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+      authDomain: "toko-barmods.firebaseapp.com",
+      projectId: "toko-barmods",
+      storageBucket: "toko-barmods.firebasestorage.app",
+      messagingSenderId: "284047189012",
+      appId: "1:284047189012:web:6ef0c6891adab08a383301"
+    };
 
-  <button class="btn btn-gray" onclick="location.href='register.html'">
-    Daftar Akun Baru
-  </button>
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
-  <div id="msg" class="msg"></div>
-</div>
+    const emailInput = document.getElementById("email");
+    const passInput = document.getElementById("password");
+    const loginEmailBtn = document.getElementById("loginEmailBtn");
+    const loginGoogleBtn = document.getElementById("loginGoogleBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const registerBtn = document.getElementById("registerBtn");
+    const errorBox = document.getElementById("errorBox");
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import {
-    getAuth,
-    signInWithEmailAndPassword,
-    GoogleAuthProvider,
-    signInWithPopup,
-    onAuthStateChanged
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import {
-    getFirestore,
-    doc,
-    setDoc,
-    getDoc
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-    authDomain: "toko-barmods.firebaseapp.com",
-    projectId: "toko-barmods",
-    storageBucket: "toko-barmods.firebasestorage.app",
-    messagingSenderId: "284047189012",
-    appId: "1:284047189012:web:6ef0c6891adab08a383301"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db   = getFirestore(app);
-  const provider = new GoogleAuthProvider();
-  const msg = document.getElementById("msg");
-
-  function showMsg(t, ok=false){
-    msg.textContent = t;
-    msg.className = "msg " + (ok ? "ok" : "err");
-  }
-
-  async function ensureUserDoc(user){
-    const ref = doc(db, "users", user.uid);
-    const snap = await getDoc(ref);
-    if(!snap.exists()){
-      await setDoc(ref, {
-        uid: user.uid,
-        email: user.email,
-        username: user.displayName || "",
-        phone: "",
-        provider: user.providerData[0]?.providerId || "unknown",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      });
-    }
-  }
-
-  document.getElementById("loginEmail").onclick = async () => {
-    const email = document.getElementById("email").value.trim();
-    const pw = document.getElementById("pw").value.trim();
-
-    if(!email || !pw){
-      showMsg("Email & password wajib diisi.");
-      return;
+    function setLoading(isLoading) {
+      loginEmailBtn.disabled = isLoading;
+      loginGoogleBtn.disabled = isLoading;
+      resetBtn.disabled = isLoading;
+      registerBtn.disabled = isLoading;
     }
 
-    try{
-      const cred = await signInWithEmailAndPassword(auth, email, pw);
-      await ensureUserDoc(cred.user);
-      showMsg("Login berhasil!", true);
-      setTimeout(()=>location.href="index.html", 600);
-    }catch(e){
-      let t = "Login gagal.";
-      if(e.code === "auth/user-not-found") t = "Email tidak terdaftar.";
-      if(e.code === "auth/wrong-password") t = "Password salah.";
-      showMsg(t);
+    function showError(msg) {
+      errorBox.textContent = msg || "";
     }
-  };
 
-  document.getElementById("loginGoogle").onclick = async () => {
-    try{
-      const cred = await signInWithPopup(auth, provider);
-      await ensureUserDoc(cred.user);
-      showMsg("Login Google berhasil!", true);
-      setTimeout(()=>location.href="index.html", 600);
-    }catch(e){
-      showMsg("Gagal login Google.");
-    }
-  };
+    // ✅ Kalau sudah login, jangan di login lagi → langsung ke index
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = "index.html";
+      }
+    });
 
-  onAuthStateChanged(auth, (user)=>{
-    if(user){
-      location.href = "index.html";
-    }
-  });
-</script>
+    // ========= LOGIN EMAIL/PASSWORD =========
+    loginEmailBtn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      const pass = passInput.value.trim();
+      if (!email || !pass) {
+        showError("Email & password wajib diisi.");
+        return;
+      }
+      setLoading(true);
+      showError("");
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        // onAuthStateChanged di atas yang akan redirect ke index.html
+      } catch (err) {
+        console.error(err);
+        showError("Gagal login: " + (err.code || err.message));
+      } finally {
+        setLoading(false);
+      }
+    });
 
+    // ========= LOGIN GOOGLE =========
+    loginGoogleBtn.addEventListener("click", async () => {
+      setLoading(true);
+      showError("");
+      try {
+        await signInWithPopup(auth, provider);
+        // redirect juga lewat onAuthStateChanged
+      } catch (err) {
+        console.error(err);
+        showError("Gagal login Google: " + (err.code || err.message));
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    // ========= LUPA PASSWORD =========
+    resetBtn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      if (!email) {
+        showError("Isi email dulu untuk reset password.");
+        return;
+      }
+      setLoading(true);
+      showError("");
+      try {
+        await sendPasswordResetEmail(auth, email);
+        showError("Link reset password dikirim ke email.");
+      } catch (err) {
+        console.error(err);
+        showError("Gagal mengirim reset: " + (err.code || err.message));
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    // ========= KE HALAMAN REGISTER =========
+    registerBtn.addEventListener("click", () => {
+      window.location.href = "register.html";
+    });
+  </script>
 </body>
 </html>
