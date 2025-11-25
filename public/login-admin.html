@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Login Admin - Barmods Digital Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  background:#020617;
+  color:white;
+  font-family:Arial;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+.card {
+  background:#0f172a;
+  padding:20px;
+  border-radius:12px;
+  width:300px;
+  border:1px solid rgba(255,255,255,.15);
+}
+input {
+  width:100%;
+  padding:10px;
+  margin-top:8px;
+  border-radius:8px;
+  border:1px solid #334155;
+  background:#1e293b;
+  color:white;
+}
+button {
+  margin-top:12px;
+  width:100%;
+  padding:10px;
+  border:none;
+  background:#3b82f6;
+  color:white;
+  border-radius:8px;
+  font-size:15px;
+}
+.error {
+  color:#f87171;
+  margin-top:10px;
+  font-size:13px;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h2 style="text-align:center;">Login Admin</h2>
+
+  <input id="user" placeholder="Username">
+  <input id="pass" type="password" placeholder="Password">
+
+  <button onclick="loginAdmin()">Login</button>
+  <div id="msg" class="error"></div>
+</div>
+
+<script>
+function loginAdmin(){
+  const u = document.getElementById("user").value.trim();
+  const p = document.getElementById("pass").value.trim();
+  const msg = document.getElementById("msg");
+
+  if(u === "barmods" && p === "barmods21"){
+    localStorage.setItem("adminLogged","true");
+    window.location.href = "admin.html";
+  } else {
+    msg.textContent = "Username atau password salah!";
+  }
+}
+</script>
+
+</body>
+</html>
