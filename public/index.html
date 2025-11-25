@@ -1,573 +1,751 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Barmods Digital Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <title>Barmods Digital Store - Produk</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:#020617;
-      color:#e5e7eb;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #050815;
+      color: #f9fafb;
+      min-height: 100vh;
     }
-    .topbar{
-      height:56px;
-      background:#020617;
-      border-bottom:1px solid #1f2937;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:0 14px;
+    a { color: inherit; text-decoration: none; }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: rgba(5, 8, 21, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.3);
     }
-    .brand{
-      display:flex;
-      flex-direction:column;
+    .brand {
+      font-weight: 700;
+      font-size: 18px;
     }
-    .brand-title{font-size:15px;font-weight:700;}
-    .brand-sub{font-size:11px;color:#94a3b8;}
-    .top-links{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
+    .nav-left { display: flex; gap: 8px; align-items: center; }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
     }
-    .link-btn{
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid #374151;
-      background:#111827;
-      color:#e5e7eb;
-      font-size:12px;
-      text-decoration:none;
-      cursor:pointer;
+    .nav-btn {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: transparent;
+      color: #e5e7eb;
+      font-size: 13px;
+      cursor: pointer;
     }
-    .link-btn.logout{
-      background:#b91c1c;
-      border-color:#7f1d1d;
+    .nav-btn.primary {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #f9fafb;
+    }
+    .nav-btn.danger {
+      background: #ef4444;
+      border-color: #ef4444;
+      color: #f9fafb;
     }
 
-    .main{
-      max-width:1080px;
-      margin:0 auto;
-      padding:12px;
-    }
-    .card{
-      background:#020617;
-      border-radius:14px;
-      border:1px solid #1f2937;
-      padding:12px;
-      margin-bottom:12px;
-    }
-    .card-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:6px;
-    }
-    .card-header h2{
-      margin:0;
-      font-size:15px;
-    }
-    .card-header small{
-      font-size:11px;
-      color:#94a3b8;
-    }
-    .info-text{
-      font-size:12px;
-      color:#9ca3af;
-      margin-top:4px;
-    }
-    .saldo-text{
-      font-size:14px;
-      margin-top:4px;
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 12px 40px;
     }
 
-    .search-input{
-      width:100%;
-      margin-top:8px;
-      padding:8px 11px;
-      border-radius:999px;
-      border:1px solid #1f2937;
-      background:#020617;
-      color:#e5e7eb;
-      font-size:13px;
-      box-sizing:border-box;
+    .section-card {
+      background: radial-gradient(circle at top left, #0f172a, #020617);
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .section-card h2 {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+    .section-card p {
+      font-size: 13px;
+      color: #9ca3af;
     }
 
-    .product-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
-      gap:10px;
-      margin-top:12px;
+    .saldo-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-top: 8px;
     }
-    .product-card{
-      background:#0f172a;
-      border-radius:12px;
-      border:1px solid #1f2937;
-      padding:9px;
-      font-size:12px;
+    .saldo-amount {
+      font-size: 22px;
+      font-weight: 700;
     }
-    .pc-title{
-      font-size:13px;
-      font-weight:600;
-    }
-    .pc-price{
-      color:#22c55e;
-      font-weight:700;
-      font-size:13px;
-      margin-top:4px;
-    }
-    .pc-stock{
-      font-size:11px;
-      color:#9ca3af;
-      margin-top:2px;
-    }
-    .btn-order{
-      margin-top:8px;
-      padding:6px 9px;
-      border-radius:999px;
-      border:none;
-      background:#2563eb;
-      color:#fff;
-      font-size:12px;
-      cursor:pointer;
-    }
-    .btn-order:disabled{
-      background:#1f2937;
-      color:#6b7280;
-      cursor:not-allowed;
+    .saldo-label {
+      font-size: 12px;
+      color: #9ca3af;
+      text-align: right;
     }
 
-    /* MODAL */
-    .modal-bg{
-      position:fixed;
-      inset:0;
-      background:rgba(15,23,42,.75);
-      display:none;
-      justify-content:center;
-      align-items:center;
-      padding:14px;
-      z-index:40;
+    .search-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
     }
-    .modal{
-      background:#020617;
-      border-radius:16px;
-      border:1px solid #1f2937;
-      padding:14px;
-      max-width:420px;
-      width:100%;
-      box-shadow:0 18px 40px rgba(0,0,0,.75);
+    .search-input {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.8);
+      color: #e5e7eb;
+      font-size: 13px;
     }
-    .modal h3{
-      margin:0 0 6px;
-      font-size:15px;
+    .search-input::placeholder {
+      color: #6b7280;
     }
-    .modal p{
-      font-size:12px;
-      color:#9ca3af;
-      margin:0 0 8px;
+
+    .products-grid {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
     }
-    .modal label{
-      display:block;
-      font-size:12px;
-      margin-top:8px;
+    .product-card {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 16px;
+      border: 1px solid rgba(55, 65, 81, 0.8);
+      padding: 10px 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
-    .modal input, .modal textarea{
-      width:100%;
-      padding:7px 9px;
-      border-radius:9px;
-      border:1px solid #1f2937;
-      background:#020617;
-      color:#e5e7eb;
-      font-size:12px;
-      margin-top:4px;
-      box-sizing:border-box;
+    .product-name {
+      font-size: 13px;
+      font-weight: 600;
+      min-height: 32px;
     }
-    .modal textarea{
-      resize:vertical;
+    .product-price {
+      font-size: 13px;
+      color: #a5b4fc;
     }
-    .modal-footer{
-      display:flex;
-      justify-content:flex-end;
-      gap:8px;
-      margin-top:12px;
+    .product-stock {
+      font-size: 12px;
+      color: #9ca3af;
     }
-    .btn-cancel{
-      border-radius:999px;
-      border:1px solid #374151;
-      background:#111827;
-      color:#e5e7eb;
-      font-size:12px;
-      padding:7px 11px;
-      cursor:pointer;
+    .product-stock.out {
+      color: #f97373;
     }
-    .btn-ok{
-      border-radius:999px;
-      border:none;
-      background:#2563eb;
-      color:#fff;
-      font-size:12px;
-      padding:7px 11px;
-      cursor:pointer;
+    .product-actions {
+      margin-top: 6px;
+      display: flex;
+      justify-content: flex-end;
     }
-    .msg{
-      font-size:12px;
-      margin-top:6px;
-      min-height:16px;
+    .btn-order {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: none;
+      font-size: 12px;
+      cursor: pointer;
+      background: #2563eb;
+      color: #f9fafb;
     }
-    .msg.err{color:#f97373;}
-    .msg.ok{color:#22c55e;}
+    .btn-order[disabled] {
+      background: #4b5563;
+      cursor: not-allowed;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 60;
+      padding: 12px;
+    }
+    .modal {
+      background: #020617;
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      max-width: 600px;
+      width: 100%;
+      padding: 16px 16px 14px;
+      color: #e5e7eb;
+    }
+    .modal h3 {
+      font-size: 17px;
+      margin-bottom: 2px;
+    }
+    .modal-subtitle {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 10px;
+    }
+    .modal-body {
+      max-height: 65vh;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .modal-body label {
+      display: block;
+      font-size: 13px;
+      margin-top: 8px;
+      margin-bottom: 3px;
+    }
+    .modal-body input,
+    .modal-body textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      font-size: 13px;
+    }
+    .modal-body textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+    .modal-body input::placeholder,
+    .modal-body textarea::placeholder {
+      color: #6b7280;
+    }
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .btn-secondary {
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(75, 85, 99, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn-primary {
+      padding: 7px 16px;
+      border-radius: 999px;
+      border: none;
+      background: #2563eb;
+      color: #f9fafb;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn-primary[disabled] {
+      opacity: 0.7;
+      cursor: wait;
+    }
+    .error-text {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #f97373;
+    }
+    .info-text {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
   </style>
 </head>
 <body>
+  <header class="navbar">
+    <div class="nav-left">
+      <div class="brand">Barmods Digital Store</div>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-btn primary" id="navProdukBtn">Produk</button>
+      <a href="wallet.html"><button class="nav-btn" type="button">Saldo</button></a>
+      <a href="orders.html"><button class="nav-btn" type="button">Pesanan Saya</button></a>
+      <a href="profile.html"><button class="nav-btn" type="button">Profil</button></a>
+      <a href="admin.html"><button class="nav-btn" type="button">Admin</button></a>
+      <button class="nav-btn danger" id="logoutBtn">Logout</button>
+    </div>
+  </header>
 
-<!-- TOPBAR -->
-<div class="topbar">
-  <div class="brand">
-    <span class="brand-title">Barmods Digital Store</span>
-    <span class="brand-sub">Saldo • Produk Digital • Sosmed</span>
-  </div>
-  <div class="top-links">
-    <a href="wallet.html" class="link-btn">Saldo</a>
-    <a href="orders.html" class="link-btn">Pesanan Saya</a>
-    <a href="profile.html" class="link-btn">Profil</a>
-    <a href="admin.html" class="link-btn">Admin</a>
-    <button id="logoutBtn" class="link-btn logout" type="button">Logout</button>
-  </div>
-</div>
+  <main>
+    <!-- SALDO -->
+    <section class="section-card">
+      <h2>Saldo Saya</h2>
+      <p>Saldo ini dipakai untuk bayar semua order produk.</p>
+      <div class="saldo-row">
+        <div class="saldo-amount" id="saldoAmount">Rp 0</div>
+        <div class="saldo-label">
+          <div id="saldoEmail">Akun: -</div>
+          <div>Topup lewat menu <b>Saldo</b>.</div>
+        </div>
+      </div>
+    </section>
 
-<div class="main">
-  <!-- SALDO -->
-  <div class="card">
-    <div class="card-header">
+    <!-- DAFTAR PRODUK -->
+    <section class="section-card">
+      <h2>Daftar Produk</h2>
+      <p>Saldo akan otomatis terpotong saat order berhasil dibuat.</p>
+
+      <div class="search-row">
+        <input id="searchInput" class="search-input" placeholder="Cari produk (misal: Netflix, TikTok, Panel, Followers)..." />
+      </div>
+
+      <div id="productList" class="products-grid"></div>
+      <div id="productError" class="error-text"></div>
+    </section>
+  </main>
+
+  <!-- MODAL ORDER -->
+  <div class="modal-backdrop" id="orderModal">
+    <div class="modal">
       <div>
-        <h2>Saldo Saya</h2>
-        <small>Gunakan saldo untuk order produk</small>
+        <h3 id="orderTitle">Order Produk</h3>
+        <div class="modal-subtitle" id="orderSubtitle"></div>
+      </div>
+      <div class="modal-body">
+        <div id="orderSaldoInfo" class="info-text"></div>
+        <div id="orderFormContent" style="margin-top:8px;"></div>
+        <div id="orderError" class="error-text"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="orderCancelBtn">Batal</button>
+        <button class="btn-primary" id="orderSubmitBtn">Order Sekarang</button>
       </div>
     </div>
-    <div class="saldo-text">
-      Saldo: <b id="saldoText">Rp 0</b>
-    </div>
-    <div class="info-text">
-      Akun: <span id="userEmail">-</span><br>
-      Topup lewat menu <b>Saldo</b>, admin akan menambahkan saldo setelah cek pembayaran.
-    </div>
   </div>
 
-  <!-- PRODUK -->
-  <div class="card">
-    <div class="card-header">
-      <div>
-        <h2>Daftar Produk</h2>
-        <small>Saldo akan otomatis terpotong saat order</small>
-      </div>
-    </div>
-    <input id="searchInput" class="search-input" placeholder="Cari produk (misal: Netflix, TikTok, Panel, Followers)...">
-    <div id="productGrid" class="product-grid"></div>
-  </div>
-</div>
+  <!-- ================== SCRIPT ================== -->
+  <script type="module">
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      doc,
+      getDocs,
+      getDoc,
+      updateDoc,
+      addDoc,
+      query,
+      orderBy,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-<!-- MODAL ORDER -->
-<div id="orderModal" class="modal-bg">
-  <div class="modal">
-    <h3 id="modalTitle">Order Produk</h3>
-    <p id="modalInfo"></p>
+    // ================== CONFIG FIREBASE ==================
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+      authDomain: "toko-barmods.firebaseapp.com",
+      projectId: "toko-barmods",
+      storageBucket: "toko-barmods.firebasestorage.app",
+      messagingSenderId: "284047189012",
+      appId: "1:284047189012:web:6ef0c6891adab08a383301"
+    };
 
-    <div id="modalFields"></div>
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    <div id="orderMsg" class="msg"></div>
+    const USERS_COLLECTION = "users";
+    const PRODUCTS_COLLECTION = "products";
+    const ORDERS_COLLECTION = "orders";
 
-    <div class="modal-footer">
-      <button class="btn-cancel" type="button" onclick="closeOrderModal()">Batal</button>
-      <button class="btn-ok" type="button" onclick="submitOrder()">Order Sekarang</button>
-    </div>
-  </div>
-</div>
+    const saldoAmountEl = document.getElementById("saldoAmount");
+    const saldoEmailEl = document.getElementById("saldoEmail");
+    const productListEl = document.getElementById("productList");
+    const productErrorEl = document.getElementById("productError");
+    const searchInputEl = document.getElementById("searchInput");
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import {
-    getFirestore,
-    collection,
-    getDocs,
-    doc,
-    getDoc,
-    setDoc,
-    updateDoc,
-    addDoc
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-  import {
-    getAuth,
-    onAuthStateChanged,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    const orderModalEl = document.getElementById("orderModal");
+    const orderTitleEl = document.getElementById("orderTitle");
+    const orderSubtitleEl = document.getElementById("orderSubtitle");
+    const orderFormContentEl = document.getElementById("orderFormContent");
+    const orderSaldoInfoEl = document.getElementById("orderSaldoInfo");
+    const orderErrorEl = document.getElementById("orderError");
+    const orderCancelBtn = document.getElementById("orderCancelBtn");
+    const orderSubmitBtn = document.getElementById("orderSubmitBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-    authDomain: "toko-barmods.firebaseapp.com",
-    projectId: "toko-barmods",
-    storageBucket: "toko-barmods.appspot.com",
-    messagingSenderId: "284047189012",
-    appId: "1:284047189012:web:6ef0c6891adab08a383301"
-  };
+    let currentUser = null;
+    let currentUserDoc = null;
+    let productsCache = [];
+    let selectedProduct = null;
 
-  const app  = initializeApp(firebaseConfig);
-  const db   = getFirestore(app);
-  const auth = getAuth(app);
-
-  const saldoTextEl = document.getElementById('saldoText');
-  const userEmailEl = document.getElementById('userEmail');
-  const productGrid = document.getElementById('productGrid');
-  const searchInput = document.getElementById('searchInput');
-  const orderModal  = document.getElementById('orderModal');
-  const modalTitle  = document.getElementById('modalTitle');
-  const modalInfo   = document.getElementById('modalInfo');
-  const modalFields = document.getElementById('modalFields');
-  const orderMsgEl  = document.getElementById('orderMsg');
-
-  let currentUser = null;
-  let userBalance = 0;
-  let products    = [];
-  let selectedProduct = null;
-
-  // Format rupiah
-  function formatRupiah(num){
-    num = Math.floor(num || 0);
-    return 'Rp ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');
-  }
-
-  // Konversi "Rp 2k" / "2k" / "2000" → number
-  function parsePriceToNumber(str){
-    if(!str) return 0;
-    let s = String(str).toLowerCase();
-    s = s.replace('rp','').trim();
-    s = s.replace(/\s/g,'');
-    if(s.endsWith('k')){
-      const n = parseFloat(s.slice(0,-1));
-      return isNaN(n)?0:n*1000;
+    // ================== UTIL ==================
+    function formatRupiah(num) {
+      const n = Number(num || 0);
+      return "Rp " + n.toLocaleString("id-ID");
     }
-    s = s.replace(/\./g,'').replace(/,/g,'');
-    const n = parseInt(s,10);
-    return isNaN(n)?0:n;
-  }
 
-  // Cek login
-  onAuthStateChanged(auth, async (user)=>{
-    if(!user){
-      window.location.href = 'login.html';
-      return;
-    }
-    currentUser = user;
-    userEmailEl.textContent = user.email || '-';
-    await loadUserBalance();
-    await loadProducts();
-  });
-
-  document.getElementById('logoutBtn').onclick = async ()=>{
-    try{ await signOut(auth); }catch(e){}
-  };
-
-  // Load saldo user
-  async function loadUserBalance(){
-    if(!currentUser) return;
-    const ref = doc(db,'users',currentUser.uid);
-    const snap = await getDoc(ref);
-    if(!snap.exists()){
-      await setDoc(ref,{
-        email: currentUser.email || '',
-        balance: 0,
-        createdAt: new Date().toISOString()
-      });
-      userBalance = 0;
-    } else {
-      const d = snap.data();
-      userBalance = d.balance || 0;
-    }
-    saldoTextEl.textContent = formatRupiah(userBalance);
-  }
-
-  // Load produk
-  async function loadProducts(){
-    const snap = await getDocs(collection(db,'products'));
-    const arr = [];
-    snap.forEach(d=> arr.push(d.data()));
-    arr.sort((a,b)=>(a.id||0)-(b.id||0));
-    products = arr;
-    renderProducts();
-  }
-
-  function renderProducts(){
-    const val = searchInput.value.toLowerCase();
-    productGrid.innerHTML = '';
-    products.forEach(p=>{
-      const combined = (p.name + ' ' + (p.category||'')).toLowerCase();
-      if(val && !combined.includes(val)) return;
-
-      const card = document.createElement('div');
-      card.className = 'product-card';
-
-      const priceValue = parsePriceToNumber(p.price);
-
-      card.innerHTML = `
-        <div class="pc-title">${p.name}</div>
-        <div class="pc-price">${p.price}</div>
-        <div class="pc-stock">Stok: ${p.stock ?? 0}</div>
-      `;
-
-      const btn = document.createElement('button');
-      btn.className = 'btn-order';
-      btn.textContent = 'Order';
-      if((p.stock ?? 0) <= 0){
-        btn.disabled = true;
-        btn.textContent = 'Stok habis';
+    function parsePrice(price) {
+      if (typeof price === "number") return price;
+      if (!price) return 0;
+      let s = String(price).toLowerCase().replace(/rp|\s|\./g, "");
+      if (s.endsWith("k")) {
+        const n = parseInt(s.slice(0, -1), 10);
+        if (isNaN(n)) return 0;
+        return n * 1000;
       }
-      btn.onclick = ()=> openOrderModal(p);
+      const n = parseInt(s.replace(/\D/g, ""), 10);
+      return isNaN(n) ? 0 : n;
+    }
 
-      card.appendChild(btn);
-      productGrid.appendChild(card);
+    function openModal() {
+      orderModalEl.style.display = "flex";
+    }
+    function closeModal() {
+      orderModalEl.style.display = "none";
+      orderErrorEl.textContent = "";
+      orderFormContentEl.innerHTML = "";
+      selectedProduct = null;
+    }
+
+    // ================== AUTH ==================
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+      currentUser = user;
+      saldoEmailEl.textContent = "Akun: " + (user.email || "-");
+
+      try {
+        const userRef = doc(db, USERS_COLLECTION, user.uid);
+        const snap = await getDoc(userRef);
+        if (snap.exists()) {
+          currentUserDoc = snap.data();
+        } else {
+          currentUserDoc = { email: user.email, balance: 0 };
+        }
+      } catch (e) {
+        console.error(e);
+        currentUserDoc = { email: user.email, balance: 0 };
+      }
+
+      updateSaldoUI();
+      loadProducts();
     });
-  }
 
-  searchInput.oninput = renderProducts;
-
-  // Buka modal
-  function openOrderModal(p){
-    selectedProduct = p;
-    modalTitle.textContent = 'Order: ' + (p.name || '');
-    modalInfo.textContent  =
-      'Harga: ' + (p.price || '-') +
-      ' • Saldo kamu: ' + formatRupiah(userBalance) +
-      ' • Kategori: ' + (p.category || '-');
-
-    modalFields.innerHTML = '';
-    orderMsgEl.textContent = '';
-    orderMsgEl.className = 'msg';
-
-    // Field umum DANA (untuk data pembayaran / identitas)
-    const danaHtml = `
-      <label>Nomor DANA kamu</label>
-      <input id="orderDanaNumber" placeholder="Contoh: 0838xxxxxxx">
-      <label>Atas nama DANA</label>
-      <input id="orderDanaName" placeholder="Nama sesuai akun DANA">
-    `;
-    modalFields.insertAdjacentHTML('beforeend', danaHtml);
-
-    // Kalau kategori sosmed → username & link
-    if(p.category === 'sosmed'){
-      const sosHtml = `
-        <label>Username akun (tidak boleh private)</label>
-        <input id="orderSosUser" placeholder="contoh: @username">
-        <label>Link postingan / profil (jika likes / views)</label>
-        <input id="orderSosLink" placeholder="https://...">
-      `;
-      modalFields.insertAdjacentHTML('beforeend', sosHtml);
+    function updateSaldoUI() {
+      const bal = Number(currentUserDoc?.balance || 0);
+      saldoAmountEl.textContent = formatRupiah(bal);
     }
 
-    // Kalau kategori panel → user & pass wajib
-    if(p.category === 'panel'){
-      const panelHtml = `
-        <label>User panel</label>
-        <input id="orderPanelUser" placeholder="User panel">
-        <label>Password panel</label>
-        <input id="orderPanelPass" placeholder="Password panel">
-      `;
-      modalFields.insertAdjacentHTML('beforeend', panelHtml);
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+      } catch (e) {
+        console.error(e);
+      }
+      window.location.href = "login.html";
+    });
+
+    // ================== LOAD PRODUCTS ==================
+    async function loadProducts() {
+      productListEl.innerHTML = "";
+      productErrorEl.textContent = "Memuat produk...";
+      productsCache = [];
+      try {
+        const q = query(collection(db, PRODUCTS_COLLECTION), orderBy("id", "asc"));
+        const snap = await getDocs(q);
+        if (snap.empty) {
+          productListEl.innerHTML = "";
+          productErrorEl.textContent = "Belum ada produk.";
+          return;
+        }
+        snap.forEach((d) => {
+          const data = d.data();
+          productsCache.push({
+            docId: d.id,
+            ...data
+          });
+        });
+        productErrorEl.textContent = "";
+        renderProducts();
+      } catch (err) {
+        productErrorEl.textContent = "Gagal memuat produk: " + err.message;
+      }
     }
 
-    orderModal.style.display = 'flex';
-  }
+    function renderProducts() {
+      const term = searchInputEl.value.trim().toLowerCase();
+      productListEl.innerHTML = "";
+      const saldo = Number(currentUserDoc?.balance || 0);
 
-  window.closeOrderModal = function(){
-    orderModal.style.display = 'none';
-  };
+      const filtered = productsCache.filter((p) => {
+        if (!term) return true;
+        const hay =
+          (p.name || "").toLowerCase() +
+          " " +
+          (p.category || "").toLowerCase();
+        return hay.includes(term);
+      });
 
-  // Submit order
-  window.submitOrder = async function(){
-    if(!currentUser || !selectedProduct) return;
+      if (!filtered.length) {
+        productListEl.innerHTML = "<p style='font-size:13px;color:#9ca3af;'>Tidak ada produk yang cocok.</p>";
+        return;
+      }
 
-    const msg = orderMsgEl;
-    msg.textContent = '';
-    msg.className = 'msg';
+      filtered.forEach((p) => {
+        const card = document.createElement("div");
+        card.className = "product-card";
 
-    const danaNumber = (document.getElementById('orderDanaNumber')?.value || '').trim();
-    const danaName   = (document.getElementById('orderDanaName')?.value   || '').trim();
-    const sosUser    = (document.getElementById('orderSosUser')?.value    || '').trim();
-    const sosLink    = (document.getElementById('orderSosLink')?.value    || '').trim();
-    const panelUser  = (document.getElementById('orderPanelUser')?.value  || '').trim();
-    const panelPass  = (document.getElementById('orderPanelPass')?.value  || '').trim();
+        const priceNum = parsePrice(p.priceNumber ?? p.price);
+        const stock = Number(p.stock ?? 0);
+        let stockClass = "product-stock";
+        let stockText = "Stok: " + stock;
+        if (stock <= 0) {
+          stockClass += " out";
+          stockText = "Stok habis";
+        }
 
-    if(!danaNumber || !danaName){
-      msg.textContent = 'Nomor DANA dan Atas nama wajib diisi.';
-      msg.className = 'msg err';
-      return;
+        const canAfford = saldo >= priceNum;
+
+        card.innerHTML = `
+          <div class="product-name">${p.name ?? "-"}</div>
+          <div class="product-price">${typeof p.price === "string" ? p.price : formatRupiah(priceNum)}</div>
+          <div class="${stockClass}">${stockText}</div>
+          <div class="product-actions">
+            <button class="btn-order" data-id="${p.docId}" ${stock <= 0 || !canAfford ? "disabled" : ""}>
+              Order
+            </button>
+          </div>
+        `;
+
+        const btn = card.querySelector(".btn-order");
+        btn?.addEventListener("click", () => openOrderModal(p));
+
+        productListEl.appendChild(card);
+      });
     }
 
-    if(selectedProduct.category === 'sosmed' && !sosUser){
-      msg.textContent = 'Username sosmed wajib diisi untuk pesanan sosmed.';
-      msg.className = 'msg err';
-      return;
+    searchInputEl.addEventListener("input", () => renderProducts());
+
+    // ================== ORDER FORM BY CATEGORY ==================
+    function generateOrderForm(product) {
+      const cat = String(product.category || "").toLowerCase();
+      let html = "";
+
+      // TOPUP (seharusnya lewat wallet.html, jadi kita kasih info saja)
+      if (cat === "topup" || cat === "saldo") {
+        html += `
+          <p style="font-size:13px;color:#fbbf24;">
+            Produk ini adalah topup saldo. Silakan gunakan menu <b>Saldo</b> di atas (wallet.html) untuk topup.
+          </p>
+        `;
+      }
+
+      // SOSMED / SUNTIK
+      else if (
+        cat === "sosmed" ||
+        cat === "suntik" ||
+        cat === "social" ||
+        cat === "followers" ||
+        cat === "likes"
+      ) {
+        html += `
+          <label>Username akun (tidak boleh private)</label>
+          <input id="orderUsername" placeholder="contoh: @username">
+
+          <label>Link postingan / profil</label>
+          <input id="orderLink" placeholder="https://...">
+        `;
+      }
+
+      // PANEL / PTERODACTYL
+      else if (
+        cat === "panel" ||
+        cat === "pterodactyl" ||
+        cat === "hosting"
+      ) {
+        html += `
+          <label>User panel</label>
+          <input id="orderUserPanel" placeholder="User panel">
+
+          <label>Password panel</label>
+          <input id="orderPassPanel" placeholder="Password panel">
+        `;
+      }
+
+      // APK PREMIUM / EDITING
+      else if (
+        cat === "apk" ||
+        cat === "aplikasi" ||
+        cat === "premium" ||
+        cat === "editing"
+      ) {
+        html += `
+          <p class="info-text">
+            Tidak ada data tambahan. Setelah kamu klik <b>Order Sekarang</b>, saldo akan terpotong
+            dan admin akan mengirim produk di menu <b>Pesanan Saya</b>.
+          </p>
+        `;
+      }
+
+      // KATEGORI LAIN
+      else {
+        html += `
+          <p class="info-text">
+            Tidak ada data tambahan. Klik <b>Order Sekarang</b> untuk membuat pesanan.
+          </p>
+        `;
+      }
+
+      return html;
     }
 
-    if(selectedProduct.category === 'panel' && (!panelUser || !panelPass)){
-      msg.textContent = 'User & Password panel wajib diisi untuk pesanan panel.';
-      msg.className = 'msg err';
-      return;
+    function openOrderModal(product) {
+      selectedProduct = product;
+      const priceNum = parsePrice(product.priceNumber ?? product.price);
+      const saldo = Number(currentUserDoc?.balance || 0);
+
+      orderTitleEl.textContent = "Order: " + (product.name || "-");
+      orderSubtitleEl.textContent =
+        "Harga: " +
+        (typeof product.price === "string" ? product.price : formatRupiah(priceNum)) +
+        " • Saldo kamu: " +
+        formatRupiah(saldo) +
+        " • Kategori: " +
+        (product.category || "-");
+
+      orderSaldoInfoEl.textContent =
+        "Saldo akan otomatis berkurang jika order berhasil dibuat.";
+
+      orderFormContentEl.innerHTML = generateOrderForm(product);
+      orderErrorEl.textContent = "";
+
+      if (saldo < priceNum) {
+        orderErrorEl.textContent =
+          "Saldo kamu kurang. Silakan topup lewat menu Saldo.";
+        orderSubmitBtn.disabled = true;
+      } else {
+        orderSubmitBtn.disabled = false;
+      }
+
+      openModal();
     }
 
-    const priceValue = parsePriceToNumber(selectedProduct.price);
-    if(userBalance < priceValue){
-      msg.textContent = 'Saldo tidak cukup. Silakan topup saldo di menu Saldo.';
-      msg.className = 'msg err';
-      return;
-    }
+    orderCancelBtn.addEventListener("click", () => closeModal());
+    orderModalEl.addEventListener("click", (e) => {
+      if (e.target === orderModalEl) closeModal();
+    });
 
-    try{
-      // Kurangi saldo user
-      const newBalance = userBalance - priceValue;
-      const userRef = doc(db,'users',currentUser.uid);
-      await updateDoc(userRef,{balance:newBalance});
-      userBalance = newBalance;
-      saldoTextEl.textContent = formatRupiah(userBalance);
+    // ================== SUBMIT ORDER ==================
+    orderSubmitBtn.addEventListener("click", async () => {
+      if (!selectedProduct || !currentUser) return;
 
-      // Simpan order
-      const orderObj = {
-        userUid: currentUser.uid,
-        userEmail: currentUser.email || '',
-        productId: selectedProduct.id,
-        productName: selectedProduct.name,
-        price: selectedProduct.price,
-        priceValue,
-        category: selectedProduct.category || '',
-        danaNumber,
-        danaName,
-        sosmedUsername: sosUser || '',
-        sosmedLink: sosLink || '',
-        panelUser: panelUser || '',
-        panelPass: panelPass || '',
-        proofUrl: '',            // bisa dipakai nanti kalau pakai upload bukti
-        status: 'pending',
-        deliveryMsg: '',
-        createdAt: new Date().toISOString(),
-        balanceAfter: newBalance
-      };
+      orderErrorEl.textContent = "";
+      orderSubmitBtn.disabled = true;
 
-      await addDoc(collection(db,'orders'), orderObj);
+      try {
+        const product = selectedProduct;
+        const cat = String(product.category || "").toLowerCase();
+        const priceNum = parsePrice(product.priceNumber ?? product.price);
 
-      msg.textContent = 'Order berhasil dibuat. Status: pending.';
-      msg.className = 'msg ok';
+        // Cek saldo & stok terbaru
+        const userRef = doc(db, USERS_COLLECTION, currentUser.uid);
+        const userSnap = await getDoc(userRef);
+        const userData = userSnap.exists() ? userSnap.data() : { balance: 0 };
+        let saldo = Number(userData.balance || 0);
 
-      setTimeout(()=>{
-        orderModal.style.display = 'none';
-        window.location.href = 'orders.html';
-      }, 800);
+        const productRef = doc(db, PRODUCTS_COLLECTION, product.docId);
+        const prodSnap = await getDoc(productRef);
+        if (!prodSnap.exists()) {
+          throw new Error("Produk tidak ditemukan.");
+        }
+        const prodData = prodSnap.data();
+        let stock = Number(prodData.stock || 0);
 
-    } catch(e){
-      console.error(e);
-      msg.textContent = 'Gagal membuat order. Coba lagi.';
-      msg.className = 'msg err';
-    }
-  };
-</script>
+        if (stock <= 0) {
+          throw new Error("Stok produk habis.");
+        }
+        if (saldo < priceNum) {
+          throw new Error("Saldo kamu kurang. Silakan topup terlebih dahulu.");
+        }
 
+        // Kumpulkan data tambahan sesuai kategori
+        const extra = {};
+        if (
+          cat === "sosmed" ||
+          cat === "suntik" ||
+          cat === "social" ||
+          cat === "followers" ||
+          cat === "likes"
+        ) {
+          const username = (document.getElementById("orderUsername")?.value || "").trim();
+          const link = (document.getElementById("orderLink")?.value || "").trim();
+          if (!username || !link) {
+            throw new Error("Username dan link wajib diisi untuk order sosmed.");
+          }
+          extra.sosmedUsername = username;
+          extra.sosmedLink = link;
+        } else if (
+          cat === "panel" ||
+          cat === "pterodactyl" ||
+          cat === "hosting"
+        ) {
+          const userPanel = (document.getElementById("orderUserPanel")?.value || "").trim();
+          const passPanel = (document.getElementById("orderPassPanel")?.value || "").trim();
+          if (!userPanel || !passPanel) {
+            throw new Error("User & password panel wajib diisi.");
+          }
+          extra.panelUser = userPanel;
+          extra.panelPass = passPanel;
+        }
+        // topup / apk / lainnya tidak perlu extra wajib
+
+        // Buat dokumen order
+        await addDoc(collection(db, ORDERS_COLLECTION), {
+          userId: currentUser.uid,
+          userEmail: currentUser.email || currentUserDoc?.email || "",
+          productDocId: product.docId,
+          productId: product.id ?? null,
+          productName: product.name || "",
+          category: product.category || "",
+          price: priceNum,
+          status: "pending",
+          createdAt: serverTimestamp(),
+          adminProduct: "",
+          ...extra
+        });
+
+        // Kurangi saldo & stok
+        saldo -= priceNum;
+        stock -= 1;
+
+        await Promise.all([
+          updateDoc(userRef, { balance: saldo }),
+          updateDoc(productRef, { stock: stock })
+        ]);
+
+        currentUserDoc.balance = saldo;
+        updateSaldoUI();
+        await loadProducts();
+
+        alert("Order berhasil dibuat. Silakan cek di menu Pesanan Saya.");
+        closeModal();
+      } catch (err) {
+        console.error(err);
+        orderErrorEl.textContent = err.message || "Gagal membuat order.";
+      } finally {
+        orderSubmitBtn.disabled = false;
+      }
+    });
+  </script>
 </body>
 </html>
