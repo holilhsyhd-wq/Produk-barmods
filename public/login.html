@@ -1,221 +1,42 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <title>Masuk - Barmods Digital Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      background: #050815;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      padding: 32px 12px;
-      color: #111827;
-    }
-    .card {
-      margin-top: 40px;
-      width: 100%;
-      max-width: 480px;
-      background: #ffffff;
-      border-radius: 24px;
-      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.4);
-      padding: 28px 20px 24px;
-    }
-    h1 {
-      text-align: center;
-      margin: 0;
-      font-size: 26px;
-    }
-    .sub {
-      text-align: center;
-      color: #6b7280;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      font-size: 13px;
-      margin-bottom: 4px;
-      color: #374151;
-    }
-    input {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid #d1d5db;
-      font-size: 14px;
-      margin-bottom: 14px;
-      box-sizing: border-box;
-    }
-    input:focus {
-      outline: none;
-      border-color: #2563eb;
-      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.4);
-    }
-    .btn {
-      width: 100%;
-      border-radius: 999px;
-      padding: 11px 16px;
-      border: none;
-      font-size: 15px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      color: #f9fafb;
-    }
-    .btn.email { background: #16a34a; }
-    .btn.google { background: #2563eb; }
-    .btn.reset { background: #ef4444; }
-    .btn.register { background: #4b5563; }
-    .btn:disabled {
-      opacity: 0.6;
-      cursor: default;
-    }
-    .err {
-      color: #b91c1c;
-      font-size: 13px;
-      min-height: 18px;
-      margin-bottom: 6px;
-      text-align: center;
-    }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h1>Masuk</h1>
-    <div class="sub">Barmods Digital Store</div>
+<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Login</title>
+<style>
+body{font-family:sans-serif;padding:20px;background:#f4f4f4;}
+.card{background:#fff;padding:20px;margin:10px 0;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+input,button{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ccc;}
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px;background:white;box-shadow:0 -4px 10px rgba(0,0,0,0.1);}
+a{text-decoration:none;color:#0062D1;}
+h1{text-align:center;}
+</style>
+</head><body>
+<h1>Login</h1>
+<div class='card'>
+<input id='email' placeholder='Email'>
+<input id='password' type='password' placeholder='Password'>
+<button onclick='login()'>Login</button>
+<a href='register.html'>Register</a><br><a href='reset-password.html'>Reset Password</a>
+</div>
+<script>
+function login(){
+ auth.signInWithEmailAndPassword(email.value,password.value)
+ .then(()=>location.href='index.html')
+ .catch(e=>alert(e.message));
+}
+</script>
 
-    <div class="err" id="errorBox"></div>
-
-    <label for="email">Email</label>
-    <input id="email" type="email" placeholder="email kamu" />
-
-    <label for="password">Password</label>
-    <input id="password" type="password" placeholder="password kamu" />
-
-    <button class="btn email" id="loginEmailBtn">Login dengan Email</button>
-    <button class="btn google" id="loginGoogleBtn">Login dengan Google 🔐</button>
-    <button class="btn reset" id="resetBtn">Lupa Password</button>
-    <button class="btn register" id="registerBtn">Daftar Akun Baru</button>
-  </div>
-
-  <script type="module">
-    import {
-      initializeApp
-    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-    import {
-      getAuth,
-      signInWithEmailAndPassword,
-      signInWithPopup,
-      GoogleAuthProvider,
-      sendPasswordResetEmail,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
-
-    // 🔑 PASTI SAMA dengan index.html / admin.html / orders.html
-    const firebaseConfig = {
-      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-      authDomain: "toko-barmods.firebaseapp.com",
-      projectId: "toko-barmods",
-      storageBucket: "toko-barmods.firebasestorage.app",
-      messagingSenderId: "284047189012",
-      appId: "1:284047189012:web:6ef0c6891adab08a383301"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-
-    const emailInput = document.getElementById("email");
-    const passInput = document.getElementById("password");
-    const loginEmailBtn = document.getElementById("loginEmailBtn");
-    const loginGoogleBtn = document.getElementById("loginGoogleBtn");
-    const resetBtn = document.getElementById("resetBtn");
-    const registerBtn = document.getElementById("registerBtn");
-    const errorBox = document.getElementById("errorBox");
-
-    function setLoading(isLoading) {
-      loginEmailBtn.disabled = isLoading;
-      loginGoogleBtn.disabled = isLoading;
-      resetBtn.disabled = isLoading;
-      registerBtn.disabled = isLoading;
-    }
-
-    function showError(msg) {
-      errorBox.textContent = msg || "";
-    }
-
-    // ✅ Kalau sudah login, jangan di login lagi → langsung ke index
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        window.location.href = "index.html";
-      }
-    });
-
-    // ========= LOGIN EMAIL/PASSWORD =========
-    loginEmailBtn.addEventListener("click", async () => {
-      const email = emailInput.value.trim();
-      const pass = passInput.value.trim();
-      if (!email || !pass) {
-        showError("Email & password wajib diisi.");
-        return;
-      }
-      setLoading(true);
-      showError("");
-      try {
-        await signInWithEmailAndPassword(auth, email, pass);
-        // onAuthStateChanged di atas yang akan redirect ke index.html
-      } catch (err) {
-        console.error(err);
-        showError("Gagal login: " + (err.code || err.message));
-      } finally {
-        setLoading(false);
-      }
-    });
-
-    // ========= LOGIN GOOGLE =========
-    loginGoogleBtn.addEventListener("click", async () => {
-      setLoading(true);
-      showError("");
-      try {
-        await signInWithPopup(auth, provider);
-        // redirect juga lewat onAuthStateChanged
-      } catch (err) {
-        console.error(err);
-        showError("Gagal login Google: " + (err.code || err.message));
-      } finally {
-        setLoading(false);
-      }
-    });
-
-    // ========= LUPA PASSWORD =========
-    resetBtn.addEventListener("click", async () => {
-      const email = emailInput.value.trim();
-      if (!email) {
-        showError("Isi email dulu untuk reset password.");
-        return;
-      }
-      setLoading(true);
-      showError("");
-      try {
-        await sendPasswordResetEmail(auth, email);
-        showError("Link reset password dikirim ke email.");
-      } catch (err) {
-        console.error(err);
-        showError("Gagal mengirim reset: " + (err.code || err.message));
-      } finally {
-        setLoading(false);
-      }
-    });
-
-    // ========= KE HALAMAN REGISTER =========
-    registerBtn.addEventListener("click", () => {
-      window.location.href = "register.html";
-    });
-  </script>
-</body>
-</html>
+<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js'></script>
+<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js'></script>
+<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js'></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+  authDomain: "toko-barmods.firebaseapp.com",
+  projectId: "toko-barmods",
+  storageBucket: "toko-barmods.firebasestorage.app",
+  messagingSenderId: "284047189012",
+  appId: "1:284047189012:web:6ef0c6891adab08a383301"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+</script>
+</body></html>
