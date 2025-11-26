@@ -1,45 +1,139 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Orders</title>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Orders - Barmods Store</title>
+
 <style>
-body{font-family:sans-serif;padding:20px;background:#f4f4f4;}
-.card{background:#fff;padding:20px;margin:10px 0;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
-input,button{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ccc;}
-.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px;background:white;box-shadow:0 -4px 10px rgba(0,0,0,0.1);}
-a{text-decoration:none;color:#0062D1;}
-h1{text-align:center;}
+  body{
+    font-family:sans-serif;
+    margin:0;
+    background:#0d1117;
+    color:white;
+    padding-bottom:80px;
+  }
+  h1{text-align:center;margin:20px 0;font-size:22px;}
+
+  .card{
+    background:#161b22;
+    margin:12px;
+    padding:15px;
+    border-radius:14px;
+    box-shadow:0 0 12px rgba(0,0,0,0.4);
+  }
+
+  .status{
+    font-weight:bold;
+    padding:4px 8px;
+    border-radius:6px;
+    display:inline-block;
+    margin-top:6px;
+  }
+
+  .pending{background:#fbbf24;color:black;}
+  .process{background:#60a5fa;color:black;}
+  .success{background:#4ade80;color:black;}
+
+  .nav{
+    position:fixed;bottom:0;left:0;right:0;
+    background:#161b22;
+    display:flex;
+    justify-content:space-around;
+    padding:10px 0;
+    box-shadow:0 -4px 12px rgba(0,0,0,0.4);
+  }
+  .nav a{color:#58a6ff;text-decoration:none;font-size:14px;}
+
+  .small{color:#9ca3af;font-size:13px;}
 </style>
-</head><body>
-<h1>Orders</h1>
-<div id='list'></div>
-<div class='nav'>
-<a href='index.html'>Produk</a><a href='wallet.html'>Wallet</a><a href='orders.html'>Orders</a><a href='profile.html'>Profile</a>
+</head>
+<body>
+
+<h1>Daftar Pesanan</h1>
+
+<div id="orders"></div>
+
+<div class="nav">
+  <a href="index.html">Produk</a>
+  <a href="wallet.html">Wallet</a>
+  <a href="orders.html">Orders</a>
+  <a href="profile.html">Profile</a>
 </div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
 <script>
-auth.onAuthStateChanged(u=>{if(!u)location.href='login.html';load();});
-function load(){
- db.collection('orders').where('userId','==',auth.currentUser.uid).get().then(s=>{
-  list.innerHTML='';
-  s.forEach(d=>{
-    let o=d.data();
-    list.innerHTML+=`<div class='card'><b>${o.productName}</b><br>Status: ${o.status}<br>${o.adminProduct||''}</div>`;
+// FIREBASE INIT
+const firebaseConfig={
+  apiKey:"AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+  authDomain:"toko-barmods.firebaseapp.com",
+  projectId:"toko-barmods"
+};
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth();
+const db=firebase.firestore();
+
+auth.onAuthStateChanged(u=>{
+  if(!u) return location.href="login.html";
+  loadOrders();
+});
+
+// ========================
+// LOAD ALL ORDERS FOR USER
+// ========================
+function loadOrders(){
+  const uid = auth.currentUser.uid;
+
+  db.collection("orders")
+  .where("userId","==",uid)
+  .orderBy("createdAt","desc")
+  .get()
+  .then(q=>{
+    if(q.empty){
+      orders.innerHTML = "<div class='card'>Belum ada pesanan.</div>";
+      return;
+    }
+
+    orders.innerHTML="";
+
+    q.forEach(doc=>{
+      let o=doc.data();
+
+      let stClass = (o.status==="pending") ? "pending"
+                    : (o.status==="process") ? "process"
+                    : "success";
+
+      let tanggal = new Date(o.createdAt).toLocaleString("id-ID");
+
+      orders.innerHTML += `
+        <div class="card">
+          <b>${o.productName}</b><br>
+          <div class="small">Tanggal: ${tanggal}</div>
+
+          <div class="status ${stClass}">${o.status.toUpperCase()}</div>
+
+          <div style="margin-top:10px;">
+            <div class="small">Harga: Rp ${o.price.toLocaleString("id-ID")}</div>
+          </div>
+
+          <div style="margin-top:10px;">
+            <b>Data yang kamu kirim:</b><br>
+            <div class="small">${o.inputUser || "-"}</div>
+          </div>
+
+          <div style="margin-top:10px;">
+            <b>Produk dari admin:</b><br>
+            <div class="small">${o.adminProduct || "<i>Belum dikirim</i>"}</div>
+          </div>
+        </div>
+      `;
+    });
   });
- });
 }
 </script>
 
-<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js'></script>
-<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js'></script>
-<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js'></script>
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-  authDomain: "toko-barmods.firebaseapp.com",
-  projectId: "toko-barmods",
-  storageBucket: "toko-barmods.firebasestorage.app",
-  messagingSenderId: "284047189012",
-  appId: "1:284047189012:web:6ef0c6891adab08a383301"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-</script>
-</body></html>
+</body>
+</html>
