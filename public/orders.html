@@ -86,37 +86,43 @@ auth.onAuthStateChanged(u=>{
 // ========================
 function loadOrders(){
   const uid = auth.currentUser.uid;
+  const container = document.getElementById("orders");
+  container.innerHTML = "<div class='card'>Memuat pesanan...</div>";
 
-  db.collection("orders")
-  .where("userId","==",uid)
-  .orderBy("createdAt","desc")
-  .get()
+  db.collection("orders").where("userId","==",uid).get()
   .then(q=>{
     if(q.empty){
-      orders.innerHTML = "<div class='card'>Belum ada pesanan.</div>";
+      container.innerHTML = "<div class='card'>Belum ada pesanan.</div>";
       return;
     }
 
-    orders.innerHTML="";
-
+    // sort manual by createdAt desc
+    const arr=[];
     q.forEach(doc=>{
-      let o=doc.data();
+      arr.push({id:doc.id, ...doc.data()});
+    });
+    arr.sort((a,b)=> (b.createdAt||0) - (a.createdAt||0));
 
-      let stClass = (o.status==="pending") ? "pending"
-                    : (o.status==="process") ? "process"
-                    : "success";
+    container.innerHTML="";
+    arr.forEach(o=>{
+      const st = o.status || "pending";
+      let stClass = (st==="pending") ? "pending"
+                 : (st==="process") ? "process"
+                 : "success";
 
-      let tanggal = new Date(o.createdAt).toLocaleString("id-ID");
+      const tanggal = o.createdAt
+        ? new Date(o.createdAt).toLocaleString("id-ID")
+        : "-";
 
-      orders.innerHTML += `
+      container.innerHTML += `
         <div class="card">
           <b>${o.productName}</b><br>
           <div class="small">Tanggal: ${tanggal}</div>
 
-          <div class="status ${stClass}">${o.status.toUpperCase()}</div>
+          <div class="status ${stClass}">${st.toUpperCase()}</div>
 
           <div style="margin-top:10px;">
-            <div class="small">Harga: Rp ${o.price.toLocaleString("id-ID")}</div>
+            <div class="small">Harga: Rp ${Number(o.price||0).toLocaleString("id-ID")}</div>
           </div>
 
           <div style="margin-top:10px;">
@@ -131,6 +137,9 @@ function loadOrders(){
         </div>
       `;
     });
+  })
+  .catch(err=>{
+    container.innerHTML = "<div class='card'>Gagal load orders: "+err.message+"</div>";
   });
 }
 </script>
