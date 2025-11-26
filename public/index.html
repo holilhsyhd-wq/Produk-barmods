@@ -1,247 +1,155 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Barmods Store - Produk</title>
-  <style>
-    body{
-      font-family: sans-serif;
-      margin:0;
-      background:#0d1117;
-      color:white;
-      padding-bottom:80px;
-    }
-    h1{text-align:center;margin:20px 0;font-size:22px;}
-
-    .card{
-      background:#161b22;
-      margin:12px;
-      padding:15px;
-      border-radius:14px;
-      box-shadow:0 0 12px rgba(0,0,0,0.4);
-    }
-    .card:hover{background:#1b212c;}
-
-    .prod-title{font-size:16px;font-weight:bold;}
-    .prod-cat{font-size:12px;color:#9ca3af;}
-    .prod-price{margin-top:8px;font-size:15px;font-weight:bold;color:#58a6ff;}
-
-    button{
-      margin-top:10px;
-      width:100%;
-      padding:12px;
-      border:none;
-      border-radius:8px;
-      background:#007bff;
-      color:white;
-      font-weight:bold;
-      font-size:14px;
-    }
-
-    .nav{
-      position:fixed;bottom:0;left:0;right:0;
-      background:#161b22;
-      display:flex;
-      justify-content:space-around;
-      padding:10px 0;
-      box-shadow:0 -4px 12px rgba(0,0,0,0.4);
-    }
-    .nav a{color:#58a6ff;text-decoration:none;font-size:14px;}
-
-    .input-box{
-      width:100%;
-      padding:10px;
-      margin-top:10px;
-      background:#0f141a;
-      border:1px solid #30363d;
-      border-radius:8px;
-      color:white;
-    }
-  </style>
-</head>
-
-<body>
-
-<h1>Produk</h1>
-<div id="list"></div>
-
-<div class="nav">
-  <a href="index.html">Produk</a>
-  <a href="wallet.html">Wallet</a>
-  <a href="orders.html">Orders</a>
-  <a href="profile.html">Profile</a>
-</div>
-
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-
 <script>
-// FIREBASE INIT
-const firebaseConfig={
-  apiKey:"AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-  authDomain:"toko-barmods.firebaseapp.com",
-  projectId:"toko-barmods"
+const firebaseConfig = {
+  apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+  authDomain: "toko-barmods.firebaseapp.com",
+  projectId: "toko-barmods",
+  storageBucket: "toko-barmods.firebasestorage.app",
+  messagingSenderId: "284047189012",
+  appId: "1:284047189012:web:6ef0c6891adab08a383301"
 };
 firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth();
-const db=firebase.firestore();
+const db   = firebase.firestore();
+const auth = firebase.auth();
 
-// parse "2k", "1.5k", "Rp 10.000", dll → angka
+/* ===== Helper ===== */
+function rupiah(n){
+  n = Number(n || 0);
+  return "Rp " + n.toLocaleString("id-ID");
+}
 function parseAmount(raw){
-  if(raw === null || raw === undefined) return 0;
-  let str = raw.toString().trim().toLowerCase();
-
-  if(str.endsWith("k")){
-    let num = Number(str.replace("k",""));
-    if(!isNaN(num)) return Math.round(num * 1000);
+  if(raw===null || raw===undefined) return 0;
+  let s = raw.toString().toLowerCase().trim();
+  // "7k" → 7000
+  if(s.endsWith("k")){
+    const n = Number(s.replace("k",""));
+    if(!isNaN(n)) return n * 1000;
   }
-  if(str.includes("k")){
-    let num = Number(str.replace("k",""));
-    if(!isNaN(num)) return Math.round(num * 1000);
-  }
-  const cleaned = str.replace(/[^0-9]/g,"");
-  return Number(cleaned) || 0;
-}
-function rupiah(num){
-  return "Rp " + Number(num).toLocaleString("id-ID");
+  s = s.replace(/[^0-9]/g,"");
+  return Number(s || 0);
 }
 
-auth.onAuthStateChanged(u=>{
-  if(!u){
-    location.href="login.html";
-    return;
-  }
-  loadProducts();
-});
-
+/* ====== Load produk ke homepage ====== */
 function loadProducts(){
-  const listEl = document.getElementById("list");
-  listEl.innerHTML = "<div class='card'>Memuat produk...</div>";
+  const listEl = document.getElementById("productList");
+  if(!listEl) return;
 
-  db.collection("products").get()
-  .then(snap=>{
+  db.collection("products").get().then(snap=>{
+    listEl.innerHTML = "";
     if(snap.empty){
-      listEl.innerHTML = "<div class='card'>Belum ada produk.</div>";
+      listEl.innerHTML = "<p style='padding:10px'>Belum ada produk.</p>";
       return;
     }
-    listEl.innerHTML = "";
+
     snap.forEach(doc=>{
       const p = doc.data();
-      const hargaNumber = parseAmount(p.price);
-      const showPrice   = rupiah(hargaNumber);
+      const id = doc.id;
+      const priceNumber = parseAmount(p.price);
 
       listEl.innerHTML += `
         <div class="card">
-          <div class="prod-title">${p.icon || ""} ${p.name || "(tanpa nama)"}</div>
-          <div class="prod-cat">${p.category || ""}</div>
-          <div class="prod-price">${showPrice}</div>
-          <button onclick="orderForm('${doc.id}')">Beli</button>
+          <div class="title">${p.icon || ""} ${p.name || ""}</div>
+          <div class="label">${p.category || "-"}</div>
+          <div class="value">${rupiah(priceNumber)}</div>
+          <button class="btn-beli" onclick="beliProduk('${id}','${encodeURIComponent(p.name || "")}','${p.category || ""}','${p.price || ""}')">Beli</button>
         </div>
       `;
     });
-  })
-  .catch(err=>alert("Gagal load produk: "+err.message));
+  }).catch(err=>{
+    listEl.innerHTML = "<p style='padding:10px'>Gagal memuat produk: "+err.message+"</p>";
+  });
 }
 
-function orderForm(id){
-  const listEl = document.getElementById("list");
-
-  db.collection("products").doc(id).get()
-  .then(d=>{
-    if(!d.exists) throw new Error("Produk tidak ditemukan");
-    const p = d.data();
-    const hargaNumber = parseAmount(p.price);
-    if(hargaNumber <= 0){
-      alert("Harga produk belum benar. Hubungi admin.");
-      return;
-    }
-
-    let extraInput="";
-    if(p.category==="sosmed"){
-      extraInput = `<input id="inputData" class="input-box"
-         placeholder="Masukkan link / username / video (IG/TikTok dll)">`;
-    }else if(p.category==="panel"){
-      extraInput = `<input id="inputData" class="input-box"
-         placeholder="username:password panel">`;
-    }else if(p.category==="premium"){
-      extraInput = `<input id="inputData" class="input-box"
-         placeholder="Catatan (opsional)">`;
-    }else{
-      extraInput = `<input id="inputData" class="input-box"
-         placeholder="Keterangan order (opsional)">`;
-    }
-
-    listEl.innerHTML=`
-      <div class="card">
-        <div class="prod-title">${p.icon || ""} ${p.name || "(tanpa nama)"}</div>
-        <div class="prod-cat">${p.category || ""}</div>
-        <div class="prod-price">Harga: ${rupiah(hargaNumber)}</div>
-        ${extraInput}
-        <button onclick="makeOrder('${id}')">Konfirmasi Order</button>
-        <button style="background:#4b5563;margin-top:6px" onclick="loadProducts()">Batal</button>
-      </div>
-    `;
-  })
-  .catch(err=>alert("Gagal buka form order: "+err.message));
-}
-
-function makeOrder(id){
+/* ====== Fungsi Beli Produk (INTI MASALAH DI SINI) ====== */
+function beliProduk(productDocId, encodedName, category, rawPrice){
   const user = auth.currentUser;
   if(!user){
-    alert("Silakan login ulang.");
-    location.href="login.html";
+    alert("Silakan login dulu.");
+    location.href = "login.html";
     return;
   }
-  const uid   = user.uid;
-  const input = (document.getElementById("inputData")?.value || "").trim();
 
-  db.collection("products").doc(id).get()
-  .then(doc=>{
-    if(!doc.exists) throw new Error("Produk tidak ditemukan");
-    const p = doc.data();
-    const hargaNumber = parseAmount(p.price);
-    if(hargaNumber <= 0) throw new Error("Harga produk tidak valid.");
+  const productName = decodeURIComponent(encodedName);
+  const priceNumber = parseAmount(rawPrice);
 
-    return db.collection("users").doc(uid).get()
-      .then(uDoc=>{
-        if(!uDoc.exists) throw new Error("Data user tidak ditemukan.");
-        const u = uDoc.data();
-        const saldoNumber = parseAmount(u.balance);
+  // input tambahan sesuai kategori
+  let labelInput = "Data tambahan untuk pesanan ini";
+  if(category === "sosmed"){
+    labelInput = "Link / username / URL video yang mau ditambah (IG/TikTok dsb.)";
+  }else if(category === "panel"){
+    labelInput = "Masukkan username:password panel (contoh: user:pass)";
+  }else if(category === "premium"){
+    labelInput = "Email / akun yang akan diaktifkan / catatan lain";
+  }
 
-        if(saldoNumber < hargaNumber){
-          alert(
-            "Saldo tidak cukup.\n" +
-            "Saldo kamu: "+rupiah(saldoNumber)+"\n" +
-            "Harga produk: "+rupiah(hargaNumber)+
-            "\nSilakan topup di menu Wallet."
-          );
-          return null;
-        }
+  const inputUser = prompt(labelInput);
+  if(inputUser === null){
+    // user batal
+    return;
+  }
 
-        const saldoBaru = saldoNumber - hargaNumber;
+  if(!inputUser.trim()){
+    alert("Data tidak boleh kosong.");
+    return;
+  }
 
-        return db.collection("users").doc(uid).update({balance:saldoBaru})
-          .then(()=> db.collection("orders").add({
-            userId      : uid,
-            productDocId: id,
-            productName : p.name || "",
-            price       : hargaNumber,
-            inputUser   : input,
-            status      : "pending",
-            adminProduct: "",
-            createdAt   : Date.now()
-          }))
-          .then(()=>{
-            alert("Order berhasil! Saldo baru: "+rupiah(saldoBaru));
-            loadProducts();
-          });
-      });
+  // transaksi: cek saldo + kurangi + buat order
+  const uid = user.uid;
+  const userRef = db.collection("users").doc(uid);
+
+  db.runTransaction(async (tx)=>{
+    const uSnap = await tx.get(userRef);
+    if(!uSnap.exists){
+      throw new Error("Data user tidak ditemukan.");
+    }
+    const uData = uSnap.data();
+    const saldoLama = Number(uData.balance || 0);
+
+    if(saldoLama < priceNumber){
+      throw new Error("Saldo kamu kurang. Saldo: "+rupiah(saldoLama)+" | Harga: "+rupiah(priceNumber));
+    }
+
+    const saldoBaru = saldoLama - priceNumber;
+    tx.update(userRef,{balance:saldoBaru});
+
+    const orderRef = db.collection("orders").doc(); // ROOT COLLECTION "orders"
+    tx.set(orderRef,{
+      userId        : uid,
+      userEmail     : uData.email || user.email || "",
+      productId     : productDocId,
+      productName   : productName,
+      price         : priceNumber,    // angka murni
+      category      : category || "",
+      inputUser     : inputUser.trim(),
+      status        : "pending",
+      adminProduct  : "",
+      userReceived  : false,
+      createdAt     : firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    return saldoBaru;
   })
-  .catch(err=>alert("Gagal membuat order: "+err.message));
+  .then((saldoBaru)=>{
+    alert("Pesanan berhasil dibuat.\nSaldo tersisa: "+rupiah(saldoBaru));
+    // optional: redirect ke halaman orders
+    location.href = "orders.html";
+  })
+  .catch(err=>{
+    alert("Gagal membuat pesanan: "+err.message);
+  });
 }
-</script>
 
-</body>
-</html>
+/* ====== Cek login user & load produk ====== */
+auth.onAuthStateChanged(user=>{
+  if(!user){
+    // kalau halaman ini wajib login, redirect ke login
+    // kalau boleh guest, cukup loadProducts()
+    // di flow kamu kayaknya wajib login, jadi:
+    location.href = "login.html";
+  }else{
+    loadProducts();
+  }
+});
+</script>
