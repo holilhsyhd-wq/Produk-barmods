@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fix Products - Barmods</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #020617;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+    .card {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #020617;
+      border-radius: 16px;
+      border: 1px solid #1f2937;
+      padding: 18px;
+    }
+    h1 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    button {
+      border: none;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    pre {
+      margin-top: 14px;
+      font-size: 12px;
+      background: #020617;
+      border-radius: 12px;
+      border: 1px solid #1f2937;
+      padding: 10px;
+      max-height: 320px;
+      overflow: auto;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Perbaiki Data Produk</h1>
+    <p>Tool ini akan:</p>
+    <ul style="font-size:13px;margin-left:18px;">
+      <li>Mengubah <b>price</b> yang masih string seperti "Rp 2.000" jadi <b>number</b> (2000)</li>
+      <li>Memastikan <b>stock</b> bertipe number (kalau kosong → 0)</li>
+      <li>Ngisi <b>category</b> kosong jadi "lainnya"</li>
+      <li>Ngisi <b>icon</b> kosong jadi "⭐"</li>
+    </ul>
+    <p style="font-size:13px;margin-top:6px;">Pastikan sudah login Firebase di aplikasi kamu. Klik sekali saja, tunggu sampai selesai.</p>
+    <button id="runFixBtn">Jalankan Perbaikan</button>
+    <pre id="logBox">Log akan muncul di sini...</pre>
+  </div>
+
+  <!-- Firebase compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+  <script>
+    // config sama persis dengan project kamu
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+      authDomain: "toko-barmods.firebaseapp.com",
+      projectId: "toko-barmods",
+      storageBucket: "toko-barmods.firebasestorage.app",
+      messagingSenderId: "284047189012",
+      appId: "1:284047189012:web:6ef0c6891adab08a383301"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const runFixBtn = document.getElementById("runFixBtn");
+    const logBox = document.getElementById("logBox");
+
+    function log(msg) {
+      console.log(msg);
+      logBox.textContent += "\n" + msg;
+    }
+
+    async function fixProducts() {
+      runFixBtn.disabled = true;
+      logBox.textContent = "Mulai perbaikan produk...\n";
+
+      try {
+        const snap = await db.collection("products").get();
+        log("Ditemukan " + snap.size + " produk.");
+
+        const batch = db.batch();
+        let changedCount = 0;
+
+        snap.forEach(doc => {
+          const data = doc.data();
+          const update = {};
+
+          // price: string "Rp 2.000" -> number 2000
+          if (typeof data.price === "string") {
+            const cleaned = data.price.replace(/[^0-9]/g, "");
+            if (cleaned) {
+              update.price = parseInt(cleaned, 10);
+            } else {
+              update.price = 0;
+            }
+          }
+
+          // kalau price bukan number, paksa 0
+          if (typeof data.price !== "number" && update.price === undefined) {
+            update.price = 0;
+          }
+
+          // stock: pastikan number
+          if (typeof data.stock !== "number") {
+            const s = Number(data.stock);
+            update.stock = isNaN(s) ? 0 : s;
+          }
+
+          // category: isi default kalau kosong
+          if (!data.category || typeof data.category !== "string") {
+            update.category = "lainnya";
+          }
+
+          // icon: isi default kalau kosong
+          if (!data.icon || typeof data.icon !== "string" || !data.icon.trim()) {
+            update.icon = "⭐";
+          }
+
+          if (Object.keys(update).length > 0) {
+            batch.update(doc.ref, update);
+            changedCount++;
+            log("Update produk " + doc.id + " ⇒ " + JSON.stringify(update));
+          }
+        });
+
+        if (changedCount === 0) {
+          log("Tidak ada produk yang perlu diperbaiki.");
+        } else {
+          await batch.commit();
+          log("Selesai! " + changedCount + " produk berhasil diperbarui.");
+        }
+      } catch (err) {
+        console.error(err);
+        log("ERROR: " + err.message);
+      } finally {
+        runFixBtn.disabled = false;
+      }
+    }
+
+    runFixBtn.addEventListener("click", fixProducts);
+  </script>
+</body>
+</html>
