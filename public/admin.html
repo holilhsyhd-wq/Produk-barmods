@@ -147,23 +147,25 @@
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 
 <script>
-// CEK ADMIN LOCAL
+// CEK ADMIN LOCAL (username/password di login-admin.html)
 if(localStorage.getItem("adminBarmods")!=="yes"){
   location.href="login-admin.html";
 }
 
-// FIREBASE
+// FIREBASE INIT
 const firebaseConfig={
   apiKey:"AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
   authDomain:"toko-barmods.firebaseapp.com",
   projectId:"toko-barmods"
 };
 firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
+const db   = firebase.firestore();
+const auth = firebase.auth();
 
-// Helpers: parseAmount + rupiah (sama seperti di index.html)
+// Bantu: parseAmount + rupiah (sama seperti index.html)
 function parseAmount(raw){
   if(raw === null || raw === undefined) return 0;
   let str = raw.toString().trim().toLowerCase();
@@ -183,15 +185,11 @@ function rupiah(num){
   return "Rp " + Number(num).toLocaleString("id-ID");
 }
 
-// ----------------------
 // GLOBAL
-// ----------------------
 let currentTab="produk";
 let editingProductId=null;
 
-// ----------------------
 // TAB HANDLER
-// ----------------------
 function showTab(name){
   currentTab = name;
   document.getElementById("tabProduk").classList.remove("active");
@@ -212,12 +210,14 @@ function showTab(name){
 
 function logoutAdmin(){
   localStorage.removeItem("adminBarmods");
-  location.href="login-admin.html";
+  auth.signOut().finally(()=> {
+    location.href="login-admin.html";
+  });
 }
 
-// ----------------------
+// ======================
 // PRODUK TAB (CRUD)
-// ----------------------
+// ======================
 function loadProdukAdmin(){
   content.innerHTML = `
     <div class="card">
@@ -237,6 +237,11 @@ function loadProdukAdmin(){
   db.collection("products").get().then(snap=>{
     const box = document.getElementById("listProduk");
     box.innerHTML = "";
+
+    if(snap.empty){
+      box.innerHTML = "<div class='card'>Belum ada produk.</div>";
+      return;
+    }
 
     snap.forEach(doc=>{
       const p = doc.data();
@@ -261,6 +266,8 @@ function loadProdukAdmin(){
         </div>
       `;
     });
+  }).catch(err=>{
+    content.innerHTML += `<div class="card">Gagal load produk: ${err.message}</div>`;
   });
 }
 
@@ -288,7 +295,7 @@ function saveProduct(){
 
   const data = {
     name:name,
-    price:price,      // biarkan string aslinya
+    price:price,      // simpan string raw
     stock:stock,
     category:cat,
     icon:icon
@@ -299,13 +306,13 @@ function saveProduct(){
       alert("Produk diperbarui");
       resetProductForm();
       loadProdukAdmin();
-    });
+    }).catch(err=>alert("Gagal update produk: "+err.message));
   }else{
     db.collection("products").add(data).then(()=>{
       alert("Produk ditambahkan");
       resetProductForm();
       loadProdukAdmin();
-    });
+    }).catch(err=>alert("Gagal tambah produk: "+err.message));
   }
 }
 
@@ -327,12 +334,12 @@ function deleteProduct(id){
   db.collection("products").doc(id).delete().then(()=>{
     alert("Produk dihapus");
     loadProdukAdmin();
-  });
+  }).catch(err=>alert("Gagal hapus produk: "+err.message));
 }
 
-// ----------------------
-// TOPUP TAB (tidak diubah logika utama)
-// ----------------------
+// ======================
+// TOPUP TAB
+// ======================
 function loadTopupAdmin(){
   content.innerHTML = `<div id="topupList"></div>`;
 
@@ -367,6 +374,9 @@ function loadTopupAdmin(){
         </div>
       `;
     });
+  }).catch(err=>{
+    document.getElementById("topupList").innerHTML =
+      "<div class='card'>Gagal load topup: "+err.message+"</div>";
   });
 }
 
@@ -403,9 +413,9 @@ function approveTopup(id){
   });
 }
 
-// ----------------------
+// ======================
 // SALDO USER TAB
-// ----------------------
+// ======================
 function loadUsersSaldo(){
   content.innerHTML = `<div id="userList"></div>`;
 
@@ -442,6 +452,9 @@ function loadUsersSaldo(){
         </div>
       `;
     });
+  }).catch(err=>{
+    document.getElementById("userList").innerHTML =
+      "<div class='card'>Gagal load user: "+err.message+"</div>";
   });
 }
 
@@ -452,12 +465,12 @@ function updateUserSaldo(uid){
   db.collection("users").doc(uid).update({balance:val}).then(()=>{
     alert("Saldo user diperbarui");
     loadUsersSaldo();
-  });
+  }).catch(err=>alert("Gagal update saldo: "+err.message));
 }
 
-// ----------------------
+// ======================
 // ORDERS TAB
-// ----------------------
+// ======================
 function loadOrdersAdmin(){
   content.innerHTML = `<div id="ordersAdminList"></div>`;
 
@@ -511,6 +524,9 @@ function loadOrdersAdmin(){
         </div>
       `;
     });
+  }).catch(err=>{
+    document.getElementById("ordersAdminList").innerHTML =
+      "<div class='card'>Gagal load orders: "+err.message+"</div>";
   });
 }
 
@@ -524,11 +540,24 @@ function saveOrderAdmin(id){
   }).then(()=>{
     alert("Order diperbarui");
     loadOrdersAdmin();
-  });
+  }).catch(err=>alert("Gagal update order: "+err.message));
 }
 
-// LOAD DEFAULT TAB
-showTab("produk");
+// ======================
+// START: login anonymous dulu,
+// baru boleh load tab awal.
+// ======================
+auth.onAuthStateChanged(function(u){
+  if(!u){
+    // login anonymous kalau belum login
+    auth.signInAnonymously().catch(err=>{
+      alert("Gagal login admin ke Firebase: "+err.message);
+    });
+  }else{
+    // begitu anonymous login OK -> load tab default
+    showTab("produk");
+  }
+});
 </script>
 
 </body>
