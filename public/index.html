@@ -23,6 +23,7 @@
       display: flex;
       gap: 12px;
       padding: 12px;
+      background: #f5f5f5;
     }
     .nav-filter button {
       flex: 1;
@@ -38,7 +39,7 @@
     }
     #product-list {
       padding: 16px;
-      padding-bottom: 90px; /* biar ga ketutup footer */
+      padding-bottom: 90px; /* supaya tidak ketutup footer */
     }
     .card {
       background: white;
@@ -72,9 +73,11 @@
       color: white;
       display: flex;
       justify-content: space-around;
-      padding: 8px 0 6px;
+      padding: 6px 0;
     }
-    footer div {
+    footer a {
+      color: white;
+      text-decoration: none;
       text-align: center;
       font-size: 14px;
     }
@@ -97,10 +100,10 @@
 <div id="product-list"></div>
 
 <footer>
-  <div onclick="location.href='index.html'">🏠<br>Home</div>
-  <div onclick="location.href='wallet.html'">💳<br>Wallet</div>
-  <div onclick="location.href='orders.html'">📦<br>Pesanan</div>
-  <div onclick="location.href='profile.html'">👤<br>Profil</div>
+  <a href="index.html">🏠<br>Home</a>
+  <a href="wallet.html">💳<br>Wallet</a>
+  <a href="orders.html">📦<br>Pesanan</a>
+  <a href="profile.html">👤<br>Profil</a>
 </footer>
 
 <!-- FIREBASE -->
@@ -112,7 +115,7 @@
     getDocs
   } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-  // 🔥 KONFIG FIREBASE KAMU
+  // 🔥 KONFIG FIREBASE
   const firebaseConfig = {
     apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
     authDomain: "toko-barmods.firebaseapp.com",
@@ -125,7 +128,7 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // Semua produk disimpan di sini (biar query ke Firestore cuma sekali)
+  // Semua produk disimpan di sini
   let ALL_PRODUCTS = [];
 
   async function loadAllProducts() {
@@ -137,26 +140,34 @@
       snap.forEach(d => {
         ALL_PRODUCTS.push({ id: d.id, ...d.data() });
       });
+      // default: Premium Apps
       renderCategory("apk");
     } catch (err) {
       list.innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
     }
   }
 
+  // logika kategori:
+  // - category = "sosmed" -> tab Sosial Media
+  // - category = "panel"/"tools" -> tab Panel & Tools
+  // - selain itu semua -> Premium Apps
   function renderCategory(cat) {
     const list = document.getElementById("product-list");
 
-    // Filter berdasarkan kategori, tapi kalau category kosong → anggap Premium Apps
     const filtered = ALL_PRODUCTS.filter(p => {
-      const c = (p.category || "").toLowerCase();
-      if (cat === "apk") {
-        return c === "apk" || c === "premium" || c === "apps" || c === "";
-      }
+      const c = String(p.category || "").toLowerCase().trim();
+
       if (cat === "sosmed") {
-        return c === "sosmed" || c === "sosmeds" || c === "sosial";
+        return c === "sosmed" || c === "sosial" || c === "sosmeds";
       }
       if (cat === "panel") {
         return c === "panel" || c === "tools" || c === "paneltools";
+      }
+      // cat === "apk" (Premium Apps) -> semua yang BUKAN sosmed / panel
+      if (cat === "apk") {
+        if (c === "sosmed" || c === "sosial" || c === "sosmeds") return false;
+        if (c === "panel" || c === "tools" || c === "paneltools") return false;
+        return true;
       }
       return true;
     });
@@ -182,7 +193,7 @@
     });
   }
 
-  // 👉 Fungsi ini dipanggil dari HTML, jadi harus ditaruh di window
+  // fungsi dipanggil dari HTML -> taruh di window
   window.changeCategory = function (cat, btn) {
     document.querySelectorAll(".nav-filter button").forEach(b =>
       b.classList.remove("active")
@@ -202,11 +213,11 @@
   };
 
   window.orderPage = function (id) {
-    // ganti ke nama file order kamu kalau beda
-    location.href = "order.html?id=" + encodeURIComponent(id);
+    // nanti bisa diarahkan ke halaman/order modal yang kamu mau
+    alert("Order produk ID: " + id);
   };
 
-  // pertama kali load → ambil semua produk & tampilkan Premium Apps
+  // load saat pertama kali
   loadAllProducts();
 </script>
 
