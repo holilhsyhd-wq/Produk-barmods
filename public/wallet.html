@@ -1,281 +1,469 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wallet — Barmods Digital Store</title>
-
-<style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial;
-}
-body{
-  background:#ffffff;
-  padding-bottom:70px;
-}
-
-/* HEADER */
-.header{
-  background:#1565c0;
-  color:white;
-  padding:20px;
-  text-align:center;
-  font-size:22px;
-  font-weight:bold;
-  box-shadow:0 4px 12px rgba(0,0,0,.25);
-}
-
-/* BALANCE BOX */
-.balance-box{
-  margin:18px;
-  background:#e3f2fd;
-  padding:18px;
-  border-radius:14px;
-  border:1px solid #90caf9;
-  text-align:center;
-}
-.balance-box h2{
-  color:#0d47a1;
-  font-size:20px;
-}
-.balance-box span{
-  font-size:28px;
-  font-weight:bold;
-  color:#2e7d32;
-}
-
-/* FORM TOPUP */
-.form-box{
-  margin:18px;
-  padding:18px;
-  background:#f5f5f5;
-  border-radius:14px;
-  border:1px solid #ddd;
-}
-.input{
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid #ccc;
-  margin-bottom:12px;
-}
-.btn{
-  width:100%;
-  padding:12px;
-  background:#0d47a1;
-  color:white;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  font-size:16px;
-}
-
-/* RIWAYAT */
-.title{
-  margin:20px 18px 10px;
-  font-size:18px;
-  font-weight:bold;
-  color:#0d47a1;
-}
-.history{
-  margin:0 18px 18px;
-}
-.item{
-  background:#fafafa;
-  border:1px solid #ddd;
-  padding:14px;
-  border-radius:12px;
-  margin-bottom:12px;
-}
-.status{
-  padding:6px 10px;
-  border-radius:8px;
-  font-size:12px;
-  color:white;
-  display:inline-block;
-}
-.pending{ background:#ff9800; }
-.proses{ background:#0288d1; }
-.sukses{ background:#2e7d32; }
-.error{ background:#c62828; }
-
-/* NAVBAR */
-.navbar{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:65px;
-  background:#0d47a1;
-  color:white;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  box-shadow:0 -4px 12px rgba(0,0,0,0.25);
-}
-.nav-btn{
-  text-align:center;
-  font-size:13px;
-  cursor:pointer;
-}
-.nav-btn span{
-  display:block;
-  font-size:20px;
-}
-</style>
-</head>
-
-<body>
-
-<div class="header">Dompet Digital</div>
-
-<!-- SALDO -->
-<div class="balance-box">
-  <h2>Saldo Anda</h2>
-  <span id="saldoText">Rp 0</span>
-</div>
-
-<!-- FORM TOPUP -->
-<div class="form-box">
-  <h3 style="margin-bottom:10px;color:#0d47a1;font-size:17px;">Top Up Saldo</h3>
-
-  <input class="input" id="amount" type="number" placeholder="Nominal (contoh: 5000)">
-  <input class="input" id="dana" type="text" placeholder="Nomor Dana Anda">
-
-  <button class="btn" onclick="requestTopup()">Kirim Permintaan Topup</button>
-</div>
-
-<!-- RIWAYAT -->
-<div class="title">Riwayat Topup</div>
-<div id="history" class="history"></div>
-
-<!-- NAVBAR -->
-<div class="navbar">
-  <div class="nav-btn" onclick="go('index.html')"><span>🏠</span>Home</div>
-  <div class="nav-btn" onclick="go('wallet.html')"><span>💳</span>Wallet</div>
-  <div class="nav-btn" onclick="go('orders.html')"><span>📦</span>Pesanan</div>
-  <div class="nav-btn" onclick="go('profile.html')"><span>👤</span>Profil</div>
-</div>
-
-<!-- FIREBASE SCRIPT -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-import {
-  getFirestore, collection, addDoc, getDocs, doc, getDoc, query, where, orderBy
-} from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
-import {
-  getAuth, onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
-
-/* CONFIG */
-const firebaseConfig = {
-  apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-  authDomain: "toko-barmods.firebaseapp.com",
-  projectId: "toko-barmods",
-  storageBucket: "toko-barmods.firebasestorage.app",
-  messagingSenderId: "284047189012",
-  appId: "1:284047189012:web:6ef0c6891adab08a383301"
-};
-
-const app = initializeApp(firebaseConfig);
-const db  = getFirestore(app);
-const auth = getAuth(app);
-
-let currentUser = null;
-
-function go(x){ window.location.href=x; }
-
-/* SAAT LOGIN */
-onAuthStateChanged(auth, async (user)=>{
-  if(!user){ window.location.href="login.html"; return; }
-  currentUser = user;
-
-  loadSaldo();
-  loadHistory();
-});
-
-/* LOAD SALDO */
-async function loadSaldo(){
-  const ref = doc(db, "users", currentUser.uid);
-  const snap = await getDoc(ref);
-
-  let saldo = 0;
-  if(snap.exists()) saldo = snap.data().balance || 0;
-
-  document.getElementById("saldoText").innerText =
-    "Rp " + saldo.toLocaleString("id-ID");
-}
-
-/* REQUEST TOPUP */
-window.requestTopup = async function(){
-  const amount = Number(document.getElementById("amount").value);
-  const dana   = document.getElementById("dana").value.trim();
-
-  if(amount <= 0 || !dana){
-    alert("Nominal dan nomor DANA wajib diisi!");
-    return;
-  }
-
-  await addDoc(collection(db, "topups"), {
-    userId: currentUser.uid,
-    userEmail: currentUser.email,
-    amount: amount,
-    danaNumber: dana,
-    status: "pending",
-    createdAt: new Date()
-  });
-
-  alert("Permintaan topup terkirim!");
-  document.getElementById("amount").value = "";
-  document.getElementById("dana").value = "";
-
-  loadHistory();
-};
-
-/* LOAD RIWAYAT */
-async function loadHistory(){
-  const list = document.getElementById("history");
-  list.innerHTML = "Memuat...";
-
-  const q = query(
-    collection(db, "topups"),
-    where("userId", "==", currentUser.uid),
-    orderBy("createdAt", "desc")
-  );
-  const snap = await getDocs(q);
-
-  list.innerHTML = "";
-
-  if(snap.empty){
-    list.innerHTML = "<div style='color:#777;'>Belum ada riwayat topup.</div>";
-    return;
-  }
-
-  snap.forEach(d=>{
-    const t = d.data();
-
-    let statusClass = t.status;
-    if(!statusClass) statusClass = "pending";
-
-    let waktu = "-";
-    if(t.createdAt?.toDate){
-      waktu = t.createdAt.toDate().toLocaleString();
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dompet Digital - Barmods</title>
+  <style>
+    :root {
+      --blue: #0052cc;
+      --blue-soft: #e3f0ff;
+      --bg: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --card: #ffffff;
+      --border: #e5e7eb;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --danger: #dc2626;
     }
 
-    const div = document.createElement("div");
-    div.className = "item";
-    div.innerHTML = `
-      <div><b>Rp ${Number(t.amount).toLocaleString("id-ID")}</b></div>
-      <div style="color:#444">${waktu}</div>
-      <div class="status ${statusClass}">${t.status}</div>
-    `;
-    list.appendChild(div);
-  });
-}
-</script>
+    * {
+      box-sizing: border-box;
+    }
 
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--blue);
+      color: #fff;
+      padding: 14px 16px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    main {
+      flex: 1;
+      padding: 12px 12px 70px;
+      max-width: 800px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .saldo-value {
+      font-size: 26px;
+      font-weight: 800;
+      color: #16a34a;
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    label {
+      font-size: 14px;
+      display: block;
+      margin-bottom: 4px;
+      margin-top: 8px;
+    }
+
+    input {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 9px 10px;
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      margin-top: 14px;
+      width: 100%;
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      background: var(--blue);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .btn-primary:active {
+      background: var(--primary-dark);
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-top: 4px;
+      margin-bottom: 6px;
+    }
+
+    .muted {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .error-text {
+      font-size: 13px;
+      color: var(--danger);
+      margin-top: 6px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th, td {
+      padding: 6px 4px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+    }
+
+    th {
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .badge-status {
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      text-transform: capitalize;
+    }
+
+    .badge-pending { background:#fef3c7; color:#92400e; }
+    .badge-proses  { background:#dbeafe; color:#1d4ed8; }
+    .badge-sukses  { background:#dcfce7; color:#166534; }
+    .badge-error   { background:#fee2e2; color:#b91c1c; }
+
+    /* bottom nav */
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #0052cc;
+      display: flex;
+      justify-content: space-around;
+      padding: 6px 4px 8px;
+      z-index: 50;
+    }
+
+    .nav-item {
+      flex: 1;
+      text-align: center;
+      color: #e5e7eb;
+      font-size: 11px;
+      text-decoration: none;
+    }
+
+    .nav-item span {
+      display: block;
+    }
+
+    .nav-item .icon {
+      font-size: 18px;
+      margin-bottom: 2px;
+    }
+
+    .nav-item.active {
+      color: #ffffff;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header>Dompet Digital</header>
+
+  <main>
+    <!-- SALDO -->
+    <div class="card">
+      <div class="card-title">Saldo Anda</div>
+      <div id="saldoText" class="saldo-value">Rp 0</div>
+      <div class="muted" id="emailText" style="text-align:center;margin-top:4px;"></div>
+    </div>
+
+    <!-- TOPUP FORM -->
+    <div class="card">
+      <div class="section-title">Top Up Saldo</div>
+      <div class="muted">
+        Pembayaran manual via DANA. Isi nominal dan nomor DANA kamu, nanti admin cek lalu saldo akan ditambah.
+      </div>
+
+      <label for="nominalInput">Nominal (contoh: 5000)</label>
+      <input id="nominalInput" type="number" min="1000" placeholder="Nominal topup (Rp)" />
+
+      <label for="danaInput">Nomor DANA Anda</label>
+      <input id="danaInput" placeholder="Contoh: 08xxxxxxxxxx" />
+
+      <button id="btnTopup" class="btn-primary" type="button">
+        Kirim Permintaan Topup
+      </button>
+
+      <div id="topupError" class="error-text" style="display:none;"></div>
+      <div id="topupInfo" class="muted" style="margin-top:6px;display:none;"></div>
+    </div>
+
+    <!-- RIWAYAT TOPUP -->
+    <div style="margin-top:10px;">
+      <div class="section-title">Riwayat Topup</div>
+      <div id="historyStatus" class="muted">Memuat...</div>
+      <div style="overflow-x:auto;">
+        <table id="historyTable" style="display:none;">
+          <thead>
+            <tr>
+              <th>Waktu</th>
+              <th>Nominal</th>
+              <th>DANA</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <a href="index.htn" class="nav-item">
+      <span class="icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="wallet.html" class="nav-item active">
+      <span class="icon">💳</span>
+      <span>Wallet</span>
+    </a>
+    <a href="orders.html" class="nav-item">
+      <span class="icon">📦</span>
+      <span>Pesanan</span>
+    </a>
+    <a href="profile.html" class="nav-item">
+      <span class="icon">👤</span>
+      <span>Profil</span>
+    </a>
+  </nav>
+
+  <script type="module">
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      updateDoc,
+      collection,
+      addDoc,
+      query,
+      where,
+      getDocs,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+    // ==== CONFIG FIREBASE (SAMA DENGAN INDEX) ====
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+      authDomain: "toko-barmods.firebaseapp.com",
+      projectId: "toko-barmods",
+      storageBucket: "toko-barmods.firebasestorage.app",
+      messagingSenderId: "284047189012",
+      appId: "1:284047189012:web:6ef0c6891adab08a383301"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ==== AMBIL USER DARI LOCALSTORAGE ====
+    const userUid = localStorage.getItem("userUid");
+    const userEmail = localStorage.getItem("userEmail");
+
+    if (!userUid || !userEmail) {
+      // kalau belum login, paksa ke login
+      window.location.href = "login.html";
+    }
+
+    const saldoText = document.getElementById("saldoText");
+    const emailText = document.getElementById("emailText");
+    const nominalInput = document.getElementById("nominalInput");
+    const danaInput = document.getElementById("danaInput");
+    const btnTopup = document.getElementById("btnTopup");
+    const topupError = document.getElementById("topupError");
+    const topupInfo = document.getElementById("topupInfo");
+    const historyStatus = document.getElementById("historyStatus");
+    const historyTable = document.getElementById("historyTable");
+    const historyBody = document.getElementById("historyBody");
+
+    emailText.textContent = userEmail;
+
+    function formatRupiah(n) {
+      const num = Number(n || 0);
+      return "Rp " + num.toLocaleString("id-ID");
+    }
+
+    function formatTime(ts) {
+      if (!ts) return "-";
+      try {
+        const d = ts.toDate ? ts.toDate() : new Date(ts);
+        return d.toLocaleString("id-ID");
+      } catch {
+        return "-";
+      }
+    }
+
+    // ==== LOAD SALDO USER ====
+    async function loadSaldo() {
+      try {
+        const ref = doc(db, "users", userUid);
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          const data = snap.data();
+          saldoText.textContent = formatRupiah(data.balance || 0);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // ==== KIRIM PERMINTAAN TOPUP ====
+    async function sendTopup() {
+      topupError.style.display = "none";
+      topupInfo.style.display = "none";
+
+      const nominal = Number(nominalInput.value);
+      const dana = danaInput.value.trim();
+
+      if (!nominal || nominal < 1000) {
+        topupError.style.display = "block";
+        topupError.textContent = "Nominal minimal Rp 1.000.";
+        return;
+      }
+      if (!dana) {
+        topupError.style.display = "block";
+        topupError.textContent = "Nomor DANA harus diisi.";
+        return;
+      }
+
+      btnTopup.disabled = true;
+      btnTopup.textContent = "Mengirim...";
+
+      try {
+        await addDoc(collection(db, "topups"), {
+          amount: nominal,
+          danaNumber: dana,
+          status: "pending",
+          userUid,
+          userEmail,
+          createdAt: serverTimestamp()
+        });
+
+        nominalInput.value = "";
+        danaInput.value = "";
+
+        topupInfo.style.display = "block";
+        topupInfo.textContent =
+          "Permintaan topup dibuat. Status: pending. Kirim bukti transfer ke admin.";
+
+        // reload riwayat
+        await loadTopupHistory();
+      } catch (err) {
+        console.error(err);
+        topupError.style.display = "block";
+        topupError.textContent =
+          "Gagal mengirim permintaan topup: " + (err.message || String(err));
+      } finally {
+        btnTopup.disabled = false;
+        btnTopup.textContent = "Kirim Permintaan Topup";
+      }
+    }
+
+    btnTopup.addEventListener("click", sendTopup);
+
+    // ==== LOAD RIWAYAT TOPUP USER ====
+    async function loadTopupHistory() {
+      historyStatus.style.display = "block";
+      historyStatus.textContent = "Memuat...";
+      historyTable.style.display = "none";
+      historyBody.innerHTML = "";
+
+      try {
+        // HANYA where userUid, TANPA orderBy -> tidak butuh composite index
+        const q = query(
+          collection(db, "topups"),
+          where("userUid", "==", userUid)
+        );
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+          historyStatus.textContent = "Belum ada riwayat topup.";
+          return;
+        }
+
+        const rows = [];
+        snap.forEach((docSnap) => {
+          rows.push(docSnap.data());
+        });
+
+        // urutkan manual by createdAt desc di sisi client
+        rows.sort((a, b) => {
+          const ta = a.createdAt?.seconds || 0;
+          const tb = b.createdAt?.seconds || 0;
+          return tb - ta;
+        });
+
+        rows.forEach((t) => {
+          const tr = document.createElement("tr");
+          const amount = formatRupiah(t.amount || 0);
+          const waktu = formatTime(t.createdAt);
+          const status = t.status || "pending";
+          const badgeClass =
+            status === "sukses"
+              ? "badge-sukses"
+              : status === "proses"
+              ? "badge-proses"
+              : status === "error"
+              ? "badge-error"
+              : "badge-pending";
+
+          tr.innerHTML = `
+            <td>${waktu}</td>
+            <td>${amount}</td>
+            <td>${t.danaNumber || "-"}</td>
+            <td><span class="badge-status ${badgeClass}">${status}</span></td>
+          `;
+          historyBody.appendChild(tr);
+        });
+
+        historyStatus.style.display = "none";
+        historyTable.style.display = "table";
+      } catch (err) {
+        console.error(err);
+        historyStatus.textContent =
+          "Gagal memuat topup: " + (err.message || String(err));
+      }
+    }
+
+    // ==== INIT ====
+    loadSaldo();
+    loadTopupHistory();
+  </script>
 </body>
 </html>
