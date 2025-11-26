@@ -1,45 +1,152 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Orders</title>
-<style>
-body{font-family:sans-serif;padding:20px;background:#f4f4f4;}
-.card{background:#fff;padding:20px;margin:10px 0;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
-input,button{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ccc;}
-.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px;background:white;box-shadow:0 -4px 10px rgba(0,0,0,0.1);}
-a{text-decoration:none;color:#0062D1;}
-h1{text-align:center;}
-</style>
-</head><body>
-<h1>Orders</h1>
-<div id='list'></div>
-<div class='nav'>
-<a href='index.html'>Produk</a><a href='wallet.html'>Wallet</a><a href='orders.html'>Orders</a><a href='profile.html'>Profile</a>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Profile - Barmods Store</title>
+  <style>
+    body{
+      font-family:sans-serif;
+      margin:0;
+      background:#0d1117;
+      color:white;
+      padding-bottom:80px;
+    }
+    h1{text-align:center;margin:20px 0;font-size:22px;}
+
+    .card{
+      background:#161b22;
+      margin:12px;
+      padding:15px;
+      border-radius:14px;
+      box-shadow:0 0 12px rgba(0,0,0,0.4);
+    }
+
+    .label{font-size:12px;color:#9ca3af;margin-top:8px;}
+    .value{font-size:14px;margin-top:2px;}
+
+    .input-box{
+      width:100%;
+      padding:10px;
+      margin-top:6px;
+      background:#0f141a;
+      border:1px solid #30363d;
+      border-radius:8px;
+      color:white;
+    }
+
+    button{
+      margin-top:10px;
+      width:100%;
+      padding:12px;
+      border:none;
+      border-radius:8px;
+      font-weight:bold;
+      font-size:14px;
+    }
+
+    .btn-save{background:#007bff;color:white;}
+    .btn-logout{background:#ef4444;color:white;}
+
+    .nav{
+      position:fixed;bottom:0;left:0;right:0;
+      background:#161b22;
+      display:flex;
+      justify-content:space-around;
+      padding:10px 0;
+      box-shadow:0 -4px 12px rgba(0,0,0,0.4);
+    }
+    .nav a{color:#58a6ff;text-decoration:none;font-size:14px;}
+  </style>
+</head>
+<body>
+
+<h1>Profil Saya</h1>
+
+<div class="card">
+  <div class="label">Email</div>
+  <div class="value" id="emailText">-</div>
+
+  <div class="label">Saldo</div>
+  <div class="value" id="saldoText">Rp 0</div>
 </div>
+
+<div class="card">
+  <div class="label">Username</div>
+  <input id="username" class="input-box" placeholder="Username">
+
+  <div class="label">Nomor HP</div>
+  <input id="phone" class="input-box" placeholder="Nomor HP">
+
+  <button class="btn-save" onclick="saveProfile()">Simpan Perubahan</button>
+  <button class="btn-logout" onclick="logout()">Logout</button>
+</div>
+
+<div class="nav">
+  <a href="index.html">Produk</a>
+  <a href="wallet.html">Wallet</a>
+  <a href="orders.html">Orders</a>
+  <a href="profile.html">Profile</a>
+</div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
 <script>
-auth.onAuthStateChanged(u=>{if(!u)location.href='login.html';load();});
-function load(){
- db.collection('orders').where('userId','==',auth.currentUser.uid).get().then(s=>{
-  list.innerHTML='';
-  s.forEach(d=>{
-    let o=d.data();
-    list.innerHTML+=`<div class='card'><b>${o.productName}</b><br>Status: ${o.status}<br>${o.adminProduct||''}</div>`;
+const firebaseConfig={
+  apiKey:"AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+  authDomain:"toko-barmods.firebaseapp.com",
+  projectId:"toko-barmods"
+};
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth();
+const db=firebase.firestore();
+
+let currentUid=null;
+
+// Cek login
+auth.onAuthStateChanged(u=>{
+  if(!u) return location.href="login.html";
+  currentUid=u.uid;
+  loadProfile();
+});
+
+// Load data user dari Firestore
+function loadProfile(){
+  db.collection("users").doc(currentUid).get().then(doc=>{
+    if(!doc.exists) return;
+    const u=doc.data();
+
+    emailText.textContent = u.email || auth.currentUser.email;
+    username.value        = u.username || "";
+    phone.value           = u.phone || "";
+    saldoText.textContent = "Rp " + Number(u.balance || 0).toLocaleString("id-ID");
   });
- });
+}
+
+// Simpan perubahan username & phone
+function saveProfile(){
+  const uname = username.value.trim();
+  const hp    = phone.value.trim();
+
+  db.collection("users").doc(currentUid).update({
+    username: uname,
+    phone: hp
+  }).then(()=>{
+    alert("Profil berhasil diperbarui.");
+  }).catch(e=>{
+    alert("Gagal menyimpan: " + e.message);
+  });
+}
+
+// Logout
+function logout(){
+  auth.signOut().then(()=>{
+    location.href="login.html";
+  });
 }
 </script>
 
-<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js'></script>
-<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js'></script>
-<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js'></script>
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-  authDomain: "toko-barmods.firebaseapp.com",
-  projectId: "toko-barmods",
-  storageBucket: "toko-barmods.firebasestorage.app",
-  messagingSenderId: "284047189012",
-  appId: "1:284047189012:web:6ef0c6891adab08a383301"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-</script>
-</body></html>
+</body>
+</html>
