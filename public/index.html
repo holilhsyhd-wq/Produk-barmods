@@ -2,294 +2,278 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Barmods Digital Store</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
-      --blue: #0d47a1;
-      --blue-soft: #1976d2;
-      --bg: #f2f4f8;
-      --card: #ffffff;
-      --text: #0b1020;
-      --text-soft: #666f86;
-      --chip: #e3f2fd;
-      --chip-text: #0d47a1;
-      --danger: #d32f2f;
-      --primary: #1976d2;
-      --shadow: 0 4px 16px rgba(0,0,0,0.12);
+      --blue: #0052cc;
+      --blue-soft: #e6f0ff;
+      --gray-bg: #f5f5f5;
+      --text: #222;
+      --text-soft: #777;
+      --green: #0a9f4a;
+      --card-radius: 18px;
     }
-
     * {
       box-sizing: border-box;
     }
-
     body {
       margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: var(--gray-bg);
       color: var(--text);
-      min-height: 100vh;
     }
 
     /* HEADER */
     header {
       background: var(--blue);
       color: #fff;
-      padding: 14px 16px 10px;
+      padding: 14px 16px 18px;
       text-align: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      font-weight: 600;
+      font-size: 18px;
       position: sticky;
       top: 0;
       z-index: 20;
     }
 
-    header h1 {
-      font-size: 20px;
-      margin: 0;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-    }
-
-    /* NAV HALAMAN (Home / Wallet / Pesanan / Profil) */
-    .page-nav {
+    /* NAV ATAS (Home / Wallet / Pesanan / Profil) */
+    .top-nav {
+      background: #fff;
       display: flex;
       justify-content: center;
       gap: 8px;
-      padding: 10px 10px 6px;
-      background: #fff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-      position: sticky;
-      top: 56px; /* tinggi header */
-      z-index: 15;
-    }
-
-    .page-nav a {
-      flex: 1;
-      text-align: center;
-      text-decoration: none;
-      font-size: 13px;
-      padding: 8px 4px;
-      border-radius: 999px;
-      border: 1px solid #e0e0e0;
-      color: var(--text-soft);
-      background: #fff;
-      white-space: nowrap;
-    }
-
-    .page-nav a.active {
-      background: var(--blue-soft);
-      color: #fff;
-      border-color: var(--blue-soft);
-      font-weight: 600;
-    }
-
-    /* TAB KATEGORI */
-    .tabs {
-      display: flex;
-      gap: 8px;
-      padding: 12px 12px 4px;
-      background: #fff;
-      position: sticky;
-      top: 104px; /* header + page-nav */
-      z-index: 10;
-    }
-
-    .tab-btn {
-      flex: 1;
-      border-radius: 999px;
-      border: none;
       padding: 10px 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      position: sticky;
+      top: 54px;
+      z-index: 19;
+    }
+    .top-nav button {
+      border: none;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: #eef1ff;
+      color: #334;
       font-size: 14px;
       cursor: pointer;
-      background: #e3f2fd;
-      color: var(--blue);
-      font-weight: 500;
     }
-
-    .tab-btn.active {
-      background: var(--blue-soft);
+    .top-nav button.active {
+      background: var(--blue);
       color: #fff;
     }
 
     main {
-      max-width: 1024px;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 12px;
+      padding: 16px 12px 80px;
+    }
+
+    /* TAB KATEGORI PRODUK */
+    .category-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .category-tabs button {
+      flex: 1;
+      border-radius: 999px;
+      border: none;
+      padding: 10px 12px;
+      background: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .category-tabs button.active {
+      background: var(--blue);
+      color: #fff;
     }
 
     .category-label {
       font-size: 14px;
-      margin-bottom: 8px;
       color: var(--text-soft);
-    }
-
-    .category-label span {
-      font-weight: 600;
-      color: var(--text);
+      margin-bottom: 12px;
     }
 
     /* KARTU PRODUK */
-    .product-list {
+    .products-list {
       display: flex;
       flex-direction: column;
       gap: 12px;
-      margin-bottom: 24px;
     }
-
     .product-card {
-      background: var(--card);
-      border-radius: 14px;
+      background: #fff;
+      border-radius: var(--card-radius);
       padding: 14px 14px 12px;
-      box-shadow: var(--shadow);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
     }
-
-    .product-title {
-      font-size: 15px;
-      font-weight: 600;
-      margin: 0 0 4px;
-    }
-
-    .product-sub {
-      font-size: 13px;
-      color: var(--text-soft);
-      margin-bottom: 8px;
-    }
-
-    .product-meta {
+    .product-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      flex-wrap: wrap;
-      gap: 4px 10px;
+      gap: 8px;
+      align-items: flex-start;
+      margin-bottom: 6px;
     }
-
-    .price {
+    .product-name {
+      font-weight: 600;
       font-size: 15px;
-      font-weight: 700;
-      color: #1b5e20;
     }
-
-    .stock {
+    .product-chip {
+      border-radius: 999px;
+      background: var(--blue-soft);
+      padding: 4px 10px;
+      font-size: 11px;
+      color: var(--blue);
+    }
+    .product-meta {
       font-size: 13px;
       color: var(--text-soft);
+      margin-bottom: 4px;
     }
-
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 2px 10px;
-      border-radius: 999px;
-      background: var(--chip);
-      color: var(--chip-text);
-      font-size: 11px;
+    .product-price {
       font-weight: 600;
+      color: var(--green);
+      margin-bottom: 8px;
     }
-
-    .actions {
+    .product-actions {
       display: flex;
       justify-content: flex-end;
-      margin-top: 6px;
     }
-
     .btn-order {
-      padding: 8px 14px;
-      border-radius: 999px;
       border: none;
-      background: var(--primary);
+      border-radius: 999px;
+      padding: 8px 18px;
+      background: var(--blue);
       color: #fff;
       font-size: 14px;
       cursor: pointer;
     }
 
-    .empty-msg {
+    .empty-state {
+      text-align: center;
+      margin-top: 32px;
       font-size: 14px;
       color: var(--text-soft);
-      padding: 12px 4px 24px;
     }
 
-    .error-msg {
-      color: var(--danger);
-      font-size: 13px;
-      padding: 10px 4px;
-      white-space: pre-line;
+    /* BOTTOM NAV BAR */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-top: 1px solid #e4e4e4;
+      display: flex;
+      justify-content: space-around;
+      padding: 6px 0 8px;
+      z-index: 30;
+    }
+    .bottom-nav button {
+      background: none;
+      border: none;
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: #555;
+      cursor: pointer;
+    }
+    .bottom-nav button span.icon {
+      font-size: 20px;
+    }
+    .bottom-nav button.active {
+      color: var(--blue);
     }
 
-    @media (min-width: 720px) {
-      .product-list {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 14px;
+    @media (min-width: 768px) {
+      header {
+        font-size: 20px;
       }
-
       .product-card {
-        height: 100%;
+        padding: 16px 18px 14px;
       }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Barmods Digital Store</h1>
-  </header>
+  <header>Barmods Digital Store</header>
 
-  <!-- NAVIGASI HALAMAN (dipindah ke atas) -->
-  <nav class="page-nav">
-    <a href="index.html" class="active">Home</a>
-    <a href="wallet.html">Wallet</a>
-    <a href="orders.html">Pesanan</a>
-    <a href="profile.html">Profil</a>
+  <!-- NAV ATAS (HALAMAN) -->
+  <nav class="top-nav">
+    <button id="nav-home" class="active" type="button">Home</button>
+    <button id="nav-wallet" type="button">Wallet</button>
+    <button id="nav-orders" type="button">Pesanan</button>
+    <button id="nav-profile" type="button">Profil</button>
   </nav>
 
-  <!-- TAB KATEGORI PRODUK -->
-  <div class="tabs">
-    <button class="tab-btn active" data-category="premium">Premium Apps</button>
-    <button class="tab-btn" data-category="sosmed">Sosial Media</button>
-    <button class="tab-btn" data-category="panel">Panel &amp; Tools</button>
-  </div>
-
   <main>
-    <div class="category-label">
-      Menampilkan kategori: <span id="categoryLabel">Premium Apps</span>
+    <!-- TAB KATEGORI PRODUK -->
+    <div class="category-tabs">
+      <button id="tab-premium" class="active" type="button">
+        Premium Apps
+      </button>
+      <button id="tab-sosmed" type="button">Sosial Media</button>
+      <button id="tab-panel" type="button">Panel &amp; Tools</button>
     </div>
 
-    <div id="errorBox" class="error-msg" style="display:none;"></div>
-
-    <div id="productList" class="product-list">
-      <!-- Kartu produk akan diisi dengan JS -->
+    <div class="category-label" id="category-label">
+      Menampilkan kategori: <strong>Premium Apps</strong>
     </div>
 
-    <div id="emptyMsg" class="empty-msg" style="display:none;">
+    <div id="products" class="products-list">
+      <!-- kartu produk akan diisi lewat JS -->
+    </div>
+
+    <div id="empty" class="empty-state" style="display: none">
       Tidak ada produk.
     </div>
   </main>
 
+  <!-- BOTTOM NAV (IKON) -->
+  <nav class="bottom-nav">
+    <button id="bottom-home" class="active" type="button">
+      <span class="icon">🏠</span>
+      Home
+    </button>
+    <button id="bottom-wallet" type="button">
+      <span class="icon">💳</span>
+      Wallet
+    </button>
+    <button id="bottom-orders" type="button">
+      <span class="icon">📦</span>
+      Pesanan
+    </button>
+    <button id="bottom-profile" type="button">
+      <span class="icon">👤</span>
+      Profil
+    </button>
+  </nav>
+
   <!-- FIREBASE + LOGIC -->
   <script type="module">
-    // ====== IMPORT FIREBASE (v10 modular) ======
-    import {
-      initializeApp
-    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
     import {
       getFirestore,
       collection,
       getDocs,
       query,
-      where
+      where,
     } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-    // ====== CONFIG KAMU ======
+    // ================== CONFIG FIREBASE ==================
     const firebaseConfig = {
       apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
       authDomain: "toko-barmods.firebaseapp.com",
       projectId: "toko-barmods",
       storageBucket: "toko-barmods.firebasestorage.app",
       messagingSenderId: "284047189012",
-      appId: "1:284047189012:web:6ef0c6891adab08a383301"
+      appId: "1:284047189012:web:6ef0c6891adab08a383301",
     };
 
     const app = initializeApp(firebaseConfig);
@@ -297,122 +281,223 @@
 
     const PRODUCTS_COLLECTION = "products";
 
-    const tabButtons = document.querySelectorAll(".tab-btn");
-    const categoryLabelEl = document.getElementById("categoryLabel");
-    const productListEl = document.getElementById("productList");
-    const emptyMsgEl = document.getElementById("emptyMsg");
-    const errorBoxEl = document.getElementById("errorBox");
+    // ======= NAV HALAMAN (HOME / WALLET / PESANAN / PROFIL) =======
+    function setActiveTopNav(id) {
+      document
+        .querySelectorAll(".top-nav button")
+        .forEach((b) => b.classList.remove("active"));
+      const btn = document.getElementById(id);
+      if (btn) btn.classList.add("active");
 
-    const categoryNames = {
-      premium: "Premium Apps",
-      sosmed: "Sosial Media",
-      panel: "Panel & Tools"
+      document
+        .querySelectorAll(".bottom-nav button")
+        .forEach((b) => b.classList.remove("active"));
+      const map = {
+        nav-home: "bottom-home",
+        nav-wallet: "bottom-wallet",
+        nav-orders: "bottom-orders",
+        nav-profile: "bottom-profile",
+      };
+      const bottomId = map[id];
+      if (bottomId) {
+        const b = document.getElementById(bottomId);
+        if (b) b.classList.add("active");
+      }
+    }
+
+    function go(path) {
+      // Pastikan semua pakai .html
+      window.location.href = path;
+    }
+
+    // Top nav
+    document.getElementById("nav-home").addEventListener("click", () => {
+      setActiveTopNav("nav-home");
+      go("index.html");
+    });
+    document.getElementById("nav-wallet").addEventListener("click", () => {
+      setActiveTopNav("nav-wallet");
+      go("wallet.html");
+    });
+    document.getElementById("nav-orders").addEventListener("click", () => {
+      setActiveTopNav("nav-orders");
+      go("orders.html");
+    });
+    document.getElementById("nav-profile").addEventListener("click", () => {
+      setActiveTopNav("nav-profile");
+      go("profile.html");
+    });
+
+    // Bottom nav
+    document.getElementById("bottom-home").addEventListener("click", () => {
+      setActiveTopNav("nav-home");
+      go("index.html");
+    });
+    document.getElementById("bottom-wallet").addEventListener("click", () => {
+      setActiveTopNav("nav-wallet");
+      go("wallet.html");
+    });
+    document.getElementById("bottom-orders").addEventListener("click", () => {
+      setActiveTopNav("nav-orders");
+      go("orders.html");
+    });
+    document.getElementById("bottom-profile").addEventListener("click", () => {
+      setActiveTopNav("nav-profile");
+      go("profile.html");
+    });
+
+    // ======= LOGIC PRODUK =======
+    const productsContainer = document.getElementById("products");
+    const emptyState = document.getElementById("empty");
+    const label = document.getElementById("category-label");
+
+    // nilai category di Firestore (sesuaikan dengan koleksi kamu)
+    const CATEGORY_FIRESTORE = {
+      premium: "premium", // untuk tab Premium Apps
+      sosmed: "sosmed", // untuk Sosial Media
+      panel: "panel", // untuk Panel & Tools
     };
 
-    let currentCategory = "premium";
-    let isLoading = false;
+    let currentCategoryKey = "premium";
 
-    // ====== LOAD PRODUK ======
-    async function loadProducts(category) {
-      if (isLoading) return;
-      isLoading = true;
-
-      currentCategory = category;
-      categoryLabelEl.textContent = categoryNames[category] || "Premium Apps";
-
-      // UI: set tab active
-      tabButtons.forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.category === category);
-      });
-
-      // Reset list
-      productListEl.innerHTML = "";
-      emptyMsgEl.style.display = "none";
-      errorBoxEl.style.display = "none";
-
-      // Tampilkan placeholder loading
-      const loadingDiv = document.createElement("div");
-      loadingDiv.className = "empty-msg";
-      loadingDiv.textContent = "Memuat produk...";
-      productListEl.appendChild(loadingDiv);
+    async function loadProducts() {
+      productsContainer.innerHTML = "";
+      emptyState.style.display = "none";
+      productsContainer.innerHTML = "<div>Memuat produk...</div>";
 
       try {
-        const baseRef = collection(db, PRODUCTS_COLLECTION);
-        let qRef;
+        const catValue = CATEGORY_FIRESTORE[currentCategoryKey];
 
-        // TANPA orderBy supaya tidak perlu composite index
-        if (category) {
-          qRef = query(baseRef, where("category", "==", category));
+        let qRef;
+        if (catValue) {
+          // hanya where, TANPA orderBy → tidak perlu index.
+          qRef = query(
+            collection(db, PRODUCTS_COLLECTION),
+            where("category", "==", catValue)
+          );
         } else {
-          qRef = baseRef;
+          qRef = collection(db, PRODUCTS_COLLECTION);
         }
 
         const snap = await getDocs(qRef);
 
-        productListEl.innerHTML = "";
+        productsContainer.innerHTML = "";
 
         if (snap.empty) {
-          emptyMsgEl.style.display = "block";
+          emptyState.style.display = "block";
           return;
         }
 
-        snap.forEach(docSnap => {
-          const p = docSnap.data();
+        snap.forEach((docSnap) => {
+          const data = docSnap.data();
 
-          const name = p.name || p.title || "Produk tanpa nama";
-          const priceNumber = Number(p.price ?? p.harga ?? 0);
-          const stockNumber = Number(p.stock ?? 0);
+          // handle harga (bisa number atau string)
+          let priceText = "-";
+          if (typeof data.price === "number") {
+            priceText = `Rp ${data.price.toLocaleString("id-ID")}`;
+          } else if (typeof data.price === "string" && data.price.trim() !== "") {
+            // kalau kamu simpan "6000" sebagai string
+            const num = Number(data.price);
+            if (!Number.isNaN(num)) {
+              priceText = `Rp ${num.toLocaleString("id-ID")}`;
+            } else {
+              priceText = data.price;
+            }
+          }
+
+          const stockText =
+            data.stock !== undefined ? data.stock.toString() : "-";
 
           const card = document.createElement("div");
           card.className = "product-card";
-
           card.innerHTML = `
-            <div class="product-title">${name}</div>
-            <div class="product-sub">
-              Harga: Rp ${priceNumber.toLocaleString("id-ID")} •
-              Stok: ${stockNumber.toLocaleString("id-ID")}
-            </div>
-            <div class="product-meta">
-              <div class="price">Rp ${priceNumber.toLocaleString("id-ID")}</div>
-              <div class="chip">
-                ${categoryNames[category] || "Produk"}
+            <div class="product-header">
+              <div class="product-name">
+                ${data.name ?? "(Tanpa nama)"}
+              </div>
+              <div class="product-chip">
+                ${
+                  data.categoryLabel ??
+                  (data.category ?? "").toString().toUpperCase()
+                }
               </div>
             </div>
-            <div class="actions">
-              <button class="btn-order">Order</button>
+            <div class="product-meta">
+              Harga: <strong>${priceText}</strong> • Stok: ${stockText}
+            </div>
+            <div class="product-price">${priceText}</div>
+            <div class="product-actions">
+              <button
+                type="button"
+                class="btn-order"
+                data-id="${docSnap.id}"
+              >
+                Order
+              </button>
             </div>
           `;
-
-          const orderBtn = card.querySelector(".btn-order");
-          orderBtn.addEventListener("click", () => {
-            // SEMENTARA: cuma alert supaya kelihatan tombol berfungsi
-            alert(`Order produk:\n${name}\nHarga: Rp ${priceNumber.toLocaleString("id-ID")}`);
-            // Nanti di sini bisa kamu ganti dengan buka popup form / simpan ke Firestore orders.
-          });
-
-          productListEl.appendChild(card);
+          productsContainer.appendChild(card);
         });
+
+        // pasang event listener untuk tombol Order
+        productsContainer
+          .querySelectorAll(".btn-order")
+          .forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const productId = btn.dataset.id;
+              alert("Order produk ID: " + productId);
+              // di sini nanti kamu lanjutkan buka popup form order, dsb.
+            });
+          });
       } catch (err) {
         console.error(err);
-        errorBoxEl.style.display = "block";
-        errorBoxEl.textContent = "Gagal memuat produk: " + err.message;
-      } finally {
-        isLoading = false;
+        productsContainer.innerHTML =
+          "<div style='color:red'>Gagal memuat produk: " +
+          (err.message || err) +
+          "</div>";
       }
     }
 
-    // EVENT TAB
-    tabButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const cat = btn.dataset.category;
-        if (cat && cat !== currentCategory) {
-          loadProducts(cat);
-        }
-      });
-    });
+    // ======= TAB KATEGORI =======
+    function setActiveCategory(key) {
+      currentCategoryKey = key;
 
-    // PERTAMA KALI: load kategori Premium
-    loadProducts("premium");
+      document
+        .querySelectorAll(".category-tabs button")
+        .forEach((b) => b.classList.remove("active"));
+
+      if (key === "premium")
+        document.getElementById("tab-premium").classList.add("active");
+      if (key === "sosmed")
+        document.getElementById("tab-sosmed").classList.add("active");
+      if (key === "panel")
+        document.getElementById("tab-panel").classList.add("active");
+
+      const labelText =
+        key === "premium"
+          ? "Premium Apps"
+          : key === "sosmed"
+          ? "Sosial Media"
+          : "Panel & Tools";
+
+      label.innerHTML =
+        'Menampilkan kategori: <strong>' + labelText + "</strong>";
+
+      loadProducts();
+    }
+
+    document
+      .getElementById("tab-premium")
+      .addEventListener("click", () => setActiveCategory("premium"));
+    document
+      .getElementById("tab-sosmed")
+      .addEventListener("click", () => setActiveCategory("sosmed"));
+    document
+      .getElementById("tab-panel")
+      .addEventListener("click", () => setActiveCategory("panel"));
+
+    // pertama kali
+    setActiveCategory("premium");
   </script>
 </body>
 </html>
