@@ -1,45 +1,60 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Register</title>
-<style>
-body{font-family:sans-serif;padding:20px;background:#f4f4f4;}
-.card{background:#fff;padding:20px;margin:10px 0;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
-input,button{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ccc;}
-.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px;background:white;box-shadow:0 -4px 10px rgba(0,0,0,0.1);}
-a{text-decoration:none;color:#0062D1;}
-h1{text-align:center;}
-</style>
-</head><body>
-<h1>Register</h1>
-<div class='card'>
-<input id='email' placeholder='Email'>
-<input id='username' placeholder='Username'>
-<input id='phone' placeholder='Phone'>
-<input id='password' type='password' placeholder='Password'>
-<button onclick='reg()'>Register</button>
-</div>
-<script>
-function reg(){
- auth.createUserWithEmailAndPassword(email.value,password.value)
- .then(u=>db.collection('users').doc(u.user.uid).set({
-   email:email.value, username:username.value, phone:phone.value, balance:0
- })).then(()=>location.href='login.html')
- .catch(e=>alert(e.message));
-}
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Register - Barmods Store</title>
+  <style>
+    body{font-family:sans-serif;background:#0f141a;color:white;padding:20px;}
+    .card{background:#1c2530;padding:20px;border-radius:12px;}
+    input,button{
+      width:100%;padding:12px;margin:8px 0;border-radius:8px;
+      border:none;background:#16202a;color:white;
+    }
+    button{background:#0070ff;font-weight:bold;}
+    a{color:#7cb3ff;text-decoration:none;}
+    h1{text-align:center;margin-bottom:20px;}
+  </style>
+</head>
+<body>
 
-<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js'></script>
-<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js'></script>
-<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js'></script>
+<h1>Daftar Akun</h1>
+<div class="card">
+  <input id="email" placeholder="Email">
+  <input id="username" placeholder="Username">
+  <input id="phone" placeholder="Nomor HP">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="reg()">Buat Akun</button>
+  <a href="login.html">Sudah punya akun?</a>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-  authDomain: "toko-barmods.firebaseapp.com",
-  projectId: "toko-barmods",
-  storageBucket: "toko-barmods.firebasestorage.app",
-  messagingSenderId: "284047189012",
-  appId: "1:284047189012:web:6ef0c6891adab08a383301"
+const firebaseConfig={
+  apiKey:"AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+  authDomain:"toko-barmods.firebaseapp.com",
+  projectId:"toko-barmods"
 };
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+const auth=firebase.auth();
+const db=firebase.firestore();
+
+function reg(){
+  auth.createUserWithEmailAndPassword(email.value,password.value)
+  .then(u=>{
+    return db.collection("users").doc(u.user.uid).set({
+      email:email.value,
+      username:username.value,
+      phone:phone.value,
+      balance:0,
+      createdAt:Date.now()
+    });
+  })
+  .then(()=>location.href="login.html")
+  .catch(e=>alert(e.message));
+}
 </script>
-</body></html>
+</body>
+</html>
