@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Login</title>
+<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Admin Login</title>
 <style>
 body{font-family:sans-serif;padding:20px;background:#f4f4f4;}
 .card{background:#fff;padding:20px;margin:10px 0;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
@@ -8,18 +8,18 @@ a{text-decoration:none;color:#0062D1;}
 h1{text-align:center;}
 </style>
 </head><body>
-<h1>Login</h1>
+<h1>Admin Login</h1>
 <div class='card'>
-<input id='email' placeholder='Email'>
-<input id='password' type='password' placeholder='Password'>
-<button onclick='login()'>Login</button>
-<a href='register.html'>Register</a><br><a href='reset-password.html'>Reset Password</a>
+<input id='u' placeholder='Username'>
+<input id='p' type='password' placeholder='Password'>
+<button onclick='go()'>Login</button>
 </div>
 <script>
-function login(){
- auth.signInWithEmailAndPassword(email.value,password.value)
- .then(()=>location.href='index.html')
- .catch(e=>alert(e.message));
+function go(){
+ if(u.value==='barmods' && p.value==='barmods21'){
+   localStorage.setItem('admin','yes');
+   location.href='admin.html';
+ } else alert('Salah!');
 }
 </script>
 
