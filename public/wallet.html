@@ -1,50 +1,183 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Wallet</title>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Wallet - Barmods Store</title>
+
 <style>
-body{font-family:sans-serif;padding:20px;background:#f4f4f4;}
-.card{background:#fff;padding:20px;margin:10px 0;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
-input,button{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ccc;}
-.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px;background:white;box-shadow:0 -4px 10px rgba(0,0,0,0.1);}
-a{text-decoration:none;color:#0062D1;}
-h1{text-align:center;}
+  body{
+    font-family:sans-serif;
+    margin:0;
+    background:#0d1117;
+    color:white;
+    padding-bottom:80px;
+  }
+  h1{text-align:center;margin:20px 0;font-size:22px;}
+
+  .card{
+    background:#161b22;
+    margin:12px;
+    padding:15px;
+    border-radius:14px;
+    box-shadow:0 0 12px rgba(0,0,0,0.4);
+  }
+
+  .input-box{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    background:#0f141a;
+    border:1px solid #30363d;
+    border-radius:8px;
+    color:white;
+  }
+
+  button{
+    margin-top:10px;
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#007bff;
+    color:white;
+    font-weight:bold;
+    font-size:14px;
+  }
+
+  .nav{
+    position:fixed;bottom:0;left:0;right:0;
+    background:#161b22;
+    display:flex;
+    justify-content:space-around;
+    padding:10px 0;
+    box-shadow:0 -4px 12px rgba(0,0,0,0.4);
+  }
+  .nav a{color:#58a6ff;text-decoration:none;font-size:14px;}
 </style>
-</head><body>
+</head>
+<body>
+
 <h1>Wallet</h1>
-<div class='card' id='saldo'></div>
-<div class='card'>
-<input id='nom' placeholder='Nominal'>
-<button onclick='req()'>Request Topup</button>
+
+<div class="card">
+  <h3>Saldo Kamu</h3>
+  <div id="saldo" style="font-size:20px;font-weight:bold;margin-top:10px;">Loading...</div>
 </div>
-<div class='nav'>
-<a href='index.html'>Produk</a><a href='wallet.html'>Wallet</a><a href='orders.html'>Orders</a><a href='profile.html'>Profile</a>
+
+<div class="card">
+  <h3>Topup Saldo</h3>
+  <small>Transfer ke DANA:</small><br>
+  <b style="color:#58a6ff;">083877842721 (karsih)</b>
+
+  <input id="nominal" class="input-box" placeholder="Nominal Topup (misal: 5000)">
+  <input id="fromDana" class="input-box" placeholder="Nama pengirim DANA">
+
+  <button onclick="reqTopup()">Kirim Request Topup</button>
 </div>
+
+<div class="card">
+  <h3>Riwayat Topup</h3>
+  <div id="history"></div>
+</div>
+
+<div class="nav">
+  <a href="index.html">Produk</a>
+  <a href="wallet.html">Wallet</a>
+  <a href="orders.html">Orders</a>
+  <a href="profile.html">Profile</a>
+</div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
 <script>
-auth.onAuthStateChanged(u=>{if(!u)location.href='login.html';load();});
-function load(){
- db.collection('users').doc(auth.currentUser.uid).get().then(d=>{
-  saldo.innerHTML='Saldo: Rp'+d.data().balance;
- });
+// INIT FIREBASE
+const firebaseConfig={
+  apiKey:"AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+  authDomain:"toko-barmods.firebaseapp.com",
+  projectId:"toko-barmods"
+};
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth();
+const db=firebase.firestore();
+
+auth.onAuthStateChanged(u=>{
+  if(!u) location.href="login.html";
+  loadSaldo();
+  loadHistory();
+});
+
+// =========================
+// Load Balance
+// =========================
+function loadSaldo(){
+  db.collection("users").doc(auth.currentUser.uid).get().then(d=>{
+    saldo.innerHTML = "Rp" + Number(d.data().balance).toLocaleString("id-ID");
+  });
 }
-function req(){
- db.collection('topups').add({
-  userId:auth.currentUser.uid, nominal:Number(nom.value), dana:'pending', status:'pending'
- }).then(()=>alert('Request dibuat'));
+
+// =========================
+// Request Topup
+// =========================
+function reqTopup(){
+  let nominal = Number(nominalInput(nominal.value));
+  let from = fromDana.value.trim();
+  let uid = auth.currentUser.uid;
+
+  if(nominal <= 0){
+    alert("Nominal tidak valid");
+    return;
+  }
+
+  db.collection("topups").add({
+    userId: uid,
+    nominal: nominal,
+    fromDana: from,
+    status: "pending",
+    createdAt: Date.now()
+  });
+
+  alert("Request topup terkirim. Tunggu admin memproses.");
+  loadHistory();
+}
+
+// Bersihkan angka
+function nominalInput(raw){
+  return raw.replace(/[^0-9]/g,"");
+}
+
+// =========================
+// Riwayat Topup User
+// =========================
+function loadHistory(){
+  let uid = auth.currentUser.uid;
+
+  db.collection("topups").where("userId","==",uid).orderBy("createdAt","desc").get().then(s=>{
+    history.innerHTML = "";
+
+    if(s.empty){
+      history.innerHTML = "<small>Kamu belum memiliki riwayat topup.</small>";
+      return;
+    }
+
+    s.forEach(d=>{
+      let x = d.data();
+      let st = x.status;
+      let color = (st==="success") ? "#4ade80" : (st==="process") ? "#60a5fa" : "#f87171";
+
+      history.innerHTML += `
+        <div style="margin-bottom:12px;">
+          <b>Rp ${x.nominal.toLocaleString("id-ID")}</b><br>
+          <small>Pengirim: ${x.fromDana || "-"}</small><br>
+          <small style="color:${color}">Status: ${st}</small>
+        </div>
+      `;
+    });
+  });
 }
 </script>
 
-<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js'></script>
-<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js'></script>
-<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js'></script>
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-  authDomain: "toko-barmods.firebaseapp.com",
-  projectId: "toko-barmods",
-  storageBucket: "toko-barmods.firebasestorage.app",
-  messagingSenderId: "284047189012",
-  appId: "1:284047189012:web:6ef0c6891adab08a383301"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-</script>
-</body></html>
+</body>
+</html>
