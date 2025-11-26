@@ -1,258 +1,354 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pesanan Saya — Barmods Digital Store</title>
+  <meta charset="UTF-8" />
+  <title>Pesanan Saya — Barmods Digital Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --blue:#0052cc;
+      --blue-soft:#e6f0ff;
+      --gray-bg:#f5f5f5;
+      --text:#222;
+      --text-soft:#777;
+      --green:#0a9f4a;
+      --card-radius:18px;
+      --danger:#dc2626;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--gray-bg);
+      color:var(--text);
+    }
 
-<style>
-* {
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family: Arial, Helvetica, sans-serif;
-}
-body {
-  background:#ffffff;
-  padding-bottom:70px;
-}
+    header{
+      background:var(--blue);
+      color:#fff;
+      padding:14px 16px 18px;
+      text-align:center;
+      font-weight:600;
+      font-size:18px;
+      position:sticky;
+      top:0;
+      z-index:20;
+    }
 
-/* HEADER */
-.header {
-  background:#1565c0;
-  color:white;
-  padding:20px;
-  text-align:center;
-  font-size:22px;
-  font-weight:bold;
-  box-shadow:0 4px 12px rgba(0,0,0,.25);
-}
+    .top-nav{
+      background:#fff;
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      padding:10px 8px;
+      box-shadow:0 1px 3px rgba(0,0,0,.06);
+      position:sticky;
+      top:54px;
+      z-index:19;
+    }
+    .top-nav button{
+      border:none;
+      padding:8px 16px;
+      border-radius:999px;
+      background:#eef1ff;
+      color:#334;
+      font-size:14px;
+      cursor:pointer;
+    }
+    .top-nav button.active{
+      background:var(--blue);
+      color:#fff;
+    }
 
-/* INFO TOP */
-.info-box {
-  margin:16px 18px 8px;
-  background:#e3f2fd;
-  border-radius:12px;
-  padding:10px 12px;
-  border:1px solid #90caf9;
-  font-size:13px;
-  color:#0d47a1;
-}
+    main{
+      max-width:900px;
+      margin:0 auto;
+      padding:16px 12px 80px;
+    }
 
-/* ORDER LIST */
-.list {
-  margin:8px 18px 18px;
-}
-.card {
-  background:#fafafa;
-  border:1px solid #ddd;
-  border-radius:14px;
-  padding:12px;
-  margin-bottom:12px;
-  box-shadow:0 2px 6px rgba(0,0,0,.08);
-}
-.card-header {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:6px;
-}
-.card-title {
-  font-weight:bold;
-  font-size:15px;
-  color:#0d47a1;
-}
-.card-price {
-  font-size:13px;
-  font-weight:bold;
-  color:#2e7d32;
-}
-.card-line {
-  font-size:13px;
-  margin:2px 0;
-  color:#444;
-}
-.card-label {
-  font-weight:bold;
-}
-.status-pill {
-  display:inline-block;
-  padding:4px 8px;
-  border-radius:999px;
-  font-size:11px;
-  color:#fff;
-  text-transform:lowercase;
-}
-.pending { background:#ff9800; }
-.proses  { background:#0288d1; }
-.sukses  { background:#2e7d32; }
-.error   { background:#c62828; }
+    .info-card{
+      background:#e0edff;
+      border-radius:var(--card-radius);
+      padding:12px 14px;
+      font-size:13px;
+      color:#1f2937;
+      margin-bottom:14px;
+    }
+    .info-card strong{ font-weight:700; }
 
-.admin-box {
-  margin-top:6px;
-  padding:8px;
-  border-radius:10px;
-  background:#fff3e0;
-  border:1px dashed #fb8c00;
-  font-size:13px;
-  color:#e65100;
-}
+    .order-list{ display:flex; flex-direction:column; gap:10px; }
 
-/* NAVBAR */
-.navbar{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:65px;
-  background:#0d47a1;
-  color:white;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  box-shadow:0 -4px 12px rgba(0,0,0,0.25);
-}
-.nav-btn{
-  text-align:center;
-  font-size:13px;
-  cursor:pointer;
-}
-.nav-btn span{
-  display:block;
-  font-size:20px;
-}
-</style>
+    .order-card{
+      background:#fff;
+      border-radius:var(--card-radius);
+      padding:12px 14px 10px;
+      box-shadow:0 2px 6px rgba(0,0,0,.06);
+      font-size:13px;
+    }
+    .order-top{
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:4px;
+    }
+    .order-product{ font-weight:600; }
+    .order-time{ color:var(--text-soft); }
+
+    .order-line{
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:2px;
+    }
+    .order-label{ color:var(--text-soft); }
+    .order-value{ font-weight:500; }
+
+    .order-status{
+      font-size:12px;
+      padding:2px 8px;
+      border-radius:999px;
+      text-transform:capitalize;
+    }
+    .st-pending{ background:#fef3c7; color:#92400e; }
+    .st-proses{  background:#dbeafe; color:#1d4ed8; }
+    .st-sukses{  background:#dcfce7; color:#15803d; }
+    .st-error{   background:#fee2e2; color:#b91c1c; }
+
+    .order-admin{
+      margin-top:6px;
+      font-size:12px;
+      color:#374151;
+      background:#f9fafb;
+      border-radius:10px;
+      padding:6px 8px;
+    }
+
+    .empty-state{
+      margin-top:24px;
+      text-align:center;
+      font-size:14px;
+      color:var(--text-soft);
+    }
+
+    .bottom-nav{
+      position:fixed;
+      bottom:0;left:0;right:0;
+      background:#fff;
+      border-top:1px solid #e4e4e4;
+      display:flex;
+      justify-content:space-around;
+      padding:6px 0 8px;
+      z-index:30;
+    }
+    .bottom-nav button{
+      background:none;
+      border:none;
+      font-size:11px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      color:#555;
+      cursor:pointer;
+    }
+    .bottom-nav button span.icon{ font-size:20px; }
+    .bottom-nav button.active{ color:var(--blue); }
+  </style>
 </head>
 <body>
+  <header>Pesanan Saya</header>
 
-<div class="header">Pesanan Saya</div>
+  <nav class="top-nav">
+    <button id="nav-home" type="button">Home</button>
+    <button id="nav-wallet" type="button">Wallet</button>
+    <button id="nav-orders" class="active" type="button">Pesanan</button>
+    <button id="nav-profile" type="button">Profil</button>
+  </nav>
 
-<div class="info-box">
-  Status pesanan:
-  <b>pending</b> = menunggu diproses,
-  <b>proses</b> = sedang dikerjakan,
-  <b>sukses</b> = selesai & produk sudah dikirim,
-  <b>error</b> = ada kendala (hubungi admin).
-</div>
+  <main>
+    <div class="info-card">
+      Status pesanan: <strong>pending</strong> = menunggu diproses,
+      <strong>proses</strong> = sedang dikerjakan,
+      <strong>sukses</strong> = selesai &amp; produk sudah dikirim,
+      <strong>error</strong> = ada kendala (hubungi admin).
+    </div>
 
-<div id="orderList" class="list">
-  Memuat pesanan...
-</div>
+    <div id="orders-list" class="order-list">
+      Memuat pesanan...
+    </div>
 
-<!-- NAVBAR -->
-<div class="navbar">
-  <div class="nav-btn" onclick="go('index.html')"><span>🏠</span>Home</div>
-  <div class="nav-btn" onclick="go('wallet.html')"><span>💳</span>Wallet</div>
-  <div class="nav-btn" onclick="go('orders.html')"><span>📦</span>Pesanan</div>
-  <div class="nav-btn" onclick="go('profile.html')"><span>👤</span>Profil</div>
-</div>
+    <div id="orders-empty" class="empty-state" style="display:none">
+      Belum ada pesanan.
+    </div>
+  </main>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-import {
-  getFirestore, collection, getDocs, query, where, orderBy
-} from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
-import {
-  getAuth, onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+  <nav class="bottom-nav">
+    <button id="bottom-home" type="button">
+      <span class="icon">🏠</span>
+      Home
+    </button>
+    <button id="bottom-wallet" type="button">
+      <span class="icon">💳</span>
+      Wallet
+    </button>
+    <button id="bottom-orders" class="active" type="button">
+      <span class="icon">📦</span>
+      Pesanan
+    </button>
+    <button id="bottom-profile" type="button">
+      <span class="icon">👤</span>
+      Profil
+    </button>
+  </nav>
 
-/* CONFIG */
-const firebaseConfig = {
-  apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-  authDomain: "toko-barmods.firebaseapp.com",
-  projectId: "toko-barmods",
-  storageBucket: "toko-barmods.firebasestorage.app",
-  messagingSenderId: "284047189012",
-  appId: "1:284047189012:web:6ef0c6891adab08a383301"
-};
+  <!-- NAV SCRIPT -->
+  <script>
+    function go(path){ window.location.href = path; }
 
-const app  = initializeApp(firebaseConfig);
-const db   = getFirestore(app);
-const auth = getAuth(app);
+    function setActiveTopNav(id){
+      document.querySelectorAll(".top-nav button").forEach(b=>b.classList.remove("active"));
+      const t = document.getElementById(id);
+      if(t) t.classList.add("active");
 
-function go(x){ window.location.href = x; }
-
-let currentUser = null;
-
-onAuthStateChanged(auth, async (user)=>{
-  if(!user){
-    window.location.href = "login.html";
-    return;
-  }
-  currentUser = user;
-  loadOrders();
-});
-
-async function loadOrders(){
-  const list = document.getElementById("orderList");
-  list.innerHTML = "Memuat pesanan...";
-
-  const q = query(
-    collection(db, "orders"),
-    where("userId","==", currentUser.uid),
-    orderBy("createdAt", "desc")
-  );
-  const snap = await getDocs(q);
-
-  list.innerHTML = "";
-
-  if(snap.empty){
-    list.innerHTML = "<div style='color:#777;'>Belum ada pesanan.</div>";
-    return;
-  }
-
-  snap.forEach(docSnap=>{
-    const o = docSnap.data();
-
-    let waktu = "-";
-    if(o.createdAt?.toDate){
-      waktu = o.createdAt.toDate().toLocaleString("id-ID");
-    }
-
-    const statusClass = o.status || "pending";
-    const priceNum = Number(o.price ?? 0);
-
-    let extraText = "";
-    // data tambahan dari order (sesuai index.html)
-    if(o.data){
-      extraText += `Data: ${o.data}`;
-    }
-    if(o.user || o.pass){
-      if(extraText) extraText += " | ";
-      extraText += `Panel User: ${o.user ?? "-"}, Pass: ${o.pass ?? "-"}`;
-    }
-
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <div class="card-header">
-        <div class="card-title">${o.productName ?? "-"}</div>
-        <div class="card-price">Rp ${priceNum.toLocaleString("id-ID")}</div>
-      </div>
-      <div class="card-line">
-        <span class="card-label">Waktu:</span> ${waktu}
-      </div>
-      <div class="card-line">
-        <span class="card-label">Status:</span>
-        <span class="status-pill ${statusClass}">${statusClass}</span>
-      </div>
-      ${
-        extraText
-          ? `<div class="card-line"><span class="card-label">Data order:</span> ${extraText}</div>`
-          : ""
+      document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));
+      const map = {
+        "nav-home":"bottom-home",
+        "nav-wallet":"bottom-wallet",
+        "nav-orders":"bottom-orders",
+        "nav-profile":"bottom-profile",
+      };
+      const bottomId = map[id];
+      if(bottomId){
+        const b = document.getElementById(bottomId);
+        if(b) b.classList.add("active");
       }
-      ${
-        (o.adminProduct && o.adminProduct.trim() !== "")
-          ? `<div class="admin-box">
-               <div style="font-weight:bold;margin-bottom:4px;">Produk dari admin:</div>
-               <div>${o.adminProduct.replace(/\n/g,"<br>")}</div>
-             </div>`
-          : ""
+    }
+
+    document.getElementById("nav-home").onclick   = ()=>{ setActiveTopNav("nav-home"); go("index.html"); };
+    document.getElementById("nav-wallet").onclick = ()=>{ setActiveTopNav("nav-wallet"); go("wallet.html"); };
+    document.getElementById("nav-orders").onclick = ()=>{ setActiveTopNav("nav-orders"); go("orders.html"); };
+    document.getElementById("nav-profile").onclick= ()=>{ setActiveTopNav("nav-profile"); go("profile.html"); };
+
+    document.getElementById("bottom-home").onclick   = ()=>{ setActiveTopNav("nav-home"); go("index.html"); };
+    document.getElementById("bottom-wallet").onclick = ()=>{ setActiveTopNav("nav-wallet"); go("wallet.html"); };
+    document.getElementById("bottom-orders").onclick = ()=>{ setActiveTopNav("nav-orders"); go("orders.html"); };
+    document.getElementById("bottom-profile").onclick= ()=>{ setActiveTopNav("nav-profile"); go("profile.html"); };
+
+    setActiveTopNav("nav-orders");
+  </script>
+
+  <!-- FIREBASE SCRIPT -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+      authDomain: "toko-barmods.firebaseapp.com",
+      projectId: "toko-barmods",
+      storageBucket: "toko-barmods.firebasestorage.app",
+      messagingSenderId: "284047189012",
+      appId: "1:284047189012:web:6ef0c6891adab08a383301",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+    const ORDERS = "orders";
+
+    const ordersList = document.getElementById("orders-list");
+    const emptyState = document.getElementById("orders-empty");
+
+    const userEmail = localStorage.getItem("userEmail");
+    if (!userEmail){
+      window.location.href = "login.html";
+    } else {
+      loadOrders();
+    }
+
+    async function loadOrders(){
+      try{
+        ordersList.textContent = "Memuat pesanan...";
+        emptyState.style.display = "none";
+
+        // ambil semua => filter by userEmail (biar nggak kena error index)
+        const snap = await getDocs(collection(db, ORDERS));
+        const list = [];
+        snap.forEach(d=>{
+          const o = d.data();
+          if (o.userEmail === userEmail){
+            list.push({id:d.id, ...o});
+          }
+        });
+
+        if (!list.length){
+          ordersList.textContent = "";
+          emptyState.style.display = "block";
+          return;
+        }
+
+        // sort terbaru dulu
+        list.sort((a,b)=>{
+          const ta = a.createdAt?.seconds || 0;
+          const tb = b.createdAt?.seconds || 0;
+          return tb - ta;
+        });
+
+        ordersList.innerHTML = "";
+        list.forEach(o=>{
+          const div = document.createElement("div");
+          div.className = "order-card";
+
+          const waktu = o.createdAt?.toDate ? o.createdAt.toDate().toLocaleString("id-ID") : "-";
+          const priceNum = Number(o.price ?? 0);
+          const priceText = priceNum ? "Rp " + priceNum.toLocaleString("id-ID") : "-";
+
+          const status = o.status || "pending";
+          const stClass =
+            status === "sukses" ? "st-sukses" :
+            status === "proses" ? "st-proses" :
+            status === "error"  ? "st-error"  :
+                                  "st-pending";
+
+          div.innerHTML = `
+            <div class="order-top">
+              <span class="order-product">${o.productName ?? "-"}</span>
+              <span class="order-time">${waktu}</span>
+            </div>
+            <div class="order-line">
+              <span class="order-label">Harga</span>
+              <span class="order-value">${priceText}</span>
+            </div>
+            <div class="order-line">
+              <span class="order-label">Kategori</span>
+              <span class="order-value">${o.category ?? "-"}</span>
+            </div>
+            <div class="order-line">
+              <span class="order-label">Status</span>
+              <span class="order-status ${stClass}">${status}</span>
+            </div>
+            ${
+              o.orderData
+                ? `<div class="order-line">
+                    <span class="order-label">Data Order</span>
+                    <span class="order-value">${o.orderData}</span>
+                  </div>`
+                : ""
+            }
+            ${
+              o.adminProduct
+                ? `<div class="order-admin"><strong>Produk dari admin:</strong><br>${o.adminProduct}</div>`
+                : ""
+            }
+          `;
+          ordersList.appendChild(div);
+        });
+      }catch(e){
+        console.error(e);
+        ordersList.textContent = "Gagal memuat pesanan: " + (e.message || e);
       }
-    `;
-    list.appendChild(card);
-  });
-}
-</script>
+    }
+  </script>
 </body>
 </html>
