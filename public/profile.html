@@ -1,232 +1,250 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Barmods Digital Store - Profil Saya</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <style>
-    body{
-      margin:0;
-      padding:0;
-      background:#f3f4f6;
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI";
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      min-height:100vh;
-    }
-    .card{
-      width:100%;
-      max-width:460px;
-      background:white;
-      padding:24px;
-      border-radius:18px;
-      box-shadow:0 0 25px rgba(0,0,0,.15);
-    }
-    h2{
-      margin:0 0 4px;
-      text-align:center;
-    }
-    small{
-      display:block;
-      text-align:center;
-      font-size:12px;
-      color:#6b7280;
-      margin-bottom:16px;
-    }
-    label{
-      display:block;
-      font-size:13px;
-      margin-top:10px;
-    }
-    .input{
-      width:100%;
-      border:1px solid #d1d5db;
-      background:#f9fafb;
-      border-radius:8px;
-      padding:9px 11px;
-      font-size:14px;
-      margin-top:4px;
-    }
-    .input[disabled]{
-      background:#e5e7eb;
-      color:#6b7280;
-    }
-    .btn-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:14px;
-    }
-    .btn{
-      flex:1;
-      min-width:120px;
-      border:none;
-      border-radius:999px;
-      padding:9px 10px;
-      font-size:13px;
-      font-weight:500;
-      cursor:pointer;
-      color:white;
-    }
-    .btn-main{ background:#2563eb; }
-    .btn-gray{ background:#6b7280; }
-    .btn-red{  background:#ef4444; }
-    .meta{
-      margin-top:10px;
-      font-size:11px;
-      color:#6b7280;
-    }
-    .msg{
-      margin-top:10px;
-      text-align:center;
-      font-size:12px;
-      min-height:16px;
-    }
-    .ok{ color:#10b981; }
-    .err{ color:#ef4444; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil — Barmods Digital Store</title>
+
+<style>
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+body {
+  background:#ffffff;
+  padding-bottom:70px;
+}
+
+/* HEADER */
+.header {
+  background:#1565c0;
+  color:white;
+  padding:20px;
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+
+/* CARD */
+.card {
+  margin:18px;
+  background:#f5f5f5;
+  border-radius:14px;
+  border:1px solid #ddd;
+  padding:16px 14px;
+}
+.card-title {
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:8px;
+  color:#0d47a1;
+}
+.label {
+  font-size:13px;
+  color:#555;
+  margin-bottom:4px;
+}
+.value-box {
+  padding:10px 12px;
+  border-radius:10px;
+  background:#e3f2fd;
+  border:1px solid #90caf9;
+  font-size:14px;
+  margin-bottom:12px;
+  word-wrap:break-word;
+}
+.input {
+  width:100%;
+  padding:11px;
+  border-radius:10px;
+  border:1px solid #bbb;
+  margin-bottom:12px;
+  font-size:14px;
+}
+.btn-primary {
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:#0d47a1;
+  color:white;
+  font-size:15px;
+  cursor:pointer;
+  margin-top:4px;
+}
+.btn-danger {
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:#c62828;
+  color:white;
+  font-size:15px;
+  cursor:pointer;
+  margin-top:10px;
+}
+.info-text {
+  font-size:12px;
+  color:#666;
+  margin-top:6px;
+}
+
+/* NAVBAR */
+.navbar{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:65px;
+  background:#0d47a1;
+  color:white;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  box-shadow:0 -4px 12px rgba(0,0,0,0.25);
+}
+.nav-btn{
+  text-align:center;
+  font-size:13px;
+  cursor:pointer;
+}
+.nav-btn span{
+  display:block;
+  font-size:20px;
+}
+</style>
 </head>
 <body>
 
+<div class="header">Profil Saya</div>
+
 <div class="card">
-  <h2>Profil Saya</h2>
-  <small>Barmods Digital Store</small>
+  <div class="card-title">Akun</div>
 
-  <label>Email (tidak bisa diubah)</label>
-  <input id="email" class="input" disabled>
+  <div class="label">Email</div>
+  <div class="value-box" id="emailBox">Memuat...</div>
 
-  <label>Username</label>
-  <input id="username" class="input" placeholder="username kamu">
+  <div class="label">Saldo</div>
+  <div class="value-box" id="saldoBox">Rp 0</div>
+</div>
 
-  <label>Nomor HP / WhatsApp</label>
-  <input id="phone" class="input" placeholder="08xxxxxxxxxx">
+<div class="card">
+  <div class="card-title">Data Profil</div>
 
-  <div class="meta">
-    <div id="createdAtRow">Terdaftar: -</div>
-    <div id="providerRow">Login via: -</div>
+  <div class="label">Username</div>
+  <input class="input" id="usernameInput" placeholder="Username kamu">
+
+  <div class="label">Nomor HP</div>
+  <input class="input" id="phoneInput" placeholder="Nomor HP (opsional)">
+  
+  <button class="btn-primary" onclick="saveProfile()">Simpan Profil</button>
+  <div class="info-text">
+    Username akan digunakan untuk identitas di pesanan dan layanan tertentu.
   </div>
+</div>
 
-  <div class="btn-row">
-    <button class="btn btn-main" id="btnSave">Simpan Profil</button>
-    <button class="btn btn-gray" type="button" onclick="location.href='index.html'">
-      Kembali ke Produk
-    </button>
-    <button class="btn btn-red" id="btnLogout">Logout</button>
+<div class="card">
+  <div class="card-title">Keluar</div>
+  <button class="btn-danger" onclick="logout()">Logout</button>
+  <div class="info-text">
+    Setelah logout, kamu harus login kembali untuk mengakses produk dan saldo.
   </div>
+</div>
 
-  <div id="msg" class="msg"></div>
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="nav-btn" onclick="go('index.html')"><span>🏠</span>Home</div>
+  <div class="nav-btn" onclick="go('wallet.html')"><span>💳</span>Wallet</div>
+  <div class="nav-btn" onclick="go('orders.html')"><span>📦</span>Pesanan</div>
+  <div class="nav-btn" onclick="go('profile.html')"><span>👤</span>Profil</div>
 </div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import {
-    getAuth,
-    onAuthStateChanged,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import {
-    getFirestore,
-    doc,
-    getDoc,
-    updateDoc
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, setDoc, updateDoc
+} from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+import {
+  getAuth, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-    authDomain: "toko-barmods.firebaseapp.com",
-    projectId: "toko-barmods",
-    storageBucket: "toko-barmods.firebasestorage.app",
-    messagingSenderId: "284047189012",
-    appId: "1:284047189012:web:6ef0c6891adab08a383301"
-  };
+/* CONFIG */
+const firebaseConfig = {
+  apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+  authDomain: "toko-barmods.firebaseapp.com",
+  projectId: "toko-barmods",
+  storageBucket: "toko-barmods.firebasestorage.app",
+  messagingSenderId: "284047189012",
+  appId: "1:284047189012:web:6ef0c6891adab08a383301"
+};
 
-  const app  = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db   = getFirestore(app);
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
 
-  const msgEl = document.getElementById("msg");
-  function showMsg(t, ok=false){
-    msgEl.textContent = t;
-    msgEl.className = "msg " + (ok ? "ok" : "err");
+function go(x){ window.location.href = x; }
+
+let currentUser = null;
+let userDocRef  = null;
+
+onAuthStateChanged(auth, async (user)=>{
+  if(!user){
+    window.location.href = "login.html";
+    return;
+  }
+  currentUser = user;
+  userDocRef  = doc(db, "users", currentUser.uid);
+
+  document.getElementById("emailBox").innerText = currentUser.email || "-";
+
+  await loadProfile();
+});
+
+async function loadProfile(){
+  if(!userDocRef) return;
+
+  const snap = await getDoc(userDocRef);
+  let data = {};
+  if(snap.exists()){
+    data = snap.data();
+  } else {
+    // kalau belum ada dokumen, buat dasar
+    await setDoc(userDocRef, {
+      email: currentUser.email,
+      username: "",
+      phone: "",
+      balance: 0
+    });
+    data = { email: currentUser.email, username:"", phone:"", balance:0 };
   }
 
-  const emailEl = document.getElementById("email");
-  const userEl  = document.getElementById("username");
-  const phoneEl = document.getElementById("phone");
-  const createdAtRow = document.getElementById("createdAtRow");
-  const providerRow  = document.getElementById("providerRow");
+  document.getElementById("usernameInput").value = data.username || "";
+  document.getElementById("phoneInput").value    = data.phone || "";
+  document.getElementById("saldoBox").innerText  =
+    "Rp " + Number(data.balance || 0).toLocaleString("id-ID");
+}
 
-  let currentUid = null;
+window.saveProfile = async function(){
+  if(!userDocRef) return;
 
-  onAuthStateChanged(auth, async (user) => {
-    if(!user){
-      // kalau belum login, balik ke login
-      window.location.href = "login.html";
-      return;
-    }
-    currentUid = user.uid;
-    emailEl.value = user.email || "";
+  const username = document.getElementById("usernameInput").value.trim();
+  const phone    = document.getElementById("phoneInput").value.trim();
 
-    try{
-      const ref = doc(db, "users", currentUid);
-      const snap = await getDoc(ref);
-      if(snap.exists()){
-        const data = snap.data();
-        if(data.username) userEl.value = data.username;
-        if(data.phone)    phoneEl.value = data.phone;
-        if(data.createdAt){
-          const d = new Date(data.createdAt);
-          createdAtRow.textContent = "Terdaftar: " + d.toLocaleString("id-ID");
-        }else{
-          createdAtRow.textContent = "Terdaftar: -";
-        }
-        providerRow.textContent = "Login via: " + (data.provider || (user.providerData[0]?.providerId || "unknown"));
-      }else{
-        createdAtRow.textContent = "Terdaftar: (data user belum tersimpan)";
-        providerRow.textContent  = "Login via: " + (user.providerData[0]?.providerId || "unknown");
-      }
-    }catch(e){
-      console.error(e);
-      showMsg("Gagal memuat profil.", false);
-    }
+  await updateDoc(userDocRef, {
+    username: username,
+    phone: phone
   });
 
-  document.getElementById("btnSave").onclick = async () => {
-    if(!currentUid){
-      showMsg("Sesi login habis. Silakan login ulang.");
-      return;
-    }
-    const username = userEl.value.trim();
-    const phone    = phoneEl.value.trim();
+  alert("Profil berhasil disimpan.");
+};
 
-    if(!username || !phone){
-      showMsg("Username dan nomor HP wajib diisi.");
-      return;
-    }
-
-    try{
-      const ref = doc(db, "users", currentUid);
-      await updateDoc(ref, {
-        username,
-        phone,
-        updatedAt: new Date().toISOString()
-      });
-      showMsg("Profil berhasil disimpan.", true);
-    }catch(e){
-      console.error(e);
-      showMsg("Gagal menyimpan profil.");
-    }
-  };
-
-  document.getElementById("btnLogout").onclick = async () => {
-    try{
-      await signOut(auth);
-      window.location.href = "login.html";
-    }catch(e){
-      showMsg("Gagal logout.");
-    }
-  };
+window.logout = async function(){
+  await signOut(auth);
+  window.location.href = "login.html";
+};
 </script>
 
 </body>
