@@ -129,6 +129,7 @@
       align-items: center;
       gap: 5px;
       box-shadow: 0 10px 25px rgba(248, 250, 252, 0.25);
+      cursor: pointer;
     }
 
     .topup-btn-small span.icon {
@@ -207,18 +208,18 @@
       transition: all 0.18s ease;
     }
 
-    .chip-filter.active {
-      background: radial-gradient(circle at top left, #2563eb, #1e40af);
-      color: #e5e7eb;
-      border-color: rgba(93, 175, 255, 0.9);
-      box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.6), 0 12px 30px rgba(15,23,42,0.9);
-    }
-
     .chip-filter .dot {
       width: 6px;
       height: 6px;
       border-radius: 999px;
       background: rgba(148,163,184,0.7);
+    }
+
+    .chip-filter.active {
+      background: radial-gradient(circle at top left, #2563eb, #1e40af);
+      color: #e5e7eb;
+      border-color: rgba(93,175,255,0.9);
+      box-shadow: 0 0 0 1px rgba(96,165,250,0.6), 0 12px 30px rgba(15,23,42,0.9);
     }
 
     .chip-filter.active .dot {
@@ -302,6 +303,7 @@
       gap: 6px;
       min-width: 110px;
       box-shadow: 0 14px 35px rgba(22,163,74,0.55);
+      cursor: pointer;
     }
 
     .btn-buy:disabled {
@@ -490,7 +492,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
   <script>
-    // Konfigurasi Firebase
+    // ================== FIREBASE CONFIG ==================
     const firebaseConfig = {
       apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
       authDomain: "toko-barmods.firebaseapp.com",
@@ -500,21 +502,22 @@
       appId: "1:284047189012:web:6ef0c6891adab08a383301"
     };
 
-    // Init Firebase (compat)
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    const balanceText = document.getElementById("balanceText");
+    // ================== DOM REFS & GLOBAL STATE ==================
+    const balanceText   = document.getElementById("balanceText");
     const userEmailPill = document.getElementById("userEmailPill");
     const productListEl = document.getElementById("productList");
-    const toastEl = document.getElementById("toast");
+    const toastEl       = document.getElementById("toast");
 
     let currentUser = null;
     let currentUserDoc = null;
     let allProducts = [];
     let activeFilter = "all";
 
+    // ================== HELPER ==================
     function showToast(message) {
       if (!toastEl) return;
       toastEl.textContent = message;
@@ -537,6 +540,7 @@
       window.location.href = "wallet.html";
     }
 
+    // ================== RENDER PRODUK ==================
     function renderProducts(filter) {
       productListEl.innerHTML = "";
       const normalizedFilter = (filter || "all").toLowerCase();
@@ -549,22 +553,20 @@
       });
 
       if (!filtered.length) {
-        productListEl.innerHTML = '<p class="info-text">Produk tidak ditemukan untuk kategori ini.</p>';
+        productListEl.innerHTML =
+          '<p class="info-text">Produk tidak ditemukan untuk kategori ini.</p>';
         return;
       }
 
-      filtered.forEach(doc => {
-        const data = doc;
-        const name = data.name || "Produk tanpa nama";
-        const category = (data.category || "").toLowerCase();
-        const priceRaw = data.price ?? 0;
-        const priceNum = typeof priceRaw === "number"
-          ? priceRaw
-          : parseInt(String(priceRaw).replace(/[^0-9]/g, ""), 10) || 0;
+      filtered.forEach(prod => {
+        const name      = prod.name || "Produk tanpa nama";
+        const category  = (prod.category || "").toLowerCase();
+        const icon      = prod.icon || "⭐";
+        const priceNum  = typeof prod.price === "number"
+          ? prod.price
+          : parseInt(String(prod.price || "0").replace(/[^0-9]/g, ""), 10) || 0;
         const priceText = formatRupiah(priceNum);
-
-        const stock = typeof data.stock === "number" ? data.stock : 0;
-        const icon = data.icon || "⭐";
+        const stock     = typeof prod.stock === "number" ? prod.stock : 0;
 
         let catLabel = "Lainnya";
         if (category.includes("premium")) catLabel = "Premium (APK)";
@@ -573,8 +575,6 @@
 
         const card = document.createElement("div");
         card.className = "product-card";
-
-        const isHabis = stock <= 0;
 
         card.innerHTML = `
           <div class="product-header">
@@ -587,50 +587,26 @@
           <div class="product-body">
             <div>
               <div class="price-text">${priceText}</div>
-              <div class="stock-text">Stok: ${isHabis ? "Habis" : stock}</div>
+              <div class="stock-text">Stok: ${stock <= 0 ? "Habis" : stock}</div>
             </div>
-            <button class="btn-buy" ${isHabis ? "disabled" : ""}>
+            <button class="btn-buy" ${stock <= 0 ? "disabled" : ""}>
               <span class="icon">🛒</span>
-              <span>${isHabis ? "Habis" : "Beli"}</span>
+              <span>${stock <= 0 ? "Habis" : "Beli"}</span>
             </button>
           </div>
         `;
 
         const buyBtn = card.querySelector(".btn-buy");
-        if (!isHabis) {
-          buyBtn.addEventListener("click", () => handleBuyProduct(doc, priceNum));
-        }
+        buyBtn.addEventListener("click", () => {
+          if (stock <= 0) return;
+          handleBuyProduct(prod, priceNum);
+        });
 
         productListEl.appendChild(card);
       });
     }
 
-    // 🔁 Refresh saldo + produk dari Firestore
-    async function refreshUI() {
-      if (!currentUser) return;
-
-      // refresh saldo
-      try {
-        const userSnap = await db.collection("users").doc(currentUser.uid).get();
-        currentUserDoc = userSnap.data() || {};
-        const balance = currentUserDoc.balance || 0;
-        balanceText.textContent = formatRupiah(balance);
-      } catch (e) {
-        console.error("Gagal refresh saldo:", e);
-      }
-
-      // refresh produk
-      try {
-        const snap = await db.collection("products").orderBy("name").get();
-        allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        renderProducts(activeFilter);
-      } catch (e) {
-        console.error("Gagal refresh produk:", e);
-        productListEl.innerHTML = '<p class="info-text">Gagal memuat produk.</p>';
-      }
-    }
-
-    // 🛒 Fungsi beli produk, stok berkurang & saldo terpotong
+    // ================== HANDLE BELI PRODUK (WITH STOCK -1) ==================
     async function handleBuyProduct(productData, priceNum) {
       try {
         if (!currentUser || !currentUserDoc) {
@@ -639,6 +615,7 @@
           return;
         }
 
+        // ambil kategori utk pertanyaan prompt
         const category = (productData.category || "").toLowerCase();
         let promptText = "";
 
@@ -653,46 +630,46 @@
         }
 
         const userInput = prompt(promptText);
-        if (userInput === null) return; // user tekan Cancel
+        if (userInput === null) return;
         if (!userInput.trim()) {
           showToast("Data tidak boleh kosong.");
           return;
         }
 
         await db.runTransaction(async (tx) => {
-          const userRef = db.collection("users").doc(currentUser.uid);
+          const userRef    = db.collection("users").doc(currentUser.uid);
           const productRef = db.collection("products").doc(productData.id);
 
-          const userSnap = await tx.get(userRef);
-          const prodSnap = await tx.get(productRef);
+          const userSnap    = await tx.get(userRef);
+          const productSnap = await tx.get(productRef);
 
           if (!userSnap.exists) {
-            throw new Error("user_not_found");
+            throw new Error("USER_NOT_FOUND");
           }
-          if (!prodSnap.exists) {
-            throw new Error("product_not_found");
+          if (!productSnap.exists) {
+            throw new Error("PRODUCT_NOT_FOUND");
           }
 
-          const userData = userSnap.data() || {};
-          const prodData = prodSnap.data() || {};
+          const userData    = userSnap.data() || {};
+          const productDataNow = productSnap.data() || {};
 
           const balance = userData.balance || 0;
-          const stock = typeof prodData.stock === "number" ? prodData.stock : 0;
+          const stock   = typeof productDataNow.stock === "number"
+            ? productDataNow.stock
+            : 0;
 
-          if (stock <= 0) {
-            throw new Error("out_of_stock");
-          }
           if (balance < priceNum) {
-            throw new Error("not_enough_balance");
+            throw new Error("INSUFFICIENT_BALANCE");
+          }
+          if (stock <= 0) {
+            throw new Error("OUT_OF_STOCK");
           }
 
-          // potong saldo user
+          // potong saldo
           tx.update(userRef, { balance: balance - priceNum });
 
-          // kurangi stok produk
-          tx.update(productRef, {
-            stock: firebase.firestore.FieldValue.increment(-1)
-          });
+          // kurangi stok 1
+          tx.update(productRef, { stock: stock - 1 });
 
           // buat order
           const orderRef = db.collection("orders").doc();
@@ -700,8 +677,8 @@
             userId: currentUser.uid,
             userEmail: currentUser.email || "",
             productId: productRef.id,
-            productName: prodData.name || "Produk",
-            category: prodData.category || "",
+            productName: productDataNow.name || productData.name || "Produk",
+            category: productDataNow.category || productData.category || "",
             price: priceNum,
             dataOrder: userInput.trim(),
             status: "pending",
@@ -712,25 +689,21 @@
         });
 
         showToast("Pesanan berhasil dibuat. Stok berkurang 1.");
-        await refreshUI();
-
+        // refresh produk supaya stok baru tampil
+        await loadProducts();
       } catch (err) {
-        console.error(err);
-
-        if (err.message === "out_of_stock") {
-          showToast("Stok produk sudah habis.");
-        } else if (err.message === "not_enough_balance") {
+        console.error("ERROR HANDLE BUY:", err);
+        if (err.message === "INSUFFICIENT_BALANCE") {
           showToast("Saldo tidak cukup. Silakan topup dulu.");
-        } else if (err.message === "user_not_found") {
-          showToast("Data user tidak ditemukan.");
-        } else if (err.message === "product_not_found") {
-          showToast("Produk tidak ditemukan.");
+        } else if (err.message === "OUT_OF_STOCK") {
+          showToast("Stok habis. Silakan pilih produk lain.");
         } else {
           showToast("Gagal membuat pesanan.");
         }
       }
     }
 
+    // ================== FILTER BUTTONS ==================
     function setupFilterButtons() {
       const chips = document.querySelectorAll(".chip-filter");
       chips.forEach(chip => {
@@ -743,7 +716,24 @@
       });
     }
 
-    // Auth listener
+    // ================== LOAD PRODUCTS ==================
+    async function loadProducts() {
+      try {
+        const snap = await db.collection("products")
+          .orderBy("name")
+          .get();
+        allProducts = snap.docs.map(d => ({
+          id: d.id,
+          ...d.data()
+        }));
+        renderProducts(activeFilter);
+      } catch (err) {
+        console.error("GAGAL MUAT PRODUK:", err);
+        productListEl.innerHTML = '<p class="info-text">Gagal memuat produk.</p>';
+      }
+    }
+
+    // ================== AUTH LISTENER ==================
     auth.onAuthStateChanged(async (user) => {
       if (!user) {
         window.location.href = "login.html";
@@ -752,7 +742,17 @@
       currentUser = user;
       userEmailPill.textContent = user.email || "User";
 
-      await refreshUI();
+      try {
+        const userSnap = await db.collection("users").doc(user.uid).get();
+        currentUserDoc = userSnap.data() || {};
+        const balance = currentUserDoc.balance || 0;
+        balanceText.textContent = formatRupiah(balance);
+      } catch (err) {
+        console.error("GAGAL MUAT USER:", err);
+        balanceText.textContent = "Rp 0";
+      }
+
+      loadProducts();
     });
 
     document.addEventListener("DOMContentLoaded", () => {
