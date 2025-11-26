@@ -6,182 +6,171 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      --bg: #020617;
-      --bg-card: #020617;
-      --border: #1e293b;
-      --text: #e2e8f0;
-      --text-soft: #94a3b8;
-      --primary: #2563eb;
-      --danger: #dc2626;
-      --chip-bg: #0f172a;
+      --bg:#020617;
+      --border:#1e293b;
+      --text:#e2e8f0;
+      --text-soft:#94a3b8;
+      --primary:#2563eb;
+      --danger:#dc2626;
     }
-    * { box-sizing: border-box; }
-
+    *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
     body {
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      background: radial-gradient(circle at top, #0b1120 0, #020617 55%, #000 100%);
-      color: var(--text);
-      min-height: 100vh;
+      margin:0;
+      padding:0;
+      background:radial-gradient(circle at top,#0b1120 0,#020617 55%,#000 100%);
+      color:var(--text);
+      min-height:100vh;
     }
-
     header {
-      padding: 16px 16px 8px;
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(6px);
-      background: linear-gradient(
-        to bottom,
-        rgba(15, 23, 42, 0.96),
-        rgba(15, 23, 42, 0.9)
-      );
-      position: sticky;
-      top: 0;
-      z-index: 20;
+      padding:16px 16px 8px;
+      border-bottom:1px solid var(--border);
+      backdrop-filter:blur(6px);
+      background:linear-gradient(to bottom,rgba(15,23,42,0.96),rgba(15,23,42,0.9));
+      position:sticky;
+      top:0;
+      z-index:20;
     }
     .nav-top {
-      max-width: 1040px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      max-width:1040px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
     }
     .nav-title-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
     }
     .nav-title {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 0.02em;
+      font-size:18px;
+      font-weight:700;
+      letter-spacing:0.02em;
     }
     .nav-sub {
-      font-size: 12px;
-      color: var(--text-soft);
+      font-size:12px;
+      color:var(--text-soft);
     }
     .nav-tabs {
-      margin-top: 10px;
-      max-width: 1040px;
-      margin-left: auto;
-      margin-right: auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
+      margin-top:10px;
+      max-width:1040px;
+      margin-left:auto;
+      margin-right:auto;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
     }
     .nav-btn {
-      border-radius: 999px;
-      border: 1px solid #1e293b;
-      padding: 6px 14px;
-      font-size: 14px;
-      background: #020617;
-      color: #e2e8f0;
-      cursor: pointer;
+      border-radius:999px;
+      border:1px solid #1e293b;
+      padding:6px 14px;
+      font-size:14px;
+      background:#020617;
+      color:#e2e8f0;
+      cursor:pointer;
     }
     .nav-btn.primary {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #f8fafc;
+      background:var(--primary);
+      border-color:var(--primary);
+      color:#f8fafc;
     }
     .nav-btn.danger {
-      background: var(--danger);
-      border-color: var(--danger);
-      color: #f9fafb;
+      background:var(--danger);
+      border-color:var(--danger);
+      color:#fef2f2;
     }
-
     main {
-      max-width: 1040px;
-      margin: 18px auto 32px;
-      padding: 0 16px 24px;
+      max-width:1040px;
+      margin:18px auto 32px;
+      padding:0 16px 24px;
     }
     h1 {
-      font-size: 24px;
-      margin-bottom: 4px;
+      font-size:24px;
+      margin-bottom:4px;
     }
     .page-sub {
-      font-size: 13px;
-      color: #94a3b8;
-      margin-bottom: 20px;
+      font-size:13px;
+      color:var(--text-soft);
+      margin-bottom:18px;
     }
     .card {
-      background: #020617;
-      border-radius: 20px;
-      border: 1px solid #1e293b;
-      padding: 16px;
-      margin-bottom: 18px;
+      background:#020617;
+      border-radius:20px;
+      border:1px solid var(--border);
+      padding:16px;
+      margin-bottom:18px;
+      box-shadow:0 16px 30px rgba(15,23,42,0.8);
     }
     .card-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 4px;
+      font-size:16px;
+      font-weight:600;
+      margin-bottom:4px;
     }
     .card-sub {
-      font-size: 13px;
-      color: #94a3b8;
-      margin-bottom: 12px;
+      font-size:13px;
+      color:var(--text-soft);
+      margin-bottom:12px;
     }
     table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
+      width:100%;
+      border-collapse:collapse;
+      font-size:13px;
     }
-    th, td {
-      border-bottom: 1px solid #111827;
-      padding: 7px 6px;
-      text-align: left;
+    th,td {
+      border-bottom:1px solid #111827;
+      padding:7px 6px;
+      text-align:left;
+      vertical-align:top;
     }
     th {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: #64748b;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:0.06em;
+      color:#64748b;
     }
     tr:last-child td {
-      border-bottom: none;
+      border-bottom:none;
     }
-    input.table-input,
-    select.table-input,
-    textarea.table-input {
-      width: 100%;
-      padding: 4px 6px;
-      border-radius: 8px;
-      border: 1px solid #1f2937;
-      background: #020617;
-      color: #e5e7eb;
-      font-size: 13px;
-      resize: vertical;
+    .table-input {
+      width:100%;
+      padding:5px 6px;
+      border-radius:8px;
+      border:1px solid #1f2937;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:13px;
+      resize:vertical;
     }
     button.small {
-      padding: 5px 10px;
-      border-radius: 999px;
-      border: none;
-      font-size: 12px;
-      cursor: pointer;
-      background: var(--primary);
-      color: #f9fafb;
+      padding:5px 10px;
+      border-radius:999px;
+      border:none;
+      font-size:12px;
+      cursor:pointer;
+      background:var(--primary);
+      color:#f9fafb;
+    }
+    .hidden {
+      display:none;
     }
     .status-error {
-      color: #f97373;
-      font-size: 13px;
-      margin-top: 8px;
+      font-size:13px;
+      color:#f97373;
+      margin-top:8px;
     }
-    .hidden { display: none; }
-
-    @media (max-width: 640px) {
-      header { padding: 12px 10px 8px; }
-      .nav-top { flex-direction: column; align-items: flex-start; }
-      main { padding: 0 10px 24px; }
-      table { font-size: 12px; }
-      th, td { padding: 6px 4px; }
+    @media (max-width:640px){
+      header{padding:12px 10px 8px;}
+      .nav-top{flex-direction:column;align-items:flex-start;}
+      main{padding:0 10px 24px;}
+      th,td{padding:6px 4px;font-size:12px;}
+      .card{padding:12px;}
     }
   </style>
 
+  <!-- cek login admin dulu -->
   <script>
-    // Cek kunci login admin (HANYA username/password lokal)
-    (function ensureAdmin() {
+    (function ensureAdmin(){
       if (localStorage.getItem("adminLogin") !== "yes") {
         window.location.href = "login-admin.html";
       }
@@ -189,407 +178,400 @@
   </script>
 </head>
 <body>
-  <header>
-    <div class="nav-top">
-      <div class="nav-title-wrap">
-        <div class="nav-title">Panel Admin — Barmods Digital Store</div>
-        <div class="nav-sub">Kelola produk, saldo, topup, dan pesanan</div>
-      </div>
+<header>
+  <div class="nav-top">
+    <div class="nav-title-wrap">
+      <div class="nav-title">Panel Admin — Barmods Digital Store</div>
+      <div class="nav-sub">Kelola produk, saldo, topup, dan pesanan user</div>
     </div>
-    <div class="nav-tabs">
-      <button class="nav-btn primary" id="tab-produk">Produk</button>
-      <button class="nav-btn" id="tab-saldo">Saldo Pengguna</button>
-      <button class="nav-btn" id="tab-topup">Topup</button>
-      <button class="nav-btn" id="tab-pesanan">Pesanan</button>
-      <button class="nav-btn danger" id="logoutBtn">Logout</button>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-btn primary" id="tab-produk">Produk</button>
+    <button class="nav-btn" id="tab-saldo">Saldo Pengguna</button>
+    <button class="nav-btn" id="tab-topup">Topup</button>
+    <button class="nav-btn" id="tab-pesanan">Pesanan</button>
+    <button class="nav-btn danger" id="logoutBtn">Logout</button>
+  </div>
+</header>
+
+<main>
+  <h1>Panel Admin</h1>
+  <div class="page-sub">
+    Gunakan tab di atas untuk mengatur <b>Produk</b>, <b>Saldo</b>, <b>Topup</b>, dan <b>Pesanan</b>.
+  </div>
+
+  <!-- PRODUK -->
+  <section id="section-produk" class="card">
+    <div class="card-title">Daftar Produk</div>
+    <div class="card-sub">
+      Edit nama, harga, dan stok produk. Klik <b>Simpan</b> per baris.
     </div>
-  </header>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Produk</th>
+          <th>Harga</th>
+          <th>Stok</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="produk-body">
+        <tr><td colspan="5">Memuat produk...</td></tr>
+      </tbody>
+    </table>
+  </section>
 
-  <main>
-    <h1>Panel Admin</h1>
-    <div class="page-sub">
-      Pilih tab di atas untuk mengelola <b>Produk</b>, <b>Saldo</b>, <b>Topup</b>, dan <b>Pesanan user</b>.
+  <!-- SALDO PENGGUNA -->
+  <section id="section-saldo" class="card hidden">
+    <div class="card-title">Saldo Pengguna</div>
+    <div class="card-sub">
+      Lihat & koreksi saldo user. Hati-hati saat mengubah saldo manual.
     </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Username</th>
+          <th>Saldo</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="saldo-body">
+        <tr><td colspan="4">Memuat data user...</td></tr>
+      </tbody>
+    </table>
+  </section>
 
-    <!-- PRODUK -->
-    <section id="section-produk" class="card">
-      <div class="card-title">Daftar Produk</div>
-      <div class="card-sub">
-        Edit nama, harga, dan stok. Klik <b>Simpan</b> per baris.
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nama</th>
-            <th>Harga</th>
-            <th>Stok</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="produk-body">
-          <tr><td colspan="5">Memuat produk...</td></tr>
-        </tbody>
-      </table>
-    </section>
+  <!-- TOPUP -->
+  <section id="section-topup" class="card hidden">
+    <div class="card-title">Permintaan Topup</div>
+    <div class="card-sub">
+      Ubah status topup: <b>pending</b> → <b>proses</b> → <b>sukses</b> / <b>error</b>.  
+      Jika di-set <b>sukses</b>, saldo user otomatis bertambah.
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Waktu</th>
+          <th>Email</th>
+          <th>Nominal</th>
+          <th>DANA</th>
+          <th>Status</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="topup-body">
+        <tr><td colspan="6">Memuat topup...</td></tr>
+      </tbody>
+    </table>
+    <div id="topup-error" class="status-error"></div>
+  </section>
 
-    <!-- SALDO PENGGUNA -->
-    <section id="section-saldo" class="card hidden">
-      <div class="card-title">Saldo Pengguna</div>
-      <div class="card-sub">
-        Atur saldo user secara manual kalau perlu koreksi.
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Username</th>
-            <th>Saldo</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="saldo-body">
-          <tr><td colspan="4">Memuat user...</td></tr>
-        </tbody>
-      </table>
-    </section>
+  <!-- PESANAN -->
+  <section id="section-pesanan" class="card hidden">
+    <div class="card-title">Pesanan User</div>
+    <div class="card-sub">
+      Ubah status pesanan & isi kolom <b>Produk dari admin</b> untuk mengirim data (akun panel, link, dsb).  
+      User akan melihat isinya di halaman <b>Pesanan Saya</b>.
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Waktu</th>
+          <th>Email</th>
+          <th>Produk</th>
+          <th>Harga</th>
+          <th>Status</th>
+          <th>Produk dari admin</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="pesanan-body">
+        <tr><td colspan="7">Memuat pesanan...</td></tr>
+      </tbody>
+    </table>
+    <div id="pesanan-error" class="status-error"></div>
+  </section>
+</main>
 
-    <!-- TOPUP -->
-    <section id="section-topup" class="card hidden">
-      <div class="card-title">Topup Saldo</div>
-      <div class="card-sub">
-        Semua permintaan topup muncul di sini. Ubah status ke <b>sukses</b>
-        supaya saldo user otomatis bertambah.
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Waktu</th>
-            <th>Email</th>
-            <th>Nominal</th>
-            <th>DANA</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="topup-body">
-          <tr><td colspan="6">Memuat topup...</td></tr>
-        </tbody>
-      </table>
-      <div id="topup-error" class="status-error"></div>
-    </section>
+<!-- FIREBASE + LOGIC -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    doc,
+    getDocs,
+    getDoc,
+    updateDoc,
+    query,
+    orderBy
+  } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-    <!-- PESANAN -->
-    <section id="section-pesanan" class="card hidden">
-      <div class="card-title">Pesanan Pengguna</div>
-      <div class="card-sub">
-        Ubah status pesanan dan isi kolom <b>Produk dari admin</b> untuk
-        mengirim data produk (user/pass panel, link, dsb).
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Waktu</th>
-            <th>Email</th>
-            <th>Produk</th>
-            <th>Harga</th>
-            <th>Status</th>
-            <th>Produk dari admin</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="pesanan-body">
-          <tr><td colspan="7">Memuat pesanan...</td></tr>
-        </tbody>
-      </table>
-      <div id="pesanan-error" class="status-error"></div>
-    </section>
-  </main>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+    authDomain: "toko-barmods.firebaseapp.com",
+    projectId: "toko-barmods",
+    storageBucket: "toko-barmods.firebasestorage.app",
+    messagingSenderId: "284047189012",
+    appId: "1:284047189012:web:6ef0c6891adab08a383301"
+  };
 
-  <!-- FIREBASE + LOGIC -->
-  <script type="module">
-    import {
-      initializeApp
-    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
 
-    import {
-      getFirestore,
-      collection,
-      doc,
-      getDocs,
-      getDoc,
-      updateDoc,
-      query,
-      orderBy
-    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+  const PRODUCTS_COLLECTION = "products";
+  const USERS_COLLECTION    = "users";
+  const TOPUP_COLLECTION    = "topups";
+  const ORDERS_COLLECTION   = "orders";
 
-    // CONFIG DARI KAMU
-    const firebaseConfig = {
-      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-      authDomain: "toko-barmods.firebaseapp.com",
-      projectId: "toko-barmods",
-      storageBucket: "toko-barmods.firebasestorage.app",
-      messagingSenderId: "284047189012",
-      appId: "1:284047189012:web:6ef0c6891adab08a383301"
-    };
+  // TAB
+  const tabButtons = {
+    produk:  document.getElementById("tab-produk"),
+    saldo:   document.getElementById("tab-saldo"),
+    topup:   document.getElementById("tab-topup"),
+    pesanan: document.getElementById("tab-pesanan")
+  };
+  const sections = {
+    produk:  document.getElementById("section-produk"),
+    saldo:   document.getElementById("section-saldo"),
+    topup:   document.getElementById("section-topup"),
+    pesanan: document.getElementById("section-pesanan")
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const PRODUCTS_COLLECTION = "products";
-    const USERS_COLLECTION = "users";
-    const TOPUP_COLLECTION = "topups";
-    const ORDERS_COLLECTION = "orders";
-
-    // ====== TAB NAVIGATION ======
-    const tabButtons = {
-      produk: document.getElementById("tab-produk"),
-      saldo: document.getElementById("tab-saldo"),
-      topup: document.getElementById("tab-topup"),
-      pesanan: document.getElementById("tab-pesanan"),
-    };
-    const sections = {
-      produk: document.getElementById("section-produk"),
-      saldo: document.getElementById("section-saldo"),
-      topup: document.getElementById("section-topup"),
-      pesanan: document.getElementById("section-pesanan"),
-    };
-
-    function showTab(name) {
-      for (const key in sections) {
-        sections[key].classList.toggle("hidden", key !== name);
-        tabButtons[key].classList.toggle("primary", key === name);
-      }
-      if (name === "produk") loadProducts();
-      if (name === "saldo") loadUserBalances();
-      if (name === "topup") loadTopups();
-      if (name === "pesanan") loadOrders();
+  function showTab(name){
+    for (const key in sections){
+      sections[key].classList.toggle("hidden", key !== name);
+      tabButtons[key].classList.toggle("primary", key === name);
     }
+    if (name === "produk")  loadProducts();
+    if (name === "saldo")   loadUserBalances();
+    if (name === "topup")   loadTopups();
+    if (name === "pesanan") loadOrders();
+  }
 
-    tabButtons.produk.addEventListener("click", () => showTab("produk"));
-    tabButtons.saldo.addEventListener("click", () => showTab("saldo"));
-    tabButtons.topup.addEventListener("click", () => showTab("topup"));
-    tabButtons.pesanan.addEventListener("click", () => showTab("pesanan"));
+  tabButtons.produk.addEventListener("click", ()=>showTab("produk"));
+  tabButtons.saldo.addEventListener("click", ()=>showTab("saldo"));
+  tabButtons.topup.addEventListener("click", ()=>showTab("topup"));
+  tabButtons.pesanan.addEventListener("click", ()=>showTab("pesanan"));
 
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.removeItem("adminLogin");
-      window.location.href = "login-admin.html";
-    });
+  document.getElementById("logoutBtn").addEventListener("click", ()=>{
+    localStorage.removeItem("adminLogin");
+    window.location.href = "login-admin.html";
+  });
 
-    // default tab
-    showTab("produk");
+  // default tab
+  showTab("produk");
 
-    // ====== PRODUK ======
-    async function loadProducts() {
-      const tbody = document.getElementById("produk-body");
-      tbody.innerHTML = `<tr><td colspan="5">Memuat produk...</td></tr>`;
-      try {
-        const qProd = query(collection(db, PRODUCTS_COLLECTION), orderBy("id", "asc"));
-        const snap = await getDocs(qProd);
-        if (snap.empty) {
-          tbody.innerHTML = `<tr><td colspan="5">Belum ada produk.</td></tr>`;
-          return;
-        }
-        tbody.innerHTML = "";
-        snap.forEach((d) => {
-          const data = d.data();
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${data.id ?? ""}</td>
-            <td><input class="table-input" value="${data.name ?? ""}" data-id="${d.id}" data-field="name"></td>
-            <td><input class="table-input" value="${data.price ?? ""}" data-id="${d.id}" data-field="price"></td>
-            <td><input class="table-input" type="number" value="${data.stock ?? 0}" data-id="${d.id}" data-field="stock"></td>
-            <td><button class="small" data-id="${d.id}">Simpan</button></td>
-          `;
-          tbody.appendChild(tr);
-        });
+  // =========== PRODUK ===========
+  async function loadProducts(){
+    const tbody = document.getElementById("produk-body");
+    tbody.innerHTML = `<tr><td colspan="5">Memuat produk...</td></tr>`;
+    try{
+      const qProd = query(collection(db, PRODUCTS_COLLECTION), orderBy("id","asc"));
+      const snap = await getDocs(qProd);
+      if (snap.empty){
+        tbody.innerHTML = `<tr><td colspan="5">Belum ada produk.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = "";
+      snap.forEach(d=>{
+        const data = d.data();
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${data.id ?? ""}</td>
+          <td><input class="table-input" value="${data.name ?? ""}" data-id="${d.id}" data-field="name"></td>
+          <td><input class="table-input" value="${data.price ?? ""}" data-id="${d.id}" data-field="price"></td>
+          <td><input class="table-input" type="number" value="${data.stock ?? 0}" data-id="${d.id}" data-field="stock"></td>
+          <td><button class="small" data-id="${d.id}">Simpan</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
 
-        tbody.querySelectorAll("button.small").forEach((btn) => {
-          btn.addEventListener("click", async () => {
-            const id = btn.dataset.id;
-            const inputs = tbody.querySelectorAll(`input[data-id="${id}"]`);
-            const payload = {};
-            inputs.forEach((inp) => {
-              payload[inp.dataset.field] =
-                inp.type === "number" ? Number(inp.value || 0) : inp.value;
-            });
-            await updateDoc(doc(db, PRODUCTS_COLLECTION, id), payload);
-            alert("Produk disimpan.");
+      tbody.querySelectorAll("button.small").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const id = btn.dataset.id;
+          const inputs = tbody.querySelectorAll(`input[data-id="${id}"]`);
+          const payload = {};
+          inputs.forEach(inp=>{
+            payload[inp.dataset.field] =
+              inp.type === "number" ? Number(inp.value || 0) : inp.value;
           });
+          await updateDoc(doc(db, PRODUCTS_COLLECTION, id), payload);
+          alert("Produk disimpan.");
         });
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="5">Gagal memuat produk: ${err.message}</td></tr>`;
-      }
+      });
+    }catch(err){
+      tbody.innerHTML = `<tr><td colspan="5">Gagal memuat produk: ${err.message}</td></tr>`;
     }
+  }
 
-    // ====== SALDO PENGGUNA ======
-    async function loadUserBalances() {
-      const tbody = document.getElementById("saldo-body");
-      tbody.innerHTML = `<tr><td colspan="4">Memuat user...</td></tr>`;
-      try {
-        const snap = await getDocs(collection(db, USERS_COLLECTION));
-        if (snap.empty) {
-          tbody.innerHTML = `<tr><td colspan="4">Belum ada user.</td></tr>`;
-          return;
-        }
-        tbody.innerHTML = "";
-        snap.forEach((d) => {
-          const data = d.data();
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${data.email ?? ""}</td>
-            <td>${data.username ?? "-"}</td>
-            <td><input type="number" class="table-input" value="${data.balance ?? 0}" data-id="${d.id}"></td>
-            <td><button class="small" data-id="${d.id}">Simpan</button></td>
-          `;
-          tbody.appendChild(tr);
-        });
-
-        tbody.querySelectorAll("button.small").forEach((btn) => {
-          btn.addEventListener("click", async () => {
-            const id = btn.dataset.id;
-            const input = tbody.querySelector(`input[data-id="${id}"]`);
-            const nominal = Number(input.value || 0);
-            await updateDoc(doc(db, USERS_COLLECTION, id), { balance: nominal });
-            alert("Saldo diperbarui.");
-          });
-        });
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="4">Gagal memuat saldo: ${err.message}</td></tr>`;
+  // =========== SALDO USER ===========
+  async function loadUserBalances(){
+    const tbody = document.getElementById("saldo-body");
+    tbody.innerHTML = `<tr><td colspan="4">Memuat data user...</td></tr>`;
+    try{
+      const snap = await getDocs(collection(db, USERS_COLLECTION));
+      if (snap.empty){
+        tbody.innerHTML = `<tr><td colspan="4">Belum ada user.</td></tr>`;
+        return;
       }
-    }
+      tbody.innerHTML = "";
+      snap.forEach(d=>{
+        const data = d.data();
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${data.email ?? ""}</td>
+          <td>${data.username ?? "-"}</td>
+          <td><input class="table-input" type="number" value="${data.balance ?? 0}" data-id="${d.id}"></td>
+          <td><button class="small" data-id="${d.id}">Simpan</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
 
-    // ====== TOPUP ======
-    async function loadTopups() {
-      const tbody = document.getElementById("topup-body");
-      const errEl = document.getElementById("topup-error");
-      errEl.textContent = "";
-      tbody.innerHTML = `<tr><td colspan="6">Memuat topup...</td></tr>`;
-      try {
-        const qT = query(collection(db, TOPUP_COLLECTION), orderBy("createdAt", "desc"));
-        const snap = await getDocs(qT);
-        if (snap.empty) {
-          tbody.innerHTML = `<tr><td colspan="6">Belum ada permintaan topup.</td></tr>`;
-          return;
-        }
-        tbody.innerHTML = "";
-        snap.forEach((d) => {
-          const t = d.data();
-          const waktu = t.createdAt?.toDate
-            ? t.createdAt.toDate().toLocaleString()
-            : "-";
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${waktu}</td>
-            <td>${t.userEmail ?? "-"}</td>
-            <td>Rp ${Number(t.amount ?? 0).toLocaleString("id-ID")}</td>
-            <td>${t.danaNumber ?? "-"}</td>
-            <td>
-              <select class="table-input" data-id="${d.id}">
-                <option value="pending" ${t.status === "pending" ? "selected" : ""}>pending</option>
-                <option value="proses" ${t.status === "proses" ? "selected" : ""}>proses</option>
-                <option value="sukses" ${t.status === "sukses" ? "selected" : ""}>sukses</option>
-                <option value="error" ${t.status === "error" ? "selected" : ""}>error</option>
-              </select>
-            </td>
-            <td><button class="small" data-id="${d.id}">Simpan</button></td>
-          `;
-          tbody.appendChild(tr);
+      tbody.querySelectorAll("button.small").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const id = btn.dataset.id;
+          const input = tbody.querySelector(`input[data-id="${id}"]`);
+          const nominal = Number(input.value || 0);
+          await updateDoc(doc(db, USERS_COLLECTION, id), { balance: nominal });
+          alert("Saldo user diperbarui.");
         });
+      });
+    }catch(err){
+      tbody.innerHTML = `<tr><td colspan="4">Gagal memuat saldo: ${err.message}</td></tr>`;
+    }
+  }
 
-        tbody.querySelectorAll("button.small").forEach((btn) => {
-          btn.addEventListener("click", async () => {
-            const id = btn.dataset.id;
-            const select = tbody.querySelector(`select[data-id="${id}"]`);
-            const newStatus = select.value;
+  // =========== TOPUP ===========
+  async function loadTopups(){
+    const tbody = document.getElementById("topup-body");
+    const errEl = document.getElementById("topup-error");
+    errEl.textContent = "";
+    tbody.innerHTML = `<tr><td colspan="6">Memuat topup...</td></tr>`;
+    try{
+      const qTop = query(collection(db, TOPUP_COLLECTION), orderBy("createdAt","desc"));
+      const snap = await getDocs(qTop);
+      if (snap.empty){
+        tbody.innerHTML = `<tr><td colspan="6">Belum ada permintaan topup.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = "";
+      snap.forEach(d=>{
+        const t = d.data();
+        const waktu = t.createdAt?.toDate ? t.createdAt.toDate().toLocaleString("id-ID") : "-";
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${waktu}</td>
+          <td>${t.userEmail ?? "-"}</td>
+          <td>Rp ${Number(t.amount ?? 0).toLocaleString("id-ID")}</td>
+          <td>${t.danaNumber ?? "-"}</td>
+          <td>
+            <select class="table-input" data-id="${d.id}">
+              <option value="pending" ${t.status==="pending"?"selected":""}>pending</option>
+              <option value="proses"  ${t.status==="proses" ?"selected":""}>proses</option>
+              <option value="sukses"  ${t.status==="sukses" ?"selected":""}>sukses</option>
+              <option value="error"   ${t.status==="error"  ?"selected":""}>error</option>
+            </select>
+          </td>
+          <td><button class="small" data-id="${d.id}">Simpan</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
 
-            const ref = doc(db, TOPUP_COLLECTION, id);
-            const snapDoc = await getDoc(ref);
-            if (!snapDoc.exists()) return;
-            const data = snapDoc.data();
+      tbody.querySelectorAll("button.small").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const id = btn.dataset.id;
+          const select = tbody.querySelector(`select[data-id="${id}"]`);
+          const newStatus = select.value;
 
-            await updateDoc(ref, { status: newStatus });
+          const ref = doc(db, TOPUP_COLLECTION, id);
+          const snapDoc = await getDoc(ref);
+          if (!snapDoc.exists()) return;
+          const data = snapDoc.data();
 
-            // Jika sukses → tambah saldo
-            if (newStatus === "sukses" && data.userId) {
-              const uRef = doc(db, USERS_COLLECTION, data.userId);
-              const uSnap = await getDoc(uRef);
-              if (uSnap.exists()) {
-                const u = uSnap.data();
-                const current = Number(u.balance ?? 0);
-                const plus = Number(data.amount ?? 0);
-                await updateDoc(uRef, { balance: current + plus });
-              }
+          await updateDoc(ref, { status:newStatus });
+
+          if (newStatus === "sukses" && data.userId){
+            const userRef = doc(db, USERS_COLLECTION, data.userId);
+            const uSnap   = await getDoc(userRef);
+            if (uSnap.exists()){
+              const u = uSnap.data();
+              const current = Number(u.balance ?? 0);
+              const plus    = Number(data.amount ?? 0);
+              await updateDoc(userRef, { balance: current + plus });
             }
-
-            alert("Topup diperbarui.");
-            loadTopups();
-          });
+          }
+          alert("Topup diperbarui.");
+          loadTopups();
         });
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6">Terjadi error saat memuat topup.</td></tr>`;
-        errEl.textContent = `Gagal memuat topup: ${err.message}`;
-      }
+      });
+    }catch(err){
+      tbody.innerHTML = `<tr><td colspan="6">Terjadi error saat memuat topup.</td></tr>`;
+      errEl.textContent = "Gagal memuat topup: " + err.message;
     }
+  }
 
-    // ====== PESANAN ======
-    async function loadOrders() {
-      const tbody = document.getElementById("pesanan-body");
-      const errEl = document.getElementById("pesanan-error");
-      errEl.textContent = "";
-      tbody.innerHTML = `<tr><td colspan="7">Memuat pesanan...</td></tr>`;
-      try {
-        const qO = query(collection(db, ORDERS_COLLECTION), orderBy("createdAt", "desc"));
-        const snap = await getDocs(qO);
-        if (snap.empty) {
-          tbody.innerHTML = `<tr><td colspan="7">Belum ada pesanan.</td></tr>`;
-          return;
-        }
-        tbody.innerHTML = "";
-        snap.forEach((d) => {
-          const o = d.data();
-          const waktu = o.createdAt?.toDate
-            ? o.createdAt.toDate().toLocaleString()
-            : "-";
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${waktu}</td>
-            <td>${o.userEmail ?? "-"}</td>
-            <td>${o.productName ?? "-"}</td>
-            <td>Rp ${Number(o.price ?? 0).toLocaleString("id-ID")}</td>
-            <td>
-              <select class="table-input status-order" data-id="${d.id}">
-                <option value="pending" ${o.status === "pending" ? "selected" : ""}>pending</option>
-                <option value="proses" ${o.status === "proses" ? "selected" : ""}>proses</option>
-                <option value="sukses" ${o.status === "sukses" ? "selected" : ""}>sukses</option>
-                <option value="error" ${o.status === "error" ? "selected" : ""}>error</option>
-              </select>
-            </td>
-            <td>
-              <textarea class="table-input produk-admin" rows="2" data-id="${d.id}" placeholder="Isi produk (user/pass panel, link, dll)">${o.adminProduct ?? ""}</textarea>
-            </td>
-            <td><button class="small btn-save-order" data-id="${d.id}">Simpan</button></td>
-          `;
-          tbody.appendChild(tr);
-        });
-
-        tbody.querySelectorAll(".btn-save-order").forEach((btn) => {
-          btn.addEventListener("click", async () => {
-            const id = btn.dataset.id;
-            const statusSel = tbody.querySelector(`select.status-order[data-id="${id}"]`);
-            const textArea = tbody.querySelector(`textarea.produk-admin[data-id="${id}"]`);
-            await updateDoc(doc(db, ORDERS_COLLECTION, id), {
-              status: statusSel.value,
-              adminProduct: textArea.value,
-            });
-            alert("Pesanan diperbarui.");
-          });
-        });
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="7">Terjadi error saat mengambil pesanan.</td></tr>`;
-        errEl.textContent = `Gagal memuat pesanan: ${err.message}`;
+  // =========== PESANAN ===========
+  async function loadOrders(){
+    const tbody = document.getElementById("pesanan-body");
+    const errEl = document.getElementById("pesanan-error");
+    errEl.textContent = "";
+    tbody.innerHTML = `<tr><td colspan="7">Memuat pesanan...</td></tr>`;
+    try{
+      const qOrder = query(collection(db, ORDERS_COLLECTION), orderBy("createdAt","desc"));
+      const snap = await getDocs(qOrder);
+      if (snap.empty){
+        tbody.innerHTML = `<tr><td colspan="7">Belum ada pesanan.</td></tr>`;
+        return;
       }
+      tbody.innerHTML = "";
+      snap.forEach(d=>{
+        const o = d.data();
+        const waktu = o.createdAt?.toDate ? o.createdAt.toDate().toLocaleString("id-ID") : "-";
+        const priceNum = Number(o.price ?? 0);
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${waktu}</td>
+          <td>${o.userEmail ?? "-"}</td>
+          <td>${o.productName ?? "-"}</td>
+          <td>Rp ${priceNum.toLocaleString("id-ID")}</td>
+          <td>
+            <select class="table-input status-order" data-id="${d.id}">
+              <option value="pending" ${o.status==="pending"?"selected":""}>pending</option>
+              <option value="proses"  ${o.status==="proses" ?"selected":""}>proses</option>
+              <option value="sukses"  ${o.status==="sukses" ?"selected":""}>sukses</option>
+              <option value="error"   ${o.status==="error"  ?"selected":""}>error</option>
+            </select>
+          </td>
+          <td>
+            <textarea class="table-input produk-admin" rows="2" data-id="${d.id}" placeholder="User/pass panel, link, dsb">${o.adminProduct ?? ""}</textarea>
+          </td>
+          <td><button class="small btn-save-order" data-id="${d.id}">Simpan</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      tbody.querySelectorAll(".btn-save-order").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const id = btn.dataset.id;
+          const statusSel = tbody.querySelector(`select.status-order[data-id="${id}"]`);
+          const textArea  = tbody.querySelector(`textarea.produk-admin[data-id="${id}"]`);
+          await updateDoc(doc(db, ORDERS_COLLECTION, id), {
+            status: statusSel.value,
+            adminProduct: textArea.value
+          });
+          alert("Pesanan diperbarui.");
+        });
+      });
+    }catch(err){
+      tbody.innerHTML = `<tr><td colspan="7">Terjadi error saat memuat pesanan.</td></tr>`;
+      errEl.textContent = "Gagal memuat pesanan: " + err.message;
     }
-  </script>
+  }
+</script>
+
 </body>
 </html>
