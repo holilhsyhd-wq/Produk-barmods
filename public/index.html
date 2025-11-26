@@ -1,155 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Barmods Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    body {
+        background: #0f0f0f;
+        color: white;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar {
+        background: #111;
+        padding: 12px;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    #productList {
+        padding: 15px;
+    }
+
+    .card {
+        background: #1a1a1a;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+    }
+
+    .title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .btn-beli {
+        background: #007bff;
+        padding: 10px 15px;
+        border-radius: 8px;
+        color: white;
+        border: none;
+        margin-top: 10px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="navbar">Barmods Store</div>
+
+<h3 style="padding-left:15px;">Daftar Produk</h3>
+<div id="productList">Memuat produk...</div>
+
+<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
   authDomain: "toko-barmods.firebaseapp.com",
   projectId: "toko-barmods",
-  storageBucket: "toko-barmods.firebasestorage.app",
+  storageBucket: "toko-barmods.appspot.com",
   messagingSenderId: "284047189012",
   appId: "1:284047189012:web:6ef0c6891adab08a383301"
 };
+
 firebase.initializeApp(firebaseConfig);
-const db   = firebase.firestore();
+const db = firebase.firestore();
 const auth = firebase.auth();
 
-/* ===== Helper ===== */
+/* ===== FORMAT UANG ===== */
 function rupiah(n){
-  n = Number(n || 0);
-  return "Rp " + n.toLocaleString("id-ID");
+    return "Rp " + Number(n || 0).toLocaleString("id-ID");
 }
+
 function parseAmount(raw){
-  if(raw===null || raw===undefined) return 0;
-  let s = raw.toString().toLowerCase().trim();
-  // "7k" → 7000
-  if(s.endsWith("k")){
-    const n = Number(s.replace("k",""));
-    if(!isNaN(n)) return n * 1000;
-  }
-  s = s.replace(/[^0-9]/g,"");
-  return Number(s || 0);
+    if(!raw) return 0;
+    let s = raw.toString().trim().toLowerCase();
+
+    if(s.endsWith("k")){
+        return Number(s.replace("k","")) * 1000;
+    }
+
+    s = s.replace(/[^0-9]/g,"");
+    return Number(s);
 }
 
-/* ====== Load produk ke homepage ====== */
+/* ===== LOAD PRODUK ===== */
 function loadProducts(){
-  const listEl = document.getElementById("productList");
-  if(!listEl) return;
+    const listEl = document.getElementById("productList");
 
-  db.collection("products").get().then(snap=>{
-    listEl.innerHTML = "";
-    if(snap.empty){
-      listEl.innerHTML = "<p style='padding:10px'>Belum ada produk.</p>";
-      return;
-    }
+    db.collection("products").get().then(snap=>{
+        listEl.innerHTML = "";
 
-    snap.forEach(doc=>{
-      const p = doc.data();
-      const id = doc.id;
-      const priceNumber = parseAmount(p.price);
+        if(snap.empty){
+            listEl.innerHTML = "<p>Tidak ada produk.</p>";
+            return;
+        }
 
-      listEl.innerHTML += `
-        <div class="card">
-          <div class="title">${p.icon || ""} ${p.name || ""}</div>
-          <div class="label">${p.category || "-"}</div>
-          <div class="value">${rupiah(priceNumber)}</div>
-          <button class="btn-beli" onclick="beliProduk('${id}','${encodeURIComponent(p.name || "")}','${p.category || ""}','${p.price || ""}')">Beli</button>
-        </div>
-      `;
+        snap.forEach(doc=>{
+            const p = doc.data();
+            const price = parseAmount(p.price);
+
+            listEl.innerHTML += `
+                <div class="card">
+                    <div class="title">${p.name}</div>
+                    <div>Kategori: ${p.category}</div>
+                    <div>Harga: ${rupiah(price)}</div>
+                    <button class="btn-beli"
+                        onclick="beliProduk('${doc.id}','${encodeURIComponent(p.name)}','${p.category}','${p.price}')">
+                        Beli Sekarang
+                    </button>
+                </div>
+            `;
+        });
     });
-  }).catch(err=>{
-    listEl.innerHTML = "<p style='padding:10px'>Gagal memuat produk: "+err.message+"</p>";
-  });
 }
 
-/* ====== Fungsi Beli Produk (INTI MASALAH DI SINI) ====== */
+/* ===== BELI PRODUK ===== */
 function beliProduk(productDocId, encodedName, category, rawPrice){
-  const user = auth.currentUser;
-  if(!user){
-    alert("Silakan login dulu.");
-    location.href = "login.html";
-    return;
-  }
-
-  const productName = decodeURIComponent(encodedName);
-  const priceNumber = parseAmount(rawPrice);
-
-  // input tambahan sesuai kategori
-  let labelInput = "Data tambahan untuk pesanan ini";
-  if(category === "sosmed"){
-    labelInput = "Link / username / URL video yang mau ditambah (IG/TikTok dsb.)";
-  }else if(category === "panel"){
-    labelInput = "Masukkan username:password panel (contoh: user:pass)";
-  }else if(category === "premium"){
-    labelInput = "Email / akun yang akan diaktifkan / catatan lain";
-  }
-
-  const inputUser = prompt(labelInput);
-  if(inputUser === null){
-    // user batal
-    return;
-  }
-
-  if(!inputUser.trim()){
-    alert("Data tidak boleh kosong.");
-    return;
-  }
-
-  // transaksi: cek saldo + kurangi + buat order
-  const uid = user.uid;
-  const userRef = db.collection("users").doc(uid);
-
-  db.runTransaction(async (tx)=>{
-    const uSnap = await tx.get(userRef);
-    if(!uSnap.exists){
-      throw new Error("Data user tidak ditemukan.");
-    }
-    const uData = uSnap.data();
-    const saldoLama = Number(uData.balance || 0);
-
-    if(saldoLama < priceNumber){
-      throw new Error("Saldo kamu kurang. Saldo: "+rupiah(saldoLama)+" | Harga: "+rupiah(priceNumber));
+    const user = auth.currentUser;
+    if(!user){
+        alert("Silakan login dulu.");
+        location.href = "login.html";
+        return;
     }
 
-    const saldoBaru = saldoLama - priceNumber;
-    tx.update(userRef,{balance:saldoBaru});
+    const productName = decodeURIComponent(encodedName);
+    const priceNumber = parseAmount(rawPrice);
 
-    const orderRef = db.collection("orders").doc(); // ROOT COLLECTION "orders"
-    tx.set(orderRef,{
-      userId        : uid,
-      userEmail     : uData.email || user.email || "",
-      productId     : productDocId,
-      productName   : productName,
-      price         : priceNumber,    // angka murni
-      category      : category || "",
-      inputUser     : inputUser.trim(),
-      status        : "pending",
-      adminProduct  : "",
-      userReceived  : false,
-      createdAt     : firebase.firestore.FieldValue.serverTimestamp()
+    const input = prompt("Masukkan data untuk pesanan ini (username/email/link):");
+    if(!input || !input.trim()){
+        alert("Input tidak boleh kosong.");
+        return;
+    }
+
+    const userRef = db.collection("users").doc(user.uid);
+
+    db.runTransaction(async tx=>{
+        const u = await tx.get(userRef);
+        const saldo = Number(u.data().balance || 0);
+
+        if(saldo < priceNumber) throw new Error("Saldo kurang!");
+
+        tx.update(userRef,{ balance: saldo - priceNumber });
+
+        tx.set(db.collection("orders").doc(), {
+            userId: user.uid,
+            userEmail: user.email,
+            productId: productDocId,
+            productName: productName,
+            price: priceNumber,
+            category: category,
+            inputUser: input,
+            status: "pending",
+            adminProduct: "",
+            userReceived: false,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    })
+    .then(()=>{
+        alert("Pesanan berhasil dibuat!");
+        location.href = "orders.html";
+    })
+    .catch(e=>{
+        alert("Gagal: " + e.message);
     });
-
-    return saldoBaru;
-  })
-  .then((saldoBaru)=>{
-    alert("Pesanan berhasil dibuat.\nSaldo tersisa: "+rupiah(saldoBaru));
-    // optional: redirect ke halaman orders
-    location.href = "orders.html";
-  })
-  .catch(err=>{
-    alert("Gagal membuat pesanan: "+err.message);
-  });
 }
 
-/* ====== Cek login user & load produk ====== */
 auth.onAuthStateChanged(user=>{
-  if(!user){
-    // kalau halaman ini wajib login, redirect ke login
-    // kalau boleh guest, cukup loadProducts()
-    // di flow kamu kayaknya wajib login, jadi:
-    location.href = "login.html";
-  }else{
-    loadProducts();
-  }
+    if(!user){
+        location.href = "login.html";
+    } else {
+        loadProducts();
+    }
 });
 </script>
+
+</body>
+</html>
