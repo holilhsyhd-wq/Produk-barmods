@@ -81,6 +81,7 @@
       font-weight:bold;
       margin-right:6px;
       margin-top:6px;
+      cursor:pointer;
     }
     .btn-save{background:#22c55e;color:white;}
     .btn-del{background:#ef4444;color:white;}
@@ -124,6 +125,12 @@
     .st-pending{background:#fbbf24;color:black;}
     .st-process{background:#60a5fa;color:black;}
     .st-success{background:#4ade80;color:black;}
+
+    .error-note{
+      color:#f87171;
+      font-size:11px;
+      margin-top:6px;
+    }
   </style>
 </head>
 <body>
@@ -150,12 +157,12 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 
 <script>
-// cek login admin lokal
+// ====== CEK LOGIN ADMIN LOCAL ======
 if(localStorage.getItem("adminBarmods")!=="yes"){
   location.href="login-admin.html";
 }
 
-// firebase init
+// ====== FIREBASE INIT ======
 const firebaseConfig={
   apiKey:"AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
   authDomain:"toko-barmods.firebaseapp.com",
@@ -165,7 +172,7 @@ firebase.initializeApp(firebaseConfig);
 const db   = firebase.firestore();
 const auth = firebase.auth();
 
-// helper
+// ====== HELPER ======
 function parseAmount(raw){
   if(raw === null || raw === undefined) return 0;
   let str = raw.toString().trim().toLowerCase();
@@ -184,11 +191,11 @@ function rupiah(num){
   return "Rp " + Number(num).toLocaleString("id-ID");
 }
 
-// global
+// ====== GLOBAL ======
 let currentTab="produk";
 let editingProductId=null;
 
-// tab handler
+// ====== TAB HANDLER ======
 function showTab(name){
   currentTab = name;
   tabProduk.classList.remove("active");
@@ -212,7 +219,7 @@ function logoutAdmin(){
   auth.signOut().finally(()=>location.href="login-admin.html");
 }
 
-// =============== PRODUK ===============
+// ====== PRODUK ======
 function loadProdukAdmin(){
   content.innerHTML = `
     <div class="card">
@@ -312,7 +319,7 @@ function deleteProduct(id){
     .catch(e=>alert("Gagal hapus: "+e.message));
 }
 
-// =============== TOPUP (SAFE) ===============
+// ====== TOPUP (dengan hapus sampah) ======
 function loadTopupAdmin(){
   content.innerHTML = `<div id="topupList"></div>`;
   db.collection("topups").orderBy("createdAt","desc").get()
@@ -323,17 +330,35 @@ function loadTopupAdmin(){
       box.innerHTML="<div class='card'>Belum ada request topup.</div>";
       return;
     }
+
     snap.forEach(doc=>{
-      const t=doc.data();
+      const t = doc.data();
       const nominalNumber = parseAmount(t.nominal);
       const nominalText   = nominalNumber>0 ? rupiah(nominalNumber) : "Rp 0";
       const userIdText    = t.userId || "-";
       const fromText      = t.fromDana || "-";
       const statusText    = (t.status || "pending").toUpperCase();
 
+      const isInvalid = !t.userId || !nominalNumber || nominalNumber <= 0;
+
       let stClass = (t.status==="success") ? "st-success"
                  : (t.status==="process") ? "st-process"
                  : "st-pending";
+
+      let actionButtons = "";
+      if(isInvalid){
+        actionButtons = `
+          <div class="error-note">
+            DATA ERROR / SAMPAH (userId / nominal tidak valid)
+          </div>
+          <button class="btn btn-del" onclick="deleteTopup('${doc.id}')">Hapus Sampah</button>
+        `;
+      }else{
+        actionButtons = `
+          <button class="btn btn-small" onclick="setTopupStatus('${doc.id}','process')">Process</button>
+          <button class="btn btn-save" onclick="approveTopup('${doc.id}')">Success (+saldo)</button>
+        `;
+      }
 
       box.innerHTML+=`
         <div class="card">
@@ -346,8 +371,7 @@ function loadTopupAdmin(){
 
           <div class="status-pill ${stClass}">${statusText}</div><br>
 
-          <button class="btn btn-small" onclick="setTopupStatus('${doc.id}','process')">Process</button>
-          <button class="btn btn-save" onclick="approveTopup('${doc.id}')">Success (+saldo)</button>
+          ${actionButtons}
         </div>
       `;
     });
@@ -367,11 +391,11 @@ function approveTopup(id){
     const uid=t.userId;
 
     if(!uid){
-      alert("Topup ini tidak punya userId. Hapus manual di Firestore.");
+      alert("Topup ini tidak punya userId. Hapus manual/sampah saja.");
       return;
     }
     if(!nominalNumber || nominalNumber<=0){
-      alert("Nominal topup tidak valid. Hapus manual di Firestore.");
+      alert("Nominal topup tidak valid. Hapus manual/sampah saja.");
       return;
     }
     if(t.status==="success" || t.applied){
@@ -391,7 +415,17 @@ function approveTopup(id){
   });
 }
 
-// =============== SALDO USER ===============
+function deleteTopup(id){
+  if(!confirm("Yakin hapus topup ini? (disarankan hanya untuk data sampah/error)")) return;
+  db.collection("topups").doc(id).delete()
+    .then(()=>{
+      alert("Topup sampah berhasil dihapus.");
+      loadTopupAdmin();
+    })
+    .catch(err=>alert("Gagal hapus topup: "+err.message));
+}
+
+// ====== SALDO USER ======
 function loadUsersSaldo(){
   content.innerHTML=`<div id="userList"></div>`;
   db.collection("users").get().then(snap=>{
@@ -435,7 +469,7 @@ function updateUserSaldo(uid){
     .catch(e=>alert("Gagal update saldo: "+e.message));
 }
 
-// =============== ORDERS ===============
+// ====== ORDERS (dengan hapus sampah) ======
 function loadOrdersAdmin(){
   content.innerHTML=`<div id="ordersAdminList"></div>`;
   db.collection("orders").orderBy("createdAt","desc").get()
@@ -446,28 +480,28 @@ function loadOrdersAdmin(){
       box.innerHTML="<div class='card'>Belum ada order.</div>";
       return;
     }
+
     snap.forEach(doc=>{
       const o=doc.data();const id=doc.id;
+
+      const hargaNumber = parseAmount(o.price);
+      const isInvalid = !o.userId || !hargaNumber || hargaNumber <= 0 || !o.productName;
+
       let stClass = (o.status==="success") ? "st-success"
                  : (o.status==="process") ? "st-process"
                  : "st-pending";
       const tanggal=o.createdAt?new Date(o.createdAt).toLocaleString("id-ID"):"-";
 
-      box.innerHTML+=`
-        <div class="card">
-          <b>${o.productName}</b>
-          <div class="label">UserID</div>
-          <div class="value">${o.userId}</div>
-
-          <div class="label">Input User</div>
-          <div class="value">${o.inputUser || "-"}</div>
-
-          <div class="label">Harga</div>
-          <div class="value">${rupiah(o.price || 0)}</div>
-
-          <div class="label">Status</div>
-          <div class="status-pill ${stClass}">${(o.status || "pending").toUpperCase()}</div>
-
+      let actionBlock = "";
+      if(isInvalid){
+        actionBlock = `
+          <div class="error-note">
+            DATA ERROR / SAMPAH (userId / harga / nama produk tidak valid)
+          </div>
+          <button class="btn btn-del" onclick="deleteOrder('${id}')">Hapus Sampah</button>
+        `;
+      }else{
+        actionBlock = `
           <div class="label">Ubah Status</div>
           <select id="status_${id}">
             <option value="pending" ${o.status==="pending"?"selected":""}>pending</option>
@@ -479,6 +513,28 @@ function loadOrdersAdmin(){
           <textarea id="adminProd_${id}" placeholder="Link produk, akun, keterangan dll">${o.adminProduct || ""}</textarea>
 
           <button class="btn btn-save" onclick="saveOrderAdmin('${id}')">Simpan Perubahan</button>
+        `;
+      }
+
+      box.innerHTML+=`
+        <div class="card">
+          <b>${o.productName || "(tanpa nama)"}</b>
+          <div class="label">UserID</div>
+          <div class="value">${o.userId || "-"}</div>
+
+          <div class="label">Input User</div>
+          <div class="value">${o.inputUser || "-"}</div>
+
+          <div class="label">Harga</div>
+          <div class="value">${isInvalid ? "Rp 0" : rupiah(hargaNumber)}</div>
+
+          <div class="label">Tanggal</div>
+          <div class="value">${tanggal}</div>
+
+          <div class="label">Status</div>
+          <div class="status-pill ${stClass}">${(o.status || "pending").toUpperCase()}</div>
+
+          ${actionBlock}
         </div>
       `;
     });
@@ -495,7 +551,17 @@ function saveOrderAdmin(id){
     .catch(e=>alert("Gagal update order: "+e.message));
 }
 
-// =============== START: anonymous login ke Firebase ===============
+function deleteOrder(id){
+  if(!confirm("Yakin hapus order ini? (gunakan untuk data sampah/error)")) return;
+  db.collection("orders").doc(id).delete()
+    .then(()=>{
+      alert("Order sampah berhasil dihapus.");
+      loadOrdersAdmin();
+    })
+    .catch(err=>alert("Gagal hapus order: "+err.message));
+}
+
+// ====== START: anonymous login ke Firebase ======
 auth.onAuthStateChanged(u=>{
   if(!u){
     auth.signInAnonymously().catch(err=>{
