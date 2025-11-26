@@ -1,577 +1,160 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Panel - Barmods Store</title>
-  <style>
-    body{
-      font-family:sans-serif;
-      margin:0;
-      background:#0d1117;
-      color:white;
-      padding-bottom:60px;
-    }
-    h1{text-align:center;margin:20px 0;font-size:22px;}
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Admin Panel Barmods</title>
+<style>
+body {
+  margin:0;
+  font-family: system-ui, sans-serif;
+  background:#0f1115;
+  color:white;
+}
 
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:10px 16px;
-      background:#161b22;
-      box-shadow:0 2px 10px rgba(0,0,0,0.4);
-    }
-    .topbar h2{margin:0;font-size:16px;}
-    .btn-logout{
-      background:#ef4444;
-      color:white;
-      border:none;
-      border-radius:8px;
-      padding:8px 12px;
-      font-size:12px;
-      font-weight:bold;
-    }
+/* Header */
+header {
+  padding:15px;
+  text-align:center;
+  font-size:20px;
+  font-weight:700;
+  background:#11131a;
+  border-bottom:1px solid #1e212a;
+}
 
-    .tabs{
-      display:flex;
-      margin:10px;
-      gap:8px;
-    }
-    .tab-btn{
-      flex:1;
-      padding:8px;
-      background:#161b22;
-      border:none;
-      border-radius:8px;
-      color:#9ca3af;
-      font-size:13px;
-    }
-    .tab-btn.active{
-      background:#2563eb;
-      color:white;
-      font-weight:bold;
-    }
+/* Tabs */
+.tab-container {
+  display:flex;
+  background:#11131a;
+  border-bottom:1px solid #1e212a;
+}
+.tab {
+  flex:1;
+  padding:12px;
+  text-align:center;
+  cursor:pointer;
+  color:#7b7f8b;
+  font-weight:600;
+}
+.tab.active {
+  background:#0d6efd;
+  color:white;
+  border-radius:4px;
+  margin:6px;
+}
 
-    .card{
-      background:#161b22;
-      margin:10px;
-      padding:12px;
-      border-radius:12px;
-      box-shadow:0 0 10px rgba(0,0,0,0.4);
-      font-size:13px;
-    }
+/* Card */
+.card {
+  background:#1a1c24;
+  padding:15px;
+  margin:12px;
+  border-radius:10px;
+  border:1px solid #22242d;
+  color:white;
+}
 
-    .input{
-      width:100%;
-      padding:8px;
-      margin:4px 0;
-      border-radius:8px;
-      border:none;
-      background:#0f141a;
-      border:1px solid #30363d;
-      color:white;
-      font-size:13px;
-    }
+.label {
+  margin-top:6px;
+  font-size:12px;
+  opacity:0.7;
+}
+.value {
+  font-size:14px;
+  margin-bottom:4px;
+}
 
-    .btn{
-      padding:8px 10px;
-      border:none;
-      border-radius:8px;
-      font-size:12px;
-      font-weight:bold;
-      margin-right:6px;
-      margin-top:6px;
-      cursor:pointer;
-    }
-    .btn-save{background:#22c55e;color:white;}
-    .btn-del{background:#ef4444;color:white;}
-    .btn-small{background:#2563eb;color:white;}
+/* Status pill */
+.status-pill {
+  display:inline-block;
+  padding:5px 10px;
+  border-radius:20px;
+  font-size:11px;
+  margin-top:6px;
+}
+.st-success { background:#16a34a; }
+.st-process { background:#eab308; color:black; }
+.st-pending { background:#dc2626; }
 
-    .label{font-size:11px;color:#9ca3af;margin-top:4px;}
-    .value{font-size:13px;margin-top:2px;}
+/* Buttons */
+.btn {
+  background:#0d6efd;
+  color:white;
+  padding:10px;
+  border-radius:6px;
+  border:none;
+  width:100%;
+  margin-top:10px;
+  cursor:pointer;
+}
+.btn-save {
+  background:#16a34a;
+}
+.btn-del {
+  background:#dc2626;
+}
+.btn-small {
+  padding:6px;
+  font-size:12px;
+  width:auto;
+}
 
-    textarea{
-      width:100%;
-      min-height:60px;
-      padding:8px;
-      margin-top:4px;
-      border-radius:8px;
-      border:none;
-      background:#0f141a;
-      border:1px solid #30363d;
-      color:white;
-      font-size:13px;
-    }
+/* Forms */
+input, textarea, select {
+  width:100%;
+  background:#101218;
+  border:1px solid #2a2d37;
+  padding:10px;
+  border-radius:6px;
+  color:white;
+  margin-top:5px;
+}
+textarea {
+  height:80px;
+}
 
-    select{
-      width:100%;
-      padding:8px;
-      margin-top:4px;
-      border-radius:8px;
-      border:none;
-      background:#0f141a;
-      border:1px solid #30363d;
-      color:white;
-      font-size:13px;
-    }
-
-    .status-pill{
-      display:inline-block;
-      padding:2px 6px;
-      border-radius:999px;
-      font-size:11px;
-      margin-top:4px;
-    }
-    .st-pending{background:#fbbf24;color:black;}
-    .st-process{background:#60a5fa;color:black;}
-    .st-success{background:#4ade80;color:black;}
-
-    .error-note{
-      color:#f87171;
-      font-size:11px;
-      margin-top:6px;
-    }
-  </style>
+.error-note {
+  margin:6px 0;
+  font-size:11px;
+  color:#f87171;
+}
+</style>
 </head>
 <body>
 
-<div class="topbar">
-  <h2>Admin Panel Barmods</h2>
-  <button class="btn-logout" onclick="logoutAdmin()">Logout Admin</button>
+<header>Admin Panel Barmods</header>
+
+<div class="tab-container">
+  <div class="tab active" onclick="showTab('produk')">Produk</div>
+  <div class="tab" onclick="showTab('topup')">Topup</div>
+  <div class="tab" onclick="showTab('saldo')">Saldo User</div>
+  <div class="tab" onclick="showTab('orders')">Orders</div>
 </div>
 
-<h1>Dashboard</h1>
+<div id="content" style="padding-bottom:40px;"></div>
 
-<div class="tabs">
-  <button class="tab-btn active" id="tabProduk" onclick="showTab('produk')">Produk</button>
-  <button class="tab-btn" id="tabTopup" onclick="showTab('topup')">Topup</button>
-  <button class="tab-btn" id="tabSaldo" onclick="showTab('saldo')">Saldo User</button>
-  <button class="tab-btn" id="tabOrders" onclick="showTab('orders')">Orders</button>
-</div>
+<button style="position:fixed;top:15px;right:15px;background:#dc2626;color:white;border:none;padding:8px 12px;border-radius:5px;cursor:pointer;" onclick="logoutAdmin()">Logout Admin</button>
 
-<div id="content"></div>
-
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 <script>
-// ====== CEK LOGIN ADMIN LOCAL ======
-if(localStorage.getItem("adminBarmods")!=="yes"){
-  location.href="login-admin.html";
-}
-
-// ====== FIREBASE INIT ======
-const firebaseConfig={
-  apiKey:"AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-  authDomain:"toko-barmods.firebaseapp.com",
-  projectId:"toko-barmods"
+const firebaseConfig = {
+  apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+  authDomain: "toko-barmods.firebaseapp.com",
+  projectId: "toko-barmods",
+  storageBucket: "toko-barmods.firebasestorage.app",
+  messagingSenderId: "284047189012",
+  appId: "1:284047189012:web:6ef0c6891adab08a383301"
 };
 firebase.initializeApp(firebaseConfig);
-const db   = firebase.firestore();
-const auth = firebase.auth();
+const db = firebase.firestore();
 
-// ====== HELPER ======
-function parseAmount(raw){
-  if(raw === null || raw === undefined) return 0;
-  let str = raw.toString().trim().toLowerCase();
-  if(str.endsWith("k")){
-    let num = Number(str.replace("k",""));
-    if(!isNaN(num)) return Math.round(num*1000);
-  }
-  if(str.includes("k")){
-    let num = Number(str.replace("k",""));
-    if(!isNaN(num)) return Math.round(num*1000);
-  }
-  const cleaned = str.replace(/[^0-9]/g,"");
-  return Number(cleaned) || 0;
+/* Helper format harga */
+function rupiah(n){
+  return "Rp " + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,".");
 }
-function rupiah(num){
-  return "Rp " + Number(num).toLocaleString("id-ID");
+function parseAmount(x){
+  if(!x) return 0;
+  x = x.toString().replace(/[^0-9]/g,"");
+  return Number(x || 0);
 }
-
-// ====== GLOBAL ======
-let currentTab="produk";
-let editingProductId=null;
-
-// ====== TAB HANDLER ======
-function showTab(name){
-  currentTab = name;
-  tabProduk.classList.remove("active");
-  tabTopup.classList.remove("active");
-  tabSaldo.classList.remove("active");
-  tabOrders.classList.remove("active");
-
-  if(name==="produk") tabProduk.classList.add("active");
-  if(name==="topup")  tabTopup.classList.add("active");
-  if(name==="saldo")  tabSaldo.classList.add("active");
-  if(name==="orders") tabOrders.classList.add("active");
-
-  if(name==="produk") loadProdukAdmin();
-  if(name==="topup")  loadTopupAdmin();
-  if(name==="saldo")  loadUsersSaldo();
-  if(name==="orders") loadOrdersAdmin();
-}
-
-function logoutAdmin(){
-  localStorage.removeItem("adminBarmods");
-  auth.signOut().finally(()=>location.href="login-admin.html");
-}
-
-// ====== PRODUK ======
-function loadProdukAdmin(){
-  content.innerHTML = `
-    <div class="card">
-      <h3>Tambah / Edit Produk</h3>
-      <input id="pName" class="input" placeholder="Nama produk">
-      <input id="pPrice" class="input" placeholder="Harga (2000 / 2k / Rp 2.000)">
-      <input id="pStock" class="input" placeholder="Stok (angka)">
-      <input id="pCat" class="input" placeholder="Kategori (premium / sosmed / panel)">
-      <input id="pIcon" class="input" placeholder="Icon (emoji, opsional)">
-      <button class="btn btn-save" onclick="saveProduct()">Simpan Produk</button>
-      <button class="btn btn-del" onclick="resetProductForm()">Reset Form</button>
-      <small id="editInfo" style="display:block;margin-top:4px;color:#9ca3af;">Mode: tambah baru</small>
-    </div>
-    <div id="listProduk"></div>
-  `;
-
-  db.collection("products").get().then(snap=>{
-    const box = document.getElementById("listProduk");
-    box.innerHTML = "";
-    if(snap.empty){
-      box.innerHTML="<div class='card'>Belum ada produk.</div>";
-      return;
-    }
-    snap.forEach(doc=>{
-      const p = doc.data();
-      const hargaNumber = parseAmount(p.price);
-      box.innerHTML += `
-        <div class="card">
-          <b>${p.icon || ""} ${p.name}</b><br>
-          <div class="label">Kategori</div>
-          <div class="value">${p.category || "-"}</div>
-
-          <div class="label">Harga</div>
-          <div class="value">${rupiah(hargaNumber)} (raw: ${p.price})</div>
-
-          <div class="label">Stok</div>
-          <div class="value">${p.stock || 0}</div>
-
-          <button class="btn btn-small" onclick="editProduct('${doc.id}')">Edit</button>
-          <button class="btn btn-del" onclick="deleteProduct('${doc.id}')">Hapus</button>
-        </div>
-      `;
-    });
-  }).catch(err=>{
-    content.innerHTML += `<div class="card">Gagal load produk: ${err.message}</div>`;
-  });
-}
-
-function resetProductForm(){
-  editingProductId=null;
-  pName.value="";pPrice.value="";pStock.value="";pCat.value="";pIcon.value="";
-  editInfo.textContent="Mode: tambah baru";
-}
-
-function saveProduct(){
-  const name=pName.value.trim();
-  const price=pPrice.value.trim();
-  const stock=Number(pStock.value||0);
-  const cat=pCat.value.trim();
-  const icon=pIcon.value.trim();
-
-  if(!name || !price || !cat){
-    alert("Nama, harga, kategori wajib diisi");
-    return;
-  }
-
-  const data={name,price,stock,category:cat,icon};
-
-  if(editingProductId){
-    db.collection("products").doc(editingProductId).update(data)
-      .then(()=>{alert("Produk diperbarui");resetProductForm();loadProdukAdmin();})
-      .catch(e=>alert("Gagal update: "+e.message));
-  }else{
-    db.collection("products").add(data)
-      .then(()=>{alert("Produk ditambahkan");resetProductForm();loadProdukAdmin();})
-      .catch(e=>alert("Gagal tambah: "+e.message));
-  }
-}
-
-function editProduct(id){
-  db.collection("products").doc(id).get().then(doc=>{
-    const p=doc.data();
-    editingProductId=id;
-    pName.value=p.name||"";
-    pPrice.value=p.price||"";
-    pStock.value=p.stock||0;
-    pCat.value=p.category||"";
-    pIcon.value=p.icon||"";
-    editInfo.textContent="Mode: edit produk ("+p.name+")";
-  });
-}
-
-function deleteProduct(id){
-  if(!confirm("Yakin hapus produk ini?")) return;
-  db.collection("products").doc(id).delete()
-    .then(()=>{alert("Produk dihapus");loadProdukAdmin();})
-    .catch(e=>alert("Gagal hapus: "+e.message));
-}
-
-// ====== TOPUP (dengan hapus sampah) ======
-function loadTopupAdmin(){
-  content.innerHTML = `<div id="topupList"></div>`;
-  db.collection("topups").orderBy("createdAt","desc").get()
-  .then(snap=>{
-    const box=document.getElementById("topupList");
-    box.innerHTML="";
-    if(snap.empty){
-      box.innerHTML="<div class='card'>Belum ada request topup.</div>";
-      return;
-    }
-
-    snap.forEach(doc=>{
-      const t = doc.data();
-      const nominalNumber = parseAmount(t.nominal);
-      const nominalText   = nominalNumber>0 ? rupiah(nominalNumber) : "Rp 0";
-      const userIdText    = t.userId || "-";
-      const fromText      = t.fromDana || "-";
-      const statusText    = (t.status || "pending").toUpperCase();
-
-      const isInvalid = !t.userId || !nominalNumber || nominalNumber <= 0;
-
-      let stClass = (t.status==="success") ? "st-success"
-                 : (t.status==="process") ? "st-process"
-                 : "st-pending";
-
-      let actionButtons = "";
-      if(isInvalid){
-        actionButtons = `
-          <div class="error-note">
-            DATA ERROR / SAMPAH (userId / nominal tidak valid)
-          </div>
-          <button class="btn btn-del" onclick="deleteTopup('${doc.id}')">Hapus Sampah</button>
-        `;
-      }else{
-        actionButtons = `
-          <button class="btn btn-small" onclick="setTopupStatus('${doc.id}','process')">Process</button>
-          <button class="btn btn-save" onclick="approveTopup('${doc.id}')">Success (+saldo)</button>
-        `;
-      }
-
-      box.innerHTML+=`
-        <div class="card">
-          <b>Topup ${nominalText}</b><br>
-          <div class="label">UserID</div>
-          <div class="value">${userIdText}</div>
-
-          <div class="label">Pengirim DANA</div>
-          <div class="value">${fromText}</div>
-
-          <div class="status-pill ${stClass}">${statusText}</div><br>
-
-          ${actionButtons}
-        </div>
-      `;
-    });
-  }).catch(err=>{
-    topupList.innerHTML="<div class='card'>Gagal load topup: "+err.message+"</div>";
-  });
-}
-
-function setTopupStatus(id,status){
-  db.collection("topups").doc(id).update({status}).then(loadTopupAdmin);
-}
-
-function approveTopup(id){
-  db.collection("topups").doc(id).get().then(doc=>{
-    const t=doc.data();
-    const nominalNumber=parseAmount(t.nominal);
-    const uid=t.userId;
-
-    if(!uid){
-      alert("Topup ini tidak punya userId. Hapus manual/sampah saja.");
-      return;
-    }
-    if(!nominalNumber || nominalNumber<=0){
-      alert("Nominal topup tidak valid. Hapus manual/sampah saja.");
-      return;
-    }
-    if(t.status==="success" || t.applied){
-      alert("Topup ini sudah pernah di-approve.");
-      return;
-    }
-
-    db.collection("users").doc(uid).get().then(uDoc=>{
-      const u=uDoc.data()||{};
-      const saldoLama=Number(u.balance||0);
-      const saldoBaru=saldoLama+nominalNumber;
-
-      db.collection("users").doc(uid).update({balance:saldoBaru});
-      db.collection("topups").doc(id).update({status:"success",applied:true})
-        .then(()=>{alert("Topup success. Saldo user: "+rupiah(saldoBaru));loadTopupAdmin();});
-    });
-  });
-}
-
-function deleteTopup(id){
-  if(!confirm("Yakin hapus topup ini? (disarankan hanya untuk data sampah/error)")) return;
-  db.collection("topups").doc(id).delete()
-    .then(()=>{
-      alert("Topup sampah berhasil dihapus.");
-      loadTopupAdmin();
-    })
-    .catch(err=>alert("Gagal hapus topup: "+err.message));
-}
-
-// ====== SALDO USER ======
-function loadUsersSaldo(){
-  content.innerHTML=`<div id="userList"></div>`;
-  db.collection("users").get().then(snap=>{
-    const box=userList;
-    box.innerHTML="";
-    if(snap.empty){
-      box.innerHTML="<div class='card'>Belum ada user.</div>";
-      return;
-    }
-    snap.forEach(doc=>{
-      const u=doc.data();const id=doc.id;
-      const saldoNumber=parseAmount(u.balance);
-      box.innerHTML+=`
-        <div class="card">
-          <b>${u.username || "(tanpa username)"}</b><br>
-          <div class="label">Email</div>
-          <div class="value">${u.email}</div>
-
-          <div class="label">Phone</div>
-          <div class="value">${u.phone || "-"}</div>
-
-          <div class="label">Saldo sekarang</div>
-          <div class="value">${rupiah(saldoNumber)}</div>
-
-          <div class="label">Atur Saldo Manual</div>
-          <input id="saldo_${id}" class="input" placeholder="Nominal baru (angka saja)">
-          <button class="btn btn-save" onclick="updateUserSaldo('${id}')">Update Saldo</button>
-        </div>
-      `;
-    });
-  }).catch(err=>{
-    userList.innerHTML="<div class='card'>Gagal load user: "+err.message+"</div>";
-  });
-}
-
-function updateUserSaldo(uid){
-  const field=document.getElementById("saldo_"+uid);
-  const val=Number((field.value||"0").replace(/[^0-9]/g,""));
-  db.collection("users").doc(uid).update({balance:val})
-    .then(()=>{alert("Saldo user diperbarui");loadUsersSaldo();})
-    .catch(e=>alert("Gagal update saldo: "+e.message));
-}
-
-// ====== ORDERS (dengan hapus sampah) ======
-function loadOrdersAdmin(){
-  content.innerHTML=`<div id="ordersAdminList"></div>`;
-  db.collection("orders").orderBy("createdAt","desc").get()
-  .then(snap=>{
-    const box=ordersAdminList;
-    box.innerHTML="";
-    if(snap.empty){
-      box.innerHTML="<div class='card'>Belum ada order.</div>";
-      return;
-    }
-
-    snap.forEach(doc=>{
-      const o=doc.data();const id=doc.id;
-
-      const hargaNumber = parseAmount(o.price);
-      const isInvalid = !o.userId || !hargaNumber || hargaNumber <= 0 || !o.productName;
-
-      let stClass = (o.status==="success") ? "st-success"
-                 : (o.status==="process") ? "st-process"
-                 : "st-pending";
-      const tanggal=o.createdAt?new Date(o.createdAt).toLocaleString("id-ID"):"-";
-
-      let actionBlock = "";
-      if(isInvalid){
-        actionBlock = `
-          <div class="error-note">
-            DATA ERROR / SAMPAH (userId / harga / nama produk tidak valid)
-          </div>
-          <button class="btn btn-del" onclick="deleteOrder('${id}')">Hapus Sampah</button>
-        `;
-      }else{
-        actionBlock = `
-          <div class="label">Ubah Status</div>
-          <select id="status_${id}">
-            <option value="pending" ${o.status==="pending"?"selected":""}>pending</option>
-            <option value="process" ${o.status==="process"?"selected":""}>process</option>
-            <option value="success" ${o.status==="success"?"selected":""}>success</option>
-          </select>
-
-          <div class="label">Produk / Respon Admin</div>
-          <textarea id="adminProd_${id}" placeholder="Link produk, akun, keterangan dll">${o.adminProduct || ""}</textarea>
-
-          <button class="btn btn-save" onclick="saveOrderAdmin('${id}')">Simpan Perubahan</button>
-        `;
-      }
-
-      box.innerHTML+=`
-        <div class="card">
-          <b>${o.productName || "(tanpa nama)"}</b>
-          <div class="label">UserID</div>
-          <div class="value">${o.userId || "-"}</div>
-
-          <div class="label">Input User</div>
-          <div class="value">${o.inputUser || "-"}</div>
-
-          <div class="label">Harga</div>
-          <div class="value">${isInvalid ? "Rp 0" : rupiah(hargaNumber)}</div>
-
-          <div class="label">Tanggal</div>
-          <div class="value">${tanggal}</div>
-
-          <div class="label">Status</div>
-          <div class="status-pill ${stClass}">${(o.status || "pending").toUpperCase()}</div>
-
-          ${actionBlock}
-        </div>
-      `;
-    });
-  }).catch(err=>{
-    ordersAdminList.innerHTML="<div class='card'>Gagal load orders: "+err.message+"</div>";
-  });
-}
-
-function saveOrderAdmin(id){
-  const newStatus=document.getElementById("status_"+id).value;
-  const adminProd=document.getElementById("adminProd_"+id).value;
-  db.collection("orders").doc(id).update({status:newStatus,adminProduct:adminProd})
-    .then(()=>{alert("Order diperbarui");loadOrdersAdmin();})
-    .catch(e=>alert("Gagal update order: "+e.message));
-}
-
-function deleteOrder(id){
-  if(!confirm("Yakin hapus order ini? (gunakan untuk data sampah/error)")) return;
-  db.collection("orders").doc(id).delete()
-    .then(()=>{
-      alert("Order sampah berhasil dihapus.");
-      loadOrdersAdmin();
-    })
-    .catch(err=>alert("Gagal hapus order: "+err.message));
-}
-
-// ====== START: anonymous login ke Firebase ======
-auth.onAuthStateChanged(u=>{
-  if(!u){
-    auth.signInAnonymously().catch(err=>{
-      alert("Gagal login Firebase di admin: "+err.message);
-    });
-  }else{
-    showTab("produk");
-  }
-});
-</script>
-
-</body>
-</html>
