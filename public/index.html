@@ -128,7 +128,6 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // Semua produk disimpan di sini
   let ALL_PRODUCTS = [];
 
   async function loadAllProducts() {
@@ -140,17 +139,21 @@
       snap.forEach(d => {
         ALL_PRODUCTS.push({ id: d.id, ...d.data() });
       });
-      // default: Premium Apps
-      renderCategory("apk");
+      renderCategory("apk"); // default
     } catch (err) {
       list.innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
     }
   }
 
-  // logika kategori:
-  // - category = "sosmed" -> tab Sosial Media
-  // - category = "panel"/"tools" -> tab Panel & Tools
-  // - selain itu semua -> Premium Apps
+  function formatHarga(value) {
+    // kalau number -> format, kalau string -> tampil apa adanya
+    if (typeof value === "number") {
+      return "Rp " + value.toLocaleString("id-ID");
+    }
+    if (!value) return "Rp 0";
+    return String(value);
+  }
+
   function renderCategory(cat) {
     const list = document.getElementById("product-list");
 
@@ -179,15 +182,14 @@
     }
 
     filtered.forEach(p => {
-      const price = Number(p.price || 0);
+      const hargaText = formatHarga(p.price);
       const stock = p.stock ?? 0;
-
       list.innerHTML += `
         <div class="card">
           <div class="card-title">${p.name || "-"}</div>
-          <div class="card-sub">Harga: Rp ${price.toLocaleString("id-ID")}</div>
+          <div class="card-sub">Harga: ${hargaText}</div>
           <div class="card-sub">Stok: ${stock}</div>
-          <button onclick="orderPage('${p.id}')">Order</button>
+          <button onclick="orderProduct('${p.id}')">Order</button>
         </div>
       `;
     });
@@ -212,12 +214,13 @@
     renderCategory(cat);
   };
 
-  window.orderPage = function (id) {
-    // nanti bisa diarahkan ke halaman/order modal yang kamu mau
-    alert("Order produk ID: " + id);
+  // SEMENTARA: klik Order cuma log di console / bisa diarahkan ke halaman lain
+  window.orderProduct = function (id) {
+    // di sini nanti bisa kamu ganti jadi buka modal order / redirect, contoh:
+    // window.location.href = 'wallet.html?product=' + encodeURIComponent(id);
+    console.log("Order produk ID:", id);
   };
 
-  // load saat pertama kali
   loadAllProducts();
 </script>
 
