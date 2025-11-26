@@ -64,7 +64,6 @@
     .btn-main{background:#2563eb;color:white;}
     .btn-disabled{background:#1f2937;color:#6b7280;}
 
-    /* bottom nav */
     .bottom-nav{
       position:fixed;
       left:0;right:0;bottom:0;
@@ -96,7 +95,6 @@
   <div class="card">Memuat pesanan...</div>
 </div>
 
-<!-- Bottom nav -->
 <nav class="bottom-nav">
   <a href="index.html" class="nav-item">Produk</a>
   <a href="wallet.html" class="nav-item">Wallet</a>
@@ -104,7 +102,6 @@
   <a href="profile.html" class="nav-item">Profile</a>
 </nav>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
@@ -118,19 +115,19 @@ const firebaseConfig = {
   appId: "1:284047189012:web:6ef0c6891adab08a383301"
 };
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const db   = firebase.firestore();
 const auth = firebase.auth();
 
-function rupiah(num){
-  num = Number(num || 0);
-  return "Rp " + num.toLocaleString("id-ID");
+function rupiah(n){
+  n = Number(n || 0);
+  return "Rp " + n.toLocaleString("id-ID");
 }
 
-// bikin milidetik dari berbagai tipe createdAt (timestamp / number / string)
+// ambil milidetik dari field createdAt (apapun tipenya)
 function getMillis(createdAt){
   if(!createdAt) return 0;
-  if(typeof createdAt.toMillis === "function") return createdAt.toMillis(); // Timestamp
-  if(typeof createdAt.toDate === "function") return createdAt.toDate().getTime();
+  if(typeof createdAt.toMillis === "function") return createdAt.toMillis();
+  if(typeof createdAt.toDate   === "function") return createdAt.toDate().getTime();
   if(typeof createdAt === "number") return createdAt;
   if(typeof createdAt === "string"){
     const d = new Date(createdAt);
@@ -146,18 +143,18 @@ function renderOrders(uid){
   db.collection("orders").where("userId","==",uid).get()
     .then(snap=>{
       if(snap.empty){
-        wrap.innerHTML = `<div class="card">Kamu belum pernah melakukan pesanan.</div>`;
+        wrap.innerHTML = `<div class="card">Kamu belum punya pesanan.</div>`;
         return;
       }
 
       const arr = [];
       snap.forEach(doc=>{
-        const data = doc.data();
-        data._id = doc.id;
-        arr.push(data);
+        const o = doc.data();
+        o._id   = doc.id;
+        arr.push(o);
       });
 
-      // sort terbaru dulu
+      // urutkan terbaru di atas
       arr.sort((a,b)=> getMillis(b.createdAt) - getMillis(a.createdAt));
 
       wrap.innerHTML = "";
@@ -166,10 +163,9 @@ function renderOrders(uid){
         const status   = o.status || "pending";
 
         let stClass = "st-pending";
-        if(status==="process") stClass="st-process";
-        if(status==="success") stClass="st-success";
+        if(status==="process") stClass = "st-process";
+        if(status==="success") stClass = "st-success";
 
-        // tanggal
         let tglText = "-";
         const cAt = o.createdAt;
         if(cAt){
@@ -182,12 +178,10 @@ function renderOrders(uid){
           }
         }
 
-        // produk dari admin
-        const adminProd = o.adminProduct && o.adminProduct.trim() !== ""
+        const adminProd = (o.adminProduct && o.adminProduct.trim()!=="")
           ? o.adminProduct
           : "Belum dikirim";
 
-        // tombol terima produk (kalau nanti mau dipakai)
         let btn = "";
         if(status==="success" && !o.userReceived){
           btn = `<button class="btn btn-main" onclick="markReceived('${o._id}')">Tandai sudah diterima</button>`;
@@ -222,7 +216,6 @@ function renderOrders(uid){
     });
 }
 
-// user menandai produk sudah diterima (opsional)
 function markReceived(orderId){
   if(!confirm("Tandai produk ini sudah kamu terima?")) return;
   db.collection("orders").doc(orderId).update({userReceived:true})
@@ -234,7 +227,7 @@ function markReceived(orderId){
     .catch(err=>alert("Gagal update: "+err.message));
 }
 
-// cek login user
+// wajib login
 auth.onAuthStateChanged(user=>{
   if(!user){
     location.href = "login.html";
