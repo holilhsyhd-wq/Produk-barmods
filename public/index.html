@@ -92,23 +92,21 @@ const auth=firebase.auth();
 const db=firebase.firestore();
 
 // =========================
-// PRICE PARSER
-// Support "Rp 2k", "2k", "2000", 2000
+// FUNGSI BERSIHKAN ANGKA
+// Bisa handle: "2000", "Rp 2k", "2k", 2000, "10.000", dll
 // =========================
-function parsePrice(raw){
+function parseAmount(raw){
   const cleaned = String(raw ?? "0").replace(/[^0-9]/g,"");
   return Number(cleaned) || 0;
 }
 
-// =========================
-// RUPIAH FORMATTER
-// =========================
+// Format ke Rupiah
 function rupiah(num){
   return "Rp" + Number(num).toLocaleString("id-ID");
 }
 
 // =========================
-// ON LOGIN
+// CEK LOGIN
 // =========================
 auth.onAuthStateChanged(u=>{
   if(!u){
@@ -119,7 +117,7 @@ auth.onAuthStateChanged(u=>{
 });
 
 // =========================
-// LOAD PRODUCT LIST
+// LOAD LIST PRODUK
 // =========================
 function loadProducts(){
   const listEl = document.getElementById("list");
@@ -133,17 +131,17 @@ function loadProducts(){
     }
     listEl.innerHTML = "";
     snap.forEach(doc=>{
-      const p=doc.data();
-      const harga = parsePrice(p.price);
-      const show  = (typeof p.price==="string" && p.price.trim()!=="")
+      const p = doc.data();
+      const hargaNumber = parseAmount(p.price);
+      const showPrice   = (typeof p.price==="string" && p.price.trim()!=="")
         ? p.price
-        : rupiah(harga);
+        : rupiah(hargaNumber);
 
-      listEl.innerHTML+=`
+      listEl.innerHTML += `
         <div class="card">
-          <div class="prod-title">${p.icon || ""} ${p.name}</div>
+          <div class="prod-title">${p.icon || ""} ${p.name || "(tanpa nama)"}</div>
           <div class="prod-cat">${p.category || ""}</div>
-          <div class="prod-price">${show}</div>
+          <div class="prod-price">${showPrice}</div>
           <button onclick="orderForm('${doc.id}')">Beli</button>
         </div>
       `;
@@ -155,7 +153,7 @@ function loadProducts(){
 }
 
 // =========================
-// OPEN ORDER INPUT
+// FORM INPUT ORDER
 // =========================
 function orderForm(id){
   const listEl = document.getElementById("list");
@@ -164,34 +162,43 @@ function orderForm(id){
   .then(d=>{
     if(!d.exists) throw new Error("Produk tidak ditemukan");
 
-    const p=d.data();
-    const harga=parsePrice(p.price);
+    const p = d.data();
+    const hargaNumber = parseAmount(p.price);
 
-    let extraInput="";
+    if(hargaNumber <= 0){
+      alert("Harga produk ini belum di-set dengan benar. Hubungi admin.");
+      return;
+    }
+
+    let extraInput = "";
 
     if(p.category==="sosmed"){
       extraInput = `
-        <input id="inputData" class="input-box" placeholder="Masukkan link / username / video">
+        <input id="inputData" class="input-box"
+               placeholder="Masukkan link / username / video (IG/TikTok dll)">
       `;
     }else if(p.category==="panel"){
       extraInput = `
-        <input id="inputData" class="input-box" placeholder="username:password panel">
+        <input id="inputData" class="input-box"
+               placeholder="username:password panel">
       `;
     }else if(p.category==="premium"){
       extraInput = `
-        <input id="inputData" class="input-box" placeholder="Catatan (opsional)">
+        <input id="inputData" class="input-box"
+               placeholder="Catatan (opsional)">
       `;
     }else{
       extraInput = `
-        <input id="inputData" class="input-box" placeholder="Keterangan order (opsional)">
+        <input id="inputData" class="input-box"
+               placeholder="Keterangan order (opsional)">
       `;
     }
 
-    listEl.innerHTML=`
+    listEl.innerHTML = `
       <div class="card">
-        <div class="prod-title">${p.icon || ""} ${p.name}</div>
+        <div class="prod-title">${p.icon || ""} ${p.name || "(tanpa nama)"}</div>
         <div class="prod-cat">${p.category || ""}</div>
-        <div class="prod-price">Harga: ${rupiah(harga)}</div>
+        <div class="prod-price">Harga: ${rupiah(hargaNumber)}</div>
         ${extraInput}
         <button onclick="makeOrder('${id}')">Konfirmasi Order</button>
         <button style="background:#4b5563;margin-top:6px" onclick="loadProducts()">Batal</button>
@@ -204,7 +211,11 @@ function orderForm(id){
 }
 
 // =========================
-// MAKE ORDER (POTONG SALDO + SIMPAN ORDER)
+// PROSES ORDER
+// - Cek saldo (pakai parseAmount)
+// - Tolak kalau saldo < harga
+// - Kurangi saldo di Firestore
+// - Simpan order ke Firestore
 // =========================
 function makeOrder(id){
   const user = auth.currentUser;
@@ -214,50 +225,60 @@ function makeOrder(id){
     return;
   }
 
-  const input = (document.getElementById("inputData")?.value || "").trim();
   const uid   = user.uid;
+  const input = (document.getElementById("inputData")?.value || "").trim();
 
-  // Ambil produk
+  // 1. Ambil produk
   db.collection("products").doc(id).get()
   .then(doc=>{
     if(!doc.exists) throw new Error("Produk tidak ditemukan");
     const p = doc.data();
-    const harga = parsePrice(p.price);
 
-    if(harga<=0 || isNaN(harga)) throw new Error("Harga produk tidak valid.");
+    const hargaNumber = parseAmount(p.price);
+    if(hargaNumber <= 0){
+      throw new Error("Harga produk tidak valid. Hubungi admin.");
+    }
 
-    // Ambil saldo user
+    // 2. Ambil saldo user
     return db.collection("users").doc(uid).get()
       .then(uDoc=>{
         if(!uDoc.exists) throw new Error("Data user tidak ditemukan.");
-        const u = uDoc.data();
-        const saldo = Number(u.balance || 0);
 
-        if(saldo < harga){
-          alert("Saldo tidak cukup. Silakan topup di menu Wallet.");
-          return null; // stop
+        const u = uDoc.data();
+        const saldoNumber = parseAmount(u.balance);   // <- PENTING, pakai parseAmount
+
+        if(saldoNumber < hargaNumber){
+          alert(
+            "Saldo tidak cukup.\n" +
+            "Saldo kamu: " + rupiah(saldoNumber) + "\n" +
+            "Harga produk: " + rupiah(hargaNumber) + "\n" +
+            "Silakan topup di menu Wallet."
+          );
+          return null; // stop di sini
         }
 
-        const newSaldo = saldo - harga;
+        const saldoBaru = saldoNumber - hargaNumber;
 
-        // Update saldo + buat order (pakai batch atau chain)
-        return db.collection("users").doc(uid).update({balance:newSaldo})
-          .then(()=>{
-            return db.collection("orders").add({
-              userId       : uid,
-              productDocId : id,
-              productName  : p.name || "",
-              price        : harga,
-              inputUser    : input,
-              status       : "pending",
-              adminProduct : "",
-              createdAt    : Date.now()
-            });
-          })
-          .then(()=>{
-            alert("Order berhasil dibuat!");
-            loadProducts();
+        // 3. Update saldo & buat order (chain biasa)
+        return db.collection("users").doc(uid).update({
+          balance: saldoBaru
+        })
+        .then(()=>{
+          return db.collection("orders").add({
+            userId       : uid,
+            productDocId : id,
+            productName  : p.name || "",
+            price        : hargaNumber,
+            inputUser    : input,
+            status       : "pending",
+            adminProduct : "",
+            createdAt    : Date.now()
           });
+        })
+        .then(()=>{
+          alert("Order berhasil dibuat! Saldo baru: " + rupiah(saldoBaru));
+          loadProducts();
+        });
       });
   })
   .catch(err=>{
