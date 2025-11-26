@@ -1,235 +1,724 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Barmods Store</title>
+  <meta charset="UTF-8" />
+  <title>Barmods Store - Produk</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-soft: #020617;
+      --card: #020617;
+      --card-soft: #0b1220;
+      --primary: #2563eb;
+      --primary-soft: rgba(37, 99, 235, 0.15);
+      --accent: #22c55e;
+      --danger: #ef4444;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --radius-xl: 18px;
+      --radius-lg: 14px;
+    }
 
-    <!-- STYLE MODERN -->
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: radial-gradient(circle at top, #0d1b3d, #000814);
-            color: white;
-        }
-        .header {
-            padding: 20px;
-            background: rgba(0, 20, 60, 0.6);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .saldo-box {
-            background: #071b3b;
-            margin: 20px;
-            padding: 20px;
-            border-radius: 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .kategori-btn {
-            display: flex;
-            gap: 10px;
-            padding: 0 20px;
-        }
-        .kategori-btn button {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 8px 15px;
-            color: white;
-            border-radius: 12px;
-            cursor: pointer;
-        }
-        .produk-list {
-            padding: 20px;
-        }
-        .produk-item {
-            background: #081a35;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255,255,255,0.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .produk-item .info {
-            max-width: 70%;
-        }
-        .produk-item button {
-            background: #00d967;
-            color: black;
-            font-weight: bold;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-        }
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: #051229;
-            padding: 10px;
-            display: flex;
-            justify-content: space-around;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-    </style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, #1d4ed8 0, transparent 55%),
+        radial-gradient(circle at bottom right, #0f766e 0, transparent 55%),
+        #020617;
+      padding-bottom: 80px;
+    }
+
+    .page {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 16px 16px 90px;
+    }
+
+    .header-card {
+      background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(30,64,175,0.95));
+      border-radius: 26px;
+      padding: 18px 18px 14px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-card::before {
+      content: "";
+      position: absolute;
+      inset: -40px;
+      background:
+        radial-gradient(circle at top right, rgba(56,189,248,0.35), transparent 60%),
+        radial-gradient(circle at bottom left, rgba(129,140,248,0.2), transparent 60%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .header-main {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .chip-badge {
+      font-size: 10px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .header-sub {
+      position: relative;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .header-row-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .pill-email {
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.85);
+      border: 1px solid rgba(148,163,184,0.5);
+      max-width: 65%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .topup-btn-small {
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #f97316, #facc15);
+      color: #0f172a;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 10px 25px rgba(248, 250, 252, 0.25);
+    }
+
+    .topup-btn-small span.icon {
+      display: inline-flex;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15,23,42,0.9);
+      color: #facc15;
+      font-size: 13px;
+    }
+
+    .balance-card {
+      margin-top: 6px;
+      background: radial-gradient(circle at top left, rgba(59,130,246,0.4), rgba(15,23,42,0.95));
+      border-radius: 22px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid rgba(148,163,184,0.4);
+      backdrop-filter: blur(14px);
+    }
+
+    .balance-left span.label {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: rgba(226,232,240,0.8);
+      letter-spacing: 0.12em;
+    }
+
+    .balance-amount {
+      font-size: 22px;
+      font-weight: 700;
+      margin-top: 3px;
+    }
+
+    .balance-right {
+      text-align: right;
+      font-size: 11px;
+      color: rgba(226,232,240,0.8);
+    }
+
+    .section-title {
+      margin-top: 18px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(226,232,240,0.9);
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .chip-filter {
+      flex: 0 0 auto;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.45);
+      background: rgba(15,23,42,0.75);
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.18s ease;
+    }
+
+    .chip-filter.active {
+      background: radial-gradient(circle at top left, #2563eb, #1e40af);
+      color: #e5e7eb;
+      border-color: rgba(93, 175, 255, 0.9);
+      box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.6), 0 12px 30px rgba(15,23,42,0.9);
+    }
+
+    .chip-filter .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.7);
+    }
+
+    .chip-filter.active .dot {
+      background: #fbbf24;
+    }
+
+    .product-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .product-card {
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
+      border-radius: var(--radius-xl);
+      padding: 12px 13px 11px;
+      border: 1px solid rgba(30,64,175,0.7);
+      box-shadow: 0 16px 40px rgba(15,23,42,0.85);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .product-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .product-meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .badge-category {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .product-body {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
+      gap: 8px;
+    }
+
+    .price-text {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .stock-text {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .btn-buy {
+      border: none;
+      padding: 9px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-width: 110px;
+      box-shadow: 0 14px 35px rgba(22,163,74,0.55);
+    }
+
+    .btn-buy:disabled {
+      opacity: 0.5;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .btn-buy span.icon {
+      font-size: 14px;
+    }
+
+    .info-text {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 80px;
+      transform: translateX(-50%);
+      padding: 9px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(15,23,42,0.96);
+      color: #e5e7eb;
+      border: 1px solid rgba(148,163,184,0.7);
+      box-shadow: 0 16px 40px rgba(15,23,42,0.95);
+      z-index: 1000;
+      display: none;
+    }
+
+    .toast.show {
+      display: block;
+      animation: fadeInOut 2.4s ease forwards;
+    }
+
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translate(-50%, 10px); }
+      10% { opacity: 1; transform: translate(-50%, 0); }
+      80% { opacity: 1; transform: translate(-50%, 0); }
+      100% { opacity: 0; transform: translate(-50%, 10px); }
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 8px 14px 14px;
+      background: radial-gradient(circle at top, rgba(15,23,42,0.98), rgba(2,6,23,0.98));
+      border-top: 1px solid rgba(31,41,55,0.95);
+      z-index: 30;
+    }
+
+    .bottom-nav-inner {
+      max-width: 520px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      background: rgba(15,23,42,0.96);
+      border-radius: 999px;
+      padding: 6px;
+      box-shadow: 0 -8px 25px rgba(15,23,42,0.9);
+      border: 1px solid rgba(31,41,55,0.9);
+    }
+
+    .nav-item {
+      text-align: center;
+      padding: 6px 4px;
+      border-radius: 999px;
+      font-size: 10px;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .nav-item span.icon {
+      font-size: 16px;
+    }
+
+    .nav-item.active {
+      background: radial-gradient(circle at top, #1d4ed8, #1e293b);
+      color: #e5e7eb;
+      box-shadow: 0 0 0 1px rgba(96,165,250,0.7);
+    }
+
+    .nav-item.active span.icon {
+      font-size: 17px;
+    }
+
+    @media (min-width: 480px) {
+      .page {
+        padding-top: 20px;
+      }
+    }
+  </style>
 </head>
-
 <body>
-
-    <!-- HEADER -->
-    <div class="header">
-        <h2>Barmods Store</h2>
-        <p>Topup & premium service dalam satu panel.</p>
-    </div>
-
-    <!-- SALDO USER -->
-    <div class="saldo-box">
+  <div class="page">
+    <div class="header-card">
+      <div class="header-main">
         <div>
-            <p>SALDO KAMU</p>
-            <h1 id="saldoUser">Rp 0</h1>
+          <div class="brand-title">Barmods Store</div>
         </div>
-        <button style="background:#1134a6; color:white; padding:10px 20px; border-radius:20px;">
-            ⚡ Topup Saldo
+        <div class="chip-badge">Digital Balance</div>
+      </div>
+      <div class="header-sub">
+        Topup & layanan premium dalam satu panel.  
+        <br />Saldo dipakai untuk semua produk.
+      </div>
+      <div class="header-row-bottom">
+        <div class="pill-email" id="userEmailPill">Memuat email...</div>
+        <button class="topup-btn-small" onclick="goWallet()">
+          <span class="icon">⚡</span>
+          Topup Saldo
         </button>
+      </div>
+      <div class="balance-card">
+        <div class="balance-left">
+          <span class="label">Saldo Kamu</span>
+          <div class="balance-amount" id="balanceText">Rp 0</div>
+        </div>
+        <div class="balance-right">
+          <div style="font-size:11px;">Dipakai untuk semua pembelian</div>
+          <div style="font-size:11px; opacity:0.8;">Premium • Sosmed • Panel</div>
+        </div>
+      </div>
     </div>
 
-    <!-- KATEGORI -->
-    <div class="kategori-btn">
-        <button onclick="filterProduk('all')">Semua</button>
-        <button onclick="filterProduk('premium')">Premium</button>
-        <button onclick="filterProduk('sosmed')">Sosmed</button>
-        <button onclick="filterProduk('panel')">Panel</button>
+    <div class="section-title">Daftar Produk</div>
+
+    <div class="filter-row">
+      <button class="chip-filter active" data-filter="all">
+        <span class="dot"></span> Semua
+      </button>
+      <button class="chip-filter" data-filter="premium">
+        <span class="dot"></span> Premium
+      </button>
+      <button class="chip-filter" data-filter="sosmed">
+        <span class="dot"></span> Sosmed
+      </button>
+      <button class="chip-filter" data-filter="panel">
+        <span class="dot"></span> Panel
+      </button>
     </div>
 
-    <!-- DAFTAR PRODUK -->
-    <div class="produk-list" id="produkList">
-        Memuat produk...
+    <div id="productList" class="product-list">
+      <p class="info-text">Memuat produk...</p>
     </div>
+  </div>
 
-    <!-- NAV BAWAH -->
-    <div class="bottom-nav">
+  <div id="toast" class="toast"></div>
+
+  <nav class="bottom-nav">
+    <div class="bottom-nav-inner">
+      <a href="index.html" class="nav-item active">
+        <span class="icon">🛒</span>
         <span>Produk</span>
+      </a>
+      <a href="wallet.html" class="nav-item">
+        <span class="icon">💳</span>
         <span>Wallet</span>
+      </a>
+      <a href="orders.html" class="nav-item">
+        <span class="icon">📦</span>
         <span>Orders</span>
+      </a>
+      <a href="profile.html" class="nav-item">
+        <span class="icon">👤</span>
         <span>Profile</span>
+      </a>
     </div>
+  </nav>
 
-    <!-- FIREBASE IMPORT -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+  <!-- Firebase SDK (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
-    <script>
-        /* ============================
-           FIREBASE CONFIG (ISI LENGKAP)
-           ============================ */
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+      authDomain: "toko-barmods.firebaseapp.com",
+      projectId: "toko-barmods",
+      storageBucket: "toko-barmods.firebasestorage.app",
+      messagingSenderId: "284047189012",
+      appId: "1:284047189012:web:6ef0c6891adab08a383301"
+    };
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-            authDomain: "toko-barmods.firebaseapp.com",
-            projectId: "toko-barmods",
-            storageBucket: "toko-barmods.firebasestorage.app",
-            messagingSenderId: "284047189012",
-            appId: "1:284047189012:web:6ef0c6891adab08a383301"
-        };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+    const balanceText = document.getElementById("balanceText");
+    const userEmailPill = document.getElementById("userEmailPill");
+    const productListEl = document.getElementById("productList");
+    const toastEl = document.getElementById("toast");
 
-        /* ============================
-           MEMUAT PRODUK
-           ============================ */
+    let currentUser = null;
+    let currentUserDoc = null;
+    let allProducts = [];
+    let activeFilter = "all";
 
-        let semuaProduk = [];
+    function showToast(message) {
+      if (!toastEl) return;
+      toastEl.textContent = message;
+      toastEl.classList.remove("show");
+      void toastEl.offsetWidth;
+      toastEl.classList.add("show");
+    }
 
-        async function loadProduk() {
-            const container = document.getElementById("produkList");
-            container.innerHTML = "Memuat produk...";
+    function formatRupiah(num) {
+      if (typeof num === "string") {
+        const cleaned = num.replace(/[^0-9]/g, "");
+        if (!cleaned) return num;
+        num = parseInt(cleaned, 10);
+      }
+      if (isNaN(num)) return "Rp 0";
+      return "Rp " + num.toLocaleString("id-ID");
+    }
 
-            const snap = await db.collection("produk").orderBy("nama").get();
+    function goWallet() {
+      window.location.href = "wallet.html";
+    }
 
-            semuaProduk = [];
-            snap.forEach(doc => {
-                semuaProduk.push({ id: doc.id, ...doc.data() });
-            });
+    function renderProducts(filter) {
+      productListEl.innerHTML = "";
+      const normalizedFilter = (filter || "all").toLowerCase();
+      activeFilter = normalizedFilter;
 
-            tampilkanProduk("all");
+      const filtered = allProducts.filter(p => {
+        if (normalizedFilter === "all") return true;
+        const cat = (p.category || "").toLowerCase();
+        return cat.includes(normalizedFilter);
+      });
+
+      if (!filtered.length) {
+        productListEl.innerHTML = '<p class="info-text">Produk tidak ditemukan untuk kategori ini.</p>';
+        return;
+      }
+
+      filtered.forEach(doc => {
+        const data = doc;
+        const name = data.name || "Produk tanpa nama";
+        const category = (data.category || "").toLowerCase();
+        const priceRaw = data.price ?? 0;
+        const priceNum = typeof priceRaw === "number"
+          ? priceRaw
+          : parseInt(String(priceRaw).replace(/[^0-9]/g, ""), 10) || 0;
+        const priceText = formatRupiah(priceNum);
+
+        const stock = typeof data.stock === "number" ? data.stock : 0;
+        const icon = data.icon || "⭐";
+
+        let catLabel = "Lainnya";
+        if (category.includes("premium")) catLabel = "Premium (APK)";
+        else if (category.includes("sosmed")) catLabel = "Sosmed";
+        else if (category.includes("panel")) catLabel = "Panel";
+
+        const card = document.createElement("div");
+        card.className = "product-card";
+
+        card.innerHTML = `
+          <div class="product-header">
+            <div>
+              <div class="product-name">${icon} ${name}</div>
+              <div class="product-meta">Kategori: ${catLabel}</div>
+            </div>
+            <div class="badge-category">${catLabel}</div>
+          </div>
+          <div class="product-body">
+            <div>
+              <div class="price-text">${priceText}</div>
+              <div class="stock-text">Stok: ${stock <= 0 ? "Habis" : stock}</div>
+            </div>
+            <button class="btn-buy" ${stock <= 0 ? "disabled" : ""}>
+              <span class="icon">🛒</span>
+              <span>Beli</span>
+            </button>
+          </div>
+        `;
+
+        const buyBtn = card.querySelector(".btn-buy");
+        buyBtn.addEventListener("click", () => handleBuyProduct(doc, priceNum));
+
+        productListEl.appendChild(card);
+      });
+    }
+
+    async function handleBuyProduct(productData, priceNum) {
+      try {
+        if (!currentUser || !currentUserDoc) {
+          showToast("Silakan login ulang.");
+          return window.location.href = "login.html";
         }
 
-        function filterProduk(kat) {
-            tampilkanProduk(kat);
+        const userDocSnap = await db.collection("users").doc(currentUser.uid).get();
+        const userData = userDocSnap.data() || {};
+        const userBalance = userData.balance || 0;
+
+        if (userBalance < priceNum) {
+          showToast("Saldo tidak cukup. Silakan topup dulu.");
+          return;
         }
 
-        function tampilkanProduk(kategori) {
-            const container = document.getElementById("produkList");
-            container.innerHTML = "";
+        const category = (productData.category || "").toLowerCase();
+        let promptText = "";
 
-            const filtered = kategori === "all"
-                ? semuaProduk
-                : semuaProduk.filter(p => p.kategori === kategori);
-
-            if (filtered.length === 0) {
-                container.innerHTML = "<p>Tidak ada produk.</p>";
-                return;
-            }
-
-            filtered.forEach(p => {
-                container.innerHTML += `
-                <div class="produk-item">
-                    <div class="info">
-                        <b>${p.nama}</b><br>
-                        <small>Kategori: ${p.kategori}</small><br>
-                        <small>Rp ${p.harga.toLocaleString("id-ID")}</small><br>
-                        <small><b>Stok: ${p.stok}</b></small>
-                    </div>
-                    <button onclick="beliProduk('${p.id}')">Beli</button>
-                </div>`;
-            });
+        if (category.includes("sosmed")) {
+          promptText = "Masukkan link / username / URL video yang ingin ditambah (IG / TikTok, dsb):";
+        } else if (category.includes("panel")) {
+          promptText = "Masukkan data panel (contoh: username:password atau catatan lain):";
+        } else if (category.includes("premium")) {
+          promptText = "Masukkan data akun / email / catatan untuk pengiriman APK premium:";
+        } else {
+          promptText = "Masukkan catatan atau data tambahan untuk admin:";
         }
 
-        /* ============================
-           BELI PRODUK + KURANGI STOK
-           ============================ */
-
-        async function beliProduk(id) {
-            const ref = db.collection("produk").doc(id);
-            const data = await ref.get();
-
-            if (!data.exists) return alert("Produk tidak ditemukan!");
-
-            const produk = data.data();
-
-            if (produk.stok <= 0) return alert("Stok habis!");
-
-            if (confirm(`Beli ${produk.nama} seharga Rp ${produk.harga}?`)) {
-
-                await db.collection("orders").add({
-                    produkID: id,
-                    nama: produk.nama,
-                    harga: produk.harga,
-                    tanggal: new Date().toLocaleString(),
-                    status: "pending"
-                });
-
-                // Kurangi stok otomatis
-                await ref.update({
-                    stok: produk.stok - 1
-                });
-
-                alert("Pesanan berhasil dibuat!");
-                loadProduk();
-            }
+        const userInput = prompt(promptText);
+        if (userInput === null) return;
+        if (!userInput.trim()) {
+          showToast("Data tidak boleh kosong.");
+          return;
         }
 
-        /* ============================
-           LOAD AWAL
-           ============================ */
-        loadProduk();
-    </script>
+        // HANYA potong saldo user + buat order
+        await db.runTransaction(async (tx) => {
+          const userRef = db.collection("users").doc(currentUser.uid);
+          const userSnap2 = await tx.get(userRef);
+          const userData2 = userSnap2.data() || {};
+          const balance2 = userData2.balance || 0;
+          if (balance2 < priceNum) {
+            throw new Error("Saldo tidak cukup saat transaksi.");
+          }
 
+          tx.update(userRef, { balance: balance2 - priceNum });
+
+          const orderRef = db.collection("orders").doc();
+          tx.set(orderRef, {
+            userId: currentUser.uid,
+            userEmail: currentUser.email || "",
+            productId: productData.id,
+            productName: productData.name || "Produk",
+            category: productData.category || "",
+            price: priceNum,
+            dataOrder: userInput.trim(),
+            status: "pending",
+            adminProduct: "",
+            userReceived: false,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        });
+
+        showToast("Pesanan berhasil dibuat. Status: PENDING.");
+      } catch (err) {
+        console.error(err);
+        if (err.message === "Saldo tidak cukup saat transaksi.") {
+          showToast("Saldo tidak cukup.");
+        } else {
+          showToast("Gagal membuat pesanan.");
+        }
+      }
+    }
+
+    function setupFilterButtons() {
+      const chips = document.querySelectorAll(".chip-filter");
+      chips.forEach(chip => {
+        chip.addEventListener("click", () => {
+          chips.forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+          const filter = chip.getAttribute("data-filter") || "all";
+          renderProducts(filter);
+        });
+      });
+    }
+
+    auth.onAuthStateChanged(async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+      currentUser = user;
+      userEmailPill.textContent = user.email || "User";
+
+      try {
+        const userSnap = await db.collection("users").doc(user.uid).get();
+        currentUserDoc = userSnap.data() || {};
+        const balance = currentUserDoc.balance || 0;
+        balanceText.textContent = formatRupiah(balance);
+      } catch (err) {
+        console.error(err);
+        balanceText.textContent = "Rp 0";
+      }
+
+      try {
+        const snap = await db.collection("products")
+          .orderBy("name")
+          .get();
+        allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderProducts(activeFilter);
+      } catch (err) {
+        console.error(err);
+        productListEl.innerHTML = '<p class="info-text">Gagal memuat produk.</p>';
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setupFilterButtons();
+    });
+  </script>
 </body>
 </html>
