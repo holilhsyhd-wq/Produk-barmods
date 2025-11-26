@@ -90,10 +90,9 @@
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
 <script>
-// INIT FIREBASE
 const firebaseConfig={
   apiKey:"AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
   authDomain:"toko-barmods.firebaseapp.com",
@@ -103,35 +102,28 @@ firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();
 const db=firebase.firestore();
 
+function rupiah(num){
+  return "Rp " + Number(num).toLocaleString("id-ID");
+}
+function cleanNumber(raw){
+  return (raw || "").toString().replace(/[^0-9]/g,"");
+}
+
 auth.onAuthStateChanged(u=>{
   if(!u) location.href="login.html";
   loadSaldo();
   loadHistory();
 });
 
-// =========================
-// Load Balance
-// =========================
 function loadSaldo(){
   db.collection("users").doc(auth.currentUser.uid).get()
   .then(d=>{
     const b = Number(d.data()?.balance || 0);
-    document.getElementById("saldo").innerHTML =
-      "Rp" + b.toLocaleString("id-ID");
+    saldo.innerHTML = rupiah(b);
   })
-  .catch(err=>{
-    alert("Gagal load saldo: "+err.message);
-  });
+  .catch(err=>alert("Gagal load saldo: "+err.message));
 }
 
-// Bersihin angka dari input
-function cleanNumber(raw){
-  return (raw || "").toString().replace(/[^0-9]/g,"");
-}
-
-// =========================
-// Request Topup
-// =========================
 function reqTopup(){
   const nominalInputEl = document.getElementById("nominal");
   const fromDanaEl     = document.getElementById("fromDana");
@@ -158,14 +150,9 @@ function reqTopup(){
     fromDanaEl.value = "";
     loadHistory();
   })
-  .catch(err=>{
-    alert("Gagal kirim request topup: "+err.message);
-  });
+  .catch(err=>alert("Gagal kirim request topup: "+err.message));
 }
 
-// =========================
-// Riwayat Topup User
-// =========================
 function loadHistory(){
   const uid = auth.currentUser.uid;
   const historyEl = document.getElementById("history");
@@ -187,7 +174,7 @@ function loadHistory(){
 
       html += `
         <div style="margin-bottom:12px;">
-          <b>Rp ${Number(x.nominal||0).toLocaleString("id-ID")}</b><br>
+          <b>${rupiah(x.nominal || 0)}</b><br>
           <small>Pengirim: ${x.fromDana || "-"}</small><br>
           <small style="color:${color}">Status: ${st}</small>
         </div>
