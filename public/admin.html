@@ -163,6 +163,26 @@ const firebaseConfig={
 firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
 
+// Helpers: parseAmount + rupiah (sama seperti di index.html)
+function parseAmount(raw){
+  if(raw === null || raw === undefined) return 0;
+  let str = raw.toString().trim().toLowerCase();
+
+  if(str.endsWith("k")){
+    let num = Number(str.replace("k",""));
+    if(!isNaN(num)) return Math.round(num * 1000);
+  }
+  if(str.includes("k")){
+    let num = Number(str.replace("k",""));
+    if(!isNaN(num)) return Math.round(num * 1000);
+  }
+  const cleaned = str.replace(/[^0-9]/g,"");
+  return Number(cleaned) || 0;
+}
+function rupiah(num){
+  return "Rp " + Number(num).toLocaleString("id-ID");
+}
+
 // ----------------------
 // GLOBAL
 // ----------------------
@@ -203,7 +223,7 @@ function loadProdukAdmin(){
     <div class="card">
       <h3>Tambah / Edit Produk</h3>
       <input id="pName" class="input" placeholder="Nama produk">
-      <input id="pPrice" class="input" placeholder="Harga (contoh: 2000 atau Rp 2k)">
+      <input id="pPrice" class="input" placeholder="Harga (boleh 2000 / 2k / Rp 2.000)">
       <input id="pStock" class="input" placeholder="Stok (angka)">
       <input id="pCat" class="input" placeholder="Kategori (premium / sosmed / panel)">
       <input id="pIcon" class="input" placeholder="Icon (emoji, opsional)">
@@ -220,13 +240,17 @@ function loadProdukAdmin(){
 
     snap.forEach(doc=>{
       const p = doc.data();
+      const hargaNumber = parseAmount(p.price);
       box.innerHTML += `
         <div class="card">
           <b>${p.icon || ""} ${p.name}</b><br>
           <div class="label">Kategori</div>
           <div class="value">${p.category || "-"}</div>
 
-          <div class="label">Harga</div>
+          <div class="label">Harga (display)</div>
+          <div class="value">${rupiah(hargaNumber)}</div>
+
+          <div class="label">Harga (raw di DB)</div>
           <div class="value">${p.price}</div>
 
           <div class="label">Stok</div>
@@ -252,7 +276,7 @@ function resetProductForm(){
 
 function saveProduct(){
   const name = pName.value.trim();
-  const price= pPrice.value.trim();
+  const price= pPrice.value.trim(); // simpan apa adanya
   const stock= Number(pStock.value || 0);
   const cat  = pCat.value.trim();
   const icon = pIcon.value.trim();
@@ -264,7 +288,7 @@ function saveProduct(){
 
   const data = {
     name:name,
-    price:price,      // disimpan apa adanya (bisa "2000" / "Rp 2k")
+    price:price,      // biarkan string aslinya
     stock:stock,
     category:cat,
     icon:icon
@@ -307,7 +331,7 @@ function deleteProduct(id){
 }
 
 // ----------------------
-// TOPUP TAB
+// TOPUP TAB (tidak diubah logika utama)
 // ----------------------
 function loadTopupAdmin(){
   content.innerHTML = `<div id="topupList"></div>`;
@@ -329,7 +353,7 @@ function loadTopupAdmin(){
 
       box.innerHTML += `
         <div class="card">
-          <b>Topup Rp ${Number(t.nominal).toLocaleString("id-ID")}</b><br>
+          <b>Topup ${rupiah(t.nominal)}</b><br>
           <div class="label">UserID</div>
           <div class="value">${t.userId}</div>
 
@@ -346,14 +370,12 @@ function loadTopupAdmin(){
   });
 }
 
-// Ubah status tanpa tambah saldo (process)
 function setTopupStatus(id,status){
   db.collection("topups").doc(id).update({status:status}).then(()=>{
     loadTopupAdmin();
   });
 }
 
-// Success: tambah saldo user
 function approveTopup(id){
   db.collection("topups").doc(id).get().then(doc=>{
     const t=doc.data();
@@ -369,10 +391,7 @@ function approveTopup(id){
       const saldoLama = Number(u.balance || 0);
       const saldoBaru = saldoLama + nominal;
 
-      // update saldo user
       db.collection("users").doc(uid).update({balance:saldoBaru});
-
-      // update status topup
       db.collection("topups").doc(id).update({
         status:"success",
         applied:true
@@ -402,9 +421,11 @@ function loadUsersSaldo(){
     snap.forEach(doc=>{
       const u=doc.data();
       const id=doc.id;
+      const saldoNumber = parseAmount(u.balance);
+
       box.innerHTML += `
         <div class="card">
-          <b>${u.username || "(tanpa username)"}</b><br>
+          <b>${u.username || "(tanpa username)"} </b><br>
           <div class="label">Email</div>
           <div class="value">${u.email}</div>
 
@@ -412,7 +433,7 @@ function loadUsersSaldo(){
           <div class="value">${u.phone || "-"}</div>
 
           <div class="label">Saldo sekarang</div>
-          <div class="value">Rp ${Number(u.balance || 0).toLocaleString("id-ID")}</div>
+          <div class="value">${rupiah(saldoNumber)}</div>
 
           <div class="label">Atur Saldo Manual</div>
           <input id="saldo_${id}" class="input" placeholder="Nominal baru (angka saja)">
@@ -457,6 +478,10 @@ function loadOrdersAdmin(){
                    : (o.status==="process") ? "st-process"
                    : "st-success";
 
+      const tanggal = o.createdAt
+        ? new Date(o.createdAt).toLocaleString("id-ID")
+        : "-";
+
       box.innerHTML += `
         <div class="card">
           <b>${o.productName}</b>
@@ -467,10 +492,10 @@ function loadOrdersAdmin(){
           <div class="value">${o.inputUser || "-"}</div>
 
           <div class="label">Harga</div>
-          <div class="value">Rp ${Number(o.price || 0).toLocaleString("id-ID")}</div>
+          <div class="value">${rupiah(o.price || 0)}</div>
 
           <div class="label">Status</div>
-          <div class="status-pill ${stClass}">${o.status.toUpperCase()}</div>
+          <div class="status-pill ${stClass}">${(o.status || "pending").toUpperCase()}</div>
 
           <div class="label">Ubah Status</div>
           <select id="status_${id}">
