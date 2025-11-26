@@ -490,7 +490,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
   <script>
-    // --- Firebase Config (punya kamu) ---
     const firebaseConfig = {
       apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
       authDomain: "toko-barmods.firebaseapp.com",
@@ -544,7 +543,7 @@
       const filtered = allProducts.filter(p => {
         if (normalizedFilter === "all") return true;
         const cat = (p.category || "").toLowerCase();
-        return cat.includes(normalizedFilter); // supaya "premium / sosmed / panel" tetap kepilih
+        return cat.includes(normalizedFilter);
       });
 
       if (!filtered.length) {
@@ -631,13 +630,12 @@
 
         const userInput = prompt(promptText);
         if (userInput === null) return;
-
         if (!userInput.trim()) {
           showToast("Data tidak boleh kosong.");
           return;
         }
 
-        // transaksi potong saldo + stok + buat order
+        // HANYA potong saldo user + buat order
         await db.runTransaction(async (tx) => {
           const userRef = db.collection("users").doc(currentUser.uid);
           const userSnap2 = await tx.get(userRef);
@@ -647,25 +645,15 @@
             throw new Error("Saldo tidak cukup saat transaksi.");
           }
 
-          // stok terbaru
-          const productRef = db.collection("products").doc(productData.id);
-          const productSnap2 = await tx.get(productRef);
-          const productData2 = productSnap2.data() || {};
-          const stock2 = typeof productData2.stock === "number" ? productData2.stock : 0;
-          if (stock2 <= 0) {
-            throw new Error("Stok produk habis.");
-          }
-
           tx.update(userRef, { balance: balance2 - priceNum });
-          tx.update(productRef, { stock: stock2 - 1 });
 
           const orderRef = db.collection("orders").doc();
           tx.set(orderRef, {
             userId: currentUser.uid,
             userEmail: currentUser.email || "",
-            productId: productRef.id,
-            productName: productData2.name || productData.name || "Produk",
-            category: productData2.category || productData.category || "",
+            productId: productData.id,
+            productName: productData.name || "Produk",
+            category: productData.category || "",
             price: priceNum,
             dataOrder: userInput.trim(),
             status: "pending",
@@ -680,8 +668,6 @@
         console.error(err);
         if (err.message === "Saldo tidak cukup saat transaksi.") {
           showToast("Saldo tidak cukup.");
-        } else if (err.message === "Stok produk habis.") {
-          showToast("Stok produk ini sudah habis.");
         } else {
           showToast("Gagal membuat pesanan.");
         }
@@ -718,7 +704,6 @@
         balanceText.textContent = "Rp 0";
       }
 
-      // load produk
       try {
         const snap = await db.collection("products")
           .orderBy("name")
