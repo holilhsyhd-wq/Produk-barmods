@@ -312,11 +312,10 @@
 
       try {
         const q = query(
-          collection(db, "products"),
-          where("category", "==", category),
-          orderBy("id", "asc")
-        );
-
+  collection(db, "products"),
+  where("category", "==", category)
+  // TANPA orderBy dulu biar nggak perlu index
+);
         const snap = await getDocs(q);
 
         if (snap.empty) {
