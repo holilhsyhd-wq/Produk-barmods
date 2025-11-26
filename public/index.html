@@ -1,188 +1,719 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>Barmods Store</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barmods Store - Produk</title>
 
-<style>
+  <!-- ====== FONT ====== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-main: #020617;
+      --bg-elevated: #020617;
+      --bg-card: #020617;
+      --bg-card-soft: #020617;
+      --primary: #2563eb;
+      --primary-soft: rgba(37, 99, 235, 0.15);
+      --primary-strong: #1d4ed8;
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.12);
+      --danger: #ef4444;
+      --text: #e5e7eb;
+      --text-soft: #9ca3af;
+      --border-soft: #1f2937;
+      --radius-lg: 18px;
+      --radius-xl: 22px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.85);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-        background: #0f0f0f;
-        color: white;
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #0b1120 0, #020617 45%, #000 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
-    .navbar {
-        background: #111;
-        padding: 12px;
-        text-align: center;
-        font-size: 20px;
-        font-weight: bold;
+    /* ====== TOP BAR ====== */
+    .app-shell {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
     }
 
-    #productList {
-        padding: 15px;
+    header.app-header {
+      padding: 14px 16px 10px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: linear-gradient(to bottom, rgba(15,23,42,0.96), rgba(15,23,42,0.92), rgba(15,23,42,0.85), transparent);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(15,23,42,0.7);
     }
 
-    .card {
-        background: #1a1a1a;
-        padding: 15px;
-        border-radius: 12px;
-        margin-bottom: 15px;
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
     }
 
-    .title {
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 5px;
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
-    .btn-beli {
-        background: #007bff;
-        padding: 10px 15px;
-        border-radius: 8px;
-        color: white;
-        border: none;
-        margin-top: 10px;
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-</style>
+
+    .brand-badge {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top left, var(--primary-soft), transparent 55%);
+      border: 1px solid rgba(37, 99, 235, 0.35);
+      color: #93c5fd;
+    }
+
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-soft);
+    }
+
+    .user-pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(55,65,81,0.8);
+      background: radial-gradient(circle at top left, rgba(37,99,235,0.18), rgba(15,23,42,0.95));
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      max-width: 58%;
+      justify-content: flex-end;
+      color: #bfdbfe;
+    }
+
+    .user-pill span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ====== BALANCE STRIP ====== */
+    .balance-strip {
+      margin: 4px 16px 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius-xl);
+      background: radial-gradient(circle at top left, rgba(37,99,235,0.28), rgba(15,23,42,0.98));
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(37, 99, 235, 0.4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .balance-label {
+      font-size: 0.78rem;
+      color: #bfdbfe;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+    }
+
+    .balance-amount {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f9fafb;
+    }
+
+    .balance-cta {
+      font-size: 0.7rem;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.85);
+      border: 1px solid rgba(148,163,184,0.45);
+      color: #e5e7eb;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .balance-cta span.icon {
+      font-size: 0.95rem;
+    }
+
+    /* ====== MAIN CONTENT ====== */
+    main {
+      flex: 1;
+      padding: 6px 12px 76px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 4px 10px;
+    }
+
+    .section-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: #9ca3af;
+    }
+
+    .chip-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 2px 4px 10px;
+      scrollbar-width: none;
+    }
+    .chip-row::-webkit-scrollbar { display: none; }
+
+    .filter-chip {
+      font-size: 0.75rem;
+      padding: 6px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(55,65,81,0.9);
+      background: rgba(15,23,42,0.9);
+      color: var(--text-soft);
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .filter-chip.active {
+      border-color: rgba(37,99,235,0.95);
+      background: radial-gradient(circle at top left, rgba(37,99,235,0.45), rgba(15,23,42,1));
+      color: #eff6ff;
+      box-shadow: 0 0 0 1px rgba(15,23,42,0.6);
+    }
+
+    /* ====== PRODUCT LIST ====== */
+    #product-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-bottom: 4px;
+    }
+
+    .card-product {
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.95), #020617);
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(31,41,55,0.9);
+      padding: 10px 11px 9px;
+      box-shadow: 0 14px 35px rgba(15,23,42,0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .product-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .product-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .product-name span.emoji {
+      font-size: 1rem;
+    }
+
+    .product-meta {
+      font-size: 0.7rem;
+      color: var(--text-soft);
+    }
+
+    .badge-category {
+      font-size: 0.68rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      border: 1px solid rgba(55,65,81,0.85);
+      color: #9ca3af;
+      background: rgba(15,23,42,0.95);
+    }
+
+    .badge-category.premium {
+      border-color: rgba(249,115,22,0.8);
+      background: radial-gradient(circle at top left, rgba(249,115,22,0.25), rgba(15,23,42,1));
+      color: #fed7aa;
+    }
+
+    .badge-category.sosmed {
+      border-color: rgba(59,130,246,0.9);
+      background: radial-gradient(circle at top left, rgba(59,130,246,0.25), rgba(15,23,42,1));
+      color: #bfdbfe;
+    }
+
+    .badge-category.panel {
+      border-color: rgba(16,185,129,0.85);
+      background: radial-gradient(circle at top left, rgba(16,185,129,0.24), rgba(15,23,42,1));
+      color: #a7f3d0;
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    .price-label {
+      font-size: 0.7rem;
+      color: var(--text-soft);
+    }
+
+    .price-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f9fafb;
+    }
+
+    .btn-buy {
+      margin-top: 8px;
+      width: 100%;
+      border: none;
+      outline: none;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-strong));
+      color: #f9fafb;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 14px 38px rgba(37,99,235,0.55);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+    }
+
+    .btn-buy:active {
+      transform: translateY(1px) scale(.99);
+      box-shadow: 0 8px 24px rgba(37,99,235,0.55);
+      filter: brightness(0.96);
+    }
+
+    /* Loading & empty */
+    .info-text {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      padding: 8px 6px;
+      text-align: center;
+    }
+
+    /* ====== BOTTOM NAV ====== */
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 10px;
+      width: 100%;
+      max-width: 480px;
+      padding: 4px 10px 6px;
+      z-index: 30;
+    }
+
+    .bottom-nav-inner {
+      display: flex;
+      background: rgba(15,23,42,0.96);
+      border-radius: 999px;
+      border: 1px solid rgba(31,41,55,0.95);
+      box-shadow: 0 18px 45px rgba(15,23,42,0.95);
+      overflow: hidden;
+    }
+
+    .nav-item {
+      flex: 1;
+      text-align: center;
+      padding: 7px 4px 8px;
+      font-size: 0.7rem;
+      color: var(--text-soft);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-item span.icon {
+      font-size: 1rem;
+    }
+
+    .nav-item.active {
+      background: radial-gradient(circle at top, rgba(37,99,235,0.4), rgba(15,23,42,1));
+      color: #eff6ff;
+      font-weight: 600;
+    }
+
+    @media (min-width: 480px) {
+      header.app-header {
+        border-radius: 0 0 18px 18px;
+        margin-top: 8px;
+      }
+      .bottom-nav {
+        bottom: 16px;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="brand">
+          <div class="brand-title">
+            Barmods Store
+            <span class="brand-badge">Digital Balance</span>
+          </div>
+          <div class="brand-subtitle">Topup & premium service dalam satu panel.</div>
+        </div>
+        <div class="user-pill" id="user-pill">
+          <span>...</span>
+        </div>
+      </div>
+    </header>
 
-<div class="navbar">Barmods Store</div>
+    <div class="balance-strip">
+      <div>
+        <div class="balance-label">Saldo Kamu</div>
+        <div class="balance-amount" id="balance-amount">Rp 0</div>
+      </div>
+      <a href="wallet.html" class="balance-cta">
+        <span class="icon">⚡</span>
+        <span>Topup Saldo</span>
+      </a>
+    </div>
 
-<h3 style="padding-left:15px;">Daftar Produk</h3>
-<div id="productList">Memuat produk...</div>
+    <main>
+      <div class="section-header">
+        <div class="section-title">Daftar Produk</div>
+      </div>
 
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+      <div class="chip-row">
+        <button class="filter-chip active" data-filter="all">Semua</button>
+        <button class="filter-chip" data-filter="premium">Premium</button>
+        <button class="filter-chip" data-filter="sosmed">Sosmed</button>
+        <button class="filter-chip" data-filter="panel">Panel</button>
+      </div>
 
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-  authDomain: "toko-barmods.firebaseapp.com",
-  projectId: "toko-barmods",
-  storageBucket: "toko-barmods.appspot.com",
-  messagingSenderId: "284047189012",
-  appId: "1:284047189012:web:6ef0c6891adab08a383301"
-};
+      <div id="product-list">
+        <p class="info-text">Memuat produk...</p>
+      </div>
+    </main>
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const auth = firebase.auth();
+    <!-- ====== BOTTOM NAV ====== -->
+    <nav class="bottom-nav">
+      <div class="bottom-nav-inner">
+        <a href="index.html" class="nav-item active">
+          <span class="icon">🛒</span>
+          <span>Produk</span>
+        </a>
+        <a href="wallet.html" class="nav-item">
+          <span class="icon">💳</span>
+          <span>Wallet</span>
+        </a>
+        <a href="orders.html" class="nav-item">
+          <span class="icon">📦</span>
+          <span>Orders</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+          <span class="icon">👤</span>
+          <span>Profile</span>
+        </a>
+      </div>
+    </nav>
+  </div>
 
-/* ===== FORMAT UANG ===== */
-function rupiah(n){
-    return "Rp " + Number(n || 0).toLocaleString("id-ID");
-}
+  <!-- ====== FIREBASE SDK (COMPAT) ====== -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
-function parseAmount(raw){
-    if(!raw) return 0;
-    let s = raw.toString().trim().toLowerCase();
+  <script>
+    // ==== Firebase config ====
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+      authDomain: "toko-barmods.firebaseapp.com",
+      projectId: "toko-barmods",
+      storageBucket: "toko-barmods.firebasestorage.app",
+      messagingSenderId: "284047189012",
+      appId: "1:284047189012:web:6ef0c6891adab08a383301"
+    };
 
-    if(s.endsWith("k")){
-        return Number(s.replace("k","")) * 1000;
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+
+    const productListEl = document.getElementById("product-list");
+    const balanceAmountEl = document.getElementById("balance-amount");
+    const userPillEl = document.getElementById("user-pill");
+
+    let allProducts = []; // cache untuk filter
+
+    // ===== Helper Rupiah =====
+    function formatRupiah(angka) {
+      if (!angka || isNaN(angka)) return "0";
+      return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
-    s = s.replace(/[^0-9]/g,"");
-    return Number(s);
-}
+    // parse berbagai format price dari DB
+    function parsePrice(raw) {
+      if (typeof raw === "number") return raw;
+      if (typeof raw !== "string") return 0;
 
-/* ===== LOAD PRODUK ===== */
-function loadProducts(){
-    const listEl = document.getElementById("productList");
+      let str = raw.toLowerCase()
+        .replace(/rp/g, "")
+        .replace(/\s+/g, "")
+        .replace(/\./g, "");
 
-    db.collection("products").get().then(snap=>{
-        listEl.innerHTML = "";
+      // contoh "21k", "2k"
+      const kMatch = str.match(/^(\d+(?:,\d+)?)(k)$/);
+      if (kMatch) {
+        let val = parseFloat(kMatch[1].replace(",", "."));
+        return Math.round(val * 1000);
+      }
 
-        if(snap.empty){
-            listEl.innerHTML = "<p>Tidak ada produk.</p>";
-            return;
+      const num = parseInt(str, 10);
+      return isNaN(num) ? 0 : num;
+    }
+
+    function badgeClassForCategory(cat) {
+      const c = (cat || "").toLowerCase();
+      if (c === "premium") return "premium";
+      if (c === "sosmed" || c === "sosmed ") return "sosmed";
+      if (c === "panel") return "panel";
+      return "";
+    }
+
+    // ===== Auth Guard =====
+    auth.onAuthStateChanged(async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      // tampilkan email/username singkat di pill
+      const short = user.email || "User";
+      userPillEl.querySelector("span").textContent = short;
+
+      await loadUserBalance(user.uid);
+      await loadProducts();
+    });
+
+    async function loadUserBalance(uid) {
+      try {
+        const userSnap = await db.collection("users").doc(uid).get();
+        if (userSnap.exists) {
+          const data = userSnap.data();
+          const saldo = data.balance || 0;
+          balanceAmountEl.textContent = "Rp " + formatRupiah(saldo);
+        } else {
+          balanceAmountEl.textContent = "Rp 0";
+        }
+      } catch (err) {
+        console.error("Error load saldo:", err);
+        balanceAmountEl.textContent = "Rp 0";
+      }
+    }
+
+    // ===== Produk =====
+    async function loadProducts() {
+      productListEl.innerHTML = '<p class="info-text">Memuat produk...</p>';
+
+      try {
+        const snap = await db.collection("products").orderBy("id", "asc").get();
+        if (snap.empty) {
+          productListEl.innerHTML = '<p class="info-text">Produk belum tersedia.</p>';
+          return;
         }
 
-        snap.forEach(doc=>{
-            const p = doc.data();
-            const price = parseAmount(p.price);
-
-            listEl.innerHTML += `
-                <div class="card">
-                    <div class="title">${p.name}</div>
-                    <div>Kategori: ${p.category}</div>
-                    <div>Harga: ${rupiah(price)}</div>
-                    <button class="btn-beli"
-                        onclick="beliProduk('${doc.id}','${encodeURIComponent(p.name)}','${p.category}','${p.price}')">
-                        Beli Sekarang
-                    </button>
-                </div>
-            `;
+        allProducts = [];
+        snap.forEach(doc => {
+          allProducts.push({ id: doc.id, ...doc.data() });
         });
+
+        renderProducts("all");
+      } catch (err) {
+        console.error(err);
+        productListEl.innerHTML = '<p class="info-text">Gagal memuat produk: ' + err.message + '</p>';
+      }
+    }
+
+    function renderProducts(filter) {
+      productListEl.innerHTML = "";
+      const normalizedFilter = (filter || "all").toLowerCase();
+
+      const filtered = allProducts.filter(p => {
+        if (normalizedFilter === "all") return true;
+        const cat = (p.category || "").toLowerCase().trim();
+        return cat === normalizedFilter;
+      });
+
+      if (!filtered.length) {
+        productListEl.innerHTML = '<p class="info-text">Produk tidak ditemukan untuk kategori ini.</p>';
+        return;
+      }
+
+      filtered.forEach(p => {
+        const priceNumber = parsePrice(p.price);
+        const priceText = "Rp " + formatRupiah(priceNumber);
+        const catClass = badgeClassForCategory(p.category);
+        const name = p.name || p.productName || "Produk";
+        const icon = p.icon || "";
+
+        const card = document.createElement("div");
+        card.className = "card-product";
+        card.innerHTML = `
+          <div class="card-header">
+            <div class="product-main">
+              <div class="product-name">
+                ${icon ? `<span class="emoji">${icon}</span>` : ""}
+                <span>${name}</span>
+              </div>
+              <div class="product-meta">Kategori: ${p.category || "-"}</div>
+            </div>
+            <div>
+              <span class="badge-category ${catClass}">${(p.category || "Produk").toUpperCase()}</span>
+            </div>
+          </div>
+          <div class="price-row">
+            <div class="price-label">Harga</div>
+            <div class="price-value">${priceText}</div>
+          </div>
+          <button class="btn-buy">Beli Sekarang</button>
+        `;
+
+        const btn = card.querySelector(".btn-buy");
+        btn.addEventListener("click", () => handleBuy(p, priceNumber));
+
+        productListEl.appendChild(card);
+      });
+    }
+
+    // ===== Filter chip logic =====
+    document.querySelectorAll(".filter-chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        const f = chip.getAttribute("data-filter");
+        renderProducts(f);
+      });
     });
-}
 
-/* ===== BELI PRODUK ===== */
-function beliProduk(productDocId, encodedName, category, rawPrice){
-    const user = auth.currentUser;
-    if(!user){
-        alert("Silakan login dulu.");
-        location.href = "login.html";
+    // ===== Buy handler =====
+    async function handleBuy(productData, priceNumber) {
+      const user = auth.currentUser;
+      if (!user) {
+        alert("Silakan login ulang.");
+        window.location.href = "login.html";
         return;
-    }
+      }
 
-    const productName = decodeURIComponent(encodedName);
-    const priceNumber = parseAmount(rawPrice);
+      const cat = (productData.category || "").toLowerCase();
 
-    const input = prompt("Masukkan data untuk pesanan ini (username/email/link):");
-    if(!input || !input.trim()){
-        alert("Input tidak boleh kosong.");
-        return;
-    }
+      let promptText = "Masukkan data yang dibutuhkan untuk order:";
+      if (cat === "sosmed") {
+        promptText = "Masukkan link / username / video yang ingin ditambahkan (IG/TikTok, dsb):";
+      } else if (cat === "panel") {
+        promptText = "Masukkan data: username:password (untuk panel):";
+      } else if (cat === "premium") {
+        promptText = "Masukkan email / username / data lain yang dibutuhkan untuk akun premium:";
+      }
 
-    const userRef = db.collection("users").doc(user.uid);
+      const userInput = prompt(promptText);
+      if (!userInput) return;
 
-    db.runTransaction(async tx=>{
-        const u = await tx.get(userRef);
-        const saldo = Number(u.data().balance || 0);
+      try {
+        const userRef = db.collection("users").doc(user.uid);
+        const userSnap = await userRef.get();
+        if (!userSnap.exists) {
+          alert("Data user tidak ditemukan.");
+          return;
+        }
 
-        if(saldo < priceNumber) throw new Error("Saldo kurang!");
+        const userData = userSnap.data();
+        const balance = userData.balance || 0;
 
-        tx.update(userRef,{ balance: saldo - priceNumber });
+        if (balance < priceNumber) {
+          alert("Saldo kamu tidak cukup. Silakan topup di menu Wallet.");
+          return;
+        }
 
-        tx.set(db.collection("orders").doc(), {
-            userId: user.uid,
-            userEmail: user.email,
-            productId: productDocId,
-            productName: productName,
-            price: priceNumber,
-            category: category,
-            inputUser: input,
-            status: "pending",
-            adminProduct: "",
-            userReceived: false,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        // potong saldo
+        await userRef.update({
+          balance: balance - priceNumber
         });
-    })
-    .then(()=>{
-        alert("Pesanan berhasil dibuat!");
-        location.href = "orders.html";
-    })
-    .catch(e=>{
-        alert("Gagal: " + e.message);
-    });
-}
 
-auth.onAuthStateChanged(user=>{
-    if(!user){
-        location.href = "login.html";
-    } else {
-        loadProducts();
+        // simpan order
+        await db.collection("orders").add({
+          userId: user.uid,
+          userEmail: user.email || "",
+          productId: productData.id || productData.productId || null,
+          productDocId: productData.docId || null,
+          productName: productData.name || productData.productName || "",
+          category: productData.category || "",
+          price: priceNumber,
+          userInput: userInput,
+          adminProduct: "",
+          status: "pending",
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          userReceived: false
+        });
+
+        alert("Order berhasil dibuat! Status: PENDING. Silakan cek di menu Orders.");
+        // refresh saldo di strip
+        await loadUserBalance(user.uid);
+
+      } catch (err) {
+        console.error("Error saat order:", err);
+        alert("Gagal membuat order: " + err.message);
+      }
     }
-});
-</script>
-
+  </script>
 </body>
 </html>
