@@ -1,354 +1,45 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <title>Pesanan Saya — Barmods Digital Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    :root {
-      --blue:#0052cc;
-      --blue-soft:#e6f0ff;
-      --gray-bg:#f5f5f5;
-      --text:#222;
-      --text-soft:#777;
-      --green:#0a9f4a;
-      --card-radius:18px;
-      --danger:#dc2626;
-    }
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:var(--gray-bg);
-      color:var(--text);
-    }
+<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Orders</title>
+<style>
+body{font-family:sans-serif;padding:20px;background:#f4f4f4;}
+.card{background:#fff;padding:20px;margin:10px 0;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+input,button{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ccc;}
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px;background:white;box-shadow:0 -4px 10px rgba(0,0,0,0.1);}
+a{text-decoration:none;color:#0062D1;}
+h1{text-align:center;}
+</style>
+</head><body>
+<h1>Orders</h1>
+<div id='list'></div>
+<div class='nav'>
+<a href='index.html'>Produk</a><a href='wallet.html'>Wallet</a><a href='orders.html'>Orders</a><a href='profile.html'>Profile</a>
+</div>
+<script>
+auth.onAuthStateChanged(u=>{if(!u)location.href='login.html';load();});
+function load(){
+ db.collection('orders').where('userId','==',auth.currentUser.uid).get().then(s=>{
+  list.innerHTML='';
+  s.forEach(d=>{
+    let o=d.data();
+    list.innerHTML+=`<div class='card'><b>${o.productName}</b><br>Status: ${o.status}<br>${o.adminProduct||''}</div>`;
+  });
+ });
+}
+</script>
 
-    header{
-      background:var(--blue);
-      color:#fff;
-      padding:14px 16px 18px;
-      text-align:center;
-      font-weight:600;
-      font-size:18px;
-      position:sticky;
-      top:0;
-      z-index:20;
-    }
-
-    .top-nav{
-      background:#fff;
-      display:flex;
-      justify-content:center;
-      gap:8px;
-      padding:10px 8px;
-      box-shadow:0 1px 3px rgba(0,0,0,.06);
-      position:sticky;
-      top:54px;
-      z-index:19;
-    }
-    .top-nav button{
-      border:none;
-      padding:8px 16px;
-      border-radius:999px;
-      background:#eef1ff;
-      color:#334;
-      font-size:14px;
-      cursor:pointer;
-    }
-    .top-nav button.active{
-      background:var(--blue);
-      color:#fff;
-    }
-
-    main{
-      max-width:900px;
-      margin:0 auto;
-      padding:16px 12px 80px;
-    }
-
-    .info-card{
-      background:#e0edff;
-      border-radius:var(--card-radius);
-      padding:12px 14px;
-      font-size:13px;
-      color:#1f2937;
-      margin-bottom:14px;
-    }
-    .info-card strong{ font-weight:700; }
-
-    .order-list{ display:flex; flex-direction:column; gap:10px; }
-
-    .order-card{
-      background:#fff;
-      border-radius:var(--card-radius);
-      padding:12px 14px 10px;
-      box-shadow:0 2px 6px rgba(0,0,0,.06);
-      font-size:13px;
-    }
-    .order-top{
-      display:flex;
-      justify-content:space-between;
-      margin-bottom:4px;
-    }
-    .order-product{ font-weight:600; }
-    .order-time{ color:var(--text-soft); }
-
-    .order-line{
-      display:flex;
-      justify-content:space-between;
-      margin-bottom:2px;
-    }
-    .order-label{ color:var(--text-soft); }
-    .order-value{ font-weight:500; }
-
-    .order-status{
-      font-size:12px;
-      padding:2px 8px;
-      border-radius:999px;
-      text-transform:capitalize;
-    }
-    .st-pending{ background:#fef3c7; color:#92400e; }
-    .st-proses{  background:#dbeafe; color:#1d4ed8; }
-    .st-sukses{  background:#dcfce7; color:#15803d; }
-    .st-error{   background:#fee2e2; color:#b91c1c; }
-
-    .order-admin{
-      margin-top:6px;
-      font-size:12px;
-      color:#374151;
-      background:#f9fafb;
-      border-radius:10px;
-      padding:6px 8px;
-    }
-
-    .empty-state{
-      margin-top:24px;
-      text-align:center;
-      font-size:14px;
-      color:var(--text-soft);
-    }
-
-    .bottom-nav{
-      position:fixed;
-      bottom:0;left:0;right:0;
-      background:#fff;
-      border-top:1px solid #e4e4e4;
-      display:flex;
-      justify-content:space-around;
-      padding:6px 0 8px;
-      z-index:30;
-    }
-    .bottom-nav button{
-      background:none;
-      border:none;
-      font-size:11px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:4px;
-      color:#555;
-      cursor:pointer;
-    }
-    .bottom-nav button span.icon{ font-size:20px; }
-    .bottom-nav button.active{ color:var(--blue); }
-  </style>
-</head>
-<body>
-  <header>Pesanan Saya</header>
-
-  <nav class="top-nav">
-    <button id="nav-home" type="button">Home</button>
-    <button id="nav-wallet" type="button">Wallet</button>
-    <button id="nav-orders" class="active" type="button">Pesanan</button>
-    <button id="nav-profile" type="button">Profil</button>
-  </nav>
-
-  <main>
-    <div class="info-card">
-      Status pesanan: <strong>pending</strong> = menunggu diproses,
-      <strong>proses</strong> = sedang dikerjakan,
-      <strong>sukses</strong> = selesai &amp; produk sudah dikirim,
-      <strong>error</strong> = ada kendala (hubungi admin).
-    </div>
-
-    <div id="orders-list" class="order-list">
-      Memuat pesanan...
-    </div>
-
-    <div id="orders-empty" class="empty-state" style="display:none">
-      Belum ada pesanan.
-    </div>
-  </main>
-
-  <nav class="bottom-nav">
-    <button id="bottom-home" type="button">
-      <span class="icon">🏠</span>
-      Home
-    </button>
-    <button id="bottom-wallet" type="button">
-      <span class="icon">💳</span>
-      Wallet
-    </button>
-    <button id="bottom-orders" class="active" type="button">
-      <span class="icon">📦</span>
-      Pesanan
-    </button>
-    <button id="bottom-profile" type="button">
-      <span class="icon">👤</span>
-      Profil
-    </button>
-  </nav>
-
-  <!-- NAV SCRIPT -->
-  <script>
-    function go(path){ window.location.href = path; }
-
-    function setActiveTopNav(id){
-      document.querySelectorAll(".top-nav button").forEach(b=>b.classList.remove("active"));
-      const t = document.getElementById(id);
-      if(t) t.classList.add("active");
-
-      document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));
-      const map = {
-        "nav-home":"bottom-home",
-        "nav-wallet":"bottom-wallet",
-        "nav-orders":"bottom-orders",
-        "nav-profile":"bottom-profile",
-      };
-      const bottomId = map[id];
-      if(bottomId){
-        const b = document.getElementById(bottomId);
-        if(b) b.classList.add("active");
-      }
-    }
-
-    document.getElementById("nav-home").onclick   = ()=>{ setActiveTopNav("nav-home"); go("index.html"); };
-    document.getElementById("nav-wallet").onclick = ()=>{ setActiveTopNav("nav-wallet"); go("wallet.html"); };
-    document.getElementById("nav-orders").onclick = ()=>{ setActiveTopNav("nav-orders"); go("orders.html"); };
-    document.getElementById("nav-profile").onclick= ()=>{ setActiveTopNav("nav-profile"); go("profile.html"); };
-
-    document.getElementById("bottom-home").onclick   = ()=>{ setActiveTopNav("nav-home"); go("index.html"); };
-    document.getElementById("bottom-wallet").onclick = ()=>{ setActiveTopNav("nav-wallet"); go("wallet.html"); };
-    document.getElementById("bottom-orders").onclick = ()=>{ setActiveTopNav("nav-orders"); go("orders.html"); };
-    document.getElementById("bottom-profile").onclick= ()=>{ setActiveTopNav("nav-profile"); go("profile.html"); };
-
-    setActiveTopNav("nav-orders");
-  </script>
-
-  <!-- FIREBASE SCRIPT -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      getDocs,
-    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-      authDomain: "toko-barmods.firebaseapp.com",
-      projectId: "toko-barmods",
-      storageBucket: "toko-barmods.firebasestorage.app",
-      messagingSenderId: "284047189012",
-      appId: "1:284047189012:web:6ef0c6891adab08a383301",
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db  = getFirestore(app);
-    const ORDERS = "orders";
-
-    const ordersList = document.getElementById("orders-list");
-    const emptyState = document.getElementById("orders-empty");
-
-    const userEmail = localStorage.getItem("userEmail");
-    if (!userEmail){
-      window.location.href = "login.html";
-    } else {
-      loadOrders();
-    }
-
-    async function loadOrders(){
-      try{
-        ordersList.textContent = "Memuat pesanan...";
-        emptyState.style.display = "none";
-
-        // ambil semua => filter by userEmail (biar nggak kena error index)
-        const snap = await getDocs(collection(db, ORDERS));
-        const list = [];
-        snap.forEach(d=>{
-          const o = d.data();
-          if (o.userEmail === userEmail){
-            list.push({id:d.id, ...o});
-          }
-        });
-
-        if (!list.length){
-          ordersList.textContent = "";
-          emptyState.style.display = "block";
-          return;
-        }
-
-        // sort terbaru dulu
-        list.sort((a,b)=>{
-          const ta = a.createdAt?.seconds || 0;
-          const tb = b.createdAt?.seconds || 0;
-          return tb - ta;
-        });
-
-        ordersList.innerHTML = "";
-        list.forEach(o=>{
-          const div = document.createElement("div");
-          div.className = "order-card";
-
-          const waktu = o.createdAt?.toDate ? o.createdAt.toDate().toLocaleString("id-ID") : "-";
-          const priceNum = Number(o.price ?? 0);
-          const priceText = priceNum ? "Rp " + priceNum.toLocaleString("id-ID") : "-";
-
-          const status = o.status || "pending";
-          const stClass =
-            status === "sukses" ? "st-sukses" :
-            status === "proses" ? "st-proses" :
-            status === "error"  ? "st-error"  :
-                                  "st-pending";
-
-          div.innerHTML = `
-            <div class="order-top">
-              <span class="order-product">${o.productName ?? "-"}</span>
-              <span class="order-time">${waktu}</span>
-            </div>
-            <div class="order-line">
-              <span class="order-label">Harga</span>
-              <span class="order-value">${priceText}</span>
-            </div>
-            <div class="order-line">
-              <span class="order-label">Kategori</span>
-              <span class="order-value">${o.category ?? "-"}</span>
-            </div>
-            <div class="order-line">
-              <span class="order-label">Status</span>
-              <span class="order-status ${stClass}">${status}</span>
-            </div>
-            ${
-              o.orderData
-                ? `<div class="order-line">
-                    <span class="order-label">Data Order</span>
-                    <span class="order-value">${o.orderData}</span>
-                  </div>`
-                : ""
-            }
-            ${
-              o.adminProduct
-                ? `<div class="order-admin"><strong>Produk dari admin:</strong><br>${o.adminProduct}</div>`
-                : ""
-            }
-          `;
-          ordersList.appendChild(div);
-        });
-      }catch(e){
-        console.error(e);
-        ordersList.textContent = "Gagal memuat pesanan: " + (e.message || e);
-      }
-    }
-  </script>
-</body>
-</html>
+<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js'></script>
+<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js'></script>
+<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js'></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+  authDomain: "toko-barmods.firebaseapp.com",
+  projectId: "toko-barmods",
+  storageBucket: "toko-barmods.firebasestorage.app",
+  messagingSenderId: "284047189012",
+  appId: "1:284047189012:web:6ef0c6891adab08a383301"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+</script>
+</body></html>
