@@ -227,10 +227,10 @@
     </div>
 
     <div id="products" class="products-list">
-      <!-- kartu produk akan diisi lewat JS -->
+      <!-- kartu produk dari Firebase -->
     </div>
 
-    <div id="empty" class="empty-state" style="display: none">
+    <div id="empty" class="empty-state" style="display:none">
       Tidak ada produk.
     </div>
   </main>
@@ -255,7 +255,125 @@
     </button>
   </nav>
 
-  <!-- FIREBASE + LOGIC -->
+  <!-- SCRIPT 1: NAV & TAB (TANPA FIREBASE, PASTI JALAN) -->
+  <script>
+    // global untuk komunikasi dengan script Firebase
+    window.currentCategoryKey = "premium"; // default
+    window.reloadProducts = null; // akan diisi oleh script Firebase nanti
+
+    function go(path) {
+      // PASTIKAN kamu punya file: index.html, wallet.html, orders.html, profile.html
+      window.location.href = path;
+    }
+
+    function setActiveTopNav(id) {
+      document
+        .querySelectorAll(".top-nav button")
+        .forEach((b) => b.classList.remove("active"));
+      const btn = document.getElementById(id);
+      if (btn) btn.classList.add("active");
+
+      document
+        .querySelectorAll(".bottom-nav button")
+        .forEach((b) => b.classList.remove("active"));
+
+      const map = {
+        "nav-home": "bottom-home",
+        "nav-wallet": "bottom-wallet",
+        "nav-orders": "bottom-orders",
+        "nav-profile": "bottom-profile",
+      };
+      const bottomId = map[id];
+      if (bottomId) {
+        const b = document.getElementById(bottomId);
+        if (b) b.classList.add("active");
+      }
+    }
+
+    // Top nav klik
+    document.getElementById("nav-home").onclick = function () {
+      setActiveTopNav("nav-home");
+      go("index.html");
+    };
+    document.getElementById("nav-wallet").onclick = function () {
+      setActiveTopNav("nav-wallet");
+      go("wallet.html");
+    };
+    document.getElementById("nav-orders").onclick = function () {
+      setActiveTopNav("nav-orders");
+      go("orders.html");
+    };
+    document.getElementById("nav-profile").onclick = function () {
+      setActiveTopNav("nav-profile");
+      go("profile.html");
+    };
+
+    // Bottom nav klik
+    document.getElementById("bottom-home").onclick = function () {
+      setActiveTopNav("nav-home");
+      go("index.html");
+    };
+    document.getElementById("bottom-wallet").onclick = function () {
+      setActiveTopNav("nav-wallet");
+      go("wallet.html");
+    };
+    document.getElementById("bottom-orders").onclick = function () {
+      setActiveTopNav("nav-orders");
+      go("orders.html");
+    };
+    document.getElementById("bottom-profile").onclick = function () {
+      setActiveTopNav("nav-profile");
+      go("profile.html");
+    };
+
+    // TAB KATEGORI (hanya ganti UI + variabel global, load data di-handle script Firebase)
+    const label = document.getElementById("category-label");
+
+    function setActiveCategory(key) {
+      window.currentCategoryKey = key;
+
+      document
+        .querySelectorAll(".category-tabs button")
+        .forEach((b) => b.classList.remove("active"));
+
+      if (key === "premium")
+        document.getElementById("tab-premium").classList.add("active");
+      if (key === "sosmed")
+        document.getElementById("tab-sosmed").classList.add("active");
+      if (key === "panel")
+        document.getElementById("tab-panel").classList.add("active");
+
+      const labelText =
+        key === "premium"
+          ? "Premium Apps"
+          : key === "sosmed"
+          ? "Sosial Media"
+          : "Panel & Tools";
+
+      label.innerHTML =
+        "Menampilkan kategori: <strong>" + labelText + "</strong>";
+
+      // kalau script Firebase sudah siap, panggil reloadProducts()
+      if (typeof window.reloadProducts === "function") {
+        window.reloadProducts();
+      }
+    }
+
+    document.getElementById("tab-premium").onclick = function () {
+      setActiveCategory("premium");
+    };
+    document.getElementById("tab-sosmed").onclick = function () {
+      setActiveCategory("sosmed");
+    };
+    document.getElementById("tab-panel").onclick = function () {
+      setActiveCategory("panel");
+    };
+
+    // set awal
+    setActiveCategory("premium");
+  </script>
+
+  <!-- SCRIPT 2: FIREBASE (BOLEH ERROR, TOMBOL TETAP JALAN) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
     import {
@@ -266,7 +384,6 @@
       where,
     } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-    // ================== CONFIG FIREBASE ==================
     const firebaseConfig = {
       apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
       authDomain: "toko-barmods.firebaseapp.com",
@@ -278,109 +395,36 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-
     const PRODUCTS_COLLECTION = "products";
 
-    // ======= NAV HALAMAN (HOME / WALLET / PESANAN / PROFIL) =======
-    function setActiveTopNav(id) {
-      document
-        .querySelectorAll(".top-nav button")
-        .forEach((b) => b.classList.remove("active"));
-      const btn = document.getElementById(id);
-      if (btn) btn.classList.add("active");
-
-      document
-        .querySelectorAll(".bottom-nav button")
-        .forEach((b) => b.classList.remove("active"));
-      const map = {
-        nav-home: "bottom-home",
-        nav-wallet: "bottom-wallet",
-        nav-orders: "bottom-orders",
-        nav-profile: "bottom-profile",
-      };
-      const bottomId = map[id];
-      if (bottomId) {
-        const b = document.getElementById(bottomId);
-        if (b) b.classList.add("active");
-      }
-    }
-
-    function go(path) {
-      // Pastikan semua pakai .html
-      window.location.href = path;
-    }
-
-    // Top nav
-    document.getElementById("nav-home").addEventListener("click", () => {
-      setActiveTopNav("nav-home");
-      go("index.html");
-    });
-    document.getElementById("nav-wallet").addEventListener("click", () => {
-      setActiveTopNav("nav-wallet");
-      go("wallet.html");
-    });
-    document.getElementById("nav-orders").addEventListener("click", () => {
-      setActiveTopNav("nav-orders");
-      go("orders.html");
-    });
-    document.getElementById("nav-profile").addEventListener("click", () => {
-      setActiveTopNav("nav-profile");
-      go("profile.html");
-    });
-
-    // Bottom nav
-    document.getElementById("bottom-home").addEventListener("click", () => {
-      setActiveTopNav("nav-home");
-      go("index.html");
-    });
-    document.getElementById("bottom-wallet").addEventListener("click", () => {
-      setActiveTopNav("nav-wallet");
-      go("wallet.html");
-    });
-    document.getElementById("bottom-orders").addEventListener("click", () => {
-      setActiveTopNav("nav-orders");
-      go("orders.html");
-    });
-    document.getElementById("bottom-profile").addEventListener("click", () => {
-      setActiveTopNav("nav-profile");
-      go("profile.html");
-    });
-
-    // ======= LOGIC PRODUK =======
     const productsContainer = document.getElementById("products");
     const emptyState = document.getElementById("empty");
-    const label = document.getElementById("category-label");
 
-    // nilai category di Firestore (sesuaikan dengan koleksi kamu)
     const CATEGORY_FIRESTORE = {
-      premium: "premium", // untuk tab Premium Apps
-      sosmed: "sosmed", // untuk Sosial Media
-      panel: "panel", // untuk Panel & Tools
+      premium: "premium",
+      sosmed: "sosmed",
+      panel: "panel",
     };
 
-    let currentCategoryKey = "premium";
-
-    async function loadProducts() {
-      productsContainer.innerHTML = "";
-      emptyState.style.display = "none";
+    window.reloadProducts = async function () {
       productsContainer.innerHTML = "<div>Memuat produk...</div>";
+      emptyState.style.display = "none";
 
       try {
-        const catValue = CATEGORY_FIRESTORE[currentCategoryKey];
+        const key = window.currentCategoryKey || "premium";
+        const cat = CATEGORY_FIRESTORE[key];
 
         let qRef;
-        if (catValue) {
-          // hanya where, TANPA orderBy → tidak perlu index.
+        if (cat) {
           qRef = query(
             collection(db, PRODUCTS_COLLECTION),
-            where("category", "==", catValue)
+            where("category", "==", cat)
           );
         } else {
           qRef = collection(db, PRODUCTS_COLLECTION);
         }
 
         const snap = await getDocs(qRef);
-
         productsContainer.innerHTML = "";
 
         if (snap.empty) {
@@ -391,15 +435,14 @@
         snap.forEach((docSnap) => {
           const data = docSnap.data();
 
-          // handle harga (bisa number atau string)
+          // harga → aman dari NaN
           let priceText = "-";
           if (typeof data.price === "number") {
-            priceText = `Rp ${data.price.toLocaleString("id-ID")}`;
+            priceText = "Rp " + data.price.toLocaleString("id-ID");
           } else if (typeof data.price === "string" && data.price.trim() !== "") {
-            // kalau kamu simpan "6000" sebagai string
             const num = Number(data.price);
             if (!Number.isNaN(num)) {
-              priceText = `Rp ${num.toLocaleString("id-ID")}`;
+              priceText = "Rp " + num.toLocaleString("id-ID");
             } else {
               priceText = data.price;
             }
@@ -427,11 +470,7 @@
             </div>
             <div class="product-price">${priceText}</div>
             <div class="product-actions">
-              <button
-                type="button"
-                class="btn-order"
-                data-id="${docSnap.id}"
-              >
+              <button type="button" class="btn-order" data-id="${docSnap.id}">
                 Order
               </button>
             </div>
@@ -439,16 +478,13 @@
           productsContainer.appendChild(card);
         });
 
-        // pasang event listener untuk tombol Order
-        productsContainer
-          .querySelectorAll(".btn-order")
-          .forEach((btn) => {
-            btn.addEventListener("click", () => {
-              const productId = btn.dataset.id;
-              alert("Order produk ID: " + productId);
-              // di sini nanti kamu lanjutkan buka popup form order, dsb.
-            });
+        productsContainer.querySelectorAll(".btn-order").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const productId = btn.dataset.id;
+            alert("Order produk ID: " + productId);
+            // nanti di sini bisa lanjut buka form order
           });
+        });
       } catch (err) {
         console.error(err);
         productsContainer.innerHTML =
@@ -456,48 +492,10 @@
           (err.message || err) +
           "</div>";
       }
-    }
+    };
 
-    // ======= TAB KATEGORI =======
-    function setActiveCategory(key) {
-      currentCategoryKey = key;
-
-      document
-        .querySelectorAll(".category-tabs button")
-        .forEach((b) => b.classList.remove("active"));
-
-      if (key === "premium")
-        document.getElementById("tab-premium").classList.add("active");
-      if (key === "sosmed")
-        document.getElementById("tab-sosmed").classList.add("active");
-      if (key === "panel")
-        document.getElementById("tab-panel").classList.add("active");
-
-      const labelText =
-        key === "premium"
-          ? "Premium Apps"
-          : key === "sosmed"
-          ? "Sosial Media"
-          : "Panel & Tools";
-
-      label.innerHTML =
-        'Menampilkan kategori: <strong>' + labelText + "</strong>";
-
-      loadProducts();
-    }
-
-    document
-      .getElementById("tab-premium")
-      .addEventListener("click", () => setActiveCategory("premium"));
-    document
-      .getElementById("tab-sosmed")
-      .addEventListener("click", () => setActiveCategory("sosmed"));
-    document
-      .getElementById("tab-panel")
-      .addEventListener("click", () => setActiveCategory("panel"));
-
-    // pertama kali
-    setActiveCategory("premium");
+    // load pertama
+    window.reloadProducts();
   </script>
 </body>
 </html>
