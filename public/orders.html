@@ -103,31 +103,29 @@
 </nav>
 
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
   authDomain: "toko-barmods.firebaseapp.com",
   projectId: "toko-barmods",
-  storageBucket: "toko-barmods.firebasestorage.app",
+  storageBucket: "toko-barmods.appspot.com",
   messagingSenderId: "284047189012",
   appId: "1:284047189012:web:6ef0c6891adab08a383301"
 };
 firebase.initializeApp(firebaseConfig);
-const db   = firebase.firestore();
+const db = firebase.firestore();
 const auth = firebase.auth();
 
 function rupiah(n){
   n = Number(n || 0);
   return "Rp " + n.toLocaleString("id-ID");
 }
-
-// ambil milidetik dari field createdAt (apapun tipenya)
 function getMillis(createdAt){
   if(!createdAt) return 0;
   if(typeof createdAt.toMillis === "function") return createdAt.toMillis();
-  if(typeof createdAt.toDate   === "function") return createdAt.toDate().getTime();
+  if(typeof createdAt.toDate === "function") return createdAt.toDate().getTime();
   if(typeof createdAt === "number") return createdAt;
   if(typeof createdAt === "string"){
     const d = new Date(createdAt);
@@ -149,12 +147,11 @@ function renderOrders(uid){
 
       const arr = [];
       snap.forEach(doc=>{
-        const o = doc.data();
-        o._id   = doc.id;
-        arr.push(o);
+        const data = doc.data();
+        data._id = doc.id;
+        arr.push(data);
       });
 
-      // urutkan terbaru di atas
       arr.sort((a,b)=> getMillis(b.createdAt) - getMillis(a.createdAt));
 
       wrap.innerHTML = "";
@@ -163,8 +160,8 @@ function renderOrders(uid){
         const status   = o.status || "pending";
 
         let stClass = "st-pending";
-        if(status==="process") stClass = "st-process";
-        if(status==="success") stClass = "st-success";
+        if(status==="process") stClass="st-process";
+        if(status==="success") stClass="st-success";
 
         let tglText = "-";
         const cAt = o.createdAt;
@@ -227,7 +224,6 @@ function markReceived(orderId){
     .catch(err=>alert("Gagal update: "+err.message));
 }
 
-// wajib login
 auth.onAuthStateChanged(user=>{
   if(!user){
     location.href = "login.html";
