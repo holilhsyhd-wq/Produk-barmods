@@ -1,148 +1,247 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>Orders - Barmods Store</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daftar Pesanan - Barmods</title>
+  <style>
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:#020617;
+      color:#e5e7eb;
+      padding-bottom:60px;
+    }
+    header{
+      text-align:center;
+      padding:14px 0;
+      background:#0f172a;
+      border-bottom:1px solid #1f2937;
+      font-weight:700;
+    }
+    .card{
+      background:#0f172a;
+      margin:10px;
+      padding:12px;
+      border-radius:12px;
+      border:1px solid #1f2937;
+      box-shadow:0 0 10px rgba(0,0,0,0.4);
+      font-size:13px;
+    }
+    .title{
+      font-weight:600;
+      margin-bottom:4px;
+    }
+    .label{
+      font-size:11px;
+      color:#9ca3af;
+      margin-top:4px;
+    }
+    .value{
+      font-size:13px;
+      margin-top:2px;
+    }
+    .status-pill{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      font-size:11px;
+      margin-top:4px;
+    }
+    .st-pending{background:#facc15;color:#111827;}
+    .st-process{background:#60a5fa;color:#111827;}
+    .st-success{background:#22c55e;color:#052e16;}
 
-<style>
-  body{
-    font-family:sans-serif;
-    margin:0;
-    background:#0d1117;
-    color:white;
-    padding-bottom:80px;
-  }
-  h1{text-align:center;margin:20px 0;font-size:22px;}
+    .btn{
+      border:none;
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:12px;
+      font-weight:600;
+      margin-top:8px;
+      cursor:pointer;
+    }
+    .btn-main{background:#2563eb;color:white;}
+    .btn-disabled{background:#1f2937;color:#6b7280;}
 
-  .card{
-    background:#161b22;
-    margin:12px;
-    padding:15px;
-    border-radius:14px;
-    box-shadow:0 0 12px rgba(0,0,0,0.4);
-  }
-
-  .status{
-    font-weight:bold;
-    padding:4px 8px;
-    border-radius:6px;
-    display:inline-block;
-    margin-top:6px;
-  }
-
-  .pending{background:#fbbf24;color:black;}
-  .process{background:#60a5fa;color:black;}
-  .success{background:#4ade80;color:black;}
-
-  .nav{
-    position:fixed;bottom:0;left:0;right:0;
-    background:#161b22;
-    display:flex;
-    justify-content:space-around;
-    padding:10px 0;
-    box-shadow:0 -4px 12px rgba(0,0,0,0.4);
-  }
-  .nav a{color:#58a6ff;text-decoration:none;font-size:14px;}
-
-  .small{color:#9ca3af;font-size:13px;}
-</style>
+    /* bottom nav */
+    .bottom-nav{
+      position:fixed;
+      left:0;right:0;bottom:0;
+      height:48px;
+      background:#020617;
+      border-top:1px solid #1f2937;
+      display:flex;
+      font-size:12px;
+    }
+    .nav-item{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#9ca3af;
+      text-decoration:none;
+    }
+    .nav-item.active{
+      color:#2563eb;
+      font-weight:600;
+    }
+  </style>
 </head>
 <body>
 
-<h1>Daftar Pesanan</h1>
+<header>Daftar Pesanan</header>
 
-<div id="orders"></div>
-
-<div class="nav">
-  <a href="index.html">Produk</a>
-  <a href="wallet.html">Wallet</a>
-  <a href="orders.html">Orders</a>
-  <a href="profile.html">Profile</a>
+<div id="ordersContainer">
+  <div class="card">Memuat pesanan...</div>
 </div>
 
-<!-- FIREBASE -->
+<!-- Bottom nav -->
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item">Produk</a>
+  <a href="wallet.html" class="nav-item">Wallet</a>
+  <a href="orders.html" class="nav-item active">Orders</a>
+  <a href="profile.html" class="nav-item">Profile</a>
+</nav>
+
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-
 <script>
-// FIREBASE INIT
-const firebaseConfig={
-  apiKey:"AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-  authDomain:"toko-barmods.firebaseapp.com",
-  projectId:"toko-barmods"
+const firebaseConfig = {
+  apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+  authDomain: "toko-barmods.firebaseapp.com",
+  projectId: "toko-barmods",
+  storageBucket: "toko-barmods.firebasestorage.app",
+  messagingSenderId: "284047189012",
+  appId: "1:284047189012:web:6ef0c6891adab08a383301"
 };
 firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth();
-const db=firebase.firestore();
+const db = firebase.firestore();
+const auth = firebase.auth();
 
-auth.onAuthStateChanged(u=>{
-  if(!u) return location.href="login.html";
-  loadOrders();
-});
+function rupiah(num){
+  num = Number(num || 0);
+  return "Rp " + num.toLocaleString("id-ID");
+}
 
-// ========================
-// LOAD ALL ORDERS FOR USER
-// ========================
-function loadOrders(){
-  const uid = auth.currentUser.uid;
-  const container = document.getElementById("orders");
-  container.innerHTML = "<div class='card'>Memuat pesanan...</div>";
+// bikin milidetik dari berbagai tipe createdAt (timestamp / number / string)
+function getMillis(createdAt){
+  if(!createdAt) return 0;
+  if(typeof createdAt.toMillis === "function") return createdAt.toMillis(); // Timestamp
+  if(typeof createdAt.toDate === "function") return createdAt.toDate().getTime();
+  if(typeof createdAt === "number") return createdAt;
+  if(typeof createdAt === "string"){
+    const d = new Date(createdAt);
+    if(!isNaN(d.getTime())) return d.getTime();
+  }
+  return 0;
+}
+
+function renderOrders(uid){
+  const wrap = document.getElementById("ordersContainer");
+  wrap.innerHTML = `<div class="card">Memuat pesanan...</div>`;
 
   db.collection("orders").where("userId","==",uid).get()
-  .then(q=>{
-    if(q.empty){
-      container.innerHTML = "<div class='card'>Belum ada pesanan.</div>";
-      return;
-    }
+    .then(snap=>{
+      if(snap.empty){
+        wrap.innerHTML = `<div class="card">Kamu belum pernah melakukan pesanan.</div>`;
+        return;
+      }
 
-    // sort manual by createdAt desc
-    const arr=[];
-    q.forEach(doc=>{
-      arr.push({id:doc.id, ...doc.data()});
+      const arr = [];
+      snap.forEach(doc=>{
+        const data = doc.data();
+        data._id = doc.id;
+        arr.push(data);
+      });
+
+      // sort terbaru dulu
+      arr.sort((a,b)=> getMillis(b.createdAt) - getMillis(a.createdAt));
+
+      wrap.innerHTML = "";
+      arr.forEach(o=>{
+        const hargaNum = Number(o.price || 0);
+        const status   = o.status || "pending";
+
+        let stClass = "st-pending";
+        if(status==="process") stClass="st-process";
+        if(status==="success") stClass="st-success";
+
+        // tanggal
+        let tglText = "-";
+        const cAt = o.createdAt;
+        if(cAt){
+          if(typeof cAt.toDate === "function"){
+            tglText = cAt.toDate().toLocaleString("id-ID");
+          }else if(typeof cAt === "number"){
+            tglText = new Date(cAt).toLocaleString("id-ID");
+          }else if(typeof cAt === "string"){
+            tglText = cAt;
+          }
+        }
+
+        // produk dari admin
+        const adminProd = o.adminProduct && o.adminProduct.trim() !== ""
+          ? o.adminProduct
+          : "Belum dikirim";
+
+        // tombol terima produk (kalau nanti mau dipakai)
+        let btn = "";
+        if(status==="success" && !o.userReceived){
+          btn = `<button class="btn btn-main" onclick="markReceived('${o._id}')">Tandai sudah diterima</button>`;
+        }else if(status==="success" && o.userReceived){
+          btn = `<button class="btn btn-disabled" disabled>Sudah diterima</button>`;
+        }
+
+        wrap.innerHTML += `
+          <div class="card">
+            <div class="title">${o.productName || "(tanpa nama)"}</div>
+            <div class="status-pill ${stClass}">${status.toUpperCase()}</div>
+
+            <div class="label">Tanggal</div>
+            <div class="value">${tglText}</div>
+
+            <div class="label">Harga</div>
+            <div class="value">${rupiah(hargaNum)}</div>
+
+            <div class="label">Data yang kamu kirim</div>
+            <div class="value">${o.inputUser || "-"}</div>
+
+            <div class="label">Produk dari admin</div>
+            <div class="value">${adminProd}</div>
+
+            ${btn}
+          </div>
+        `;
+      });
+    })
+    .catch(err=>{
+      wrap.innerHTML = `<div class="card">Gagal memuat pesanan: ${err.message}</div>`;
     });
-    arr.sort((a,b)=> (b.createdAt||0) - (a.createdAt||0));
-
-    container.innerHTML="";
-    arr.forEach(o=>{
-      const st = o.status || "pending";
-      let stClass = (st==="pending") ? "pending"
-                 : (st==="process") ? "process"
-                 : "success";
-
-      const tanggal = o.createdAt
-        ? new Date(o.createdAt).toLocaleString("id-ID")
-        : "-";
-
-      container.innerHTML += `
-        <div class="card">
-          <b>${o.productName}</b><br>
-          <div class="small">Tanggal: ${tanggal}</div>
-
-          <div class="status ${stClass}">${st.toUpperCase()}</div>
-
-          <div style="margin-top:10px;">
-            <div class="small">Harga: Rp ${Number(o.price||0).toLocaleString("id-ID")}</div>
-          </div>
-
-          <div style="margin-top:10px;">
-            <b>Data yang kamu kirim:</b><br>
-            <div class="small">${o.inputUser || "-"}</div>
-          </div>
-
-          <div style="margin-top:10px;">
-            <b>Produk dari admin:</b><br>
-            <div class="small">${o.adminProduct || "<i>Belum dikirim</i>"}</div>
-          </div>
-        </div>
-      `;
-    });
-  })
-  .catch(err=>{
-    container.innerHTML = "<div class='card'>Gagal load orders: "+err.message+"</div>";
-  });
 }
-</script>
 
+// user menandai produk sudah diterima (opsional)
+function markReceived(orderId){
+  if(!confirm("Tandai produk ini sudah kamu terima?")) return;
+  db.collection("orders").doc(orderId).update({userReceived:true})
+    .then(()=>{
+      alert("Terima kasih, pesanan ditandai sudah diterima.");
+      const u = auth.currentUser;
+      if(u) renderOrders(u.uid);
+    })
+    .catch(err=>alert("Gagal update: "+err.message));
+}
+
+// cek login user
+auth.onAuthStateChanged(user=>{
+  if(!user){
+    location.href = "login.html";
+  }else{
+    renderOrders(user.uid);
+  }
+});
+</script>
 </body>
 </html>
