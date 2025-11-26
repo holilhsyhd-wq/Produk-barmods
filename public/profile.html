@@ -1,177 +1,35 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profil — Barmods Digital Store</title>
-
+<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Orders</title>
 <style>
-* {
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family: Arial, Helvetica, sans-serif;
-}
-body {
-  background:#ffffff;
-  padding-bottom:70px;
-}
-
-/* HEADER */
-.header {
-  background:#1565c0;
-  color:white;
-  padding:20px;
-  text-align:center;
-  font-size:22px;
-  font-weight:bold;
-  box-shadow:0 4px 12px rgba(0,0,0,.25);
-}
-
-/* CARD */
-.card {
-  margin:18px;
-  background:#f5f5f5;
-  border-radius:14px;
-  border:1px solid #ddd;
-  padding:16px 14px;
-}
-.card-title {
-  font-size:18px;
-  font-weight:bold;
-  margin-bottom:8px;
-  color:#0d47a1;
-}
-.label {
-  font-size:13px;
-  color:#555;
-  margin-bottom:4px;
-}
-.value-box {
-  padding:10px 12px;
-  border-radius:10px;
-  background:#e3f2fd;
-  border:1px solid #90caf9;
-  font-size:14px;
-  margin-bottom:12px;
-  word-wrap:break-word;
-}
-.input {
-  width:100%;
-  padding:11px;
-  border-radius:10px;
-  border:1px solid #bbb;
-  margin-bottom:12px;
-  font-size:14px;
-}
-.btn-primary {
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  background:#0d47a1;
-  color:white;
-  font-size:15px;
-  cursor:pointer;
-  margin-top:4px;
-}
-.btn-danger {
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  background:#c62828;
-  color:white;
-  font-size:15px;
-  cursor:pointer;
-  margin-top:10px;
-}
-.info-text {
-  font-size:12px;
-  color:#666;
-  margin-top:6px;
-}
-
-/* NAVBAR */
-.navbar{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:65px;
-  background:#0d47a1;
-  color:white;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  box-shadow:0 -4px 12px rgba(0,0,0,0.25);
-}
-.nav-btn{
-  text-align:center;
-  font-size:13px;
-  cursor:pointer;
-}
-.nav-btn span{
-  display:block;
-  font-size:20px;
-}
+body{font-family:sans-serif;padding:20px;background:#f4f4f4;}
+.card{background:#fff;padding:20px;margin:10px 0;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+input,button{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ccc;}
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px;background:white;box-shadow:0 -4px 10px rgba(0,0,0,0.1);}
+a{text-decoration:none;color:#0062D1;}
+h1{text-align:center;}
 </style>
-</head>
-<body>
-
-<div class="header">Profil Saya</div>
-
-<div class="card">
-  <div class="card-title">Akun</div>
-
-  <div class="label">Email</div>
-  <div class="value-box" id="emailBox">Memuat...</div>
-
-  <div class="label">Saldo</div>
-  <div class="value-box" id="saldoBox">Rp 0</div>
+</head><body>
+<h1>Orders</h1>
+<div id='list'></div>
+<div class='nav'>
+<a href='index.html'>Produk</a><a href='wallet.html'>Wallet</a><a href='orders.html'>Orders</a><a href='profile.html'>Profile</a>
 </div>
+<script>
+auth.onAuthStateChanged(u=>{if(!u)location.href='login.html';load();});
+function load(){
+ db.collection('orders').where('userId','==',auth.currentUser.uid).get().then(s=>{
+  list.innerHTML='';
+  s.forEach(d=>{
+    let o=d.data();
+    list.innerHTML+=`<div class='card'><b>${o.productName}</b><br>Status: ${o.status}<br>${o.adminProduct||''}</div>`;
+  });
+ });
+}
+</script>
 
-<div class="card">
-  <div class="card-title">Data Profil</div>
-
-  <div class="label">Username</div>
-  <input class="input" id="usernameInput" placeholder="Username kamu">
-
-  <div class="label">Nomor HP</div>
-  <input class="input" id="phoneInput" placeholder="Nomor HP (opsional)">
-  
-  <button class="btn-primary" onclick="saveProfile()">Simpan Profil</button>
-  <div class="info-text">
-    Username akan digunakan untuk identitas di pesanan dan layanan tertentu.
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-title">Keluar</div>
-  <button class="btn-danger" onclick="logout()">Logout</button>
-  <div class="info-text">
-    Setelah logout, kamu harus login kembali untuk mengakses produk dan saldo.
-  </div>
-</div>
-
-<!-- NAVBAR -->
-<div class="navbar">
-  <div class="nav-btn" onclick="go('index.html')"><span>🏠</span>Home</div>
-  <div class="nav-btn" onclick="go('wallet.html')"><span>💳</span>Wallet</div>
-  <div class="nav-btn" onclick="go('orders.html')"><span>📦</span>Pesanan</div>
-  <div class="nav-btn" onclick="go('profile.html')"><span>👤</span>Profil</div>
-</div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-import {
-  getFirestore, doc, getDoc, setDoc, updateDoc
-} from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
-import {
-  getAuth, onAuthStateChanged, signOut
-} from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
-
-/* CONFIG */
+<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js'></script>
+<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js'></script>
+<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js'></script>
+<script>
 const firebaseConfig = {
   apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
   authDomain: "toko-barmods.firebaseapp.com",
@@ -180,72 +38,8 @@ const firebaseConfig = {
   messagingSenderId: "284047189012",
   appId: "1:284047189012:web:6ef0c6891adab08a383301"
 };
-
-const app  = initializeApp(firebaseConfig);
-const db   = getFirestore(app);
-const auth = getAuth(app);
-
-function go(x){ window.location.href = x; }
-
-let currentUser = null;
-let userDocRef  = null;
-
-onAuthStateChanged(auth, async (user)=>{
-  if(!user){
-    window.location.href = "login.html";
-    return;
-  }
-  currentUser = user;
-  userDocRef  = doc(db, "users", currentUser.uid);
-
-  document.getElementById("emailBox").innerText = currentUser.email || "-";
-
-  await loadProfile();
-});
-
-async function loadProfile(){
-  if(!userDocRef) return;
-
-  const snap = await getDoc(userDocRef);
-  let data = {};
-  if(snap.exists()){
-    data = snap.data();
-  } else {
-    // kalau belum ada dokumen, buat dasar
-    await setDoc(userDocRef, {
-      email: currentUser.email,
-      username: "",
-      phone: "",
-      balance: 0
-    });
-    data = { email: currentUser.email, username:"", phone:"", balance:0 };
-  }
-
-  document.getElementById("usernameInput").value = data.username || "";
-  document.getElementById("phoneInput").value    = data.phone || "";
-  document.getElementById("saldoBox").innerText  =
-    "Rp " + Number(data.balance || 0).toLocaleString("id-ID");
-}
-
-window.saveProfile = async function(){
-  if(!userDocRef) return;
-
-  const username = document.getElementById("usernameInput").value.trim();
-  const phone    = document.getElementById("phoneInput").value.trim();
-
-  await updateDoc(userDocRef, {
-    username: username,
-    phone: phone
-  });
-
-  alert("Profil berhasil disimpan.");
-};
-
-window.logout = async function(){
-  await signOut(auth);
-  window.location.href = "login.html";
-};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 </script>
-
-</body>
-</html>
+</body></html>
