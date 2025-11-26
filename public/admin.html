@@ -1,143 +1,178 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Admin Panel Barmods</title>
-<style>
-body {
-  margin:0;
-  font-family: system-ui, sans-serif;
-  background:#0f1115;
-  color:white;
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Panel Barmods</title>
+  <style>
+    body{
+      margin:0;
+      font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:#0b0f17;
+      color:#e5e7eb;
+      padding-bottom:60px;
+    }
+    header{
+      background:#0f172a;
+      padding:14px 16px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      border-bottom:1px solid #1f2937;
+    }
+    header h1{
+      margin:0;
+      font-size:18px;
+      font-weight:700;
+    }
+    .btn-logout{
+      background:#dc2626;
+      color:white;
+      border:none;
+      border-radius:8px;
+      padding:8px 12px;
+      font-size:13px;
+      font-weight:600;
+    }
 
-/* Header */
-header {
-  padding:15px;
-  text-align:center;
-  font-size:20px;
-  font-weight:700;
-  background:#11131a;
-  border-bottom:1px solid #1e212a;
-}
+    .tabs{
+      display:flex;
+      background:#020617;
+      border-bottom:1px solid #1f2937;
+    }
+    .tab-btn{
+      flex:1;
+      padding:12px 8px;
+      text-align:center;
+      border:none;
+      background:transparent;
+      color:#9ca3af;
+      font-size:14px;
+      font-weight:600;
+    }
+    .tab-btn.active{
+      background:#2563eb;
+      color:white;
+    }
 
-/* Tabs */
-.tab-container {
-  display:flex;
-  background:#11131a;
-  border-bottom:1px solid #1e212a;
-}
-.tab {
-  flex:1;
-  padding:12px;
-  text-align:center;
-  cursor:pointer;
-  color:#7b7f8b;
-  font-weight:600;
-}
-.tab.active {
-  background:#0d6efd;
-  color:white;
-  border-radius:4px;
-  margin:6px;
-}
+    .card{
+      background:#0f172a;
+      margin:10px;
+      padding:12px;
+      border-radius:12px;
+      box-shadow:0 0 12px rgba(0,0,0,0.4);
+      border:1px solid #1f2937;
+      font-size:13px;
+    }
 
-/* Card */
-.card {
-  background:#1a1c24;
-  padding:15px;
-  margin:12px;
-  border-radius:10px;
-  border:1px solid #22242d;
-  color:white;
-}
+    .label{
+      font-size:11px;
+      color:#9ca3af;
+      margin-top:6px;
+    }
+    .value{
+      font-size:13px;
+      margin-top:2px;
+    }
 
-.label {
-  margin-top:6px;
-  font-size:12px;
-  opacity:0.7;
-}
-.value {
-  font-size:14px;
-  margin-bottom:4px;
-}
+    .status-pill{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      font-size:11px;
+      margin-top:4px;
+    }
+    .st-pending{background:#facc15;color:#111827;}
+    .st-process{background:#60a5fa;color:#111827;}
+    .st-success{background:#22c55e;color:#052e16;}
 
-/* Status pill */
-.status-pill {
-  display:inline-block;
-  padding:5px 10px;
-  border-radius:20px;
-  font-size:11px;
-  margin-top:6px;
-}
-.st-success { background:#16a34a; }
-.st-process { background:#eab308; color:black; }
-.st-pending { background:#dc2626; }
+    .input{
+      width:100%;
+      padding:8px;
+      margin-top:4px;
+      border-radius:8px;
+      border:1px solid #1f2937;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:13px;
+    }
+    textarea{
+      width:100%;
+      padding:8px;
+      margin-top:4px;
+      border-radius:8px;
+      border:1px solid #1f2937;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:13px;
+      min-height:60px;
+      resize:vertical;
+    }
+    select{
+      width:100%;
+      padding:8px;
+      margin-top:4px;
+      border-radius:8px;
+      border:1px solid #1f2937;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:13px;
+    }
 
-/* Buttons */
-.btn {
-  background:#0d6efd;
-  color:white;
-  padding:10px;
-  border-radius:6px;
-  border:none;
-  width:100%;
-  margin-top:10px;
-  cursor:pointer;
-}
-.btn-save {
-  background:#16a34a;
-}
-.btn-del {
-  background:#dc2626;
-}
-.btn-small {
-  padding:6px;
-  font-size:12px;
-  width:auto;
-}
+    .btn{
+      border:none;
+      border-radius:8px;
+      padding:8px 10px;
+      font-size:13px;
+      font-weight:600;
+      margin-top:8px;
+      margin-right:6px;
+    }
+    .btn-main{background:#2563eb;color:white;}
+    .btn-save{background:#22c55e;color:white;}
+    .btn-del{background:#dc2626;color:white;}
+    .btn-small{padding:6px 10px;font-size:12px;}
 
-/* Forms */
-input, textarea, select {
-  width:100%;
-  background:#101218;
-  border:1px solid #2a2d37;
-  padding:10px;
-  border-radius:6px;
-  color:white;
-  margin-top:5px;
-}
-textarea {
-  height:80px;
-}
+    .subnote{
+      font-size:11px;
+      color:#9ca3af;
+      margin-top:4px;
+    }
 
-.error-note {
-  margin:6px 0;
-  font-size:11px;
-  color:#f87171;
-}
-</style>
+    .error-note{
+      color:#f97373;
+      font-size:11px;
+      margin-top:6px;
+    }
+  </style>
 </head>
 <body>
 
-<header>Admin Panel Barmods</header>
+<header>
+  <h1>Admin Panel Barmods</h1>
+  <button class="btn-logout" onclick="logoutAdmin()">Logout Admin</button>
+</header>
 
-<div class="tab-container">
-  <div class="tab active" onclick="showTab('produk')">Produk</div>
-  <div class="tab" onclick="showTab('topup')">Topup</div>
-  <div class="tab" onclick="showTab('saldo')">Saldo User</div>
-  <div class="tab" onclick="showTab('orders')">Orders</div>
+<div class="tabs">
+  <button id="tab-produk" class="tab-btn active" onclick="showTab('produk')">Produk</button>
+  <button id="tab-topup" class="tab-btn" onclick="showTab('topup')">Topup</button>
+  <button id="tab-saldo" class="tab-btn" onclick="showTab('saldo')">Saldo User</button>
+  <button id="tab-orders" class="tab-btn" onclick="showTab('orders')">Orders</button>
 </div>
 
-<div id="content" style="padding-bottom:40px;"></div>
+<div id="content"></div>
 
-<button style="position:fixed;top:15px;right:15px;background:#dc2626;color:white;border:none;padding:8px 12px;border-radius:5px;cursor:pointer;" onclick="logoutAdmin()">Logout Admin</button>
-
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 <script>
+/* ====== CEK LOGIN ADMIN LOCAL ====== */
+if(localStorage.getItem("adminBarmods")!=="yes"){
+  location.href = "login-admin.html";
+}
+
+/* ====== INIT FIREBASE ====== */
 const firebaseConfig = {
   apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
   authDomain: "toko-barmods.firebaseapp.com",
@@ -147,14 +182,439 @@ const firebaseConfig = {
   appId: "1:284047189012:web:6ef0c6891adab08a383301"
 };
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const db   = firebase.firestore();
+const auth = firebase.auth();
 
-/* Helper format harga */
-function rupiah(n){
-  return "Rp " + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,".");
+/* ====== HELPER ====== */
+function rupiah(num){
+  num = Number(num || 0);
+  return "Rp " + num.toLocaleString("id-ID");
 }
-function parseAmount(x){
-  if(!x) return 0;
-  x = x.toString().replace(/[^0-9]/g,"");
-  return Number(x || 0);
+function parseAmount(raw){
+  if(raw===null || raw===undefined) return 0;
+  let s = raw.toString().toLowerCase().trim();
+  if(s.endsWith("k")){
+    const n = Number(s.replace("k",""));
+    if(!isNaN(n)) return n*1000;
+  }
+  s = s.replace(/[^0-9]/g,"");
+  return Number(s || 0);
 }
+function logoutAdmin(){
+  localStorage.removeItem("adminBarmods");
+  auth.signOut().finally(()=>location.href="login-admin.html");
+}
+
+/* ====== TAB HANDLER ====== */
+let currentTab = "produk";
+let editingProductId = null;
+
+function setTabActive(name){
+  document.getElementById("tab-produk").classList.remove("active");
+  document.getElementById("tab-topup").classList.remove("active");
+  document.getElementById("tab-saldo").classList.remove("active");
+  document.getElementById("tab-orders").classList.remove("active");
+  document.getElementById("tab-"+name).classList.add("active");
+}
+
+function showTab(name){
+  currentTab = name;
+  setTabActive(name);
+  if(name==="produk") loadProdukAdmin();
+  if(name==="topup")  loadTopupAdmin();
+  if(name==="saldo")  loadUsersSaldo();
+  if(name==="orders") loadOrdersAdmin();
+}
+
+/* ====== PRODUK ====== */
+function loadProdukAdmin(){
+  const c = document.getElementById("content");
+  c.innerHTML = `
+    <div class="card">
+      <h3>Tambah / Edit Produk</h3>
+      <div class="label">Nama produk</div>
+      <input id="pName" class="input" placeholder="Nama produk">
+
+      <div class="label">Harga</div>
+      <input id="pPrice" class="input" placeholder="2000 / 2k / 10000">
+
+      <div class="label">Stok</div>
+      <input id="pStock" class="input" placeholder="Stok (angka)">
+
+      <div class="label">Kategori</div>
+      <input id="pCat" class="input" placeholder="premium / sosmed / panel">
+
+      <div class="label">Icon (emoji, opsional)</div>
+      <input id="pIcon" class="input" placeholder="🌟">
+
+      <button class="btn btn-save" onclick="saveProduct()">Simpan Produk</button>
+      <button class="btn btn-del" onclick="resetProductForm()">Reset Form</button>
+      <div id="editInfo" class="subnote">Mode: tambah baru</div>
+    </div>
+    <div id="listProduk"></div>
+  `;
+
+  db.collection("products").get().then(snap=>{
+    const box = document.getElementById("listProduk");
+    box.innerHTML = "";
+    if(snap.empty){
+      box.innerHTML = `<div class="card">Belum ada produk.</div>`;
+      return;
+    }
+    snap.forEach(doc=>{
+      const p = doc.data();
+      const hargaNumber = parseAmount(p.price);
+      box.innerHTML += `
+        <div class="card">
+          <b>${p.icon || ""} ${p.name || ""}</b>
+          <div class="label">Kategori</div>
+          <div class="value">${p.category || "-"}</div>
+
+          <div class="label">Harga</div>
+          <div class="value">${rupiah(hargaNumber)} <span class="subnote">(raw: ${p.price || "-"})</span></div>
+
+          <div class="label">Stok</div>
+          <div class="value">${p.stock || 0}</div>
+
+          <button class="btn btn-main btn-small" onclick="editProduct('${doc.id}')">Edit</button>
+          <button class="btn btn-del btn-small" onclick="deleteProduct('${doc.id}')">Hapus</button>
+        </div>
+      `;
+    });
+  }).catch(err=>{
+    alert("Gagal load produk: "+err.message);
+  });
+}
+
+function resetProductForm(){
+  editingProductId = null;
+  document.getElementById("pName").value  = "";
+  document.getElementById("pPrice").value = "";
+  document.getElementById("pStock").value = "";
+  document.getElementById("pCat").value   = "";
+  document.getElementById("pIcon").value  = "";
+  document.getElementById("editInfo").innerText = "Mode: tambah baru";
+}
+
+function saveProduct(){
+  const name  = document.getElementById("pName").value.trim();
+  const price = document.getElementById("pPrice").value.trim();
+  const stock = Number(document.getElementById("pStock").value || 0);
+  const cat   = document.getElementById("pCat").value.trim();
+  const icon  = document.getElementById("pIcon").value.trim();
+
+  if(!name || !price || !cat){
+    alert("Nama, harga dan kategori wajib diisi.");
+    return;
+  }
+
+  const data = {name, price, stock, category:cat, icon};
+
+  if(editingProductId){
+    db.collection("products").doc(editingProductId).update(data)
+      .then(()=>{alert("Produk diperbarui."); resetProductForm(); loadProdukAdmin();})
+      .catch(e=>alert("Gagal update: "+e.message));
+  }else{
+    db.collection("products").add(data)
+      .then(()=>{alert("Produk ditambahkan."); resetProductForm(); loadProdukAdmin();})
+      .catch(e=>alert("Gagal tambah: "+e.message));
+  }
+}
+
+function editProduct(id){
+  db.collection("products").doc(id).get().then(doc=>{
+    const p = doc.data();
+    editingProductId = id;
+    document.getElementById("pName").value  = p.name  || "";
+    document.getElementById("pPrice").value = p.price || "";
+    document.getElementById("pStock").value = p.stock || 0;
+    document.getElementById("pCat").value   = p.category || "";
+    document.getElementById("pIcon").value  = p.icon || "";
+    document.getElementById("editInfo").innerText = "Mode: edit produk ("+(p.name || "")+")";
+  });
+}
+
+function deleteProduct(id){
+  if(!confirm("Yakin hapus produk ini?")) return;
+  db.collection("products").doc(id).delete()
+    .then(()=>{alert("Produk dihapus."); loadProdukAdmin();})
+    .catch(e=>alert("Gagal hapus: "+e.message));
+}
+
+/* ====== TOPUP (ADMIN) ====== */
+function loadTopupAdmin(){
+  const c = document.getElementById("content");
+  c.innerHTML = `<div id="topupList"></div>`;
+
+  db.collection("topups").orderBy("createdAt","desc").get()
+    .then(snap=>{
+      const box = document.getElementById("topupList");
+      box.innerHTML = "";
+      if(snap.empty){
+        box.innerHTML = `<div class="card">Belum ada request topup.</div>`;
+        return;
+      }
+      snap.forEach(doc=>{
+        const t = doc.data();
+        const nominal = parseAmount(t.nominal);
+        const userId  = t.userId || "-";
+        const from    = t.fromDana || "-";
+        const status  = t.status || "pending";
+
+        const isInvalid = !t.userId || !nominal || nominal<=0;
+
+        let stClass = "st-pending";
+        if(status==="process") stClass = "st-process";
+        if(status==="success") stClass = "st-success";
+
+        let actionHTML = "";
+        if(isInvalid){
+          actionHTML = `
+            <div class="error-note">DATA ERROR / SAMPAH (userId / nominal tidak valid)</div>
+            <button class="btn btn-del" onclick="deleteTopup('${doc.id}')">Hapus Sampah</button>
+          `;
+        }else{
+          actionHTML = `
+            <button class="btn btn-main btn-small" onclick="setTopupStatus('${doc.id}','process')">Process</button>
+            <button class="btn btn-save btn-small" onclick="approveTopup('${doc.id}')">Success (+saldo)</button>
+          `;
+        }
+
+        box.innerHTML += `
+          <div class="card">
+            <b>Topup ${rupiah(nominal)}</b>
+            <div class="label">UserID</div>
+            <div class="value">${userId}</div>
+
+            <div class="label">Pengirim DANA</div>
+            <div class="value">${from}</div>
+
+            <div class="label">Status</div>
+            <div class="status-pill ${stClass}">${status.toUpperCase()}</div>
+
+            ${actionHTML}
+          </div>
+        `;
+      });
+    })
+    .catch(err=>{
+      document.getElementById("topupList").innerHTML =
+        `<div class="card">Gagal load topup: ${err.message}</div>`;
+    });
+}
+
+function setTopupStatus(id,status){
+  db.collection("topups").doc(id).update({status})
+    .then(loadTopupAdmin)
+    .catch(e=>alert("Gagal update status: "+e.message));
+}
+
+function approveTopup(id){
+  db.collection("topups").doc(id).get().then(doc=>{
+    const t = doc.data();
+    const nominal = parseAmount(t.nominal);
+    const uid = t.userId;
+
+    if(!uid){
+      alert("Topup tidak punya userId. Gunakan Hapus Sampah.");
+      return;
+    }
+    if(!nominal || nominal<=0){
+      alert("Nominal tidak valid. Gunakan Hapus Sampah.");
+      return;
+    }
+    if(t.status==="success" || t.applied){
+      alert("Topup sudah pernah di-approve.");
+      return;
+    }
+
+    db.collection("users").doc(uid).get().then(uDoc=>{
+      const u = uDoc.data() || {};
+      const saldoLama = Number(u.balance || 0);
+      const saldoBaru = saldoLama + nominal;
+
+      db.collection("users").doc(uid).update({balance:saldoBaru});
+      db.collection("topups").doc(id).update({status:"success", applied:true})
+        .then(()=>{
+          alert("Topup berhasil. Saldo user: "+rupiah(saldoBaru));
+          loadTopupAdmin();
+        });
+    });
+  });
+}
+
+function deleteTopup(id){
+  if(!confirm("Yakin hapus topup ini?")) return;
+  db.collection("topups").doc(id).delete()
+    .then(()=>{alert("Topup dihapus."); loadTopupAdmin();})
+    .catch(e=>alert("Gagal hapus: "+e.message));
+}
+
+/* ====== SALDO USER ====== */
+function loadUsersSaldo(){
+  const c = document.getElementById("content");
+  c.innerHTML = `<div id="userList"></div>`;
+
+  db.collection("users").get().then(snap=>{
+    const box = document.getElementById("userList");
+    box.innerHTML = "";
+    if(snap.empty){
+      box.innerHTML = `<div class="card">Belum ada user.</div>`;
+      return;
+    }
+    snap.forEach(doc=>{
+      const u = doc.data();
+      const id = doc.id;
+      const saldo = Number(u.balance || 0);
+
+      box.innerHTML += `
+        <div class="card">
+          <b>${u.username || "(tanpa username)"}</b>
+          <div class="label">Email</div>
+          <div class="value">${u.email || "-"}</div>
+
+          <div class="label">Phone</div>
+          <div class="value">${u.phone || "-"}</div>
+
+          <div class="label">Saldo saat ini</div>
+          <div class="value">${rupiah(saldo)}</div>
+
+          <div class="label">Atur saldo manual</div>
+          <input id="saldo_${id}" class="input" placeholder="Nominal baru (angka)">
+
+          <button class="btn btn-save btn-small" onclick="updateUserSaldo('${id}')">Update Saldo</button>
+        </div>
+      `;
+    });
+  }).catch(err=>{
+    document.getElementById("userList").innerHTML =
+      `<div class="card">Gagal load user: ${err.message}</div>`;
+  });
+}
+
+function updateUserSaldo(uid){
+  const el = document.getElementById("saldo_"+uid);
+  const val = parseAmount(el.value);
+  db.collection("users").doc(uid).update({balance:val})
+    .then(()=>{alert("Saldo diperbarui."); loadUsersSaldo();})
+    .catch(e=>alert("Gagal update saldo: "+e.message));
+}
+
+/* ====== ORDERS (dengan hapus sampah) ====== */
+function loadOrdersAdmin(){
+  const c = document.getElementById("content");
+  c.innerHTML = `<div id="ordersAdminList"></div>`;
+
+  db.collection("orders").get().then(snap=>{
+    const box = document.getElementById("ordersAdminList");
+    box.innerHTML = "";
+    if(snap.empty){
+      box.innerHTML = `<div class="card">Belum ada order.</div>`;
+      return;
+    }
+    snap.forEach(doc=>{
+      const o  = doc.data();
+      const id = doc.id;
+
+      const hargaNumber = parseAmount(o.price);
+      const isInvalid = !o.userId || !hargaNumber || hargaNumber<=0 || !o.productName;
+
+      // handle tanggal fleksibel
+      let tanggalText = "-";
+      const cAt = o.createdAt;
+      if(cAt){
+        if(typeof cAt.toDate === "function"){
+          tanggalText = cAt.toDate().toLocaleString("id-ID");
+        }else if(typeof cAt === "number"){
+          tanggalText = new Date(cAt).toLocaleString("id-ID");
+        }else if(typeof cAt === "string"){
+          tanggalText = cAt;
+        }
+      }
+
+      let stClass = "st-pending";
+      if(o.status==="process") stClass="st-process";
+      if(o.status==="success") stClass="st-success";
+
+      let actionBlock = "";
+      if(isInvalid){
+        actionBlock = `
+          <div class="error-note">
+            DATA ERROR / SAMPAH (userId / harga / nama produk tidak valid)
+          </div>
+          <button class="btn btn-del btn-small" onclick="deleteOrder('${id}')">Hapus Sampah</button>
+        `;
+      }else{
+        actionBlock = `
+          <div class="label">Ubah Status</div>
+          <select id="status_${id}" class="input">
+            <option value="pending" ${o.status==="pending"?"selected":""}>pending</option>
+            <option value="process" ${o.status==="process"?"selected":""}>process</option>
+            <option value="success" ${o.status==="success"?"selected":""}>success</option>
+          </select>
+
+          <div class="label">Produk / Respon Admin</div>
+          <textarea id="adminProd_${id}" placeholder="Link produk, akun, keterangan dll">${o.adminProduct || ""}</textarea>
+
+          <button class="btn btn-save btn-small" onclick="saveOrderAdmin('${id}')">Simpan Perubahan</button>
+        `;
+      }
+
+      box.innerHTML += `
+        <div class="card">
+          <b>${o.productName || "(tanpa nama)"}</b>
+
+          <div class="label">UserID</div>
+          <div class="value">${o.userId || "-"}</div>
+
+          <div class="label">Input User</div>
+          <div class="value">${o.inputUser || "-"}</div>
+
+          <div class="label">Harga</div>
+          <div class="value">${isInvalid ? "Rp 0" : rupiah(hargaNumber)}</div>
+
+          <div class="label">Tanggal</div>
+          <div class="value">${tanggalText}</div>
+
+          <div class="label">Status</div>
+          <div class="status-pill ${stClass}">${(o.status || "pending").toUpperCase()}</div>
+
+          ${actionBlock}
+        </div>
+      `;
+    });
+  }).catch(err=>{
+    document.getElementById("ordersAdminList").innerHTML =
+      `<div class="card">Gagal load orders: ${err.message}</div>`;
+  });
+}
+
+function saveOrderAdmin(id){
+  const newStatus = document.getElementById("status_"+id).value;
+  const adminProd = document.getElementById("adminProd_"+id).value;
+  db.collection("orders").doc(id).update({status:newStatus, adminProduct:adminProd})
+    .then(()=>{alert("Order diperbarui."); loadOrdersAdmin();})
+    .catch(e=>alert("Gagal update order: "+e.message));
+}
+
+function deleteOrder(id){
+  if(!confirm("Yakin hapus order ini?")) return;
+  db.collection("orders").doc(id).delete()
+    .then(()=>{alert("Order dihapus."); loadOrdersAdmin();})
+    .catch(e=>alert("Gagal hapus order: "+e.message));
+}
+
+/* ====== STARTUP ====== */
+auth.onAuthStateChanged(user=>{
+  if(!user){
+    auth.signInAnonymously().catch(e=>{
+      alert("Gagal login Firebase di admin: "+e.message);
+    });
+  }else{
+    showTab("produk");
+  }
+});
+</script>
+
+</body>
+</html>
