@@ -587,23 +587,46 @@
             </div>
             <button class="btn-buy" ${stock <= 0 ? "disabled" : ""}>
               <span class="icon">🛒</span>
-              <span>Beli</span>
+              <span>${stock <= 0 ? "Habis" : "Beli"}</span>
             </button>
           </div>
         `;
 
         const buyBtn = card.querySelector(".btn-buy");
-        buyBtn.addEventListener("click", () => handleBuyProduct(doc, priceNum));
+        if (stock > 0) {
+          buyBtn.addEventListener("click", () => handleBuyProduct(doc, priceNum));
+        }
 
         productListEl.appendChild(card);
       });
+    }
+
+    // 🔧 fungsi untuk refresh saldo & produk setelah transaksi
+    async function refreshUI() {
+      try {
+        const userSnap = await db.collection("users").doc(currentUser.uid).get();
+        currentUserDoc = userSnap.data() || {};
+        const balance = currentUserDoc.balance || 0;
+        balanceText.textContent = formatRupiah(balance);
+      } catch (e) {
+        console.error("Gagal refresh saldo:", e);
+      }
+
+      try {
+        const snap = await db.collection("products").orderBy("name").get();
+        allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderProducts(activeFilter);
+      } catch (e) {
+        console.error("Gagal refresh produk:", e);
+      }
     }
 
     async function handleBuyProduct(productData, priceNum) {
       try {
         if (!currentUser || !currentUserDoc) {
           showToast("Silakan login ulang.");
-          return window.location.href = "login.html";
+          window.location.href = "login.html";
+          return;
         }
 
         const userDocSnap = await db.collection("users").doc(currentUser.uid).get();
@@ -635,25 +658,40 @@
           return;
         }
 
-        // HANYA potong saldo user + buat order
+        // 🔥 POTONG SALDO + KURANGI STOK + BUAT ORDER DALAM 1 TRANSAKSI
         await db.runTransaction(async (tx) => {
           const userRef = db.collection("users").doc(currentUser.uid);
+          const productRef = db.collection("products").doc(productData.id);
+
           const userSnap2 = await tx.get(userRef);
+          const productSnap = await tx.get(productRef);
+
           const userData2 = userSnap2.data() || {};
           const balance2 = userData2.balance || 0;
+
           if (balance2 < priceNum) {
             throw new Error("Saldo tidak cukup saat transaksi.");
           }
 
-          tx.update(userRef, { balance: balance2 - priceNum });
+          const productData2 = productSnap.data() || {};
+          const stock2 = typeof productData2.stock === "number" ? productData2.stock : 0;
 
+          if (stock2 <= 0) {
+            throw new Error("Stok produk habis.");
+          }
+
+          // update saldo & stok
+          tx.update(userRef, { balance: balance2 - priceNum });
+          tx.update(productRef, { stock: stock2 - 1 });
+
+          // buat order
           const orderRef = db.collection("orders").doc();
           tx.set(orderRef, {
             userId: currentUser.uid,
             userEmail: currentUser.email || "",
-            productId: productData.id,
-            productName: productData.name || "Produk",
-            category: productData.category || "",
+            productId: productRef.id,
+            productName: productData2.name || productData.name || "Produk",
+            category: productData2.category || productData.category || "",
             price: priceNum,
             dataOrder: userInput.trim(),
             status: "pending",
@@ -664,10 +702,15 @@
         });
 
         showToast("Pesanan berhasil dibuat. Status: PENDING.");
+        await refreshUI();
+
       } catch (err) {
         console.error(err);
         if (err.message === "Saldo tidak cukup saat transaksi.") {
           showToast("Saldo tidak cukup.");
+        } else if (err.message === "Stok produk habis.") {
+          showToast("Stok produk habis.");
+          await refreshUI();
         } else {
           showToast("Gagal membuat pesanan.");
         }
