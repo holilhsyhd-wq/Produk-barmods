@@ -20,7 +20,6 @@
       border-radius:14px;
       box-shadow:0 0 12px rgba(0,0,0,0.4);
     }
-
     .card:hover{background:#1b212c;}
 
     .prod-title{font-size:16px;font-weight:bold;}
@@ -93,16 +92,37 @@ const db=firebase.firestore();
 
 // =========================
 // FUNGSI BERSIHKAN ANGKA
-// Bisa handle: "2000", "Rp 2k", "2k", 2000, "10.000", dll
+// Support:
+//  - "2k"  -> 2000
+//  - "1.5k" -> 1500
+//  - "Rp 10.000" -> 10000
+//  - "10000" -> 10000
+//  - 2000 -> 2000
 // =========================
 function parseAmount(raw){
-  const cleaned = String(raw ?? "0").replace(/[^0-9]/g,"");
+  if(raw === null || raw === undefined) return 0;
+  let str = raw.toString().trim().toLowerCase();
+
+  // Format "1.5k", "2k", "10k"
+  if(str.endsWith("k")){
+    let num = Number(str.replace("k",""));
+    if(!isNaN(num)) return Math.round(num * 1000);
+  }
+
+  // Kalau ada "k" di tengah, tetap treat sama
+  if(str.includes("k")){
+    let num = Number(str.replace("k",""));
+    if(!isNaN(num)) return Math.round(num * 1000);
+  }
+
+  // Hapus semua selain angka
+  const cleaned = str.replace(/[^0-9]/g,"");
   return Number(cleaned) || 0;
 }
 
 // Format ke Rupiah
 function rupiah(num){
-  return "Rp" + Number(num).toLocaleString("id-ID");
+  return "Rp " + Number(num).toLocaleString("id-ID");
 }
 
 // =========================
@@ -133,9 +153,7 @@ function loadProducts(){
     snap.forEach(doc=>{
       const p = doc.data();
       const hargaNumber = parseAmount(p.price);
-      const showPrice   = (typeof p.price==="string" && p.price.trim()!=="")
-        ? p.price
-        : rupiah(hargaNumber);
+      const showPrice   = rupiah(hargaNumber);
 
       listEl.innerHTML += `
         <div class="card">
@@ -212,10 +230,6 @@ function orderForm(id){
 
 // =========================
 // PROSES ORDER
-// - Cek saldo (pakai parseAmount)
-// - Tolak kalau saldo < harga
-// - Kurangi saldo di Firestore
-// - Simpan order ke Firestore
 // =========================
 function makeOrder(id){
   const user = auth.currentUser;
@@ -245,7 +259,7 @@ function makeOrder(id){
         if(!uDoc.exists) throw new Error("Data user tidak ditemukan.");
 
         const u = uDoc.data();
-        const saldoNumber = parseAmount(u.balance);   // <- PENTING, pakai parseAmount
+        const saldoNumber = parseAmount(u.balance);   // <- PENTING, selalu parse
 
         if(saldoNumber < hargaNumber){
           alert(
@@ -254,12 +268,12 @@ function makeOrder(id){
             "Harga produk: " + rupiah(hargaNumber) + "\n" +
             "Silakan topup di menu Wallet."
           );
-          return null; // stop di sini
+          return null; // stop
         }
 
         const saldoBaru = saldoNumber - hargaNumber;
 
-        // 3. Update saldo & buat order (chain biasa)
+        // 3. Update saldo & buat order
         return db.collection("users").doc(uid).update({
           balance: saldoBaru
         })
