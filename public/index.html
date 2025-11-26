@@ -78,9 +78,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
 <script>
-// =========================
 // FIREBASE INIT
-// =========================
 const firebaseConfig={
   apiKey:"AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
   authDomain:"toko-barmods.firebaseapp.com",
@@ -90,55 +88,34 @@ firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();
 const db=firebase.firestore();
 
-// =========================
-// FUNGSI BERSIHKAN ANGKA
-// Support:
-//  - "2k"  -> 2000
-//  - "1.5k" -> 1500
-//  - "Rp 10.000" -> 10000
-//  - "10000" -> 10000
-//  - 2000 -> 2000
-// =========================
+// parse "2k", "1.5k", "Rp 10.000", dll → angka
 function parseAmount(raw){
   if(raw === null || raw === undefined) return 0;
   let str = raw.toString().trim().toLowerCase();
 
-  // Format "1.5k", "2k", "10k"
   if(str.endsWith("k")){
     let num = Number(str.replace("k",""));
     if(!isNaN(num)) return Math.round(num * 1000);
   }
-
-  // Kalau ada "k" di tengah, tetap treat sama
   if(str.includes("k")){
     let num = Number(str.replace("k",""));
     if(!isNaN(num)) return Math.round(num * 1000);
   }
-
-  // Hapus semua selain angka
   const cleaned = str.replace(/[^0-9]/g,"");
   return Number(cleaned) || 0;
 }
-
-// Format ke Rupiah
 function rupiah(num){
   return "Rp " + Number(num).toLocaleString("id-ID");
 }
 
-// =========================
-// CEK LOGIN
-// =========================
 auth.onAuthStateChanged(u=>{
   if(!u){
-    window.location.href="login.html";
+    location.href="login.html";
     return;
   }
   loadProducts();
 });
 
-// =========================
-// LOAD LIST PRODUK
-// =========================
 function loadProducts(){
   const listEl = document.getElementById("list");
   listEl.innerHTML = "<div class='card'>Memuat produk...</div>";
@@ -165,54 +142,38 @@ function loadProducts(){
       `;
     });
   })
-  .catch(err=>{
-    alert("Gagal load produk: "+err.message);
-  });
+  .catch(err=>alert("Gagal load produk: "+err.message));
 }
 
-// =========================
-// FORM INPUT ORDER
-// =========================
 function orderForm(id){
   const listEl = document.getElementById("list");
 
   db.collection("products").doc(id).get()
   .then(d=>{
     if(!d.exists) throw new Error("Produk tidak ditemukan");
-
     const p = d.data();
     const hargaNumber = parseAmount(p.price);
-
     if(hargaNumber <= 0){
-      alert("Harga produk ini belum di-set dengan benar. Hubungi admin.");
+      alert("Harga produk belum benar. Hubungi admin.");
       return;
     }
 
-    let extraInput = "";
-
+    let extraInput="";
     if(p.category==="sosmed"){
-      extraInput = `
-        <input id="inputData" class="input-box"
-               placeholder="Masukkan link / username / video (IG/TikTok dll)">
-      `;
+      extraInput = `<input id="inputData" class="input-box"
+         placeholder="Masukkan link / username / video (IG/TikTok dll)">`;
     }else if(p.category==="panel"){
-      extraInput = `
-        <input id="inputData" class="input-box"
-               placeholder="username:password panel">
-      `;
+      extraInput = `<input id="inputData" class="input-box"
+         placeholder="username:password panel">`;
     }else if(p.category==="premium"){
-      extraInput = `
-        <input id="inputData" class="input-box"
-               placeholder="Catatan (opsional)">
-      `;
+      extraInput = `<input id="inputData" class="input-box"
+         placeholder="Catatan (opsional)">`;
     }else{
-      extraInput = `
-        <input id="inputData" class="input-box"
-               placeholder="Keterangan order (opsional)">
-      `;
+      extraInput = `<input id="inputData" class="input-box"
+         placeholder="Keterangan order (opsional)">`;
     }
 
-    listEl.innerHTML = `
+    listEl.innerHTML=`
       <div class="card">
         <div class="prod-title">${p.icon || ""} ${p.name || "(tanpa nama)"}</div>
         <div class="prod-cat">${p.category || ""}</div>
@@ -223,81 +184,62 @@ function orderForm(id){
       </div>
     `;
   })
-  .catch(err=>{
-    alert("Gagal membuka form order: "+err.message);
-  });
+  .catch(err=>alert("Gagal buka form order: "+err.message));
 }
 
-// =========================
-// PROSES ORDER
-// =========================
 function makeOrder(id){
   const user = auth.currentUser;
   if(!user){
     alert("Silakan login ulang.");
-    window.location.href="login.html";
+    location.href="login.html";
     return;
   }
-
   const uid   = user.uid;
   const input = (document.getElementById("inputData")?.value || "").trim();
 
-  // 1. Ambil produk
   db.collection("products").doc(id).get()
   .then(doc=>{
     if(!doc.exists) throw new Error("Produk tidak ditemukan");
     const p = doc.data();
-
     const hargaNumber = parseAmount(p.price);
-    if(hargaNumber <= 0){
-      throw new Error("Harga produk tidak valid. Hubungi admin.");
-    }
+    if(hargaNumber <= 0) throw new Error("Harga produk tidak valid.");
 
-    // 2. Ambil saldo user
     return db.collection("users").doc(uid).get()
       .then(uDoc=>{
         if(!uDoc.exists) throw new Error("Data user tidak ditemukan.");
-
         const u = uDoc.data();
-        const saldoNumber = parseAmount(u.balance);   // <- PENTING, selalu parse
+        const saldoNumber = parseAmount(u.balance);
 
         if(saldoNumber < hargaNumber){
           alert(
             "Saldo tidak cukup.\n" +
-            "Saldo kamu: " + rupiah(saldoNumber) + "\n" +
-            "Harga produk: " + rupiah(hargaNumber) + "\n" +
-            "Silakan topup di menu Wallet."
+            "Saldo kamu: "+rupiah(saldoNumber)+"\n" +
+            "Harga produk: "+rupiah(hargaNumber)+
+            "\nSilakan topup di menu Wallet."
           );
-          return null; // stop
+          return null;
         }
 
         const saldoBaru = saldoNumber - hargaNumber;
 
-        // 3. Update saldo & buat order
-        return db.collection("users").doc(uid).update({
-          balance: saldoBaru
-        })
-        .then(()=>{
-          return db.collection("orders").add({
-            userId       : uid,
-            productDocId : id,
-            productName  : p.name || "",
-            price        : hargaNumber,
-            inputUser    : input,
-            status       : "pending",
-            adminProduct : "",
-            createdAt    : Date.now()
+        return db.collection("users").doc(uid).update({balance:saldoBaru})
+          .then(()=> db.collection("orders").add({
+            userId      : uid,
+            productDocId: id,
+            productName : p.name || "",
+            price       : hargaNumber,
+            inputUser   : input,
+            status      : "pending",
+            adminProduct: "",
+            createdAt   : Date.now()
+          }))
+          .then(()=>{
+            alert("Order berhasil! Saldo baru: "+rupiah(saldoBaru));
+            loadProducts();
           });
-        })
-        .then(()=>{
-          alert("Order berhasil dibuat! Saldo baru: " + rupiah(saldoBaru));
-          loadProducts();
-        });
       });
   })
-  .catch(err=>{
-    alert("Gagal membuat order: "+err.message);
-  });
+  .catch(err=>alert("Gagal membuat order: "+err.message));
 }
 </script>
 
