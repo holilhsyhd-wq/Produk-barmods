@@ -490,6 +490,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
   <script>
+    // Konfigurasi Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
       authDomain: "toko-barmods.firebaseapp.com",
@@ -499,6 +500,7 @@
       appId: "1:284047189012:web:6ef0c6891adab08a383301"
     };
 
+    // Init Firebase (compat)
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
@@ -572,6 +574,8 @@
         const card = document.createElement("div");
         card.className = "product-card";
 
+        const isHabis = stock <= 0;
+
         card.innerHTML = `
           <div class="product-header">
             <div>
@@ -583,17 +587,17 @@
           <div class="product-body">
             <div>
               <div class="price-text">${priceText}</div>
-              <div class="stock-text">Stok: ${stock <= 0 ? "Habis" : stock}</div>
+              <div class="stock-text">Stok: ${isHabis ? "Habis" : stock}</div>
             </div>
-            <button class="btn-buy" ${stock <= 0 ? "disabled" : ""}>
+            <button class="btn-buy" ${isHabis ? "disabled" : ""}>
               <span class="icon">🛒</span>
-              <span>${stock <= 0 ? "Habis" : "Beli"}</span>
+              <span>${isHabis ? "Habis" : "Beli"}</span>
             </button>
           </div>
         `;
 
         const buyBtn = card.querySelector(".btn-buy");
-        if (stock > 0) {
+        if (!isHabis) {
           buyBtn.addEventListener("click", () => handleBuyProduct(doc, priceNum));
         }
 
@@ -601,8 +605,11 @@
       });
     }
 
-    // 🔧 fungsi untuk refresh saldo & produk setelah transaksi
+    // 🔁 Refresh saldo + produk dari Firestore
     async function refreshUI() {
+      if (!currentUser) return;
+
+      // refresh saldo
       try {
         const userSnap = await db.collection("users").doc(currentUser.uid).get();
         currentUserDoc = userSnap.data() || {};
@@ -612,29 +619,23 @@
         console.error("Gagal refresh saldo:", e);
       }
 
+      // refresh produk
       try {
         const snap = await db.collection("products").orderBy("name").get();
         allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         renderProducts(activeFilter);
       } catch (e) {
         console.error("Gagal refresh produk:", e);
+        productListEl.innerHTML = '<p class="info-text">Gagal memuat produk.</p>';
       }
     }
 
+    // 🛒 Fungsi beli produk, stok berkurang & saldo terpotong
     async function handleBuyProduct(productData, priceNum) {
       try {
         if (!currentUser || !currentUserDoc) {
           showToast("Silakan login ulang.");
           window.location.href = "login.html";
-          return;
-        }
-
-        const userDocSnap = await db.collection("users").doc(currentUser.uid).get();
-        const userData = userDocSnap.data() || {};
-        const userBalance = userData.balance || 0;
-
-        if (userBalance < priceNum) {
-          showToast("Saldo tidak cukup. Silakan topup dulu.");
           return;
         }
 
@@ -652,37 +653,46 @@
         }
 
         const userInput = prompt(promptText);
-        if (userInput === null) return;
+        if (userInput === null) return; // user tekan Cancel
         if (!userInput.trim()) {
           showToast("Data tidak boleh kosong.");
           return;
         }
 
-        // 🔥 POTONG SALDO + KURANGI STOK + BUAT ORDER DALAM 1 TRANSAKSI
         await db.runTransaction(async (tx) => {
           const userRef = db.collection("users").doc(currentUser.uid);
           const productRef = db.collection("products").doc(productData.id);
 
-          const userSnap2 = await tx.get(userRef);
-          const productSnap = await tx.get(productRef);
+          const userSnap = await tx.get(userRef);
+          const prodSnap = await tx.get(productRef);
 
-          const userData2 = userSnap2.data() || {};
-          const balance2 = userData2.balance || 0;
-
-          if (balance2 < priceNum) {
-            throw new Error("Saldo tidak cukup saat transaksi.");
+          if (!userSnap.exists) {
+            throw new Error("user_not_found");
+          }
+          if (!prodSnap.exists) {
+            throw new Error("product_not_found");
           }
 
-          const productData2 = productSnap.data() || {};
-          const stock2 = typeof productData2.stock === "number" ? productData2.stock : 0;
+          const userData = userSnap.data() || {};
+          const prodData = prodSnap.data() || {};
 
-          if (stock2 <= 0) {
-            throw new Error("Stok produk habis.");
+          const balance = userData.balance || 0;
+          const stock = typeof prodData.stock === "number" ? prodData.stock : 0;
+
+          if (stock <= 0) {
+            throw new Error("out_of_stock");
+          }
+          if (balance < priceNum) {
+            throw new Error("not_enough_balance");
           }
 
-          // update saldo & stok
-          tx.update(userRef, { balance: balance2 - priceNum });
-          tx.update(productRef, { stock: stock2 - 1 });
+          // potong saldo user
+          tx.update(userRef, { balance: balance - priceNum });
+
+          // kurangi stok produk
+          tx.update(productRef, {
+            stock: firebase.firestore.FieldValue.increment(-1)
+          });
 
           // buat order
           const orderRef = db.collection("orders").doc();
@@ -690,8 +700,8 @@
             userId: currentUser.uid,
             userEmail: currentUser.email || "",
             productId: productRef.id,
-            productName: productData2.name || productData.name || "Produk",
-            category: productData2.category || productData.category || "",
+            productName: prodData.name || "Produk",
+            category: prodData.category || "",
             price: priceNum,
             dataOrder: userInput.trim(),
             status: "pending",
@@ -701,16 +711,20 @@
           });
         });
 
-        showToast("Pesanan berhasil dibuat. Status: PENDING.");
+        showToast("Pesanan berhasil dibuat. Stok berkurang 1.");
         await refreshUI();
 
       } catch (err) {
         console.error(err);
-        if (err.message === "Saldo tidak cukup saat transaksi.") {
-          showToast("Saldo tidak cukup.");
-        } else if (err.message === "Stok produk habis.") {
-          showToast("Stok produk habis.");
-          await refreshUI();
+
+        if (err.message === "out_of_stock") {
+          showToast("Stok produk sudah habis.");
+        } else if (err.message === "not_enough_balance") {
+          showToast("Saldo tidak cukup. Silakan topup dulu.");
+        } else if (err.message === "user_not_found") {
+          showToast("Data user tidak ditemukan.");
+        } else if (err.message === "product_not_found") {
+          showToast("Produk tidak ditemukan.");
         } else {
           showToast("Gagal membuat pesanan.");
         }
@@ -729,6 +743,7 @@
       });
     }
 
+    // Auth listener
     auth.onAuthStateChanged(async (user) => {
       if (!user) {
         window.location.href = "login.html";
@@ -737,26 +752,7 @@
       currentUser = user;
       userEmailPill.textContent = user.email || "User";
 
-      try {
-        const userSnap = await db.collection("users").doc(user.uid).get();
-        currentUserDoc = userSnap.data() || {};
-        const balance = currentUserDoc.balance || 0;
-        balanceText.textContent = formatRupiah(balance);
-      } catch (err) {
-        console.error(err);
-        balanceText.textContent = "Rp 0";
-      }
-
-      try {
-        const snap = await db.collection("products")
-          .orderBy("name")
-          .get();
-        allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        renderProducts(activeFilter);
-      } catch (err) {
-        console.error(err);
-        productListEl.innerHTML = '<p class="info-text">Gagal memuat produk.</p>';
-      }
+      await refreshUI();
     });
 
     document.addEventListener("DOMContentLoaded", () => {
