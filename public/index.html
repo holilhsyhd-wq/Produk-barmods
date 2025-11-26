@@ -1,58 +1,190 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Produk</title>
-<style>
-body{font-family:sans-serif;padding:20px;background:#f4f4f4;}
-.card{background:#fff;padding:20px;margin:10px 0;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
-input,button{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ccc;}
-.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px;background:white;box-shadow:0 -4px 10px rgba(0,0,0,0.1);}
-a{text-decoration:none;color:#0062D1;}
-h1{text-align:center;}
-</style>
-</head><body>
-<h1>Produk</h1>
-<div id='list'></div>
-<div class='nav'>
-<a href='index.html'>Produk</a><a href='wallet.html'>Wallet</a><a href='orders.html'>Orders</a><a href='profile.html'>Profile</a>
-</div>
-<script>
-auth.onAuthStateChanged(u=>{if(!u)location.href='login.html';load();});
-function load(){
- db.collection('products').get().then(s=>{
-  list.innerHTML='';
-  s.forEach(d=>{
-   let p=d.data();
-   list.innerHTML+=`<div class='card'><b>${p.name}</b><br>Rp${p.price}<br><button onclick="order('${p.name}',${p.price})">Beli</button></div>`;
-  });
- });
-}
-function order(name,price){
- let uid=auth.currentUser.uid;
- db.collection('users').doc(uid).get().then(u=>{
-  let saldo=u.data().balance;
-  if(saldo<price) return alert('Saldo kurang');
-  db.collection('users').doc(uid).update({balance:saldo-price});
-  db.collection('orders').add({
-    userId:uid, productName:name, price:price, status:'pending',
-    adminProduct:'', userReceived:false, dataOrder:Date.now()
-  });
-  alert('Order dibuat');
-});
-}
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Barmods Digital Store - Produk</title>
+  <style>
+    body{
+      font-family:sans-serif;
+      padding:20px;
+      background:#f4f4f4;
+      margin:0;
+      padding-bottom:70px;
+    }
+    h1{text-align:center;margin-top:10px;margin-bottom:20px;}
+    .card{
+      background:#fff;
+      padding:16px;
+      margin:10px 0;
+      border-radius:12px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    }
+    .card b{font-size:15px;}
+    .card small{color:#6b7280;font-size:12px;}
+    .card-price{font-weight:bold;margin:8px 0;display:block;}
+    button{
+      width:100%;
+      padding:10px;
+      border-radius:8px;
+      border:none;
+      background:#0062D1;
+      color:white;
+      font-weight:600;
+    }
+    .nav{
+      position:fixed;
+      bottom:0;left:0;right:0;
+      display:flex;
+      justify-content:space-around;
+      padding:10px 0;
+      background:#fff;
+      box-shadow:0 -4px 10px rgba(0,0,0,0.1);
+      font-size:13px;
+    }
+    .nav a{
+      text-decoration:none;
+      color:#0062D1;
+    }
+  </style>
+</head>
+<body>
 
-<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js'></script>
-<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js'></script>
-<script src='https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js'></script>
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
-  authDomain: "toko-barmods.firebaseapp.com",
-  projectId: "toko-barmods",
-  storageBucket: "toko-barmods.firebasestorage.app",
-  messagingSenderId: "284047189012",
-  appId: "1:284047189012:web:6ef0c6891adab08a383301"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-</script>
-</body></html>
+  <h1>Produk</h1>
+  <div id="list"></div>
+
+  <div class="nav">
+    <a href="index.html">Produk</a>
+    <a href="wallet.html">Wallet</a>
+    <a href="orders.html">Orders</a>
+    <a href="profile.html">Profile</a>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+      authDomain: "toko-barmods.firebaseapp.com",
+      projectId: "toko-barmods",
+      storageBucket: "toko-barmods.firebasestorage.app",
+      messagingSenderId: "284047189012",
+      appId: "1:284047189012:web:6ef0c6891adab08a383301"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+
+    // Format angka ke Rupiah
+    function formatRupiah(num){
+      return "Rp" + Number(num).toLocaleString("id-ID");
+    }
+
+    // Parse harga dari field apa pun (string/number) -> number
+    function parsePrice(raw){
+      const cleaned = String(raw ?? "0").replace(/[^0-9]/g, "");
+      return Number(cleaned) || 0;
+    }
+
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+      loadProducts();
+    });
+
+    function loadProducts(){
+      db.collection("products").get().then(snapshot => {
+        const list = document.getElementById("list");
+        list.innerHTML = "";
+
+        if (snapshot.empty) {
+          list.innerHTML = "<p>Tidak ada produk.</p>";
+          return;
+        }
+
+        snapshot.forEach(doc => {
+          const p = doc.data();
+          const priceNumber  = parsePrice(p.price);
+          const displayPrice = (typeof p.price === "string" && p.price.trim() !== "")
+            ? p.price
+            : formatRupiah(priceNumber);
+
+          const icon = p.icon ? (p.icon + " ") : "";
+          const category = p.category || "";
+
+          list.innerHTML += `
+            <div class="card">
+              <b>${icon}${p.name || "Produk tanpa nama"}</b><br>
+              <small>${category}</small>
+              <span class="card-price">${displayPrice}</span>
+              <button onclick="order('${doc.id}')">Beli</button>
+            </div>
+          `;
+        });
+      }).catch(err => {
+        alert("Gagal memuat produk: " + err.message);
+      });
+    }
+
+    // Order ambil data produk lagi berdasarkan docId
+    function order(productId){
+      const user = auth.currentUser;
+      if (!user) {
+        alert("Silakan login terlebih dahulu.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      const uid = user.uid;
+
+      // Ambil data produk
+      db.collection("products").doc(productId).get().then(doc => {
+        if (!doc.exists) throw new Error("Produk tidak ditemukan");
+        const p = doc.data();
+        const price = parsePrice(p.price);
+
+        if (!price || isNaN(price) || price <= 0) {
+          alert("Harga produk tidak valid.");
+          return;
+        }
+
+        // Ambil saldo user
+        return db.collection("users").doc(uid).get().then(userDoc => {
+          const u = userDoc.data() || {};
+          const saldo = Number(u.balance || 0);
+
+          if (saldo < price) {
+            alert("Saldo tidak cukup.");
+            return;
+          }
+
+          // Update saldo
+          const newSaldo = saldo - price;
+          return db.collection("users").doc(uid).update({ balance: newSaldo })
+            .then(() => {
+              // Simpan order
+              return db.collection("orders").add({
+                userId       : uid,
+                productDocId : productId,
+                productName  : p.name || "",
+                price        : price,
+                status       : "pending",
+                adminProduct : "",
+                userReceived : false,
+                dataOrder    : Date.now()
+              });
+            }).then(() => {
+              alert("Order berhasil dibuat!");
+            });
+        });
+      }).catch(err => {
+        alert("Gagal membuat order: " + err.message);
+      });
+    }
+  </script>
+</body>
+</html>
