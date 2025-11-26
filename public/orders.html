@@ -18,6 +18,7 @@
       background:#0f172a;
       border-bottom:1px solid #1f2937;
       font-weight:700;
+      font-size:16px;
     }
     .card{
       background:#0f172a;
@@ -102,9 +103,11 @@
   <a href="profile.html" class="nav-item">Profile</a>
 </nav>
 
+<!-- FIREBASE (PASTIKAN TIGA INI UTUH) -->
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
@@ -118,6 +121,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
+/* ===== UTIL ===== */
 function rupiah(n){
   n = Number(n || 0);
   return "Rp " + n.toLocaleString("id-ID");
@@ -134,6 +138,7 @@ function getMillis(createdAt){
   return 0;
 }
 
+/* ===== RENDER ORDERS USER ===== */
 function renderOrders(uid){
   const wrap = document.getElementById("ordersContainer");
   wrap.innerHTML = `<div class="card">Memuat pesanan...</div>`;
@@ -213,6 +218,7 @@ function renderOrders(uid){
     });
 }
 
+/* ===== USER MARK RECEIVED ===== */
 function markReceived(orderId){
   if(!confirm("Tandai produk ini sudah kamu terima?")) return;
   db.collection("orders").doc(orderId).update({userReceived:true})
@@ -224,6 +230,7 @@ function markReceived(orderId){
     .catch(err=>alert("Gagal update: "+err.message));
 }
 
+/* ===== AUTH GUARD ===== */
 auth.onAuthStateChanged(user=>{
   if(!user){
     location.href = "login.html";
