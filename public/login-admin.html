@@ -1,76 +1,145 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Login - Barmods Store</title>
+  <meta charset="UTF-8" />
+  <title>Login Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body{
-      font-family:sans-serif;
-      margin:0;
-      background:#0d1117;
-      color:white;
-      padding:20px;
-    }
-    h1{text-align:center;margin-top:30px;margin-bottom:20px;}
-
-    .card{
-      background:#161b22;
-      margin:0 auto;
-      max-width:400px;
-      padding:20px;
-      border-radius:14px;
-      box-shadow:0 0 12px rgba(0,0,0,0.4);
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, sans-serif;
+      background:
+        radial-gradient(circle at top left, #1d4ed8 0, transparent 55%),
+        radial-gradient(circle at bottom right, #0f766e 0, transparent 55%),
+        #020617;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #e5e7eb;
     }
 
-    input,button{
-      width:100%;
-      padding:12px;
-      margin:8px 0;
-      border-radius:8px;
-      border:none;
-      font-size:14px;
+    .box {
+      background: rgba(15, 23, 42, 0.95);
+      padding: 20px;
+      border-radius: 18px;
+      width: 90%;
+      max-width: 350px;
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
     }
 
-    input{
-      background:#0f141a;
-      border:1px solid #30363d;
-      color:white;
+    h2 {
+      margin: 0 0 14px 0;
+      text-align: center;
     }
 
-    button{
-      background:#007bff;
-      color:white;
-      font-weight:bold;
+    label {
+      font-size: 12px;
+      color: #9ca3af;
     }
 
-    small{color:#9ca3af;}
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      color: #e5e7eb;
+      margin-top: 6px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      font-weight: 600;
+      color: #022c22;
+      cursor: pointer;
+    }
+
+    .alert {
+      margin-top: 10px;
+      font-size: 12px;
+      padding: 8px;
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: 10px;
+      color: #fecaca;
+      display: none;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
+  <div class="box">
+    <h2>Login Admin</h2>
 
-<h1>Admin Login</h1>
-<div class="card">
-  <small>Masuk hanya untuk admin Barmods.</small><br><br>
-  <input id="user" placeholder="Username admin">
-  <input id="pass" type="password" placeholder="Password admin">
-  <button onclick="loginAdmin()">Login Admin</button>
-</div>
+    <label>Email Admin</label>
+    <input id="email" type="email" placeholder="email admin" />
 
-<script>
-  // LOGIN ADMIN LOKAL (TANPA FIREBASE)
-  function loginAdmin(){
-    const u = user.value.trim();
-    const p = pass.value.trim();
+    <label>Password</label>
+    <input id="password" type="password" placeholder="password" />
 
-    if(u === "barmods" && p === "barmods21"){
-      localStorage.setItem("adminBarmods","yes");
-      alert("Login admin berhasil");
-      location.href = "admin.html";
-    }else{
-      alert("Username atau password admin salah");
-    }
-  }
-</script>
+    <button id="btnLogin">Masuk</button>
 
+    <div id="alert" class="alert"></div>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+      authDomain: "toko-barmods.firebaseapp.com",
+      projectId: "toko-barmods",
+      storageBucket: "toko-barmods.firebasestorage.app",
+      messagingSenderId: "284047189012",
+      appId: "1:284047189012:web:6ef0c6891adab08a383301"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const btn = document.getElementById("btnLogin");
+    const alertBox = document.getElementById("alert");
+
+    btn.addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const pass = document.getElementById("password").value.trim();
+
+      alertBox.style.display = "none";
+
+      try {
+        const res = await auth.signInWithEmailAndPassword(email, pass);
+        const user = res.user;
+
+        const doc = await db.collection("users").doc(user.uid).get();
+        const data = doc.data();
+
+        if (!data || !data.isAdmin) {
+          alertBox.style.display = "block";
+          alertBox.textContent = "Akun ini bukan admin.";
+          await auth.signOut();
+          return;
+        }
+
+        window.location.href = "admin.html";
+      } catch (err) {
+        alertBox.style.display = "block";
+        alertBox.textContent = "Login gagal: " + err.message;
+      }
+    });
+  </script>
 </body>
 </html>
