@@ -14,214 +14,168 @@
       --danger: #ef4444;
       --text: #e5e7eb;
       --muted: #9ca3af;
-      --radius-lg: 18px;
+      --radius-xl: 18px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
+      font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      min-height: 100vh;
+      color: var(--text);
       background:
         radial-gradient(circle at top left, #1d4ed8 0, transparent 55%),
         radial-gradient(circle at bottom right, #0f766e 0, transparent 55%),
         #020617;
-      color: var(--text);
-      min-height: 100vh;
       padding-bottom: 80px;
     }
 
     .page {
       max-width: 900px;
       margin: 0 auto;
-      padding: 16px 16px 90px;
+      padding: 16px 16px 100px;
     }
 
-    .header {
+    .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
+      margin-top: 6px;
     }
 
-    .header-title {
-      font-size: 20px;
-      font-weight: 700;
+    h1 {
+      font-size: 22px;
+      font-weight: 800;
     }
 
-    .header-sub {
+    .admin-email {
       font-size: 12px;
       color: var(--muted);
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
-    .btn-logout {
-      padding: 8px 14px;
-      border-radius: 999px;
+    .logout-btn {
       border: none;
-      background: linear-gradient(135deg, #ef4444, #b91c1c);
-      color: #fee2e2;
+      border-radius: 999px;
+      padding: 8px 16px;
       font-size: 12px;
       font-weight: 600;
+      background: linear-gradient(135deg,#ef4444,#f97316);
+      color: #fff;
       cursor: pointer;
+      box-shadow: 0 8px 20px rgba(248,113,113,0.4);
     }
 
     .tabs {
       display: flex;
-      gap: 8px;
-      margin-bottom: 12px;
-      overflow-x: auto;
+      gap: 10px;
+      margin: 10px 0 18px;
+      flex-wrap: wrap;
     }
 
     .tab-btn {
-      flex: 0 0 auto;
-      padding: 8px 14px;
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(15, 23, 42, 0.9);
+      padding: 8px 18px;
+      font-size: 13px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.9);
       color: var(--muted);
-      font-size: 12px;
       cursor: pointer;
     }
 
     .tab-btn.active {
       background: radial-gradient(circle at top, #1d4ed8, #1e293b);
       color: #e5e7eb;
-      border-color: rgba(96, 165, 250, 0.8);
-      box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.6);
+      box-shadow: 0 0 0 1px rgba(96,165,250,0.7);
     }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
     .card {
-      background: rgba(15, 23, 42, 0.96);
-      border-radius: var(--radius-lg);
-      border: 1px solid rgba(30, 64, 175, 0.7);
-      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
-      padding: 14px 14px 16px;
-      margin-bottom: 14px;
-    }
-
-    .card-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .card-sub {
-      font-size: 11px;
-      color: var(--muted);
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(37,99,235,0.5);
+      box-shadow: 0 18px 40px rgba(15,23,42,0.9);
+      padding: 14px 16px;
       margin-bottom: 12px;
     }
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 8px;
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
       margin-bottom: 10px;
     }
 
-    label {
-      font-size: 11px;
-      color: var(--muted);
-      display: block;
-      margin-bottom: 3px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 7px 9px;
-      border-radius: 10px;
-      border: 1px solid rgba(51, 65, 85, 0.9);
-      background: rgba(15, 23, 42, 0.9);
-      color: var(--text);
+    .field-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 6px;
+      margin-bottom: 4px;
       font-size: 12px;
     }
 
-    textarea {
-      min-height: 60px;
-      resize: vertical;
+    .field-row label { color: var(--muted); }
+
+    .field-row input,
+    .field-row select,
+    .field-row textarea {
+      border-radius: 10px;
+      border: 1px solid rgba(31,41,55,0.9);
+      background: rgba(15,23,42,0.95);
+      color: var(--text);
+      padding: 6px 8px;
+      font-size: 12px;
+      width: 100%;
+    }
+
+    textarea { resize: vertical; min-height: 60px; }
+
+    .badge {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 10px;
+      border: 1px solid rgba(148,163,184,0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .badge.success { border-color: #22c55e; color:#bbf7d0; }
+    .badge.pending { border-color: #facc15; color:#fef9c3; }
+    .badge.process { border-color: #38bdf8; color:#e0f2fe; }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 7px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
     }
 
     .btn-primary {
-      padding: 8px 14px;
+      background: linear-gradient(135deg,#2563eb,#1d4ed8);
+      color: #e5e7eb;
+      box-shadow: 0 10px 24px rgba(37,99,235,0.7);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg,#ef4444,#b91c1c);
+      color: #fee2e2;
+    }
+
+    .pill {
       border-radius: 999px;
-      border: none;
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: #022c22;
-      font-weight: 600;
-      font-size: 12px;
-      cursor: pointer;
-      margin-right: 6px;
-    }
-
-    .btn-secondary {
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: rgba(15, 23, 42, 0.9);
-      color: var(--muted);
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .item {
-      border-radius: 14px;
-      border: 1px solid rgba(31, 41, 55, 0.9);
-      background: radial-gradient(circle at top left, rgba(30, 64, 175, 0.4), rgba(15, 23, 42, 0.98));
-      padding: 10px 12px;
-      font-size: 12px;
-    }
-
-    .item-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 4px 10px;
+      font-size: 11px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.5);
+      display: inline-block;
       margin-bottom: 4px;
-      gap: 6px;
-    }
-
-    .badge {
-      padding: 3px 8px;
-      border-radius: 999px;
-      font-size: 10px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: rgba(15, 23, 42, 0.9);
-    }
-
-    .badge-success {
-      border-color: rgba(34, 197, 94, 0.8);
-      color: #bbf7d0;
-    }
-
-    .badge-pending {
-      border-color: rgba(234, 179, 8, 0.8);
-      color: #facc15;
-    }
-
-    .badge-danger {
-      border-color: rgba(248, 113, 113, 0.8);
-      color: #fecaca;
-    }
-
-    .item-row {
-      margin-top: 2px;
-      color: var(--muted);
-    }
-
-    .item-actions {
-      margin-top: 6px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
     }
 
     .toast {
@@ -229,15 +183,15 @@
       left: 50%;
       bottom: 80px;
       transform: translateX(-50%);
-      padding: 9px 14px;
+      padding: 8px 14px;
       border-radius: 999px;
       font-size: 12px;
-      background: rgba(15, 23, 42, 0.96);
+      background: rgba(15,23,42,0.96);
       color: #e5e7eb;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.95);
-      z-index: 1000;
+      border: 1px solid rgba(148,163,184,0.7);
+      box-shadow: 0 16px 40px rgba(15,23,42,0.95);
       display: none;
+      z-index: 1000;
     }
 
     .toast.show {
@@ -252,17 +206,22 @@
       100% { opacity: 0; transform: translate(-50%, 10px); }
     }
 
-    .hidden { display: none; }
+    .empty-text {
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 12px;
+    }
   </style>
 </head>
 <body>
   <div class="page">
-    <div class="header">
+    <div class="top-bar">
       <div>
-        <div class="header-title">Admin Panel Barmods</div>
-        <div class="header-sub" id="adminInfo">Memuat admin...</div>
+        <h1>Admin Panel Barmods</h1>
+        <div id="adminEmail" class="admin-email">Memuat admin...</div>
       </div>
-      <button class="btn-logout" id="btnLogout">Logout Admin</button>
+      <button class="logout-btn" id="btnLogout">Logout Admin</button>
     </div>
 
     <div class="tabs">
@@ -272,89 +231,67 @@
       <button class="tab-btn" data-tab="orders">Orders</button>
     </div>
 
-    <!-- TAB PRODUK -->
-    <section id="tab-produk">
+    <!-- PRODUK -->
+    <div id="tab-produk" class="tab-content active">
+      <div class="section-title">Daftar Produk</div>
       <div class="card">
-        <div class="card-title">Tambah / Edit Produk</div>
-        <div class="card-sub">Kelola produk yang tampil di Barmods Store.</div>
-
-        <div class="form-grid">
-          <div>
-            <label>Nama produk</label>
-            <input type="text" id="prodName" placeholder="Nama produk" />
-          </div>
-          <div>
-            <label>Harga (angka saja, contoh: 2000)</label>
-            <input type="number" id="prodPrice" placeholder="2000" />
-          </div>
-          <div>
-            <label>Stok</label>
-            <input type="number" id="prodStock" placeholder="100" />
-          </div>
-          <div>
-            <label>Kategori (premium / sosmed / panel / dll)</label>
-            <input type="text" id="prodCategory" placeholder="premium / sosmed / panel" />
-          </div>
-          <div>
-            <label>Icon (emoji, opsional)</label>
-            <input type="text" id="prodIcon" placeholder="🔥" />
-          </div>
+        <div class="badge">Tambah / Edit Produk</div>
+        <div class="field-row">
+          <label>Nama produk</label>
+          <input id="prodName" placeholder="Nama produk" />
         </div>
-
-        <div>
-          <span id="prodFormMode" style="font-size:11px;color:var(--muted);">Mode: tambah baru</span>
+        <div class="field-row">
+          <label>Harga (angka)</label>
+          <input id="prodPrice" placeholder="6000" type="number" />
         </div>
-
-        <div style="margin-top:8px;">
-          <button class="btn-primary" id="btnSaveProduct">Simpan Produk</button>
-          <button class="btn-secondary" id="btnResetProduct">Reset Form</button>
+        <div class="field-row">
+          <label>Stok</label>
+          <input id="prodStock" placeholder="100" type="number" />
         </div>
+        <div class="field-row">
+          <label>Kategori</label>
+          <input id="prodCategory" placeholder="premium / sosmed / panel / lainnya" />
+        </div>
+        <div class="field-row">
+          <label>Icon (emoji)</label>
+          <input id="prodIcon" placeholder="🔥 / 🎬 / ⭐" />
+        </div>
+        <input type="hidden" id="prodIdEdit" />
+        <button class="btn btn-primary" id="btnSaveProduct">Simpan Produk</button>
+        <button class="btn btn-danger" id="btnResetProduct" style="margin-left:8px;">Reset Form</button>
       </div>
 
-      <div class="card">
-        <div class="card-title">Daftar Produk</div>
-        <div class="card-sub" id="prodListInfo">Memuat produk...</div>
-        <div class="list" id="prodList"></div>
-      </div>
-    </section>
+      <div id="produkList"></div>
+    </div>
 
-    <!-- TAB TOPUP -->
-    <section id="tab-topup" class="hidden">
-      <div class="card">
-        <div class="card-title">Daftar Topup</div>
-        <div class="card-sub">Verifikasi permintaan topup user. Jika diset <b>success</b>, saldo user akan otomatis bertambah.</div>
-        <div class="list" id="topupList"></div>
-      </div>
-    </section>
+    <!-- TOPUP -->
+    <div id="tab-topup" class="tab-content">
+      <div class="section-title">Daftar Topup</div>
+      <div id="topupList"></div>
+    </div>
 
-    <!-- TAB SALDO USER -->
-    <section id="tab-saldo" class="hidden">
-      <div class="card">
-        <div class="card-title">Saldo User</div>
-        <div class="card-sub">Lihat dan atur saldo user secara manual bila diperlukan.</div>
-        <div class="list" id="userList"></div>
-      </div>
-    </section>
+    <!-- SALDO USER -->
+    <div id="tab-saldo" class="tab-content">
+      <div class="section-title">Saldo User</div>
+      <div id="userBalanceList"></div>
+    </div>
 
-    <!-- TAB ORDERS -->
-    <section id="tab-orders" class="hidden">
-      <div class="card">
-        <div class="card-title">Daftar Orders</div>
-        <div class="card-sub">Kelola pesanan user. Field <b>Data yang kamu kirim</b> diambil dari <code>dataOrder</code>.</div>
-        <div class="list" id="orderList"></div>
-      </div>
-    </section>
+    <!-- ORDERS -->
+    <div id="tab-orders" class="tab-content">
+      <div class="section-title">Daftar Orders</div>
+      <div id="ordersList"></div>
+    </div>
   </div>
 
   <div id="toast" class="toast"></div>
 
-  <!-- Firebase compat -->
+  <!-- Firebase compat SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
   <script>
-    // CONFIG PROJEK KAMU
+    // --- CONFIG FIREBASE (SAMA DENGAN FILE LAIN) ---
     const firebaseConfig = {
       apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
       authDomain: "toko-barmods.firebaseapp.com",
@@ -366,27 +303,14 @@
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    const db = firebase.firestore();
+    const db   = firebase.firestore();
 
-    const adminInfoEl = document.getElementById("adminInfo");
-    const toastEl = document.getElementById("toast");
-
-    // elemen produk
-    const prodNameEl = document.getElementById("prodName");
-    const prodPriceEl = document.getElementById("prodPrice");
-    const prodStockEl = document.getElementById("prodStock");
-    const prodCategoryEl = document.getElementById("prodCategory");
-    const prodIconEl = document.getElementById("prodIcon");
-    const prodFormModeEl = document.getElementById("prodFormMode");
-    const prodListEl = document.getElementById("prodList");
-    const prodListInfoEl = document.getElementById("prodListInfo");
-
-    const topupListEl = document.getElementById("topupList");
-    const userListEl = document.getElementById("userList");
-    const orderListEl = document.getElementById("orderList");
-
-    let currentAdmin = null;
-    let editingProductId = null;
+    const adminEmailEl   = document.getElementById("adminEmail");
+    const toastEl        = document.getElementById("toast");
+    const produkListEl   = document.getElementById("produkList");
+    const topupListEl    = document.getElementById("topupList");
+    const userBalanceEl  = document.getElementById("userBalanceList");
+    const ordersListEl   = document.getElementById("ordersList");
 
     function showToast(msg) {
       toastEl.textContent = msg;
@@ -405,193 +329,150 @@
       return "Rp " + num.toLocaleString("id-ID");
     }
 
-    // --------- AUTH ADMIN ----------
+    // ---------- AUTH ----------
     auth.onAuthStateChanged(async (user) => {
       if (!user) {
+        // kalau belum login, lempar ke admin-login.html
         window.location.href = "admin-login.html";
         return;
       }
-      try {
-        const snap = await db.collection("users").doc(user.uid).get();
-        const data = snap.data() || {};
-        if (!data.isAdmin) {
-          await auth.signOut();
-          alert("Akun ini bukan admin. Hubungi pemilik panel untuk akses admin.");
-          window.location.href = "admin-login.html";
-          return;
-        }
-        currentAdmin = user;
-        adminInfoEl.textContent = `${user.email} (Admin)`;
-
-        // load data awal
-        loadProducts();
-        loadTopups();
-        loadUsers();
-        loadOrders();
-      } catch (err) {
-        console.error(err);
-        alert("Gagal memeriksa hak admin.");
-        window.location.href = "admin-login.html";
-      }
+      adminEmailEl.textContent = (user.email || "Admin") + " (Admin)";
+      await Promise.all([
+        loadProducts(),
+        loadTopups(),
+        loadUserBalances(),
+        loadOrders()
+      ]);
     });
 
     document.getElementById("btnLogout").addEventListener("click", async () => {
       try {
         await auth.signOut();
-      } catch (e) {}
-      window.location.href = "admin-login.html";
+        window.location.href = "admin-login.html";
+      } catch (e) {
+        console.error(e);
+        showToast("Gagal logout.");
+      }
     });
 
-    // --------- TAB HANDLER ----------
-    const tabButtons = document.querySelectorAll(".tab-btn");
-    const sections = {
-      produk: document.getElementById("tab-produk"),
-      topup: document.getElementById("tab-topup"),
-      saldo: document.getElementById("tab-saldo"),
-      orders: document.getElementById("tab-orders"),
-    };
-
-    tabButtons.forEach(btn => {
+    // ---------- TAB ----------
+    document.querySelectorAll(".tab-btn").forEach(btn => {
       btn.addEventListener("click", () => {
-        tabButtons.forEach(b => b.classList.remove("active"));
+        const tab = btn.dataset.tab;
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
         btn.classList.add("active");
-        const tab = btn.getAttribute("data-tab");
-        Object.keys(sections).forEach(k => {
-          sections[k].classList.toggle("hidden", k !== tab);
-        });
+        document.getElementById("tab-" + tab).classList.add("active");
       });
     });
 
-    // --------- PRODUK ----------
-    function resetProductForm() {
-      editingProductId = null;
-      prodNameEl.value = "";
-      prodPriceEl.value = "";
-      prodStockEl.value = "";
-      prodCategoryEl.value = "";
-      prodIconEl.value = "";
-      prodFormModeEl.textContent = "Mode: tambah baru";
+    // ---------- PRODUK ----------
+    async function loadProducts() {
+      produkListEl.innerHTML = "<p class='empty-text'>Memuat produk...</p>";
+      try {
+        const snap = await db.collection("products").orderBy("name").get();
+        if (snap.empty) {
+          produkListEl.innerHTML = "<p class='empty-text'>Belum ada produk.</p>";
+          return;
+        }
+        produkListEl.innerHTML = "";
+        snap.forEach(doc => {
+          const data = doc.data();
+          const card = document.createElement("div");
+          card.className = "card";
+          const price = data.price ?? 0;
+          const stock = data.stock ?? 0;
+          const icon  = data.icon || "⭐";
+          card.innerHTML = `
+            <div class="pill">${icon} ${data.name || "(tanpa nama)"} · ${data.category || "lainnya"}</div>
+            <div class="field-row">
+              <label>Harga</label>
+              <div>${formatRupiah(price)}</div>
+            </div>
+            <div class="field-row">
+              <label>Stok</label>
+              <div>${stock}</div>
+            </div>
+            <button class="btn btn-primary btn-edit">Edit</button>
+            <button class="btn btn-danger btn-delete" style="margin-left:8px;">Hapus</button>
+          `;
+          card.querySelector(".btn-edit").addEventListener("click", () => {
+            document.getElementById("prodIdEdit").value   = doc.id;
+            document.getElementById("prodName").value     = data.name || "";
+            document.getElementById("prodPrice").value    = price;
+            document.getElementById("prodStock").value    = stock;
+            document.getElementById("prodCategory").value = data.category || "";
+            document.getElementById("prodIcon").value     = data.icon || "";
+            showToast("Mode edit produk.");
+          });
+          card.querySelector(".btn-delete").addEventListener("click", async () => {
+            if (!confirm("Yakin hapus produk ini?")) return;
+            try {
+              await db.collection("products").doc(doc.id).delete();
+              showToast("Produk dihapus.");
+              loadProducts();
+            } catch (e) {
+              console.error(e);
+              showToast("Gagal menghapus produk.");
+            }
+          });
+          produkListEl.appendChild(card);
+        });
+      } catch (e) {
+        console.error(e);
+        produkListEl.innerHTML = "<p class='empty-text'>Gagal memuat produk.</p>";
+      }
     }
 
-    document.getElementById("btnResetProduct").addEventListener("click", resetProductForm);
+    document.getElementById("btnResetProduct").addEventListener("click", () => {
+      document.getElementById("prodIdEdit").value = "";
+      document.getElementById("prodName").value = "";
+      document.getElementById("prodPrice").value = "";
+      document.getElementById("prodStock").value = "";
+      document.getElementById("prodCategory").value = "";
+      document.getElementById("prodIcon").value = "";
+    });
 
     document.getElementById("btnSaveProduct").addEventListener("click", async () => {
-      const name = prodNameEl.value.trim();
-      const price = parseInt(prodPriceEl.value, 10) || 0;
-      const stock = parseInt(prodStockEl.value, 10) || 0;
-      const category = prodCategoryEl.value.trim() || "lainnya";
-      const icon = prodIconEl.value.trim() || "⭐";
+      const idEdit  = document.getElementById("prodIdEdit").value.trim();
+      const name    = document.getElementById("prodName").value.trim();
+      const price   = parseInt(document.getElementById("prodPrice").value || "0", 10);
+      const stock   = parseInt(document.getElementById("prodStock").value || "0", 10);
+      const category= document.getElementById("prodCategory").value.trim();
+      const icon    = document.getElementById("prodIcon").value.trim();
 
       if (!name) {
         showToast("Nama produk wajib diisi.");
         return;
       }
-      if (price <= 0) {
-        showToast("Harga harus lebih dari 0.");
-        return;
-      }
 
-      const data = {
+      const payload = {
         name,
-        price,
-        stock,
-        category,
-        icon
+        price: isNaN(price) ? 0 : price,
+        stock: isNaN(stock) ? 0 : stock,
+        category: category || "lainnya",
+        icon: icon || "⭐"
       };
 
       try {
-        if (editingProductId) {
-          await db.collection("products").doc(editingProductId).update(data);
+        if (idEdit) {
+          await db.collection("products").doc(idEdit).update(payload);
           showToast("Produk berhasil diupdate.");
         } else {
-          await db.collection("products").add(data);
-          showToast("Produk baru berhasil ditambahkan.");
+          await db.collection("products").add(payload);
+          showToast("Produk baru ditambahkan.");
         }
-        resetProductForm();
+        document.getElementById("btnResetProduct").click();
         loadProducts();
-      } catch (err) {
-        console.error(err);
+      } catch (e) {
+        console.error(e);
         showToast("Gagal menyimpan produk.");
       }
     });
 
-    async function loadProducts() {
-      prodListEl.innerHTML = "";
-      prodListInfoEl.textContent = "Memuat produk...";
-      try {
-        const snap = await db.collection("products").orderBy("name").get();
-        if (snap.empty) {
-          prodListInfoEl.textContent = "Belum ada produk.";
-          return;
-        }
-        prodListInfoEl.textContent = `Total produk: ${snap.size}`;
-        snap.forEach(doc => {
-          const p = doc.data();
-          const item = document.createElement("div");
-          item.className = "item";
-
-          const priceText = formatRupiah(p.price || 0);
-          const stock = typeof p.stock === "number" ? p.stock : 0;
-          const icon = p.icon || "⭐";
-          const cat = p.category || "lainnya";
-
-          item.innerHTML = `
-            <div class="item-header">
-              <div><strong>${icon} ${p.name || "Tanpa nama"}</strong></div>
-              <div class="badge">${cat}</div>
-            </div>
-            <div class="item-row">Harga: ${priceText}</div>
-            <div class="item-row">Stok: ${stock}</div>
-          `;
-
-          const actions = document.createElement("div");
-          actions.className = "item-actions";
-
-          const btnEdit = document.createElement("button");
-          btnEdit.className = "btn-secondary";
-          btnEdit.textContent = "Edit";
-          btnEdit.addEventListener("click", () => {
-            editingProductId = doc.id;
-            prodNameEl.value = p.name || "";
-            prodPriceEl.value = p.price || "";
-            prodStockEl.value = stock;
-            prodCategoryEl.value = cat;
-            prodIconEl.value = icon;
-            prodFormModeEl.textContent = `Mode: edit (${p.name || ""})`;
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          });
-
-          const btnDelete = document.createElement("button");
-          btnDelete.className = "btn-secondary";
-          btnDelete.style.borderColor = "rgba(248,113,113,0.8)";
-          btnDelete.textContent = "Hapus";
-          btnDelete.addEventListener("click", async () => {
-            if (!confirm(`Hapus produk "${p.name}"?`)) return;
-            try {
-              await db.collection("products").doc(doc.id).delete();
-              showToast("Produk dihapus.");
-              loadProducts();
-            } catch (err) {
-              console.error(err);
-              showToast("Gagal menghapus produk.");
-            }
-          });
-
-          actions.appendChild(btnEdit);
-          actions.appendChild(btnDelete);
-          item.appendChild(actions);
-
-          prodListEl.appendChild(item);
-        });
-      } catch (err) {
-        console.error(err);
-        prodListInfoEl.textContent = "Gagal memuat produk.";
-      }
-    }
-
-    // --------- TOPUP ----------
+    // ---------- TOPUP ----------
     async function loadTopups() {
-      topupListEl.innerHTML = "<div class='item-row'>Memuat topup...</div>";
+      topupListEl.innerHTML = "<p class='empty-text'>Memuat topup...</p>";
       try {
         const snap = await db.collection("topups")
           .orderBy("createdAt", "desc")
@@ -599,166 +480,157 @@
           .get();
 
         if (snap.empty) {
-          topupListEl.innerHTML = "<div class='item-row'>Belum ada data topup.</div>";
+          topupListEl.innerHTML = "<p class='empty-text'>Belum ada permintaan topup.</p>";
           return;
         }
 
         topupListEl.innerHTML = "";
         snap.forEach(doc => {
-          const t = doc.data();
-          const item = document.createElement("div");
-          item.className = "item";
+          const data = doc.data();
+          const amount = data.amount ?? data.nominal ?? 0;
+          const method = data.method ?? data.metode ?? "-";
+          const status = (data.status || "pending").toLowerCase();
+          const userEmail = data.userEmail || "-";
+          let tglText = "-";
+          const ts = data.createdAt || data.tanggal;
+          if (ts && ts.toDate) {
+            const d = ts.toDate();
+            tglText = d.toLocaleString("id-ID");
+          }
 
-          const status = (t.status || "pending").toLowerCase();
-          let badgeClass = "badge-pending";
-          if (status === "success") badgeClass = "badge-success";
-          else if (status === "cancel") badgeClass = "badge-danger";
-
-          const amount = formatRupiah(t.amount || 0);
-          const userEmail = t.userEmail || "-";
-          const createdAt = t.createdAt && t.createdAt.toDate
-            ? t.createdAt.toDate().toLocaleString("id-ID")
-            : "-";
-
-          item.innerHTML = `
-            <div class="item-header">
-              <div><strong>Topup - ${userEmail}</strong></div>
-              <div class="badge ${badgeClass}">${status.toUpperCase()}</div>
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <div class="pill">Topup - ${userEmail}</div>
+            <div class="field-row">
+              <label>Nominal</label>
+              <div>${formatRupiah(amount)}</div>
             </div>
-            <div class="item-row">Nominal: ${amount}</div>
-            <div class="item-row">Metode: ${t.method || "-"}</div>
-            <div class="item-row">Tanggal: ${createdAt}</div>
+            <div class="field-row">
+              <label>Metode</label>
+              <div>${method}</div>
+            </div>
+            <div class="field-row">
+              <label>Tanggal</label>
+              <div>${tglText}</div>
+            </div>
+            <div class="field-row">
+              <label>Status</label>
+              <select class="status-select">
+                <option value="pending">PENDING</option>
+                <option value="success">SUCCESS</option>
+                <option value="failed">FAILED</option>
+              </select>
+            </div>
+            <button class="btn btn-primary btn-save">Simpan Status</button>
           `;
 
-          const actions = document.createElement("div");
-          actions.className = "item-actions";
+          const select = card.querySelector(".status-select");
+          select.value = status;
+          select.dataset.prevStatus = status;
+          select.dataset.amount = amount;
+          select.dataset.userId = data.userId || "";
+          select.dataset.topupId = doc.id;
 
-          const selectStatus = document.createElement("select");
-          ["pending", "success", "cancel"].forEach(s => {
-            const opt = document.createElement("option");
-            opt.value = s;
-            opt.textContent = s.toUpperCase();
-            if (s === status) opt.selected = true;
-            selectStatus.appendChild(opt);
+          card.querySelector(".btn-save").addEventListener("click", () => {
+            saveTopupStatus(select);
           });
 
-          const btnSave = document.createElement("button");
-          btnSave.className = "btn-primary";
-          btnSave.textContent = "Simpan Status";
-
-          btnSave.addEventListener("click", async () => {
-            const newStatus = selectStatus.value;
-            try {
-              await db.runTransaction(async (tx) => {
-                const ref = db.collection("topups").doc(doc.id);
-                const snap2 = await tx.get(ref);
-                const data2 = snap2.data() || {};
-                const oldStatus = (data2.status || "pending").toLowerCase();
-
-                tx.update(ref, { status: newStatus });
-
-                if (oldStatus !== "success" && newStatus === "success") {
-                  // kredit saldo user
-                  const userRef = db.collection("users").doc(data2.userId);
-                  const userSnap = await tx.get(userRef);
-                  const udata = userSnap.data() || {};
-                  const bal = udata.balance || 0;
-                  tx.update(userRef, { balance: bal + (data2.amount || 0) });
-                }
-              });
-
-              showToast("Status topup disimpan.");
-              loadTopups();
-              loadUsers();
-            } catch (err) {
-              console.error(err);
-              showToast("Gagal menyimpan status topup.");
-            }
-          });
-
-          actions.appendChild(selectStatus);
-          actions.appendChild(btnSave);
-          item.appendChild(actions);
-
-          topupListEl.appendChild(item);
+          topupListEl.appendChild(card);
         });
-      } catch (err) {
-        console.error(err);
-        topupListEl.innerHTML = "<div class='item-row'>Gagal memuat topup.</div>";
+      } catch (e) {
+        console.error(e);
+        topupListEl.innerHTML = "<p class='empty-text'>Gagal memuat topup.</p>";
       }
     }
 
-    // --------- SALDO USER ----------
-    async function loadUsers() {
-      userListEl.innerHTML = "<div class='item-row'>Memuat user...</div>";
-      try {
-        const snap = await db.collection("users")
-          .orderBy("email")
-          .limit(100)
-          .get();
+    async function saveTopupStatus(selectEl) {
+      const newStatus  = selectEl.value;
+      const prevStatus = selectEl.dataset.prevStatus || "pending";
+      const amount     = parseInt(selectEl.dataset.amount || "0", 10);
+      const userId     = selectEl.dataset.userId || "";
+      const topupId    = selectEl.dataset.topupId;
 
-        if (snap.empty) {
-          userListEl.innerHTML = "<div class='item-row'>Belum ada user.</div>";
-          return;
+      if (!topupId) {
+        showToast("Data topup tidak valid.");
+        return;
+      }
+
+      try {
+        const topupRef = db.collection("topups").doc(topupId);
+
+        if (newStatus === "success" && prevStatus !== "success" && userId && amount > 0) {
+          // tambah saldo user satu kali saja
+          const userRef = db.collection("users").doc(userId);
+          await db.runTransaction(async (tx) => {
+            const userSnap = await tx.get(userRef);
+            const userData = userSnap.data() || {};
+            const balance  = userData.balance || 0;
+            tx.update(userRef, { balance: balance + amount });
+            tx.update(topupRef, { status: newStatus });
+          });
+        } else {
+          await topupRef.update({ status: newStatus });
         }
 
-        userListEl.innerHTML = "";
+        selectEl.dataset.prevStatus = newStatus;
+        showToast("Status topup disimpan.");
+      } catch (e) {
+        console.error(e);
+        showToast("Gagal menyimpan status topup.");
+      }
+    }
+
+    // ---------- SALDO USER ----------
+    async function loadUserBalances() {
+      userBalanceEl.innerHTML = "<p class='empty-text'>Memuat user...</p>";
+      try {
+        const snap = await db.collection("users").orderBy("email").get();
+        if (snap.empty) {
+          userBalanceEl.innerHTML = "<p class='empty-text'>Belum ada user.</p>";
+          return;
+        }
+        userBalanceEl.innerHTML = "";
         snap.forEach(doc => {
-          const u = doc.data();
-          const item = document.createElement("div");
-          item.className = "item";
-
-          const balance = u.balance || 0;
-          const isAdmin = !!u.isAdmin;
-
-          item.innerHTML = `
-            <div class="item-header">
-              <div><strong>${u.email || "Tanpa email"}</strong></div>
-              <div class="badge ${isAdmin ? "badge-success" : ""}">${isAdmin ? "ADMIN" : "USER"}</div>
+          const data = doc.data();
+          const bal  = data.balance || 0;
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <div class="pill">${data.email || "(tanpa email)"}</div>
+            <div class="field-row">
+              <label>Saldo sekarang</label>
+              <div>${formatRupiah(bal)}</div>
             </div>
-            <div class="item-row">Saldo: ${formatRupiah(balance)}</div>
-            <div class="item-row">UID: ${doc.id}</div>
+            <div class="field-row">
+              <label>Saldo baru</label>
+              <input class="input-balance" type="number" value="${bal}">
+            </div>
+            <button class="btn btn-primary btn-save-balance">Simpan Saldo</button>
           `;
-
-          const actions = document.createElement("div");
-          actions.className = "item-actions";
-
-          const inpSaldo = document.createElement("input");
-          inpSaldo.type = "number";
-          inpSaldo.value = balance;
-          inpSaldo.style.maxWidth = "120px";
-
-          const btnSet = document.createElement("button");
-          btnSet.className = "btn-primary";
-          btnSet.textContent = "Set Saldo";
-
-          btnSet.addEventListener("click", async () => {
-            const newBal = parseInt(inpSaldo.value, 10) || 0;
+          const input = card.querySelector(".input-balance");
+          card.querySelector(".btn-save-balance").addEventListener("click", async () => {
+            const newBal = parseInt(input.value || "0", 10);
             try {
-              await db.collection("users").doc(doc.id).update({ balance: newBal });
+              await db.collection("users").doc(doc.id).update({ balance: isNaN(newBal) ? 0 : newBal });
               showToast("Saldo user diupdate.");
-              loadUsers();
-            } catch (err) {
-              console.error(err);
+              loadUserBalances();
+            } catch (e) {
+              console.error(e);
               showToast("Gagal update saldo user.");
             }
           });
-
-          actions.appendChild(inpSaldo);
-          actions.appendChild(btnSet);
-          item.appendChild(actions);
-
-          userListEl.appendChild(item);
+          userBalanceEl.appendChild(card);
         });
-      } catch (err) {
-        console.error(err);
-        userListEl.innerHTML = "<div class='item-row'>Gagal memuat user.</div>";
+      } catch (e) {
+        console.error(e);
+        userBalanceEl.innerHTML = "<p class='empty-text'>Gagal memuat user.</p>";
       }
     }
 
-    // --------- ORDERS ----------
+    // ---------- ORDERS ----------
     async function loadOrders() {
-      orderListEl.innerHTML = "<div class='item-row'>Memuat orders...</div>";
+      ordersListEl.innerHTML = "<p class='empty-text'>Memuat orders...</p>";
       try {
         const snap = await db.collection("orders")
           .orderBy("createdAt", "desc")
@@ -766,86 +638,93 @@
           .get();
 
         if (snap.empty) {
-          orderListEl.innerHTML = "<div class='item-row'>Belum ada pesanan.</div>";
+          ordersListEl.innerHTML = "<p class='empty-text'>Belum ada pesanan.</p>";
           return;
         }
 
-        orderListEl.innerHTML = "";
+        ordersListEl.innerHTML = "";
         snap.forEach(doc => {
-          const o = doc.data();
-          const item = document.createElement("div");
-          item.className = "item";
+          const data = doc.data();
+          const status = (data.status || "pending").toLowerCase();
+          let tglText = "-";
+          const ts = data.createdAt;
+          if (ts && ts.toDate) {
+            tglText = ts.toDate().toLocaleString("id-ID");
+          }
 
-          const status = (o.status || "pending").toLowerCase();
-          let badgeClass = "badge-pending";
-          if (status === "success") badgeClass = "badge-success";
-          else if (status === "cancel" || status === "failed") badgeClass = "badge-danger";
+          const card = document.createElement("div");
+          card.className = "card";
 
-          const createdAt = o.createdAt && o.createdAt.toDate
-            ? o.createdAt.toDate().toLocaleString("id-ID")
-            : "-";
+          let badgeClass = "pending";
+          if (status === "success") badgeClass = "success";
+          else if (status === "process") badgeClass = "process";
 
-          const dataUser = o.dataOrder || "-";          // <<< ini yang ambil data yang user kirim
-          const adminProd = o.adminProduct || "";
-
-          item.innerHTML = `
-            <div class="item-header">
-              <div><strong>${o.productName || "Produk"}</strong></div>
-              <div class="badge ${badgeClass}">${status.toUpperCase()}</div>
+          card.innerHTML = `
+            <div class="badge ${badgeClass}">${(data.productName || "Produk")} · ${status.toUpperCase()}</div>
+            <div class="field-row">
+              <label>Tanggal</label>
+              <div>${tglText}</div>
             </div>
-            <div class="item-row">User: ${o.userEmail || "-"}</div>
-            <div class="item-row">Harga: ${formatRupiah(o.price || 0)}</div>
-            <div class="item-row">Tanggal: ${createdAt}</div>
-            <div class="item-row">Data yang kamu kirim: ${dataUser}</div>
+            <div class="field-row">
+              <label>Harga</label>
+              <div>${formatRupiah(data.price || 0)}</div>
+            </div>
+            <div class="field-row">
+              <label>Data user</label>
+              <div>${data.dataOrder || "-"}</div>
+            </div>
+            <div class="field-row">
+              <label>Status</label>
+              <select class="order-status">
+                <option value="pending">PENDING</option>
+                <option value="process">PROCESS</option>
+                <option value="success">SUCCESS</option>
+                <option value="failed">FAILED</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label>Produk / Respon</label>
+              <textarea class="order-admin">${data.adminProduct || ""}</textarea>
+            </div>
+            <button class="btn btn-primary btn-save-order">Simpan Perubahan</button>
+            <button class="btn btn-danger btn-delete-order" style="margin-left:8px;">Hapus</button>
           `;
 
-          const actions = document.createElement("div");
-          actions.className = "item-actions";
+          const select = card.querySelector(".order-status");
+          select.value = status;
+          const adminInput = card.querySelector(".order-admin");
 
-          const selectStatus = document.createElement("select");
-          ["pending", "process", "success", "cancel"].forEach(s => {
-            const opt = document.createElement("option");
-            opt.value = s;
-            opt.textContent = s.toUpperCase();
-            if (s === status) opt.selected = true;
-            selectStatus.appendChild(opt);
-          });
-
-          const textAdmin = document.createElement("textarea");
-          textAdmin.placeholder = "Produk / respon admin";
-          textAdmin.value = adminProd;
-          textAdmin.style.flex = "1 1 100%";
-
-          const btnSave = document.createElement("button");
-          btnSave.className = "btn-primary";
-          btnSave.textContent = "Simpan Perubahan";
-
-          btnSave.addEventListener("click", async () => {
-            const newStatus = selectStatus.value;
-            const newAdminText = textAdmin.value.trim();
+          card.querySelector(".btn-save-order").addEventListener("click", async () => {
             try {
               await db.collection("orders").doc(doc.id).update({
-                status: newStatus,
-                adminProduct: newAdminText
+                status: select.value,
+                adminProduct: adminInput.value
               });
-              showToast("Order berhasil diupdate.");
+              showToast("Order diupdate.");
               loadOrders();
-            } catch (err) {
-              console.error(err);
-              showToast("Gagal update order.");
+            } catch (e) {
+              console.error(e);
+              showToast("Gagal menyimpan order.");
             }
           });
 
-          actions.appendChild(selectStatus);
-          actions.appendChild(btnSave);
-          actions.appendChild(textAdmin);
-          item.appendChild(actions);
+          card.querySelector(".btn-delete-order").addEventListener("click", async () => {
+            if (!confirm("Yakin hapus pesanan ini?")) return;
+            try {
+              await db.collection("orders").doc(doc.id).delete();
+              showToast("Order dihapus.");
+              loadOrders();
+            } catch (e) {
+              console.error(e);
+              showToast("Gagal menghapus order.");
+            }
+          });
 
-          orderListEl.appendChild(item);
+          ordersListEl.appendChild(card);
         });
-      } catch (err) {
-        console.error(err);
-        orderListEl.innerHTML = "<div class='item-row'>Gagal memuat orders.</div>";
+      } catch (e) {
+        console.error(e);
+        ordersListEl.innerHTML = "<p class='empty-text'>Gagal memuat pesanan.</p>";
       }
     }
   </script>
