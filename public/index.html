@@ -481,7 +481,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
   <script>
-    // ================== FIREBASE CONFIG ==================
     const firebaseConfig = {
       apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
       authDomain: "toko-barmods.firebaseapp.com",
@@ -506,7 +505,7 @@
     let allProducts = [];
     let activeFilter = "all";
 
-    // =============== DEFAULT PRODUCTS (AKAN DI-SEED KALAU PRODUCTS KOSONG) ===============
+    // ========= PRODUK DEFAULT (AUTO SEED KALAU KOLEKSI KOSONG) =========
     const defaultProducts = [
       // Alight Motion
       { name:"Alight Motion Private - 1 Tahun (iOS/Android)", price:2000,  category:"Alight Motion", icon:"🎞", stock:999 },
@@ -605,47 +604,47 @@
       { name:"Brainly Plus Sharing - 1 Tahun",      price:7000,  category:"Extra", icon:"🧠", stock:999 },
       { name:"RCTI+ Ultimate Private - 1 Bulan",    price:35000, category:"Extra", icon:"📺", stock:999 },
 
-      // Instagram Views
-      { name:"Instagram Views 500",   price:1500,  category:"Instagram Views", icon:"📷", stock:999 },
-      { name:"Instagram Views 1000",  price:3000,  category:"Instagram Views", icon:"📷", stock:999 },
-      { name:"Instagram Views 2000",  price:6000,  category:"Instagram Views", icon:"📷", stock:999 },
-      { name:"Instagram Views 3000",  price:9000,  category:"Instagram Views", icon:"📷", stock:999 },
-      { name:"Instagram Views 4000",  price:12000, category:"Instagram Views", icon:"📷", stock:999 },
-      { name:"Instagram Views 5000",  price:15000, category:"Instagram Views", icon:"📷", stock:999 },
-      { name:"Instagram Views 10000", price:30000, category:"Instagram Views", icon:"📷", stock:999 },
+      // Instagram Views (IG sendiri)
+      { name:"Instagram Views 500",   price:1500,  category:"Instagram", icon:"📷", stock:999 },
+      { name:"Instagram Views 1000",  price:3000,  category:"Instagram", icon:"📷", stock:999 },
+      { name:"Instagram Views 2000",  price:6000,  category:"Instagram", icon:"📷", stock:999 },
+      { name:"Instagram Views 3000",  price:9000,  category:"Instagram", icon:"📷", stock:999 },
+      { name:"Instagram Views 4000",  price:12000, category:"Instagram", icon:"📷", stock:999 },
+      { name:"Instagram Views 5000",  price:15000, category:"Instagram", icon:"📷", stock:999 },
+      { name:"Instagram Views 10000", price:30000, category:"Instagram", icon:"📷", stock:999 },
 
-      // TikTok Views
-      { name:"TikTok Views 500",   price:1500,  category:"TikTok Views", icon:"🎵", stock:999 },
-      { name:"TikTok Views 1000",  price:3000,  category:"TikTok Views", icon:"🎵", stock:999 },
-      { name:"TikTok Views 2000",  price:6000,  category:"TikTok Views", icon:"🎵", stock:999 },
-      { name:"TikTok Views 3000",  price:9000,  category:"TikTok Views", icon:"🎵", stock:999 },
-      { name:"TikTok Views 4000",  price:12000, category:"TikTok Views", icon:"🎵", stock:999 },
-      { name:"TikTok Views 5000",  price:15000, category:"TikTok Views", icon:"🎵", stock:999 },
-      { name:"TikTok Views 10000", price:30000, category:"TikTok Views", icon:"🎵", stock:999 },
+      // TikTok Views (TikTok sendiri)
+      { name:"TikTok Views 500",   price:1500,  category:"TikTok", icon:"🎵", stock:999 },
+      { name:"TikTok Views 1000",  price:3000,  category:"TikTok", icon:"🎵", stock:999 },
+      { name:"TikTok Views 2000",  price:6000,  category:"TikTok", icon:"🎵", stock:999 },
+      { name:"TikTok Views 3000",  price:9000,  category:"TikTok", icon:"🎵", stock:999 },
+      { name:"TikTok Views 4000",  price:12000, category:"TikTok", icon:"🎵", stock:999 },
+      { name:"TikTok Views 5000",  price:15000, category:"TikTok", icon:"🎵", stock:999 },
+      { name:"TikTok Views 10000", price:30000, category:"TikTok", icon:"🎵", stock:999 },
 
-      // TikTok + Instagram Members
-      { name:"100 Members",  price:5000,  category:"TikTok + Instagram Members", icon:"👥", stock:999 },
-      { name:"200 Members",  price:10000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
-      { name:"300 Members",  price:15000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
-      { name:"400 Members",  price:20000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
-      { name:"500 Members",  price:25000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
-      { name:"600 Members",  price:30000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
-      { name:"700 Members",  price:35000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
-      { name:"800 Members",  price:40000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
-      { name:"900 Members",  price:45000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
-      { name:"1000 Members", price:50000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
+      // Members (gabungan IG+TikTok, tapi kategori khusus)
+      { name:"100 Members",  price:5000,  category:"Sosmed Members", icon:"👥", stock:999 },
+      { name:"200 Members",  price:10000, category:"Sosmed Members", icon:"👥", stock:999 },
+      { name:"300 Members",  price:15000, category:"Sosmed Members", icon:"👥", stock:999 },
+      { name:"400 Members",  price:20000, category:"Sosmed Members", icon:"👥", stock:999 },
+      { name:"500 Members",  price:25000, category:"Sosmed Members", icon:"👥", stock:999 },
+      { name:"600 Members",  price:30000, category:"Sosmed Members", icon:"👥", stock:999 },
+      { name:"700 Members",  price:35000, category:"Sosmed Members", icon:"👥", stock:999 },
+      { name:"800 Members",  price:40000, category:"Sosmed Members", icon:"👥", stock:999 },
+      { name:"900 Members",  price:45000, category:"Sosmed Members", icon:"👥", stock:999 },
+      { name:"1000 Members", price:50000, category:"Sosmed Members", icon:"👥", stock:999 },
 
-      // TikTok + Instagram Likes + Views
-      { name:"100 Likes + 1000 Views",  price:2000,  category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
-      { name:"200 Likes + 1000 Views",  price:4000,  category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
-      { name:"300 Likes + 1000 Views",  price:6000,  category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
-      { name:"400 Likes + 1000 Views",  price:8000,  category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
-      { name:"500 Likes + 1000 Views",  price:9000,  category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
-      { name:"600 Likes + 1000 Views",  price:10000, category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
-      { name:"700 Likes + 1000 Views",  price:11000, category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
-      { name:"800 Likes + 1000 Views",  price:12000, category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
-      { name:"900 Likes + 1000 Views",  price:13000, category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
-      { name:"1000 Likes + 1000 Views", price:14000, category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
+      // Likes + Views paket IG/TikTok
+      { name:"100 Likes + 1000 Views",  price:2000,  category:"Likes + Views", icon:"❤️", stock:999 },
+      { name:"200 Likes + 1000 Views",  price:4000,  category:"Likes + Views", icon:"❤️", stock:999 },
+      { name:"300 Likes + 1000 Views",  price:6000,  category:"Likes + Views", icon:"❤️", stock:999 },
+      { name:"400 Likes + 1000 Views",  price:8000,  category:"Likes + Views", icon:"❤️", stock:999 },
+      { name:"500 Likes + 1000 Views",  price:9000,  category:"Likes + Views", icon:"❤️", stock:999 },
+      { name:"600 Likes + 1000 Views",  price:10000, category:"Likes + Views", icon:"❤️", stock:999 },
+      { name:"700 Likes + 1000 Views",  price:11000, category:"Likes + Views", icon:"❤️", stock:999 },
+      { name:"800 Likes + 1000 Views",  price:12000, category:"Likes + Views", icon:"❤️", stock:999 },
+      { name:"900 Likes + 1000 Views",  price:13000, category:"Likes + Views", icon:"❤️", stock:999 },
+      { name:"1000 Likes + 1000 Views", price:14000, category:"Likes + Views", icon:"❤️", stock:999 },
 
       // Panel Pterodactyl
       { name:"Panel Pterodactyl RAM 1GB",  price:1000,  category:"Panel Pterodactyl", icon:"🖥", stock:999 },
@@ -660,7 +659,6 @@
       { name:"Panel Pterodactyl Unlimited", price:10000, category:"Panel Pterodactyl", icon:"🖥", stock:999 },
     ];
 
-    // =============== HELPER ===============
     function showToast(message) {
       if (!toastEl) return;
       toastEl.textContent = message;
@@ -683,7 +681,6 @@
       window.location.href = "wallet.html";
     }
 
-    // =============== FILTER RENDER ===============
     function buildFilterChips() {
       filterRowEl.innerHTML = "";
 
@@ -713,7 +710,6 @@
       });
     }
 
-    // =============== RENDER PRODUK ===============
     function renderProducts() {
       productListEl.innerHTML = "";
       const list = activeFilter === "all"
@@ -766,7 +762,6 @@
       });
     }
 
-    // =============== SEED PRODUK JIKA KOLEKSI KOSONG ===============
     async function seedProductsIfEmpty() {
       const snap = await db.collection("products").limit(1).get();
       if (!snap.empty) return;
@@ -780,7 +775,6 @@
       console.log("Default products seeded.");
     }
 
-    // =============== LOAD PRODUK DARI FIRESTORE ===============
     async function loadProducts() {
       try {
         const snap = await db.collection("products").orderBy("name").get();
@@ -793,7 +787,6 @@
       }
     }
 
-    // =============== BELI PRODUK (POTONG SALDO + KURANGI STOK + BUAT ORDER) ===============
     async function handleBuyProduct(productData, priceNum) {
       try {
         if (!currentUser || !currentUserDoc) {
@@ -802,12 +795,12 @@
           return;
         }
 
-        const cat = (productData.category || "").toLowerCase();
+        const catLower = (productData.category || "").toLowerCase();
         let promptText = "";
 
-        if (cat.includes("views") || cat.includes("likes") || cat.includes("members")) {
-          promptText = "Masukkan link / username / URL video untuk pesanan sosmed:";
-        } else if (cat.includes("panel")) {
+        if (catLower.includes("instagram") || catLower.includes("tiktok") || catLower.includes("sosmed") || catLower.includes("likes")) {
+          promptText = "Masukkan link / username / URL video untuk pesanan sosmed (IG/TikTok):";
+        } else if (catLower.includes("panel")) {
           promptText = "Masukkan data panel (contoh: username:password atau catatan lain):";
         } else {
           promptText = "Masukkan catatan / email / data akun untuk pengiriman:";
@@ -827,8 +820,8 @@
           const userSnap    = await tx.get(userRef);
           const productSnap = await tx.get(productRef);
 
-          if (!userSnap.exists)  throw new Error("USER_NOT_FOUND");
-          if (!productSnap.exists) throw new Error("PRODUCT_NOT_FOUND");
+          if (!userSnap.exists)      throw new Error("USER_NOT_FOUND");
+          if (!productSnap.exists)   throw new Error("PRODUCT_NOT_FOUND");
 
           const uData  = userSnap.data() || {};
           const pData  = productSnap.data() || {};
@@ -859,7 +852,7 @@
         });
 
         showToast("Pesanan berhasil dibuat. Stok berkurang 1.");
-        await loadProducts(); // refresh stok di UI
+        await loadProducts();
         await refreshBalance();
       } catch (err) {
         console.error("ERROR BELI:", err);
@@ -885,7 +878,6 @@
       }
     }
 
-    // =============== AUTH LISTENER ===============
     auth.onAuthStateChanged(async (user) => {
       if (!user) {
         window.location.href = "login.html";
