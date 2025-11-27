@@ -350,7 +350,7 @@
         const date   = formatDate(data.createdAt);
         const price  = data.price || 0;
 
-        // ⚠️ DI SINI KUNCI: pakai field dataOrder
+        // pakai field dataOrder
         const userNoteRaw = data.dataOrder;
         const userNote = userNoteRaw && String(userNoteRaw).trim() !== ""
           ? String(userNoteRaw)
@@ -394,7 +394,6 @@
         btn.className = "btn-received";
         btn.textContent = "Tandai sudah diterima";
 
-        // hanya hidup kalau status success dan belum userReceived
         if (status.toLowerCase() !== "success" || userReceived) {
           btn.disabled = true;
         } else {
@@ -418,14 +417,22 @@
       }
 
       try {
+        // TANPA orderBy, lalu sort di client
         const snap = await db.collection("orders")
           .where("userId", "==", user.uid)
-          .orderBy("createdAt", "desc")
           .get();
 
-        renderOrders(snap.docs);
+        const sortedDocs = [...snap.docs].sort((a, b) => {
+          const ad = a.data();
+          const bd = b.data();
+          const ta = ad.createdAt && ad.createdAt.toMillis ? ad.createdAt.toMillis() : 0;
+          const tb = bd.createdAt && bd.createdAt.toMillis ? bd.createdAt.toMillis() : 0;
+          return tb - ta; // terbaru di atas
+        });
+
+        renderOrders(sortedDocs);
       } catch (err) {
-        console.error(err);
+        console.error("Error load orders:", err);
         orderListEl.innerHTML = '<p class="info-text">Gagal memuat pesanan.</p>';
       }
     });
