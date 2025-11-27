@@ -1,712 +1,912 @@
-masih bagusan yg ini cuma mines nya di pembelian produk
-setiap pembelian stok gk berkurang
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Barmods Store - Produk</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-soft: #020617;
+      --card: #020617;
+      --card-soft: #0b1220;
+      --primary: #2563eb;
+      --primary-soft: rgba(37, 99, 235, 0.15);
+      --accent: #22c55e;
+      --danger: #ef4444;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --radius-xl: 18px;
+      --radius-lg: 14px;
+    }
 
-<!DOCTYPE html>  <html lang="id">  
-<head>  
-  <meta charset="UTF-8" />  
-  <title>Barmods Store - Produk</title>  
-  <meta name="viewport" content="width=device-width, initial-scale=1" />  
-  <style>  
-    :root {  
-      --bg: #020617;  
-      --bg-soft: #020617;  
-      --card: #020617;  
-      --card-soft: #0b1220;  
-      --primary: #2563eb;  
-      --primary-soft: rgba(37, 99, 235, 0.15);  
-      --accent: #22c55e;  
-      --danger: #ef4444;  
-      --text: #e5e7eb;  
-      --muted: #9ca3af;  
-      --radius-xl: 18px;  
-      --radius-lg: 14px;  
-    }  * {  
-  box-sizing: border-box;  
-  margin: 0;  
-  padding: 0;  
-}  
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-body {  
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;  
-  min-height: 100vh;  
-  color: var(--text);  
-  background:  
-    radial-gradient(circle at top left, #1d4ed8 0, transparent 55%),  
-    radial-gradient(circle at bottom right, #0f766e 0, transparent 55%),  
-    #020617;  
-  padding-bottom: 80px;  
-}  
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, #1d4ed8 0, transparent 55%),
+        radial-gradient(circle at bottom right, #0f766e 0, transparent 55%),
+        #020617;
+      padding-bottom: 80px;
+    }
 
-.page {  
-  max-width: 520px;  
-  margin: 0 auto;  
-  padding: 16px 16px 90px;  
-}  
+    .page {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 16px 16px 90px;
+    }
 
-.header-card {  
-  background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(30,64,175,0.95));  
-  border-radius: 26px;  
-  padding: 18px 18px 14px;  
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.8);  
-  border: 1px solid rgba(148, 163, 184, 0.3);  
-  margin-bottom: 16px;  
-  position: relative;  
-  overflow: hidden;  
-}  
+    .header-card {
+      background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(30,64,175,0.95));
+      border-radius: 26px;
+      padding: 18px 18px 14px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
 
-.header-card::before {  
-  content: "";  
-  position: absolute;  
-  inset: -40px;  
-  background:  
-    radial-gradient(circle at top right, rgba(56,189,248,0.35), transparent 60%),  
-    radial-gradient(circle at bottom left, rgba(129,140,248,0.2), transparent 60%);  
-  opacity: 0.9;  
-  pointer-events: none;  
-}  
+    .header-card::before {
+      content: "";
+      position: absolute;
+      inset: -40px;
+      background:
+        radial-gradient(circle at top right, rgba(56,189,248,0.35), transparent 60%),
+        radial-gradient(circle at bottom left, rgba(129,140,248,0.2), transparent 60%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
 
-.header-main {  
-  position: relative;  
-  display: flex;  
-  align-items: center;  
-  justify-content: space-between;  
-  gap: 8px;  
-  margin-bottom: 6px;  
-}  
+    .header-main {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
 
-.brand-title {  
-  font-size: 20px;  
-  font-weight: 800;  
-  letter-spacing: 0.04em;  
-}  
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
 
-.chip-badge {  
-  font-size: 10px;  
-  padding: 4px 9px;  
-  border-radius: 999px;  
-  background: rgba(15,23,42,0.9);  
-  border: 1px solid rgba(148,163,184,0.7);  
-  text-transform: uppercase;  
-  letter-spacing: 0.08em;  
-}  
+    .chip-badge {
+      font-size: 10px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
 
-.header-sub {  
-  position: relative;  
-  font-size: 12px;  
-  color: var(--muted);  
-  margin-bottom: 10px;  
-}  
+    .header-sub {
+      position: relative;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
 
-.header-row-bottom {  
-  display: flex;  
-  align-items: center;  
-  justify-content: space-between;  
-  gap: 10px;  
-  margin-top: 4px;  
-}  
+    .header-row-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 4px;
+    }
 
-.pill-email {  
-  font-size: 11px;  
-  padding: 6px 10px;  
-  border-radius: 999px;  
-  background: rgba(15,23,42,0.85);  
-  border: 1px solid rgba(148,163,184,0.5);  
-  max-width: 65%;  
-  overflow: hidden;  
-  text-overflow: ellipsis;  
-  white-space: nowrap;  
-}  
+    .pill-email {
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.85);
+      border: 1px solid rgba(148,163,184,0.5);
+      max-width: 65%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-.topup-btn-small {  
-  font-size: 11px;  
-  padding: 6px 12px;  
-  border-radius: 999px;  
-  border: none;  
-  background: linear-gradient(135deg, #f97316, #facc15);  
-  color: #0f172a;  
-  font-weight: 600;  
-  display: inline-flex;  
-  align-items: center;  
-  gap: 5px;  
-  box-shadow: 0 10px 25px rgba(248, 250, 252, 0.25);  
-}  
+    .topup-btn-small {
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #f97316, #facc15);
+      color: #0f172a;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 10px 25px rgba(248, 250, 252, 0.25);
+      cursor: pointer;
+    }
 
-.topup-btn-small span.icon {  
-  display: inline-flex;  
-  width: 18px;  
-  height: 18px;  
-  border-radius: 999px;  
-  align-items: center;  
-  justify-content: center;  
-  background: rgba(15,23,42,0.9);  
-  color: #facc15;  
-  font-size: 13px;  
-}  
+    .topup-btn-small span.icon {
+      display: inline-flex;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15,23,42,0.9);
+      color: #facc15;
+      font-size: 13px;
+    }
 
-.balance-card {  
-  margin-top: 6px;  
-  background: radial-gradient(circle at top left, rgba(59,130,246,0.4), rgba(15,23,42,0.95));  
-  border-radius: 22px;  
-  padding: 12px 14px;  
-  display: flex;  
-  align-items: center;  
-  justify-content: space-between;  
-  border: 1px solid rgba(148,163,184,0.4);  
-  backdrop-filter: blur(14px);  
-}  
+    .balance-card {
+      margin-top: 6px;
+      background: radial-gradient(circle at top left, rgba(59,130,246,0.4), rgba(15,23,42,0.95));
+      border-radius: 22px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid rgba(148,163,184,0.4);
+      backdrop-filter: blur(14px);
+    }
 
-.balance-left span.label {  
-  font-size: 11px;  
-  text-transform: uppercase;  
-  color: rgba(226,232,240,0.8);  
-  letter-spacing: 0.12em;  
-}  
+    .balance-left span.label {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: rgba(226,232,240,0.8);
+      letter-spacing: 0.12em;
+    }
 
-.balance-amount {  
-  font-size: 22px;  
-  font-weight: 700;  
-  margin-top: 3px;  
-}  
+    .balance-amount {
+      font-size: 22px;
+      font-weight: 700;
+      margin-top: 3px;
+    }
 
-.balance-right {  
-  text-align: right;  
-  font-size: 11px;  
-  color: rgba(226,232,240,0.8);  
-}  
+    .balance-right {
+      text-align: right;
+      font-size: 11px;
+      color: rgba(226,232,240,0.8);
+    }
 
-.section-title {  
-  margin-top: 18px;  
-  margin-bottom: 10px;  
-  font-size: 16px;  
-  font-weight: 600;  
-  letter-spacing: 0.06em;  
-  text-transform: uppercase;  
-  color: rgba(226,232,240,0.9);  
-}  
+    .section-title {
+      margin-top: 18px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(226,232,240,0.9);
+    }
 
-.filter-row {  
-  display: flex;  
-  gap: 8px;  
-  margin-bottom: 12px;  
-  overflow-x: auto;  
-  padding-bottom: 4px;  
-}  
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
 
-.chip-filter {  
-  flex: 0 0 auto;  
-  padding: 6px 14px;  
-  border-radius: 999px;  
-  border: 1px solid rgba(148,163,184,0.45);  
-  background: rgba(15,23,42,0.75);  
-  font-size: 12px;  
-  color: var(--muted);  
-  cursor: pointer;  
-  display: inline-flex;  
-  align-items: center;  
-  gap: 6px;  
-  transition: all 0.18s ease;  
-}  
+    .chip-filter {
+      flex: 0 0 auto;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.45);
+      background: rgba(15,23,42,0.75);
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.18s ease;
+    }
 
-.chip-filter.active {  
-  background: radial-gradient(circle at top left, #2563eb, #1e40af);  
-  color: #e5e7eb;  
-  border-color: rgba(93, 175, 255, 0.9);  
-  box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.6), 0 12px 30px rgba(15,23,42,0.9);  
-}  
+    .chip-filter .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.7);
+    }
 
-.chip-filter .dot {  
-  width: 6px;  
-  height: 6px;  
-  border-radius: 999px;  
-  background: rgba(148,163,184,0.7);  
-}  
+    .chip-filter.active {
+      background: radial-gradient(circle at top left, #2563eb, #1e40af);
+      color: #e5e7eb;
+      border-color: rgba(93,175,255,0.9);
+      box-shadow: 0 0 0 1px rgba(96,165,250,0.6), 0 12px 30px rgba(15,23,42,0.9);
+    }
 
-.chip-filter.active .dot {  
-  background: #fbbf24;  
-}  
+    .chip-filter.active .dot {
+      background: #fbbf24;
+    }
 
-.product-list {  
-  display: flex;  
-  flex-direction: column;  
-  gap: 10px;  
-}  
+    .product-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-.product-card {  
-  background: radial-gradient(circle at top left, rgba(15,23,42,0.96), rgba(15,23,42,0.98));  
-  border-radius: var(--radius-xl);  
-  padding: 12px 13px 11px;  
-  border: 1px solid rgba(30,64,175,0.7);  
-  box-shadow: 0 16px 40px rgba(15,23,42,0.85);  
-  position: relative;  
-  overflow: hidden;  
-}  
+    .product-card {
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
+      border-radius: var(--radius-xl);
+      padding: 12px 13px 11px;
+      border: 1px solid rgba(30,64,175,0.7);
+      box-shadow: 0 16px 40px rgba(15,23,42,0.85);
+      position: relative;
+      overflow: hidden;
+    }
 
-.product-header {  
-  display: flex;  
-  justify-content: space-between;  
-  align-items: flex-start;  
-  gap: 6px;  
-  margin-bottom: 6px;  
-}  
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
 
-.product-name {  
-  font-size: 14px;  
-  font-weight: 600;  
-}  
+    .product-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
 
-.product-meta {  
-  font-size: 11px;  
-  color: var(--muted);  
-}  
+    .product-meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
 
-.badge-category {  
-  font-size: 10px;  
-  padding: 3px 8px;  
-  border-radius: 999px;  
-  background: rgba(15,23,42,0.9);  
-  border: 1px solid rgba(148,163,184,0.6);  
-  text-transform: uppercase;  
-  letter-spacing: 0.08em;  
-}  
+    .badge-category {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
 
-.product-body {  
-  display: flex;  
-  align-items: center;  
-  justify-content: space-between;  
-  margin-top: 4px;  
-  gap: 8px;  
-}  
+    .product-body {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
+      gap: 8px;
+    }
 
-.price-text {  
-  font-size: 15px;  
-  font-weight: 700;  
-}  
+    .price-text {
+      font-size: 15px;
+      font-weight: 700;
+    }
 
-.stock-text {  
-  font-size: 11px;  
-  color: var(--muted);  
-  margin-top: 2px;  
-}  
+    .stock-text {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
 
-.btn-buy {  
-  border: none;  
-  padding: 9px 18px;  
-  border-radius: 999px;  
-  background: linear-gradient(135deg, #22c55e, #16a34a);  
-  color: #022c22;  
-  font-size: 13px;  
-  font-weight: 600;  
-  display: inline-flex;  
-  align-items: center;  
-  justify-content: center;  
-  gap: 6px;  
-  min-width: 110px;  
-  box-shadow: 0 14px 35px rgba(22,163,74,0.55);  
-}  
+    .btn-buy {
+      border: none;
+      padding: 9px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-width: 110px;
+      box-shadow: 0 14px 35px rgba(22,163,74,0.55);
+      cursor: pointer;
+    }
 
-.btn-buy:disabled {  
-  opacity: 0.5;  
-  box-shadow: none;  
-  cursor: not-allowed;  
-}  
+    .btn-buy:disabled {
+      opacity: 0.5;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
 
-.btn-buy span.icon {  
-  font-size: 14px;  
-}  
+    .btn-buy span.icon {
+      font-size: 14px;
+    }
 
-.info-text {  
-  font-size: 13px;  
-  color: var(--muted);  
-  text-align: center;  
-  margin-top: 16px;  
-}  
+    .info-text {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 16px;
+    }
 
-.toast {  
-  position: fixed;  
-  left: 50%;  
-  bottom: 80px;  
-  transform: translateX(-50%);  
-  padding: 9px 14px;  
-  border-radius: 999px;  
-  font-size: 12px;  
-  background: rgba(15,23,42,0.96);  
-  color: #e5e7eb;  
-  border: 1px solid rgba(148,163,184,0.7);  
-  box-shadow: 0 16px 40px rgba(15,23,42,0.95);  
-  z-index: 1000;  
-  display: none;  
-}  
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 80px;
+      transform: translateX(-50%);
+      padding: 9px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(15,23,42,0.96);
+      color: #e5e7eb;
+      border: 1px solid rgba(148,163,184,0.7);
+      box-shadow: 0 16px 40px rgba(15,23,42,0.95);
+      z-index: 1000;
+      display: none;
+    }
 
-.toast.show {  
-  display: block;  
-  animation: fadeInOut 2.4s ease forwards;  
-}  
+    .toast.show {
+      display: block;
+      animation: fadeInOut 2.4s ease forwards;
+    }
 
-@keyframes fadeInOut {  
-  0% { opacity: 0; transform: translate(-50%, 10px); }  
-  10% { opacity: 1; transform: translate(-50%, 0); }  
-  80% { opacity: 1; transform: translate(-50%, 0); }  
-  100% { opacity: 0; transform: translate(-50%, 10px); }  
-}  
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translate(-50%, 10px); }
+      10% { opacity: 1; transform: translate(-50%, 0); }
+      80% { opacity: 1; transform: translate(-50%, 0); }
+      100% { opacity: 0; transform: translate(-50%, 10px); }
+    }
 
-.bottom-nav {  
-  position: fixed;  
-  left: 0;  
-  right: 0;  
-  bottom: 0;  
-  padding: 8px 14px 14px;  
-  background: radial-gradient(circle at top, rgba(15,23,42,0.98), rgba(2,6,23,0.98));  
-  border-top: 1px solid rgba(31,41,55,0.95);  
-  z-index: 30;  
-}  
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 8px 14px 14px;
+      background: radial-gradient(circle at top, rgba(15,23,42,0.98), rgba(2,6,23,0.98));
+      border-top: 1px solid rgba(31,41,55,0.95);
+      z-index: 30;
+    }
 
-.bottom-nav-inner {  
-  max-width: 520px;  
-  margin: 0 auto;  
-  display: grid;  
-  grid-template-columns: repeat(4, 1fr);  
-  gap: 6px;  
-  background: rgba(15,23,42,0.96);  
-  border-radius: 999px;  
-  padding: 6px;  
-  box-shadow: 0 -8px 25px rgba(15,23,42,0.9);  
-  border: 1px solid rgba(31,41,55,0.9);  
-}  
+    .bottom-nav-inner {
+      max-width: 520px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      background: rgba(15,23,42,0.96);
+      border-radius: 999px;
+      padding: 6px;
+      box-shadow: 0 -8px 25px rgba(15,23,42,0.9);
+      border: 1px solid rgba(31,41,55,0.9);
+    }
 
-.nav-item {  
-  text-align: center;  
-  padding: 6px 4px;  
-  border-radius: 999px;  
-  font-size: 10px;  
-  color: var(--muted);  
-  text-decoration: none;  
-  display: flex;  
-  flex-direction: column;  
-  align-items: center;  
-  gap: 3px;  
-}  
+    .nav-item {
+      text-align: center;
+      padding: 6px 4px;
+      border-radius: 999px;
+      font-size: 10px;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
 
-.nav-item span.icon {  
-  font-size: 16px;  
-}  
+    .nav-item span.icon {
+      font-size: 16px;
+    }
 
-.nav-item.active {  
-  background: radial-gradient(circle at top, #1d4ed8, #1e293b);  
-  color: #e5e7eb;  
-  box-shadow: 0 0 0 1px rgba(96,165,250,0.7);  
-}  
+    .nav-item.active {
+      background: radial-gradient(circle at top, #1d4ed8, #1e293b);
+      color: #e5e7eb;
+      box-shadow: 0 0 0 1px rgba(96,165,250,0.7);
+    }
 
-.nav-item.active span.icon {  
-  font-size: 17px;  
-}  
+    .nav-item.active span.icon {
+      font-size: 17px;
+    }
 
-@media (min-width: 480px) {  
-  .page {  
-    padding-top: 20px;  
-  }  
-}
+    @media (min-width: 480px) {
+      .page {
+        padding-top: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="header-card">
+      <div class="header-main">
+        <div>
+          <div class="brand-title">Barmods Store</div>
+        </div>
+        <div class="chip-badge">Digital Balance</div>
+      </div>
+      <div class="header-sub">
+        Topup & layanan premium dalam satu panel.  
+        <br />Saldo dipakai untuk semua produk.
+      </div>
+      <div class="header-row-bottom">
+        <div class="pill-email" id="userEmailPill">Memuat email...</div>
+        <button class="topup-btn-small" onclick="goWallet()">
+          <span class="icon">⚡</span>
+          Topup Saldo
+        </button>
+      </div>
+      <div class="balance-card">
+        <div class="balance-left">
+          <span class="label">Saldo Kamu</span>
+          <div class="balance-amount" id="balanceText">Rp 0</div>
+        </div>
+        <div class="balance-right">
+          <div style="font-size:11px;">Dipakai untuk semua pembelian</div>
+          <div style="font-size:11px; opacity:0.8;">APK • Sosmed • Panel</div>
+        </div>
+      </div>
+    </div>
 
-  </style>  
-</head>  
-<body>  
-  <div class="page">  
-    <div class="header-card">  
-      <div class="header-main">  
-        <div>  
-          <div class="brand-title">Barmods Store</div>  
-        </div>  
-        <div class="chip-badge">Digital Balance</div>  
-      </div>  
-      <div class="header-sub">  
-        Topup & layanan premium dalam satu panel.    
-        <br />Saldo dipakai untuk semua produk.  
-      </div>  
-      <div class="header-row-bottom">  
-        <div class="pill-email" id="userEmailPill">Memuat email...</div>  
-        <button class="topup-btn-small" onclick="goWallet()">  
-          <span class="icon">⚡</span>  
-          Topup Saldo  
-        </button>  
-      </div>  
-      <div class="balance-card">  
-        <div class="balance-left">  
-          <span class="label">Saldo Kamu</span>  
-          <div class="balance-amount" id="balanceText">Rp 0</div>  
-        </div>  
-        <div class="balance-right">  
-          <div style="font-size:11px;">Dipakai untuk semua pembelian</div>  
-          <div style="font-size:11px; opacity:0.8;">Premium • Sosmed • Panel</div>  
-        </div>  
-      </div>  
-    </div>  <div class="section-title">Daftar Produk</div>  
+    <div class="section-title">Daftar Produk</div>
 
-<div class="filter-row">  
-  <button class="chip-filter active" data-filter="all">  
-    <span class="dot"></span> Semua  
-  </button>  
-  <button class="chip-filter" data-filter="premium">  
-    <span class="dot"></span> Premium  
-  </button>  
-  <button class="chip-filter" data-filter="sosmed">  
-    <span class="dot"></span> Sosmed  
-  </button>  
-  <button class="chip-filter" data-filter="panel">  
-    <span class="dot"></span> Panel  
-  </button>  
-</div>  
+    <div id="filterRow" class="filter-row">
+      <!-- chip filter akan diisi via JS -->
+    </div>
 
-<div id="productList" class="product-list">  
-  <p class="info-text">Memuat produk...</p>  
-</div>
+    <div id="productList" class="product-list">
+      <p class="info-text">Memuat produk...</p>
+    </div>
+  </div>
 
-  </div>    <div id="toast" class="toast"></div>    <nav class="bottom-nav">  
-    <div class="bottom-nav-inner">  
-      <a href="index.html" class="nav-item active">  
-        <span class="icon">🛒</span>  
-        <span>Produk</span>  
-      </a>  
-      <a href="wallet.html" class="nav-item">  
-        <span class="icon">💳</span>  
-        <span>Wallet</span>  
-      </a>  
-      <a href="orders.html" class="nav-item">  
-        <span class="icon">📦</span>  
-        <span>Orders</span>  
-      </a>  
-      <a href="profile.html" class="nav-item">  
-        <span class="icon">👤</span>  
-        <span>Profile</span>  
-      </a>  
-    </div>  
-  </nav>    <!-- Firebase SDK (compat) -->    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>    <script>  
-    const firebaseConfig = {  
-      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",  
-      authDomain: "toko-barmods.firebaseapp.com",  
-      projectId: "toko-barmods",  
-      storageBucket: "toko-barmods.firebasestorage.app",  
-      messagingSenderId: "284047189012",  
-      appId: "1:284047189012:web:6ef0c6891adab08a383301"  
-    };  
-  
-    firebase.initializeApp(firebaseConfig);  
-    const auth = firebase.auth();  
-    const db = firebase.firestore();  
-  
-    const balanceText = document.getElementById("balanceText");  
-    const userEmailPill = document.getElementById("userEmailPill");  
-    const productListEl = document.getElementById("productList");  
-    const toastEl = document.getElementById("toast");  
-  
-    let currentUser = null;  
-    let currentUserDoc = null;  
-    let allProducts = [];  
-    let activeFilter = "all";  
-  
-    function showToast(message) {  
-      if (!toastEl) return;  
-      toastEl.textContent = message;  
-      toastEl.classList.remove("show");  
-      void toastEl.offsetWidth;  
-      toastEl.classList.add("show");  
-    }  
-  
-    function formatRupiah(num) {  
-      if (typeof num === "string") {  
-        const cleaned = num.replace(/[^0-9]/g, "");  
-        if (!cleaned) return num;  
-        num = parseInt(cleaned, 10);  
-      }  
-      if (isNaN(num)) return "Rp 0";  
-      return "Rp " + num.toLocaleString("id-ID");  
-    }  
-  
-    function goWallet() {  
-      window.location.href = "wallet.html";  
-    }  
-  
-    function renderProducts(filter) {  
-      productListEl.innerHTML = "";  
-      const normalizedFilter = (filter || "all").toLowerCase();  
-      activeFilter = normalizedFilter;  
-  
-      const filtered = allProducts.filter(p => {  
-        if (normalizedFilter === "all") return true;  
-        const cat = (p.category || "").toLowerCase();  
-        return cat.includes(normalizedFilter);  
-      });  
-  
-      if (!filtered.length) {  
-        productListEl.innerHTML = '<p class="info-text">Produk tidak ditemukan untuk kategori ini.</p>';  
-        return;  
-      }  
-  
-      filtered.forEach(doc => {  
-        const data = doc;  
-        const name = data.name || "Produk tanpa nama";  
-        const category = (data.category || "").toLowerCase();  
-        const priceRaw = data.price ?? 0;  
-        const priceNum = typeof priceRaw === "number"  
-          ? priceRaw  
-          : parseInt(String(priceRaw).replace(/[^0-9]/g, ""), 10) || 0;  
-        const priceText = formatRupiah(priceNum);  
-  
-        const stock = typeof data.stock === "number" ? data.stock : 0;  
-        const icon = data.icon || "⭐";  
-  
-        let catLabel = "Lainnya";  
-        if (category.includes("premium")) catLabel = "Premium (APK)";  
-        else if (category.includes("sosmed")) catLabel = "Sosmed";  
-        else if (category.includes("panel")) catLabel = "Panel";  
-  
-        const card = document.createElement("div");  
-        card.className = "product-card";  
-  
-        card.innerHTML = `  
-          <div class="product-header">  
-            <div>  
-              <div class="product-name">${icon} ${name}</div>  
-              <div class="product-meta">Kategori: ${catLabel}</div>  
-            </div>  
-            <div class="badge-category">${catLabel}</div>  
-          </div>  
-          <div class="product-body">  
-            <div>  
-              <div class="price-text">${priceText}</div>  
-              <div class="stock-text">Stok: ${stock <= 0 ? "Habis" : stock}</div>  
-            </div>  
-            <button class="btn-buy" ${stock <= 0 ? "disabled" : ""}>  
-              <span class="icon">🛒</span>  
-              <span>Beli</span>  
-            </button>  
-          </div>  
-        `;  
-  
-        const buyBtn = card.querySelector(".btn-buy");  
-        buyBtn.addEventListener("click", () => handleBuyProduct(doc, priceNum));  
-  
-        productListEl.appendChild(card);  
-      });  
-    }  
-  
-    async function handleBuyProduct(productData, priceNum) {  
-      try {  
-        if (!currentUser || !currentUserDoc) {  
-          showToast("Silakan login ulang.");  
-          return window.location.href = "login.html";  
-        }  
-  
-        const userDocSnap = await db.collection("users").doc(currentUser.uid).get();  
-        const userData = userDocSnap.data() || {};  
-        const userBalance = userData.balance || 0;  
-  
-        if (userBalance < priceNum) {  
-          showToast("Saldo tidak cukup. Silakan topup dulu.");  
-          return;  
-        }  
-  
-        const category = (productData.category || "").toLowerCase();  
-        let promptText = "";  
-  
-        if (category.includes("sosmed")) {  
-          promptText = "Masukkan link / username / URL video yang ingin ditambah (IG / TikTok, dsb):";  
-        } else if (category.includes("panel")) {  
-          promptText = "Masukkan data panel (contoh: username:password atau catatan lain):";  
-        } else if (category.includes("premium")) {  
-          promptText = "Masukkan data akun / email / catatan untuk pengiriman APK premium:";  
-        } else {  
-          promptText = "Masukkan catatan atau data tambahan untuk admin:";  
-        }  
-  
-        const userInput = prompt(promptText);  
-        if (userInput === null) return;  
-        if (!userInput.trim()) {  
-          showToast("Data tidak boleh kosong.");  
-          return;  
-        }  
-  
-        // HANYA potong saldo user + buat order  
-        await db.runTransaction(async (tx) => {  
-          const userRef = db.collection("users").doc(currentUser.uid);  
-          const userSnap2 = await tx.get(userRef);  
-          const userData2 = userSnap2.data() || {};  
-          const balance2 = userData2.balance || 0;  
-          if (balance2 < priceNum) {  
-            throw new Error("Saldo tidak cukup saat transaksi.");  
-          }  
-  
-          tx.update(userRef, { balance: balance2 - priceNum });  
-  
-          const orderRef = db.collection("orders").doc();  
-          tx.set(orderRef, {  
-            userId: currentUser.uid,  
-            userEmail: currentUser.email || "",  
-            productId: productData.id,  
-            productName: productData.name || "Produk",  
-            category: productData.category || "",  
-            price: priceNum,  
-            dataOrder: userInput.trim(),  
-            status: "pending",  
-            adminProduct: "",  
-            userReceived: false,  
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()  
-          });  
-        });  
-  
-        showToast("Pesanan berhasil dibuat. Status: PENDING.");  
-      } catch (err) {  
-        console.error(err);  
-        if (err.message === "Saldo tidak cukup saat transaksi.") {  
-          showToast("Saldo tidak cukup.");  
-        } else {  
-          showToast("Gagal membuat pesanan.");  
-        }  
-      }  
-    }  
-  
-    function setupFilterButtons() {  
-      const chips = document.querySelectorAll(".chip-filter");  
-      chips.forEach(chip => {  
-        chip.addEventListener("click", () => {  
-          chips.forEach(c => c.classList.remove("active"));  
-          chip.classList.add("active");  
-          const filter = chip.getAttribute("data-filter") || "all";  
-          renderProducts(filter);  
-        });  
-      });  
-    }  
-  
-    auth.onAuthStateChanged(async (user) => {  
-      if (!user) {  
-        window.location.href = "login.html";  
-        return;  
-      }  
-      currentUser = user;  
-      userEmailPill.textContent = user.email || "User";  
-  
-      try {  
-        const userSnap = await db.collection("users").doc(user.uid).get();  
-        currentUserDoc = userSnap.data() || {};  
-        const balance = currentUserDoc.balance || 0;  
-        balanceText.textContent = formatRupiah(balance);  
-      } catch (err) {  
-        console.error(err);  
-        balanceText.textContent = "Rp 0";  
-      }  
-  
-      try {  
-        const snap = await db.collection("products")  
-          .orderBy("name")  
-          .get();  
-        allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));  
-        renderProducts(activeFilter);  
-      } catch (err) {  
-        console.error(err);  
-        productListEl.innerHTML = '<p class="info-text">Gagal memuat produk.</p>';  
-      }  
-    });  
-  
-    document.addEventListener("DOMContentLoaded", () => {  
-      setupFilterButtons();  
-    });  
-  </script>  </body>  
+  <div id="toast" class="toast"></div>
+
+  <nav class="bottom-nav">
+    <div class="bottom-nav-inner">
+      <a href="index.html" class="nav-item active">
+        <span class="icon">🛒</span>
+        <span>Produk</span>
+      </a>
+      <a href="wallet.html" class="nav-item">
+        <span class="icon">💳</span>
+        <span>Wallet</span>
+      </a>
+      <a href="orders.html" class="nav-item">
+        <span class="icon">📦</span>
+        <span>Orders</span>
+      </a>
+      <a href="profile.html" class="nav-item">
+        <span class="icon">👤</span>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Firebase SDK (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+  <script>
+    // ================== FIREBASE CONFIG ==================
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpsfDmupS9wq-iNge5aYvknmw5bSryd3A",
+      authDomain: "toko-barmods.firebaseapp.com",
+      projectId: "toko-barmods",
+      storageBucket: "toko-barmods.firebasestorage.app",
+      messagingSenderId: "284047189012",
+      appId: "1:284047189012:web:6ef0c6891adab08a383301"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+
+    const balanceText   = document.getElementById("balanceText");
+    const userEmailPill = document.getElementById("userEmailPill");
+    const productListEl = document.getElementById("productList");
+    const filterRowEl   = document.getElementById("filterRow");
+    const toastEl       = document.getElementById("toast");
+
+    let currentUser = null;
+    let currentUserDoc = null;
+    let allProducts = [];
+    let activeFilter = "all";
+
+    // =============== DEFAULT PRODUCTS (AKAN DI-SEED KALAU PRODUCTS KOSONG) ===============
+    const defaultProducts = [
+      // Alight Motion
+      { name:"Alight Motion Private - 1 Tahun (iOS/Android)", price:2000,  category:"Alight Motion", icon:"🎞", stock:999 },
+      { name:"Bulk AM Private - 1 Bulan (10 Akun)",           price:7000,  category:"Alight Motion", icon:"🎞", stock:999 },
+
+      // Apple Music
+      { name:"Apple Music Invite - 1 Bulan", price:5000, category:"Apple Music", icon:"🎵", stock:999 },
+      { name:"Apple Music Head - 1 Bulan",   price:8000, category:"Apple Music", icon:"🎵", stock:999 },
+
+      // Bstation
+      { name:"Bstation Sharing - 1 Bulan", price:5000,  category:"Bstation", icon:"📺", stock:999 },
+      { name:"Bstation Private - 1 Bulan", price:32000, category:"Bstation", icon:"📺", stock:999 },
+
+      // Canva
+      { name:"Canva Member - 1 Bulan", price:2000, category:"Canva", icon:"🎨", stock:999 },
+      { name:"Canva Member - 1 Tahun", price:4000, category:"Canva", icon:"🎨", stock:999 },
+      { name:"Canva Owner - 1 Bulan",  price:5000, category:"Canva", icon:"🎨", stock:999 },
+
+      // Capcut
+      { name:"Capcut Private - 7 Hari",    price:2000, category:"Capcut", icon:"🎬", stock:999 },
+      { name:"Capcut Sharing - 21 Hari",   price:3000, category:"Capcut", icon:"🎬", stock:999 },
+      { name:"Capcut Sharing - 1 Bulan",   price:5000, category:"Capcut", icon:"🎬", stock:999 },
+      { name:"Capcut Private - 21 Hari",   price:7000, category:"Capcut", icon:"🎬", stock:999 },
+      { name:"Capcut Private - 1 Bulan",   price:8000, category:"Capcut", icon:"🎬", stock:999 },
+
+      // ChatGPT
+      { name:"ChatGPT Plus Sharing - 1 Bulan", price:7000,  category:"ChatGPT", icon:"🤖", stock:999 },
+      { name:"ChatGPT Private - 1 Bulan",      price:30000, category:"ChatGPT", icon:"🤖", stock:999 },
+
+      // Gemini
+      { name:"AI Gemini Premium - 1 Tahun", price:30000, category:"Gemini AI", icon:"✨", stock:999 },
+
+      // Fizzo
+      { name:"Fizzo Novel Sharing - 1 Bulan", price:3000, category:"Fizzo Novel", icon:"📘", stock:999 },
+
+      // IQIYI
+      { name:"IQIYI Sharing Plan Standar - 1 Bulan", price:3000,  category:"IQIYI", icon:"🎬", stock:999 },
+      { name:"IQIYI Sharing Plan Premium - 1 Bulan", price:5000,  category:"IQIYI", icon:"🎬", stock:999 },
+      { name:"IQIYI Standar Private - 1 Bulan",      price:30000, category:"IQIYI", icon:"🎬", stock:999 },
+      { name:"IQIYI Premium Private - 1 Bulan",      price:40000, category:"IQIYI", icon:"🎬", stock:999 },
+
+      // Lightroom
+      { name:"Lightroom - 1 Tahun", price:7000, category:"Lightroom", icon:"📷", stock:999 },
+
+      // Netflix
+      { name:"Netflix 1P2U", price:20000, category:"Netflix", icon:"📺", stock:999 },
+      { name:"Netflix 1P1U", price:30000, category:"Netflix", icon:"📺", stock:999 },
+
+      // Picsart
+      { name:"Picsart Sharing - 1 Bulan", price:3000, category:"Picsart", icon:"🖌", stock:999 },
+      { name:"Picsart Private - 1 Bulan", price:7000, category:"Picsart", icon:"🖌", stock:999 },
+
+      // Spotify
+      { name:"Spotify Premium - 1 Bulan", price:8000, category:"Spotify", icon:"🎧", stock:999 },
+
+      // Vidio
+      { name:"Vidio Platinum Sharing - 1 Bulan", price:17000, category:"Vidio", icon:"📺", stock:999 },
+      { name:"Vidio Platinum Private - 1 Bulan", price:28000, category:"Vidio", icon:"📺", stock:999 },
+
+      // Vision
+      { name:"Vision Ultimate Private - 1 Bulan", price:40000, category:"Vision", icon:"📺", stock:999 },
+
+      // Viu
+      { name:"Viu Antilimit - 200 Tahun", price:2000, category:"Viu", icon:"📺", stock:999 },
+
+      // WeTV
+      { name:"WeTV Sharing - 1 Bulan (8u)", price:6000,  category:"WeTV", icon:"🎥", stock:999 },
+      { name:"WeTV Sharing - 1 Bulan (5u)", price:8000,  category:"WeTV", icon:"🎥", stock:999 },
+      { name:"WeTV Private - 1 Bulan",      price:30000, category:"WeTV", icon:"🎥", stock:999 },
+
+      // Wink
+      { name:"Wink Premium Private Android - 7 Hari", price:7000, category:"Wink", icon:"📱", stock:999 },
+
+      // Youku
+      { name:"Youku Sharing - 1 Bulan", price:4000,  category:"Youku", icon:"🎬", stock:999 },
+      { name:"Youku Private - 1 Bulan", price:24000, category:"Youku", icon:"🎬", stock:999 },
+
+      // YouTube
+      { name:"YouTube Famplan",              price:3000,  category:"YouTube", icon:"▶️", stock:999 },
+      { name:"YouTube Indplan - 1 Bulan",    price:8000,  category:"YouTube", icon:"▶️", stock:999 },
+      { name:"YouTube Indplan - 2 Bulan",    price:9000,  category:"YouTube", icon:"▶️", stock:999 },
+      { name:"YouTube Indplan - 3 Bulan",    price:11000, category:"YouTube", icon:"▶️", stock:999 },
+      { name:"YouTube Head - 1 Bulan",       price:10000, category:"YouTube", icon:"▶️", stock:999 },
+
+      // Extra
+      { name:"HBO Max Sharing - 1 Bulan",           price:20000, category:"Extra", icon:"🎁", stock:999 },
+      { name:"HBO Max Standar Private - 1 Bulan",   price:80000, category:"Extra", icon:"🎁", stock:999 },
+      { name:"Scribd Sharing",                      price:3000,  category:"Extra", icon:"📚", stock:999 },
+      { name:"Remini Login App - 1 Tahun Android",  price:6000,  category:"Extra", icon:"🖼", stock:999 },
+      { name:"Remini Web Private - 7 Hari",         price:7000,  category:"Extra", icon:"🖼", stock:999 },
+      { name:"LokLok Plan Standar - 1 Bulan",       price:18000, category:"Extra", icon:"🎬", stock:999 },
+      { name:"Meitu Premium Private - 7 Hari",      price:7000,  category:"Extra", icon:"✨", stock:999 },
+      { name:"Mango TV SVIP - 1 Bulan Private",     price:80000, category:"Extra", icon:"📺", stock:999 },
+      { name:"Ibis Paint Android - 1 Tahun",        price:12000, category:"Extra", icon:"🎨", stock:999 },
+      { name:"VSCO Plus iOS/Android - 1 Tahun",     price:7000,  category:"Extra", icon:"📷", stock:999 },
+      { name:"Brainly Plus Sharing - 1 Tahun",      price:7000,  category:"Extra", icon:"🧠", stock:999 },
+      { name:"RCTI+ Ultimate Private - 1 Bulan",    price:35000, category:"Extra", icon:"📺", stock:999 },
+
+      // Instagram Views
+      { name:"Instagram Views 500",   price:1500,  category:"Instagram Views", icon:"📷", stock:999 },
+      { name:"Instagram Views 1000",  price:3000,  category:"Instagram Views", icon:"📷", stock:999 },
+      { name:"Instagram Views 2000",  price:6000,  category:"Instagram Views", icon:"📷", stock:999 },
+      { name:"Instagram Views 3000",  price:9000,  category:"Instagram Views", icon:"📷", stock:999 },
+      { name:"Instagram Views 4000",  price:12000, category:"Instagram Views", icon:"📷", stock:999 },
+      { name:"Instagram Views 5000",  price:15000, category:"Instagram Views", icon:"📷", stock:999 },
+      { name:"Instagram Views 10000", price:30000, category:"Instagram Views", icon:"📷", stock:999 },
+
+      // TikTok Views
+      { name:"TikTok Views 500",   price:1500,  category:"TikTok Views", icon:"🎵", stock:999 },
+      { name:"TikTok Views 1000",  price:3000,  category:"TikTok Views", icon:"🎵", stock:999 },
+      { name:"TikTok Views 2000",  price:6000,  category:"TikTok Views", icon:"🎵", stock:999 },
+      { name:"TikTok Views 3000",  price:9000,  category:"TikTok Views", icon:"🎵", stock:999 },
+      { name:"TikTok Views 4000",  price:12000, category:"TikTok Views", icon:"🎵", stock:999 },
+      { name:"TikTok Views 5000",  price:15000, category:"TikTok Views", icon:"🎵", stock:999 },
+      { name:"TikTok Views 10000", price:30000, category:"TikTok Views", icon:"🎵", stock:999 },
+
+      // TikTok + Instagram Members
+      { name:"100 Members",  price:5000,  category:"TikTok + Instagram Members", icon:"👥", stock:999 },
+      { name:"200 Members",  price:10000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
+      { name:"300 Members",  price:15000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
+      { name:"400 Members",  price:20000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
+      { name:"500 Members",  price:25000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
+      { name:"600 Members",  price:30000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
+      { name:"700 Members",  price:35000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
+      { name:"800 Members",  price:40000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
+      { name:"900 Members",  price:45000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
+      { name:"1000 Members", price:50000, category:"TikTok + Instagram Members", icon:"👥", stock:999 },
+
+      // TikTok + Instagram Likes + Views
+      { name:"100 Likes + 1000 Views",  price:2000,  category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
+      { name:"200 Likes + 1000 Views",  price:4000,  category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
+      { name:"300 Likes + 1000 Views",  price:6000,  category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
+      { name:"400 Likes + 1000 Views",  price:8000,  category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
+      { name:"500 Likes + 1000 Views",  price:9000,  category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
+      { name:"600 Likes + 1000 Views",  price:10000, category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
+      { name:"700 Likes + 1000 Views",  price:11000, category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
+      { name:"800 Likes + 1000 Views",  price:12000, category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
+      { name:"900 Likes + 1000 Views",  price:13000, category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
+      { name:"1000 Likes + 1000 Views", price:14000, category:"TikTok + Instagram Likes + Views", icon:"💗", stock:999 },
+
+      // Panel Pterodactyl
+      { name:"Panel Pterodactyl RAM 1GB",  price:1000,  category:"Panel Pterodactyl", icon:"🖥", stock:999 },
+      { name:"Panel Pterodactyl RAM 2GB",  price:2000,  category:"Panel Pterodactyl", icon:"🖥", stock:999 },
+      { name:"Panel Pterodactyl RAM 3GB",  price:3000,  category:"Panel Pterodactyl", icon:"🖥", stock:999 },
+      { name:"Panel Pterodactyl RAM 4GB",  price:4000,  category:"Panel Pterodactyl", icon:"🖥", stock:999 },
+      { name:"Panel Pterodactyl RAM 5GB",  price:5000,  category:"Panel Pterodactyl", icon:"🖥", stock:999 },
+      { name:"Panel Pterodactyl RAM 6GB",  price:6000,  category:"Panel Pterodactyl", icon:"🖥", stock:999 },
+      { name:"Panel Pterodactyl RAM 7GB",  price:7000,  category:"Panel Pterodactyl", icon:"🖥", stock:999 },
+      { name:"Panel Pterodactyl RAM 8GB",  price:8000,  category:"Panel Pterodactyl", icon:"🖥", stock:999 },
+      { name:"Panel Pterodactyl RAM 9GB",  price:9000,  category:"Panel Pterodactyl", icon:"🖥", stock:999 },
+      { name:"Panel Pterodactyl Unlimited", price:10000, category:"Panel Pterodactyl", icon:"🖥", stock:999 },
+    ];
+
+    // =============== HELPER ===============
+    function showToast(message) {
+      if (!toastEl) return;
+      toastEl.textContent = message;
+      toastEl.classList.remove("show");
+      void toastEl.offsetWidth;
+      toastEl.classList.add("show");
+    }
+
+    function formatRupiah(num) {
+      if (typeof num === "string") {
+        const cleaned = num.replace(/[^0-9]/g, "");
+        if (!cleaned) return num;
+        num = parseInt(cleaned, 10);
+      }
+      if (isNaN(num)) return "Rp 0";
+      return "Rp " + num.toLocaleString("id-ID");
+    }
+
+    function goWallet() {
+      window.location.href = "wallet.html";
+    }
+
+    // =============== FILTER RENDER ===============
+    function buildFilterChips() {
+      filterRowEl.innerHTML = "";
+
+      const btnAll = document.createElement("button");
+      btnAll.className = "chip-filter active";
+      btnAll.dataset.filter = "all";
+      btnAll.innerHTML = `<span class="dot"></span> Semua`;
+      filterRowEl.appendChild(btnAll);
+
+      const cats = Array.from(new Set(allProducts.map(p => p.category))).sort();
+      cats.forEach(cat => {
+        const btn = document.createElement("button");
+        btn.className = "chip-filter";
+        btn.dataset.filter = cat;
+        btn.innerHTML = `<span class="dot"></span> ${cat}`;
+        filterRowEl.appendChild(btn);
+      });
+
+      const chips = filterRowEl.querySelectorAll(".chip-filter");
+      chips.forEach(chip => {
+        chip.addEventListener("click", () => {
+          chips.forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+          activeFilter = chip.dataset.filter || "all";
+          renderProducts();
+        });
+      });
+    }
+
+    // =============== RENDER PRODUK ===============
+    function renderProducts() {
+      productListEl.innerHTML = "";
+      const list = activeFilter === "all"
+        ? allProducts
+        : allProducts.filter(p => p.category === activeFilter);
+
+      if (!list.length) {
+        productListEl.innerHTML = '<p class="info-text">Produk tidak ditemukan.</p>';
+        return;
+      }
+
+      list.forEach(prod => {
+        const name   = prod.name || "Produk tanpa nama";
+        const icon   = prod.icon || "⭐";
+        const cat    = prod.category || "Lainnya";
+        const price  = typeof prod.price === "number"
+          ? prod.price
+          : parseInt(String(prod.price || "0").replace(/[^0-9]/g, ""), 10) || 0;
+        const stock  = typeof prod.stock === "number" ? prod.stock : 0;
+        const isHabis = stock <= 0;
+
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <div class="product-header">
+            <div>
+              <div class="product-name">${icon} ${name}</div>
+              <div class="product-meta">${cat}</div>
+            </div>
+            <div class="badge-category">${cat}</div>
+          </div>
+          <div class="product-body">
+            <div>
+              <div class="price-text">${formatRupiah(price)}</div>
+              <div class="stock-text">Stok: ${isHabis ? "Habis" : stock}</div>
+            </div>
+            <button class="btn-buy" ${isHabis ? "disabled" : ""}>
+              <span class="icon">🛒</span>
+              <span>${isHabis ? "Habis" : "Beli"}</span>
+            </button>
+          </div>
+        `;
+
+        const btn = card.querySelector(".btn-buy");
+        if (!isHabis) {
+          btn.addEventListener("click", () => handleBuyProduct(prod, price));
+        }
+
+        productListEl.appendChild(card);
+      });
+    }
+
+    // =============== SEED PRODUK JIKA KOLEKSI KOSONG ===============
+    async function seedProductsIfEmpty() {
+      const snap = await db.collection("products").limit(1).get();
+      if (!snap.empty) return;
+
+      const batch = db.batch();
+      defaultProducts.forEach(p => {
+        const ref = db.collection("products").doc();
+        batch.set(ref, p);
+      });
+      await batch.commit();
+      console.log("Default products seeded.");
+    }
+
+    // =============== LOAD PRODUK DARI FIRESTORE ===============
+    async function loadProducts() {
+      try {
+        const snap = await db.collection("products").orderBy("name").get();
+        allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        buildFilterChips();
+        renderProducts();
+      } catch (err) {
+        console.error("Gagal memuat produk:", err);
+        productListEl.innerHTML = '<p class="info-text">Gagal memuat produk.</p>';
+      }
+    }
+
+    // =============== BELI PRODUK (POTONG SALDO + KURANGI STOK + BUAT ORDER) ===============
+    async function handleBuyProduct(productData, priceNum) {
+      try {
+        if (!currentUser || !currentUserDoc) {
+          showToast("Silakan login ulang.");
+          window.location.href = "login.html";
+          return;
+        }
+
+        const cat = (productData.category || "").toLowerCase();
+        let promptText = "";
+
+        if (cat.includes("views") || cat.includes("likes") || cat.includes("members")) {
+          promptText = "Masukkan link / username / URL video untuk pesanan sosmed:";
+        } else if (cat.includes("panel")) {
+          promptText = "Masukkan data panel (contoh: username:password atau catatan lain):";
+        } else {
+          promptText = "Masukkan catatan / email / data akun untuk pengiriman:";
+        }
+
+        const userInput = prompt(promptText);
+        if (userInput === null) return;
+        if (!userInput.trim()) {
+          showToast("Data tidak boleh kosong.");
+          return;
+        }
+
+        await db.runTransaction(async (tx) => {
+          const userRef    = db.collection("users").doc(currentUser.uid);
+          const productRef = db.collection("products").doc(productData.id);
+
+          const userSnap    = await tx.get(userRef);
+          const productSnap = await tx.get(productRef);
+
+          if (!userSnap.exists)  throw new Error("USER_NOT_FOUND");
+          if (!productSnap.exists) throw new Error("PRODUCT_NOT_FOUND");
+
+          const uData  = userSnap.data() || {};
+          const pData  = productSnap.data() || {};
+
+          const balance = uData.balance || 0;
+          const stock   = typeof pData.stock === "number" ? pData.stock : 0;
+
+          if (balance < priceNum) throw new Error("INSUFFICIENT_BALANCE");
+          if (stock <= 0)         throw new Error("OUT_OF_STOCK");
+
+          tx.update(userRef, { balance: balance - priceNum });
+          tx.update(productRef, { stock: stock - 1 });
+
+          const orderRef = db.collection("orders").doc();
+          tx.set(orderRef, {
+            userId: currentUser.uid,
+            userEmail: currentUser.email || "",
+            productId: productRef.id,
+            productName: pData.name || productData.name || "Produk",
+            category: pData.category || productData.category || "",
+            price: priceNum,
+            dataOrder: userInput.trim(),
+            status: "pending",
+            adminProduct: "",
+            userReceived: false,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        });
+
+        showToast("Pesanan berhasil dibuat. Stok berkurang 1.");
+        await loadProducts(); // refresh stok di UI
+        await refreshBalance();
+      } catch (err) {
+        console.error("ERROR BELI:", err);
+        if (err.message === "INSUFFICIENT_BALANCE") {
+          showToast("Saldo tidak cukup. Silakan topup dulu.");
+        } else if (err.message === "OUT_OF_STOCK") {
+          showToast("Stok habis. Silakan pilih produk lain.");
+        } else {
+          showToast("Gagal membuat pesanan.");
+        }
+      }
+    }
+
+    async function refreshBalance() {
+      if (!currentUser) return;
+      try {
+        const snap = await db.collection("users").doc(currentUser.uid).get();
+        currentUserDoc = snap.data() || {};
+        const balance = currentUserDoc.balance || 0;
+        balanceText.textContent = formatRupiah(balance);
+      } catch (err) {
+        console.error("Gagal refresh saldo:", err);
+      }
+    }
+
+    // =============== AUTH LISTENER ===============
+    auth.onAuthStateChanged(async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+      currentUser = user;
+      userEmailPill.textContent = user.email || "User";
+
+      try {
+        const userSnap = await db.collection("users").doc(user.uid).get();
+        currentUserDoc = userSnap.data() || {};
+        const balance = currentUserDoc.balance || 0;
+        balanceText.textContent = formatRupiah(balance);
+      } catch (err) {
+        console.error("Gagal memuat user:", err);
+        balanceText.textContent = "Rp 0";
+      }
+
+      await seedProductsIfEmpty();
+      await loadProducts();
+    });
+  </script>
+</body>
 </html>
